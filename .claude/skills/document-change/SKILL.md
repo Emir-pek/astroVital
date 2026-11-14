@@ -28,17 +28,19 @@ Dil: `CHANGELOG.md` ve `docs/` **Türkçe** (ADR-018). Commit mesajı İngilizce
 
 ## 2. İlgili dokümanı güncelle (davranış değiştiyse)
 
-| Değişen                      | Güncellenecek                                                       |
-| ---------------------------- | ------------------------------------------------------------------- |
-| Bağımlılık (`package.json`)  | `docs/SETUP_CHECK.md` § 5 — **aynı commit**, test zorlar            |
-| `src/core/types`             | `npm run docs:contracts` → `docs/CONTRACTS.md` (+ Mühendis 1 onayı) |
-| Eşik / kaynak                | `docs/THRESHOLDS.md`, `docs/SOURCES.md` (+ ilgili `*.config.ts`)    |
-| Mimari, modül sınırı         | `docs/ARCHITECTURE.md`                                              |
-| Alternatifli karar           | `docs/DECISIONS.md` → yeni ADR numarası                             |
-| Modül görevi bitti / değişti | `docs/modules/<modül>.md`, modülün `README.md`                      |
-| Kurulum, script              | `README.md` (İngilizce) + `docs/SETUP_CHECK.md`                     |
-| Skill / plugin / MCP / hook  | `docs/CLAUDE_SETUP.md`                                              |
-| Demo akışı                   | `docs/DEMO_SCRIPT.md`                                               |
+| Değişen                                                             | Güncellenecek                                                       |
+| ------------------------------------------------------------------- | ------------------------------------------------------------------- |
+| Bağımlılık (`package.json`)                                         | `docs/SETUP_CHECK.md` § 5 — **aynı commit**, test zorlar            |
+| `src/core/types`                                                    | `npm run docs:contracts` → `docs/CONTRACTS.md` (+ Mühendis 1 onayı) |
+| Eşik / kaynak                                                       | `docs/THRESHOLDS.md`, `docs/SOURCES.md` (+ ilgili `*.config.ts`)    |
+| Mimari, modül sınırı                                                | `docs/ARCHITECTURE.md`                                              |
+| Alternatifli karar                                                  | `docs/DECISIONS.md` → yeni ADR numarası                             |
+| Modül görevi bitti / değişti                                        | `docs/modules/<modül>.md`, modülün `README.md`                      |
+| Kurulum, script                                                     | `README.md` (İngilizce) + `docs/SETUP_CHECK.md`                     |
+| Skill / plugin / MCP / hook                                         | `docs/CLAUDE_SETUP.md`                                              |
+| Demo akışı                                                          | `docs/DEMO_SCRIPT.md`                                               |
+| Yapay zekânın yeni kullanımı (araç, AI görsel/video, uygulamada AI) | `AI.md` (İngilizce)                                                 |
+| Akış, klasör yapısı, ekip çalışma şekli                             | `docs/ADIMLAR.md` (gündelik dil, örnekli)                           |
 
 ## 3. Doğrula
 

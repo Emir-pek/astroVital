@@ -282,6 +282,12 @@ The team's AI tooling lives in this repo and is maintained by the tooling owner:
 run setup, start `claude` in the repo and accept the trust prompt. Use local Claude Code sessions:
 cloud sessions load `CLAUDE.md` only. Guide (Turkish): [docs/CLAUDE_SETUP.md](docs/CLAUDE_SETUP.md).
 
+## AI usage
+
+AI tools (Anthropic Claude) were used to help write code, tests and documentation and to research
+sources; every change was reviewed by a team member and had to pass CI. The app itself uses no AI at
+runtime. Full disclosure, as required by the Space Apps submission guide: [AI.md](AI.md).
+
 ## Science
 
 Every threshold and recommendation links to a source ID in [docs/SOURCES.md](docs/SOURCES.md)

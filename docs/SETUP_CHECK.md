@@ -15,11 +15,13 @@
 
 ## 1. Sistem araçları
 
-| #   | Komut           | Beklenen                                                              | Eksik / geride ise                                                             |
-| --- | --------------- | --------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
-| 1.1 | `node -v`       | `v22.x` veya üstü (`engines.node`: `>=22`). Test edilen: **v24.15.0** | Node 24 LTS kur: https://nodejs.org (veya `nvm install 24` / `fnm install 24`) |
-| 1.2 | `npm -v`        | `10.x` veya üstü. Test edilen: **12.0.2**                             | Node ile birlikte gelir; `npm i -g npm@latest`                                 |
-| 1.3 | `git --version` | `2.40` veya üstü. Test edilen: **2.53.0**                             | https://git-scm.com                                                            |
+| #   | Komut              | Beklenen                                                              | Eksik / geride ise                                                                    |
+| --- | ------------------ | --------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
+| 1.1 | `node -v`          | `v22.x` veya üstü (`engines.node`: `>=22`). Test edilen: **v24.15.0** | Node 24 LTS kur: https://nodejs.org (veya `nvm install 24` / `fnm install 24`)        |
+| 1.2 | `npm -v`           | `10.x` veya üstü. Test edilen: **12.0.2**                             | Node ile birlikte gelir; `npm i -g npm@latest`                                        |
+| 1.3 | `git --version`    | `2.40` veya üstü. Test edilen: **2.53.0**                             | https://git-scm.com                                                                   |
+| 1.4 | `claude --version` | İsteğe bağlı (önerilir): Claude Code CLI, son sürüm                   | https://code.claude.com/docs/en/overview — kurulum script'i plugin'leri bununla kurar |
+| 1.5 | `gh --version`     | İsteğe bağlı: GitHub CLI (PR/merge/branch işleri için)                | `winget install GitHub.cli`, sonra `gh auth login`                                    |
 
 Python / venv **gerekmez** (saf Node projesi; izolasyonu `node_modules` + `package-lock.json` sağlar).
 
