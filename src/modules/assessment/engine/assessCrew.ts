@@ -31,7 +31,7 @@ export function buildRegions(assessments: Assessment[]): RegionHealth[] {
  *   region status = worst assessment in region; overall = worst region;
  *   escalation = highest escalation of any assessment.
  * Aggregation is final; only assessMeasurement is a stub in Phase 0.
- * TODO(Engineer 3): region rule "≥2 yellow in one region → crew_medical_officer".
+ * TODO(Engineer 3): region rule "≥2 caution in one region → crew_medical_officer".
  */
 export function assessCrew(
   crewId: string,
@@ -55,7 +55,7 @@ export function assessCrew(
 export function emptySummary(crewId: string, now: Date): CrewHealthSummary {
   return {
     crewId,
-    overall: 'green',
+    overall: 'nominal',
     escalation: 'self_care',
     regions: buildRegions([]),
     assessments: [],

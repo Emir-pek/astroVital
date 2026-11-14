@@ -14,7 +14,7 @@ export interface BodyMapProps {
 /**
  * STUB: region buttons instead of the figure.
  * TODO(Engineer 4, P0): hand-drawn SVG human figure (no copyrighted assets), clickable
- * regions, hover highlight, status-coloured pulse (faster when red: --av-pulse-*),
+ * regions, hover highlight, status-coloured pulse (faster when warning: --av-pulse-*),
  * keyboard navigation (Tab/arrow keys), aria-labels, colour + icon + text.
  */
 export function BodyMap({ crewId, onRegionSelect, selectedRegion }: BodyMapProps) {

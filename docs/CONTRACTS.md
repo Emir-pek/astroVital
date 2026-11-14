@@ -140,8 +140,8 @@ import type { EnvironmentProfile } from './environment';
 import type { Measurement } from './measurement';
 import type { MetricId } from './metrics';
 
-/** Traffic-light status. Always rendered as colour + icon + text (colour-blind safe). */
-export type Status = 'green' | 'yellow' | 'red';
+/** Four-level status (NASA-STD-3001 App. F). Always rendered as colour + icon + text (colour-blind safe). */
+export type Status = 'nominal' | 'advisory' | 'caution' | 'warning';
 
 /** Who must act, in increasing order of severity. */
 export type Escalation =
@@ -164,7 +164,7 @@ export interface ThresholdBand {
   messageKey: string;
 }
 
-/** Rule over consecutive days, e.g. "sleep < 6.5 h for 3 days in a row → red". */
+/** Rule over consecutive days, e.g. "sleep < 6.5 h for 3 days in a row → warning". */
 export interface SustainedRule {
   days: number;
   /** Rule matches when the daily value is >= min (if set) ... */
@@ -235,7 +235,7 @@ export interface Assessment {
 
 export interface RegionHealth {
   region: BodyRegionId;
-  /** Worst status among `assessments`; 'green' with empty assessments = no data. */
+  /** Worst status among `assessments`; 'nominal' with empty assessments = no data. */
   status: Status;
   assessments: Assessment[];
   functionKey: string;

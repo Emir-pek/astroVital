@@ -7,7 +7,7 @@ import { assessCrew, assessMeasurement, emptySummary } from '../index';
 
 /*
  * Phase-0 contract tests for the STUB engine. When Engineer 3 implements real rules,
- * keep the "shape" tests and replace the "always green" expectations with band tests
+ * keep the "shape" tests and replace the "always nominal" expectations with band tests
  * (target ≥ 90 % coverage of engine/).
  */
 const now = new Date('2026-11-14T22:00:00Z');
@@ -23,13 +23,13 @@ const history: Measurement[] = generateHistory({
 const ctx: AssessmentContext = { environment: ENVIRONMENTS.iss, crew, history, now };
 
 describe('assessMeasurement (stub)', () => {
-  it('returns a well-formed green assessment', () => {
+  it('returns a well-formed nominal assessment', () => {
     const m = history.find((x) => x.metric === 'heartRate')!;
     const a = assessMeasurement(m, ctx);
     expect(a).toMatchObject({
       metric: 'heartRate',
       crewId: crew.id,
-      status: 'green',
+      status: 'nominal',
       escalation: 'self_care',
       value: m.value,
       measurementId: m.id,
@@ -43,7 +43,7 @@ describe('assessCrew', () => {
     const s = assessCrew(crew.id, history, ctx);
     expect(s.assessments).toHaveLength(11);
     expect(s.regions.map((r) => r.region)).toEqual([...BODY_REGION_IDS]);
-    expect(s.overall).toBe('green');
+    expect(s.overall).toBe('nominal');
     expect(s.escalation).toBe('self_care');
     expect(s.generatedAt).toBe(now.toISOString());
   });

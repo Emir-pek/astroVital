@@ -9,9 +9,10 @@ interface ActiveToast extends Required<Omit<ToastInput, 'durationMs'>> {
 
 const TONE: Record<ActiveToast['tone'], string> = {
   info: 'border-accent/50',
-  green: 'border-ok/60',
-  yellow: 'border-warn/60',
-  red: 'border-crit/70',
+  nominal: 'border-ok/60',
+  advisory: 'border-accent/60',
+  caution: 'border-warn/60',
+  warning: 'border-crit/70',
 };
 
 export function ToastProvider({ children }: { children: ReactNode }) {

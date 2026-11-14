@@ -15,7 +15,7 @@ export interface AlertCenterProps {
 }
 
 /**
- * Prioritised list of non-green assessments across the crew.
+ * Prioritised list of non-nominal assessments across the crew.
  * Sorting/aggregation is real; alerts appear automatically once the engine stops being a stub.
  * TODO(Engineer 3, P1): acknowledge button (module-local persisted store), escalation contact
  * info (incl. Mars comm delay), link to RecommendationList.
@@ -28,7 +28,7 @@ export function AlertCenter({ compact = false, limit }: AlertCenterProps) {
   const alerts = useMemo(() => {
     const list = summaries
       .flatMap((s) => s.assessments)
-      .filter((a) => a.status !== 'green')
+      .filter((a) => a.status !== 'nominal')
       .sort(
         (a, b) =>
           ESCALATION_ORDER[b.escalation] - ESCALATION_ORDER[a.escalation] ||

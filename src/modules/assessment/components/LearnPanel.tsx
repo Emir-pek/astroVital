@@ -9,7 +9,7 @@ export interface LearnPanelProps {
   metric?: MetricId;
 }
 
-const STATUSES: Status[] = ['green', 'yellow', 'red'];
+const STATUSES: Status[] = ['nominal', 'advisory', 'caution', 'warning'];
 
 /**
  * Plain-language education: "What is it? / How to measure in space? / How does space affect

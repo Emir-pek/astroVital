@@ -4,7 +4,7 @@ import { STATUS_STYLE } from './statusStyle';
 
 export interface StatusBadgeProps {
   status: Status;
-  /** Already-translated label (e.g. t('status.green')). Required: colour is never the only cue. */
+  /** Already-translated label (e.g. t('status.nominal')). Required: colour is never the only cue. */
   label: string;
   size?: 'sm' | 'md';
   className?: string;

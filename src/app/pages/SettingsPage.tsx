@@ -32,7 +32,7 @@ export function SettingsPage() {
     loadDemoData();
     toast.show({
       message: t('settings.demoLoaded', { count: useHealthStore.getState().measurements.length }),
-      tone: 'green',
+      tone: 'nominal',
     });
   };
 

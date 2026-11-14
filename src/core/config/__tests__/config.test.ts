@@ -24,9 +24,9 @@ describe('thresholds.config', () => {
     }
   });
 
-  it.each(METRIC_IDS)('%s has exactly one green band and known sourceIds', (id) => {
+  it.each(METRIC_IDS)('%s has exactly one nominal band and known sourceIds', (id) => {
     const t = THRESHOLDS[id];
-    expect(t.bands.filter((b) => b.status === 'green')).toHaveLength(1);
+    expect(t.bands.filter((b) => b.status === 'nominal')).toHaveLength(1);
     expect(t.sourceIds.length).toBeGreaterThan(0);
     t.sourceIds.forEach((s) => expect(isKnownSource(s), s).toBe(true));
   });

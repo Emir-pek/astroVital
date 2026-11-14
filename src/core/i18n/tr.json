@@ -81,13 +81,15 @@
     }
   },
   "status": {
-    "green": "Normal",
-    "yellow": "Dikkat",
-    "red": "Müdahale gerekli",
+    "nominal": "Normal",
+    "advisory": "Bilgi",
+    "caution": "Dikkat",
+    "warning": "Uyarı",
     "meaning": {
-      "green": "Normal aralıkta. Rutininize devam edin.",
-      "yellow": "Normalin biraz dışında. Önerileri uygulayın ve yeniden ölçün.",
-      "red": "Belirgin şekilde normal dışı. Adımları izleyin ve gösterilen kişiye haber verin."
+      "nominal": "Normal aralıkta. Rutininize devam edin.",
+      "advisory": "Bilmekte fayda var. Şu an bir şey yapman gerekmiyor.",
+      "caution": "Normalin biraz dışında. Önerileri uygulayın ve yeniden ölçün.",
+      "warning": "Belirgin şekilde normal dışı. Adımları izleyin ve gösterilen kişiye haber verin."
     }
   },
   "escalation": {

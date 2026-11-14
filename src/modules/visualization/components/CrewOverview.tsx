@@ -19,7 +19,7 @@ export function CrewOverview() {
       <ul className="grid gap-3 sm:grid-cols-2">
         {crew.map((member) => {
           const s = summaries.find((x) => x.crewId === member.id);
-          const status = s?.overall ?? 'green';
+          const status = s?.overall ?? 'nominal';
           return (
             <li key={member.id}>
               <Link

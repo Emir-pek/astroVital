@@ -81,13 +81,15 @@
     }
   },
   "status": {
-    "green": "Nominal",
-    "yellow": "Watch",
-    "red": "Action needed",
+    "nominal": "Nominal",
+    "advisory": "Advisory",
+    "caution": "Caution",
+    "warning": "Warning",
     "meaning": {
-      "green": "Within the normal range. Keep your routine.",
-      "yellow": "Slightly outside normal. Follow the guidance and measure again.",
-      "red": "Clearly outside normal. Follow the steps and inform the person shown."
+      "nominal": "Within the normal range. Keep your routine.",
+      "advisory": "Worth knowing. No action needed right now.",
+      "caution": "Slightly outside normal. Follow the guidance and measure again.",
+      "warning": "Clearly outside normal. Follow the steps and inform the person shown."
     }
   },
   "escalation": {
