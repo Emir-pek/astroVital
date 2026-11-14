@@ -13,6 +13,9 @@ paylaşılan durum (`store`), demo verisi (`simulation`), çeviriler (`i18n`), U
 - `types/` yalnız tip içerir. Değişiklik → ekip duyurusu → `npm run docs:contracts` → Mühendis 1 onayı.
 - `config/` saf veri: React/store yok. Eşik veya ortam değeri değişirse `docs/THRESHOLDS.md` de güncellenir.
   `thresholds.config.ts` / `sources.config.ts` içeriğinin sahibi Mühendis 3'tür (merge onayı Mühendis 1).
+  **Paylaşılan veri dosyaları:** birden fazla modülün veya `simulation/`'ın kullandığı veri (ör. gömülü
+  uzay ajansı verisi) buraya konur; içerik sahibi veriyi getiren mühendis, merge onayı Mühendis 1
+  (`thresholds.config.ts` düzeni). Tek modülün kullandığı veri o modülde kalır — core modülden okuyamaz.
 - `simulation/` saf ve deterministik: `Math.random`/`Date.now` yasak, seed'li `createRng` kullan.
 - `ui/` bileşenleri `t()` çağırmaz; çevrilmiş metni prop olarak alır. Sabit renk yok, token kullan.
   `tokens.css` içeriğinin sahibi Mühendis 4'tür.
