@@ -63,6 +63,12 @@ veya Radix** kullanılır — seçim parça bazında, envanterde "Motor" sütunu
 `src/core/ui` altında** import edilir. Diğer core klasörleri, modüller ve app yalnız `@core/ui`'dan
 alır; kütüphane tipleri kitin public API'sinden dışarı sızmaz, bu yüzden motor değişikliği modülleri etkilemez.
 
+**Paylaşılan veri dosyaları:** bir veri dosyası (ör. gömülü uzay ajansı verisi) yalnız tek modülde
+kullanılıyorsa o modülün klasöründe durur. Birden fazla modül veya `core/simulation` kullanacaksa
+`src/core/config/` altına konur; içerik sahibi veriyi getiren mühendis, merge onayı Mühendis 1
+(`thresholds.config.ts` düzeni). Gerekçe: oklar tek yönlü — modüller core'dan okuyabilir, core hiçbir
+modülden okuyamaz (ESLint).
+
 Faz 0'da bu kuralların 8 farklı ihlal örneğinde hata verdiği doğrulandı (bkz. DECISIONS.md ADR-004).
 
 ## 3. Katman sorumlulukları

@@ -20,7 +20,13 @@ Yalnız `docs/` değişiklikleri kayıt gerektirmez.
 
 <!-- NEW ENTRIES BELOW -->
 
-<<<<<<< HEAD
+### 2026-11-14 16:25 — Muhammed Bektaş (feat/core-routine) — Mimari kural: paylaşılan veri dosyalarının yeri
+
+- **Ne:** Yeni kural: tek modülün kullandığı veri dosyası (ör. gömülü uzay ajansı verisi) o modülde kalır; birden fazla modül
+  veya `core/simulation` kullanacaksa `src/core/config/` altına konur (içerik sahibi veriyi getiren, merge onayı Mühendis 1).
+- **Neden:** Modüller core'dan okuyabilir, core hiçbir modülden okuyamaz (ESLint) — paylaşılan veri modülde kalırsa diğerleri erişemez.
+- **Dosyalar:** `CLAUDE.md`, `src/core/CLAUDE.md`, `docs/ARCHITECTURE.md`, `CHANGELOG.md`
+- **Ekip ne yapmalı:** Hiçbir şey; yeni bir veri dosyası eklerken bu kurala göre yer seç.
 
 ### 2026-11-14 15:22 — Muhammed Bektaş (feat/core-routine) — UI kit kuralları: açık katkı modeli + Base UI/Radix yalnız core/ui'da
 
