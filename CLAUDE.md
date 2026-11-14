@@ -44,7 +44,7 @@ Kurulum tek komut: `powershell -ExecutionPolicy Bypass -File scripts\setup.ps1` 
   Ayrıntı: `docs/CONTRACTS.md`. Mimari: `docs/ARCHITECTURE.md`. Kararlar: `docs/DECISIONS.md`.
 - Paylaşılan alan verisi `useHealthStore`'da; modül-yerel durum modülün kendi store'unda.
 - Zustand v5: seçiciden yeni dizi/nesne döndürme → ham dilim + `useMemo`.
-- Arayüz parçası gerekiyorsa önce @core/ui'a bak; yoksa kendi versiyonunu yazma, Mühendis 1'den kit'e eklenmesini iste.
+- Arayüz parçası gerekiyorsa önce @core/ui'a bak. Yoksa ve genel bir parçaysa veya 2+ modülde kullanılacaksa kendin src/core/ui'a ekle: önce docs/TEAM.md 'UI kit envanteri'ne adını yaz; kurallara uy (Base UI yalnız kitte, t() yok, renkler token'dan, test zorunlu). Tek modüle özgü parça (ör. BodyMap) o modülde kalır. Kit PR'larında mimari onay Mühendis 1, görünüm onayı tasarım sahibi.
 
 ## Kod stili
 

@@ -29,9 +29,7 @@ Yalnız `docs/` değişiklikleri kayıt gerektirmez.
   davranışını elle yazmak 48 saatte riskli (ADR-029).
 - **Dosyalar:** `package.json`, `package-lock.json`, `eslint.config.js`, `docs/DECISIONS.md`,
   `docs/ARCHITECTURE.md`, `docs/SETUP_CHECK.md`, `src/core/CLAUDE.md`, `CLAUDE.md`, `CHANGELOG.md`
-- **Ekip ne yapmalı:** Kendi branch'inde `git merge origin/main` sonrası `npm ci`. Select/Tabs/Slider/Tooltip gibi
-  parçaları kendin yazma; @core/ui'a eklenene kadar mevcut haliyle bırak veya Mühendis 1'e iste.
-  @base-ui/react'i modülünden doğrudan import etme (lint hata verir).
+- **Ekip ne yapmalı:** Kendi branch'inde `git merge origin/main` sonrası `npm ci`. Genel bir arayüz parçası gerekiyorsa src/core/ui'a kendin ekle; önce docs/TEAM.md 'UI kit envanteri'ne adını yaz. @base-ui/react'i yalnız src/core/ui içinde kullan (lint zorlar).
 
 ### 2026-11-14 13:30 — Emir (main) — Ekip altyapısı: tek komut kurulum, dokümantasyon zorunluluğu, ortak Claude araçları
 

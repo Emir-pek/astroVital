@@ -21,6 +21,10 @@ paylaşılan durum (`store`), demo verisi (`simulation`), çeviriler (`i18n`), U
   `src/core/ui/**` içinde import edilir (ESLint zorlar). Base UI tipleri/bileşenleri kitin public
   API'sinden (`index.ts`) **dışarı sızmaz**: props bizim tiplerimizdir, Base UI'ı sarmalayıp
   yalnız kendi bileşenimizi export ederiz.
+  **Kit açık modeldir (ADR-029):** `src/core` sahibi Mühendis 1 olsa da `ui/`'a her mühendis genel
+  (veya 2+ modülde kullanılacak) parça ekleyebilir; önce `docs/TEAM.md` "UI kit envanteri"ne adını
+  yazar. Modüle özgü parça (ör. BodyMap) modülde kalır. Kit PR'larında mimari onay Mühendis 1,
+  görünüm onayı tasarım sahibi; her yeni parça render testli.
 - `store/`: yalnız alan verisi. Şema değişirse `version` artır + `migrate`.
 - `i18n/`: anahtar ekleyen herkes EN + TR'yi aynı commit'te ekler.
 

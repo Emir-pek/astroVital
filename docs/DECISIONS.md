@@ -211,6 +211,5 @@ Node 24 LTS, npm.
   her zaman `@core/ui`'dan alır. Değerlendirilen alternatifler: tamamen kendimiz yazmak
   (zaman/erişilebilirlik riski), Radix UI (bakımı yavaşladı, ekip odağını Base UI'a kaydırdı), hazır
   görünümlü kütüphaneler MUI/Ant (kendi tasarımımız olmaz).
-- **Sonuç:** Kit parçaları (Select, Tabs, Slider, ProgressBar, Tooltip/Popover) sıradaki görevde bu
-  temel üzerine yazılacak. Kütüphane yalnız kitin içinde kullanıldığı için ileride değiştirmek sadece
+- **Sonuç:** Kit'e her mühendis katkı verebilir (açık model): genel/2+ modülde kullanılan parçalar src/core/ui'a, modüle özgü parçalar modülde. Çakışmayı TEAM.md 'UI kit envanteri' önler. Mimari onay Mühendis 1, görünüm onayı tasarım sahibi. Kütüphane yalnız kitin içinde kullanıldığı için ileride değiştirmek sadece
   `src/core/ui`'yi etkiler. Sahip: Mühendis 1.

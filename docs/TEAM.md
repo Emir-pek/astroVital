@@ -24,6 +24,27 @@
 | `.claude/**`, `.mcp.json`          | Yalnız araç sahibi değiştirir (ADR-027)                                                                                   |
 | `package.json`                     | Yeni bağımlılık eklemeden önce kanalda sor (bundle boyutu, offline); aynı commit'te `docs/SETUP_CHECK.md` § 5'i güncelle  |
 
+## UI kit envanteri (`src/core/ui` — açık model, ADR-029)
+
+- **Tasarım sahibi:** _TBD_ (görünüm onayı)
+- **Mimari onay:** Mühendis 1
+
+| Parça           | Kim yazıyor | Durum |
+| --------------- | ----------- | ----- |
+| Button          | Faz 0       | hazır |
+| Card            | Faz 0       | hazır |
+| Modal           | Faz 0       | hazır |
+| StatusBadge     | Faz 0       | hazır |
+| Toast           | Faz 0       | hazır |
+| EmptyState      | Faz 0       | hazır |
+| Select          |             | boşta |
+| Tabs            |             | boşta |
+| Slider          |             | boşta |
+| ProgressBar     |             | boşta |
+| Tooltip/Popover |             | boşta |
+
+Başlamadan önce adını yaz ve push et; aynı parçayı iki kişi yazmasın.
+
 ## Git akışı (GitHub: `https://github.com/Emir-pek/astroVital`)
 
 - Branch'ler `main`'den: `feat/core-routine`, `feat/intake`, `feat/assessment`, `feat/visualization`.
