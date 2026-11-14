@@ -45,6 +45,26 @@ Yalnız `docs/` değişiklikleri kayıt gerektirmez.
   `src/core/config/sources.config.ts`, `src/core/simulation/__tests__/generator.test.ts`, `docs/ROUTINE_SCHEDULE.md`,
   `docs/SOURCES.md`, `docs/DECISIONS.md`, `docs/modules/core-routine.md`, `CHANGELOG.md`
 - **Ekip ne yapmalı:** Merge sonrası demo verisinde ölçüm saatleri değişir (sabah vitalleri 06:30, egzersiz 17:30, dozimetre 19:30). Saat varsayan testin/ekranın varsa kontrol et.
+### 2026-11-14 21:30 — Emir (main) — Dört feat/* branch'i main'e fast-forward edildi; skill/kural erişimi netleştirildi
+
+- **Ne:** `feat/assessment`, `feat/core-routine`, `feat/intake`, `feat/visualization` branch'leri main'in ucuna
+  (PR #9 dahil) fast-forward edildi. Hiçbiri main'den ayrışan commit taşımıyordu (hepsi main'in öncülü), bu yüzden
+  merge değil, doğrudan işaretçi ilerletme yapıldı — hiçbir iş kaybolmadı, çakışma çıkmadı, force push yok.
+  Ayrıca ekip Claude kurulumunun kapsamı netleştirildi (bkz. `docs/CLAUDE_SETUP.md` tablosu): **yerel** Claude
+  Code (terminal / masaüstü Code sekmesi / VS Code), bu repoda, `git pull` sonrası skill'leri canlı (yeniden
+  başlatmadan), `CLAUDE.md` + `.claude/rules/*.md`'yi ise **yeni oturumda** okur — açık bir oturum `/clear`
+  ile yenilenmeden eski kuralı kullanmaya devam eder. **Bulut** oturumları (claude.ai/code, Projects thread'leri)
+  kök `CLAUDE.md` ve kök `.claude/rules/*.md`'yi okur ama repo skill'lerini, `.mcp.json`'ı ve
+  `.claude/settings.json` plugin'lerini **hiç yüklemez** — bu Claude Code'un kendi sınırı, repo ayarıyla aşılamıyor.
+- **Neden:** Branch'ler main'in gerisinde kalmıştı; ileride her yeni PR'da çakışma riski oluşturuyordu. Ekip
+  arkadaşlarının hangi ortamda hangi aracın gerçekten çalıştığını bilmesi gerekiyor.
+- **Dosyalar:** (yalnız bu kayıt) `CHANGELOG.md`
+- **Ekip ne yapmalı:** Kendi branch'inde `git fetch origin` sonra `git reset --hard origin/<branch-adın>`
+  (yerelde bu PR'dan sonra kendi commit'in yoksa güvenli; varsa önce `git branch backup-<tarih>` ile yedek al).
+  Üzerinde çalışırken **yerel** Claude Code kullan (bu repo klasöründe `claude`); bulut/Projects yalnız
+  `CLAUDE.md` ve `.claude/rules/`'ı görür, skill çalıştıramaz. Açık bir Claude oturumun varsa yeni kural
+  dosyalarını görmesi için `/clear` yap veya yeniden başlat.
+
 ### 2026-11-14 21:00 — Emir (docs/ai-brief-adimlar) — AI beyanı, iletişim kuralları, ADIMLAR ve proje özeti repoya eklendi
 
 - **Ne:** `AI.md` (jüri için İngilizce yapay zekâ kullanım beyanı — Space Apps kuralı: AI'nin nerede/nasıl
