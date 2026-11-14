@@ -200,16 +200,20 @@ Node 24 LTS, npm.
 - **Sonuç:** ADR-026'nın "main'e doğrudan push" kısmının yerine geçer; force push yasağı aynen geçerli.
   Aynı makinede worktree akışı değişmez, yalnız main'e alma adımı PR olur.
 
-### ADR-029 — UI kit: kendi bileşenlerimiz, gerekirse Radix (headless)
+### ADR-029 — UI kit: kendi bileşenlerimiz + gerektiğinde Base UI veya Radix (esnek)
 
 - **Bağlam:** Modern ve tamamen kendi tasarımımız olan bir arayüz istiyoruz; tarayıcının kendi
   `<select>` vb. öğeleri açıldığında stillenemiyor; popover/tooltip/konuşma balonu gibi parçaların
   konumlandırma, klavye ve erişilebilirlik davranışını 48 saatte elle yazmak riskli. Uygulamada 6 ham
-  `<select>` dağınık duruyor. Tasarım sahibi kit parçalarını kendi yapısıyla yazmaya başladı.
-- **Karar:** Kit parçaları ekibin kendi bileşenleridir; açılır menü, popover/tooltip, modal gibi
-  konumlanan/odak yöneten parçalarda gerekirse Radix primitives kullanılabilir. Radix yalnız
-  `src/core/ui` içinde import edilir (ESLint zorlar), paketi ilk ihtiyaç duyan kurar. Base UI
-  değerlendirildi, ekip tercihiyle seçilmedi.
+  `<select>` dağınık duruyor. Tasarım sahibi kit parçalarını kendi yapısıyla yazmaya başladı. Tasarım
+  sahibi geniş yelpazede çalışabilmeli; tek kütüphaneye kilitlenmek istemiyoruz.
+- **Karar:** Kit parçaları kendi bileşenlerimiz; konumlanan/odak yöneten parçalarda Base UI
+  (`@base-ui/react`) veya Radix (`radix-ui` / `@radix-ui/*`) serbest. Kütüphaneler yalnız
+  `src/core/ui`'da (ESLint). Paketi ilk ihtiyaç duyan kurar. Tavsiyeler: (a) bir parça = bir motor,
+  envanterde "Motor" sütununa yazılır; (b) iç içe açılabilen katmanlar (modal/popover/tooltip/menü)
+  mümkünse aynı kütüphaneden — odak/dış tıklama davranışı çakışmasın. Not: Base UI ve Radix ayrı
+  kütüphanelerdir; Base UI, Radix/Floating UI/MUI geliştiricilerinden, aktif geliştiriliyor.
 - **Sonuç:** Kit'e her mühendis katkı verebilir (açık model): genel/2+ modülde kullanılan parçalar
   src/core/ui'a, modüle özgü parçalar modülde. Çakışmayı TEAM.md 'UI kit envanteri' önler. Mimari onay
-  Mühendis 1, görünüm onayı tasarım sahibi.
+  Mühendis 1, görünüm onayı tasarım sahibi. Kütüphane seçimi parça bazında, yalnız kitin içinde olduğu
+  için değiştirmek modülleri etkilemez.

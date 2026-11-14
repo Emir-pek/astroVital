@@ -47,36 +47,37 @@ Ok yönü = "import eder". Kurallar ESLint `no-restricted-imports` ile **derleme
 (`eslint.config.js > boundary()`), ayrıca `tsconfig.app.json > paths` modüller için yalnızca
 `index.ts`'i tanımladığından derin import TypeScript'te de çözülemez (çift koruma).
 
-| Kural                               | Örnek ihlal                                       | Hata mesajı                                                          |
-| ----------------------------------- | ------------------------------------------------- | -------------------------------------------------------------------- |
-| Derin import yasak                  | `@modules/assessment/engine/assessCrew`           | Deep import into another module is forbidden                         |
-| Grafik dışı bağımlılık              | intake → `@modules/assessment`                    | [intake] may not depend on this module                               |
-| Modül kendi index'ini import edemez | intake → `@modules/intake`                        | importing your own public API creates cycles                         |
-| Katman dışına göreli import         | `../../core/types`                                | Relative import crosses a layer/module boundary                      |
-| Uygulama kabuğu yalnız app'ten      | intake → `@app/router`                            | may not import from the app shell                                    |
-| Test yardımcıları yalnız testlerden | bileşen → `@test/...`                             | `@test/*` is test-only infrastructure                                |
-| Radix yalnız `src/core/ui` içinde   | intake/app/core-store → `radix-ui`, `@radix-ui/*` | Radix yalnız src/core/ui içinde kullanılır; bileşeni @core/ui'dan al |
+| Kural                                       | Örnek ihlal                                                         | Hata mesajı                                                                                               |
+| ------------------------------------------- | ------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
+| Derin import yasak                          | `@modules/assessment/engine/assessCrew`                             | Deep import into another module is forbidden                                                              |
+| Grafik dışı bağımlılık                      | intake → `@modules/assessment`                                      | [intake] may not depend on this module                                                                    |
+| Modül kendi index'ini import edemez         | intake → `@modules/intake`                                          | importing your own public API creates cycles                                                              |
+| Katman dışına göreli import                 | `../../core/types`                                                  | Relative import crosses a layer/module boundary                                                           |
+| Uygulama kabuğu yalnız app'ten              | intake → `@app/router`                                              | may not import from the app shell                                                                         |
+| Test yardımcıları yalnız testlerden         | bileşen → `@test/...`                                               | `@test/*` is test-only infrastructure                                                                     |
+| Base UI / Radix yalnız `src/core/ui` içinde | intake/app/core-store → `@base-ui/react`, `radix-ui`, `@radix-ui/*` | Headless UI kütüphaneleri (Base UI, Radix) yalnız src/core/ui içinde kullanılır; bileşeni @core/ui'dan al |
 
-**UI kit (ADR-029):** kit parçaları ekibin kendi bileşenleridir; görünüm Tailwind + `tokens.css`.
-Konumlanan/odak yöneten parçalarda (açılır menü, popover/tooltip, modal) gerekirse headless Radix
-primitives kullanılır ve **yalnız `src/core/ui` altında** import edilir. Diğer core klasörleri,
-modüller ve app yalnız `@core/ui`'dan alır; Radix tipleri kitin public API'sinden dışarı sızmaz.
+**UI kit (ADR-029, esnek):** kit parçaları ekibin kendi bileşenleridir; görünüm Tailwind + `tokens.css`.
+Konumlanan/odak yöneten parçalarda (açılır menü, popover/tooltip, modal) gerektiğinde headless **Base UI
+veya Radix** kullanılır — seçim parça bazında, envanterde "Motor" sütununda — ve **yalnız
+`src/core/ui` altında** import edilir. Diğer core klasörleri, modüller ve app yalnız `@core/ui`'dan
+alır; kütüphane tipleri kitin public API'sinden dışarı sızmaz, bu yüzden motor değişikliği modülleri etkilemez.
 
 Faz 0'da bu kuralların 8 farklı ihlal örneğinde hata verdiği doğrulandı (bkz. DECISIONS.md ADR-004).
 
 ## 3. Katman sorumlulukları
 
-| Katman                      | Sorumluluk                                                                     | Yasaklar                                                   |
-| --------------------------- | ------------------------------------------------------------------------------ | ---------------------------------------------------------- |
-| `core/types`                | Tüm paylaşılan sözleşmeler                                                     | Çalışma zamanı kodu yok (sadece `type`)                    |
-| `core/config`               | Metrik kataloğu, eşikler, ortamlar, tehlikeler, bölgeler, kaynak kaydı         | React yok, store yok                                       |
-| `core/store`                | Paylaşılan alan verisi: ölçümler, mürettebat, aktif ortam, ayarlar             | Modül-yerel UI durumu (uyarı onayı, XP) burada DEĞİL       |
-| `core/simulation`           | Seed'li, saf demo verisi üretimi                                               | `Date.now()` / `Math.random()` yok                         |
-| `core/ui`                   | UI kit: kendi bileşenlerimiz, görünüm token'lardan; gerekirse Radix (headless) | `t()` çağırmaz — çevrilmiş metin alır; Radix dışarı sızmaz |
-| `core/i18n`                 | EN/TR kaynaklar                                                                | —                                                          |
-| `modules/assessment/engine` | Saf kural motoru                                                               | store/React yok; `ctx.now` kullanır                        |
-| `modules/*/components`      | Modülün UI'ı                                                                   | Başka modülün içine bakmaz                                 |
-| `app`                       | Sayfaları birleştirir, provider'lar                                            | İş kuralı yazmaz                                           |
+| Katman                      | Sorumluluk                                                                                     | Yasaklar                                                               |
+| --------------------------- | ---------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------- |
+| `core/types`                | Tüm paylaşılan sözleşmeler                                                                     | Çalışma zamanı kodu yok (sadece `type`)                                |
+| `core/config`               | Metrik kataloğu, eşikler, ortamlar, tehlikeler, bölgeler, kaynak kaydı                         | React yok, store yok                                                   |
+| `core/store`                | Paylaşılan alan verisi: ölçümler, mürettebat, aktif ortam, ayarlar                             | Modül-yerel UI durumu (uyarı onayı, XP) burada DEĞİL                   |
+| `core/simulation`           | Seed'li, saf demo verisi üretimi                                                               | `Date.now()` / `Math.random()` yok                                     |
+| `core/ui`                   | UI kit: kendi bileşenlerimiz, görünüm token'lardan; gerektiğinde Base UI veya Radix (headless) | `t()` çağırmaz — çevrilmiş metin alır; kütüphane tipleri dışarı sızmaz |
+| `core/i18n`                 | EN/TR kaynaklar                                                                                | —                                                                      |
+| `modules/assessment/engine` | Saf kural motoru                                                                               | store/React yok; `ctx.now` kullanır                                    |
+| `modules/*/components`      | Modülün UI'ı                                                                                   | Başka modülün içine bakmaz                                             |
+| `app`                       | Sayfaları birleştirir, provider'lar                                                            | İş kuralı yazmaz                                                       |
 
 ## 4. Veri akışı (uçtan uca)
 

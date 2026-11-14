@@ -16,11 +16,13 @@ paylaşılan durum (`store`), demo verisi (`simulation`), çeviriler (`i18n`), U
 - `simulation/` saf ve deterministik: `Math.random`/`Date.now` yasak, seed'li `createRng` kullan.
 - `ui/` bileşenleri `t()` çağırmaz; çevrilmiş metni prop olarak alır. Sabit renk yok, token kullan.
   `tokens.css` içeriğinin sahibi Mühendis 4'tür.
-  **Kendi bileşenlerimiz, gerekirse Radix (ADR-029):** kit parçalarını biz yazarız; açılır menü,
-  popover/tooltip, modal gibi konumlanan/odak yöneten parçalarda gerekirse Radix primitives kullanılır.
-  `radix-ui` / `@radix-ui/*` yalnız `src/core/ui/**` içinde import edilir (ESLint zorlar); paketi ilk
-  ihtiyaç duyan kendi PR'ında kurar. Radix tipleri/bileşenleri kitin public API'sinden (`index.ts`)
-  **dışarı sızmaz**: props bizim tiplerimizdir, sarmalayıp yalnız kendi bileşenimizi export ederiz.
+  **Kendi bileşenlerimiz + gerektiğinde Base UI veya Radix (ADR-029, esnek):** kit parçalarını biz
+  yazarız; açılır menü, popover/tooltip, modal gibi konumlanan/odak yöneten parçalarda Base UI
+  (`@base-ui/react`) veya Radix (`radix-ui` / `@radix-ui/*`) kullanılabilir. Bu kütüphaneler yalnız
+  `src/core/ui/**` içinde import edilir (ESLint zorlar); paketi ilk ihtiyaç duyan kendi PR'ında kurar.
+  Bir parça = bir motor (envanterde "Motor" sütunu); iç içe açılan katmanlar mümkünse aynı kütüphaneden.
+  Kütüphane tipleri/bileşenleri kitin public API'sinden (`index.ts`) **dışarı sızmaz**: props bizim
+  tiplerimizdir, sarmalayıp yalnız kendi bileşenimizi export ederiz.
   **Kit açık modeldir (ADR-029):** `src/core` sahibi Mühendis 1 olsa da `ui/`'a her mühendis genel
   (veya 2+ modülde kullanılacak) parça ekleyebilir; önce `docs/TEAM.md` "UI kit envanteri"ne adını
   yazar. Modüle özgü parça (ör. BodyMap) modülde kalır. Kit PR'larında mimari onay Mühendis 1,

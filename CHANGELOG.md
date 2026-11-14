@@ -21,17 +21,19 @@ Yalnız `docs/` değişiklikleri kayıt gerektirmez.
 <!-- NEW ENTRIES BELOW -->
 
 <<<<<<< HEAD
-### 2026-11-14 15:22 — Muhammed Bektaş (feat/core-routine) — UI kit kuralları: açık katkı modeli + Radix yalnız core/ui'da
+
+### 2026-11-14 15:22 — Muhammed Bektaş (feat/core-routine) — UI kit kuralları: açık katkı modeli + Base UI/Radix yalnız core/ui'da
 
 - **Ne:** UI kit (`src/core/ui`) açık katkı modeline geçti: genel/2+ modülde kullanılacak parçaları her
-  mühendis ekleyebilir, önce `docs/TEAM.md` "UI kit envanteri"ne adını yazar. ESLint artık `radix-ui` ve
-  `@radix-ui/*` importunu `src/core/ui/**` dışında hata olarak işaretliyor. Yeni paket kurulmadı.
-- **Neden:** Kit parçaları ekibin kendi bileşenleri; konumlanan/odak yöneten parçalarda gerekirse Radix
-  kullanılacak ve yalnız kitin içinde kalacak. Base UI değerlendirildi, ekip tercihiyle seçilmedi (ADR-029).
+  mühendis ekleyebilir, önce `docs/TEAM.md` "UI kit envanteri"ne adını ve motorunu yazar (yeni "Motor"
+  sütunu). Konumlanan/odak yöneten parçalarda Base UI veya Radix serbest; ESLint `@base-ui/react`,
+  `radix-ui` ve `@radix-ui/*` importunu `src/core/ui/**` dışında hata olarak işaretliyor. Yeni paket kurulmadı.
+- **Neden:** Tasarım sahibini tek kütüphaneye kilitlememek; kütüphaneler kitin içinde kaldığı için seçim
+  parça bazında değişebilir ve modülleri etkilemez (ADR-029).
 - **Dosyalar:** `eslint.config.js`, `docs/DECISIONS.md`, `docs/ARCHITECTURE.md`, `docs/TEAM.md`,
-  `src/core/CLAUDE.md`, `CLAUDE.md`, `CHANGELOG.md`
-- **Ekip ne yapmalı:** Kendi branch'inde `git merge origin/main`. Genel arayüz parçası gerekiyorsa src/core/ui'a ekle; önce docs/TEAM.md 'UI kit envanteri'ne adını yaz. Radix gerekirse paketi kendi PR'ında kur, yalnız src/core/ui içinde kullan (lint zorlar).
-=======
+  `docs/SETUP_CHECK.md`, `src/core/CLAUDE.md`, `CLAUDE.md`, `CHANGELOG.md`
+- **Ekip ne yapmalı:** Kendi branch'inde `git merge origin/main`. Genel arayüz parçası gerekiyorsa src/core/ui'a ekle; önce docs/TEAM.md 'UI kit envanteri'ne adını ve motorunu (kendi/Base UI/Radix) yaz. Base UI veya Radix gerekiyorsa paketi kendi PR'ında kur; yalnız src/core/ui içinde import et (lint zorlar).
+
 ### 2026-11-14 15:25 — Emir (chore/changelog-union) — CHANGELOG çakışmaları yerel merge'te otomatik çözülür
 
 - **Ne:** `.gitattributes`'a `CHANGELOG.md merge=union` eklendi: kendi branch'inde `git merge origin/main`
@@ -41,7 +43,8 @@ Yalnız `docs/` değişiklikleri kayıt gerektirmez.
 - **Ekip ne yapmalı:** Hiçbir şey. Bu kuralı içeren main'i branch'ine aldığın **ilk** merge'te bir kez daha
   çakışma çıkabilir (iki kaydı da tut); sonrakiler otomatik. GitHub web arayüzündeki "Resolve conflicts" bu
   kuralı kullanmaz — merge'ü yerelde yap.
->>>>>>> origin/main
+
+> > > > > > > origin/main
 
 ### 2026-11-14 15:00 — Emir (docs/team-onboarding) — README'ye adım adım ekip kurulumu
 
