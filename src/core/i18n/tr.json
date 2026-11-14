@@ -416,10 +416,13 @@
     },
     "regionDetail": {
       "title": "Bölge ayrıntıları",
+      "whatToDo": "Ne yapmalıyım?",
+      "nothingToDo": "Şu an yapılacak bir şey yok. Rutininize devam edin.",
+      "currentValues": "Güncel değerler",
+      "whyItMatters": "Neden önemli",
+      "sourceAndAge": "Kaynak ve verinin yaşı",
       "function": "Ne işe yarar",
       "spaceRisk": "Uzay onu nasıl etkiler",
-      "metrics": "İlgili ölçümler",
-      "empty": "Ayrıntıları görmek için bir vücut bölgesi seçin.",
       "noMetrics": "Bu bölge için henüz doğrudan bir ölçüm yok."
     },
     "trend": {
@@ -433,11 +436,26 @@
       }
     },
     "vitals": {
-      "title": "Son yaşamsal değerler"
+      "title": "Son değerler",
+      "bloodPressure": "Tansiyon",
+      "above": "normalin üstünde",
+      "below": "normalin altında",
+      "staleText": "Son ölçüm {{when}} · yeniden ölç",
+      "gauge": "{{metric}} göstergesi"
     },
     "crewOverview": {
-      "title": "Mürettebat",
-      "open": "{{name}} sayfasını aç"
+      "title": "Mürettebat"
+    },
+    "alerts": {
+      "label": "Uyarılar",
+      "allNominal": "Tüm göstergeler normal · son ölçüm {{when}}",
+      "noData": "Henüz ölçüm yok. İlk ölçümünüzü yapın.",
+      "redHeading": "Uyarı — hemen harekete geçin",
+      "whatToDo": "Ne yapmalıyım?",
+      "acknowledge": "Gördüm",
+      "stopBlinking": "Yanıp sönmeyi durdur",
+      "snooze": "2 sa ertele",
+      "more": "{{count}} uyarı daha"
     }
   },
   "settings": {

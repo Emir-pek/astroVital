@@ -6,6 +6,7 @@ import type { BodyRegionId, MetricId } from '@core/types';
 import type { DisplayStatus } from '@core/ui';
 import { isStale } from '@core/utils';
 import { useCrewHealth } from '@modules/assessment';
+import { useNow } from '../hooks/useNow';
 import { regionDisplayStatus } from '../services/regionStatus';
 import { AstronautFigure } from './figure/AstronautFigure';
 import { HIT_AREAS, STAGE } from './figure/hitAreas';
@@ -77,9 +78,9 @@ export function BodyMap({ crewId, selectedRegion, onRegionSelect }: BodyMapProps
   const health = useCrewHealth(crewId);
   const latest = useLatestByMetric(crewId);
   const env = useActiveEnvironment();
+  const now = useNow();
 
   const regions = useMemo<RegionView[]>(() => {
-    const now = new Date();
     const isMetricStale = (m: MetricId) => {
       const measurement = latest[m];
       return measurement ? isStale(measurement.timestamp, m, env, now) : true;
@@ -97,7 +98,7 @@ export function BodyMap({ crewId, selectedRegion, onRegionSelect }: BodyMapProps
             : t(`status.${status}`),
       };
     });
-  }, [health.regions, latest, env, t]);
+  }, [health.regions, latest, env, now, t]);
 
   return (
     <section

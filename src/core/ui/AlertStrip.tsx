@@ -38,7 +38,11 @@ export function AlertStrip({
   if (items.length === 0) {
     const { icon: Icon, textClass } = STATUS_STYLE.nominal;
     return (
-      <section aria-label={label} className="flex items-center gap-3 rounded-card bg-raised p-4">
+      <section
+        aria-label={label}
+        aria-live="polite"
+        className="flex items-center gap-3 rounded-card bg-raised p-4"
+      >
         <Icon aria-hidden="true" className={`size-6 ${textClass}`} />
         <span className="text-body">{emptyText}</span>
       </section>
@@ -48,7 +52,11 @@ export function AlertStrip({
   const visible = expanded ? items : items.slice(0, 1);
 
   return (
-    <section aria-label={label} className="flex flex-col gap-touch-gap rounded-card bg-raised p-4">
+    <section
+      aria-label={label}
+      aria-live="polite"
+      className="flex flex-col gap-touch-gap rounded-card bg-raised p-4"
+    >
       {visible.map((item) => {
         const { icon: Icon, textClass } = STATUS_STYLE[item.status];
         return (

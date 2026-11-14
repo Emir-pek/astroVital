@@ -1,5 +1,7 @@
 import { motion, useReducedMotion } from 'framer-motion';
 import { Outlet, useLocation } from 'react-router';
+import { useHealthStore } from '@core/store';
+import { AlertLayer } from '@modules/visualization';
 import { Disclaimer } from './Disclaimer';
 import { PortraitNotice } from './PortraitNotice';
 import { Sidebar } from './Sidebar';
@@ -9,11 +11,17 @@ import { TopBar } from './TopBar';
 export function AppShell() {
   const { pathname } = useLocation();
   const reduceMotion = useReducedMotion();
+  const crewId = useHealthStore((s) => s.selectedCrewId);
   return (
     <div className="flex min-h-screen">
       <Sidebar />
       <div className="flex min-w-0 flex-1 flex-col">
         <TopBar />
+        {crewId && (
+          <div className="px-6 pt-2">
+            <AlertLayer crewId={crewId} />
+          </div>
+        )}
         <motion.main
           key={pathname}
           id="main"

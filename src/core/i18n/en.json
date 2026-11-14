@@ -416,10 +416,13 @@
     },
     "regionDetail": {
       "title": "Region details",
+      "whatToDo": "What should I do?",
+      "nothingToDo": "Nothing to do right now. Keep your routine.",
+      "currentValues": "Current values",
+      "whyItMatters": "Why it matters",
+      "sourceAndAge": "Source and data age",
       "function": "What it does",
       "spaceRisk": "How space affects it",
-      "metrics": "Related measurements",
-      "empty": "Select a body region to see details.",
       "noMetrics": "No direct measurement yet for this region."
     },
     "trend": {
@@ -433,11 +436,26 @@
       }
     },
     "vitals": {
-      "title": "Latest vitals"
+      "title": "Latest values",
+      "bloodPressure": "Blood pressure",
+      "above": "above normal",
+      "below": "below normal",
+      "staleText": "Last measured {{when}} · measure again",
+      "gauge": "{{metric}} gauge"
     },
     "crewOverview": {
-      "title": "Crew",
-      "open": "Open {{name}}"
+      "title": "Crew"
+    },
+    "alerts": {
+      "label": "Alerts",
+      "allNominal": "All indicators nominal · last measurement {{when}}",
+      "noData": "No measurements yet. Take your first measurement.",
+      "redHeading": "Warning — act now",
+      "whatToDo": "What should I do?",
+      "acknowledge": "I saw it",
+      "stopBlinking": "Stop blinking",
+      "snooze": "Snooze 2 h",
+      "more": "{{count}} more"
     }
   },
   "settings": {
