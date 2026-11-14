@@ -17,14 +17,14 @@
 
 ## Ortak dosyalar (çatışma noktaları)
 
-| Dosya                              | Kural                                                                                                                     |
-| ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
-| `src/core/types/**`                | Yalnız Mühendis 1 merge eder; değişiklik önce kanalda duyurulur, `npm run docs:contracts`                                 |
-| `src/core/i18n/en.json`, `tr.json` | Herkes ekler; **kendi modül önekinde** (`intake.*`, `assessment.*`, `visualization.*`, `routine.*`); EN+TR aynı commit'te |
-| `src/core/config/*.config.ts`      | İçerik sahibi yukarıdaki tabloya göre; yapısal değişiklik = sözleşme değişikliği                                          |
-| `CHANGELOG.md`                     | Herkes ekler, **en üste**; merge çatışmasında iki kaydı da tut (sıra: tarih)                                              |
-| `.claude/**`, `.mcp.json`          | Yalnız araç sahibi değiştirir (ADR-027)                                                                                   |
-| `package.json`                     | Yeni bağımlılık eklemeden önce kanalda sor (bundle boyutu, offline); aynı commit'te `docs/SETUP_CHECK.md` § 5'i güncelle  |
+| Dosya                              | Kural                                                                                                                                                          |
+| ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `src/core/types/**`                | Yalnız Mühendis 1 merge eder; değişiklik önce kanalda duyurulur, `npm run docs:contracts`                                                                      |
+| `src/core/i18n/en.json`, `tr.json` | Herkes ekler; **kendi modül önekinde** (`intake.*`, `assessment.*`, `visualization.*`, `routine.*`); EN+TR aynı commit'te                                      |
+| `src/core/config/*.config.ts`      | İçerik sahibi yukarıdaki tabloya göre; yapısal değişiklik = sözleşme değişikliği                                                                               |
+| `CHANGELOG.md`                     | Herkes ekler, **en üste**. `.gitattributes` `merge=union` ile yerel `git merge origin/main` iki kaydı otomatik tutar; GitHub web'de çakışırsa iki kaydı da tut |
+| `.claude/**`, `.mcp.json`          | Yalnız araç sahibi değiştirir (ADR-027)                                                                                                                        |
+| `package.json`                     | Yeni bağımlılık eklemeden önce kanalda sor (bundle boyutu, offline); aynı commit'te `docs/SETUP_CHECK.md` § 5'i güncelle                                       |
 
 ## UI kit envanteri (`src/core/ui` — açık model, ADR-029)
 
