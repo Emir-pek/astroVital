@@ -30,6 +30,23 @@ Yalnız `docs/` değişiklikleri kayıt gerektirmez.
   `src/core/config/sources.config.ts`, `src/core/simulation/__tests__/generator.test.ts`, `docs/ROUTINE_SCHEDULE.md`,
   `docs/SOURCES.md`, `docs/DECISIONS.md`, `docs/modules/core-routine.md`, `CHANGELOG.md`
 - **Ekip ne yapmalı:** Merge sonrası demo verisinde ölçüm saatleri değişir (sabah vitalleri 06:30, egzersiz 17:30, dozimetre 19:30). Saat varsayan testin/ekranın varsa kontrol et.
+### 2026-11-14 21:00 — Emir (docs/ai-brief-adimlar) — AI beyanı, iletişim kuralları, ADIMLAR ve proje özeti repoya eklendi
+
+- **Ne:** `AI.md` (jüri için İngilizce yapay zekâ kullanım beyanı — Space Apps kuralı: AI'nin nerede/nasıl
+  kullanıldığı belirtilir, AI görsel/videoya filigran, NASA markası kullanılmaz); `.claude/rules/ai-collaboration.md`
+  (Claude'un ekiple konuşma biçimi: önce anla, soru sor, övme, Ne → Neden → Nasıl, trade-off — her oturumda
+  otomatik yüklenir); `docs/ADIMLAR.md` (projeyi gündelik dille, örneklerle anlatan rehber);
+  `docs/PROJECT_BRIEF.md` (claude.ai proje talimatı + KAYNAKLAR.md'nin repodaki karşılığı). `docs/SETUP_CHECK.md`
+  § 1'e Claude Code ve GitHub CLI (isteğe bağlı) eklendi. `CLAUDE.md`, README, `document-change` skill'i ve
+  `docs/CLAUDE_SETUP.md` bu dosyalara bağlandı. YAPILANLAR = `CHANGELOG.md` (ayrı dosya açılmadı).
+- **Neden:** Ekip arkadaşının istediği dosya seti (CLAUDE / ADIMLAR / YAPILANLAR / SETUP_CHECK / AI) ve
+  Space Apps teslim rehberindeki "Use of Artificial Intelligence" kuralı; yerel ve bulut Claude'un claude.ai
+  proje talimatına erişememesi.
+- **Dosyalar:** `AI.md`, `.claude/rules/ai-collaboration.md`, `docs/ADIMLAR.md`, `docs/PROJECT_BRIEF.md`,
+  `docs/SETUP_CHECK.md`, `CLAUDE.md`, `README.md`, `.claude/skills/document-change/SKILL.md`,
+  `docs/CLAUDE_SETUP.md`, `CHANGELOG.md`
+- **Ekip ne yapmalı:** `git merge origin/main`; açık Claude oturumunda yeni oturum başlat (`/clear`) ki yeni
+  kural dosyası yüklensin. AI ile yeni bir şey ürettiysen (görsel, video, araç) `AI.md`'yi güncelle.
 
 ### 2026-11-14 20:00 — Muhammed Bektaş (feat/core-routine) — Hatırlatma takvimi üç katmanlı (günlük/haftalık/aylık), NASA/CSA kaynaklı
 
@@ -124,7 +141,6 @@ Yalnız `docs/` değişiklikleri kayıt gerektirmez.
 - **Ekip ne yapmalı:** Hiçbir şey. Bu kuralı içeren main'i branch'ine aldığın **ilk** merge'te bir kez daha
   çakışma çıkabilir (iki kaydı da tut); sonrakiler otomatik. GitHub web arayüzündeki "Resolve conflicts" bu
   kuralı kullanmaz — merge'ü yerelde yap.
-
 
 ### 2026-11-14 15:00 — Emir (docs/team-onboarding) — README'ye adım adım ekip kurulumu
 
