@@ -307,6 +307,10 @@
     "orthostatic_return": {
       "label": "Yerçekimine dönüş",
       "description": "İnişten sonra ayağa kalkınca tansiyon düşer, nabız yükselir."
+    },
+    "mixed_mission": {
+      "label": "Karma görev",
+      "description": "Varsayılan demo: dört astronot, dört hikâye — biri sağlıklı, birinde başlayan ateş, birinde yavaş kötüleşen uyku ve ruh hali, biri kendi normalinden hafifçe sapıyor."
     }
   },
   "thresholds": {
@@ -344,7 +348,8 @@
       "weeklySurgeonReport": "Uçuş doktorlarına haftalık rapor gönder",
       "weeklyHealthSummary": "Uçuş doktoru için haftalık sağlık özeti",
       "monthlyHealthExam": "Aylık tam kontrol: tüm ölçümler",
-      "monthlySleepTeamSurvey": "Aylık uyku ve ekip anketi"
+      "monthlySleepTeamSurvey": "Aylık uyku ve ekip anketi",
+      "respRate": "Dinlenirken solunum hızı"
     },
     "reminders": {
       "title": "Bugünkü rutin",

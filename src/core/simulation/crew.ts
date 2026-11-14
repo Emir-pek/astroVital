@@ -2,7 +2,8 @@ import type { CrewMember } from '@core/types';
 
 /**
  * Fictional demo crew (any resemblance to real astronauts is unintended).
- * Baselines are plausible healthy adult values in canonical units.
+ * Baselines are plausible healthy adult values in canonical units, placed inside the nominal
+ * threshold bands with margin for day-to-day noise, so a healthy day reads nominal (ADR-038).
  */
 export const DEMO_CREW: CrewMember[] = [
   {
@@ -17,13 +18,13 @@ export const DEMO_CREW: CrewMember[] = [
       systolicBP: 114,
       diastolicBP: 74,
       heartRate: 61,
-      bloodGlucose: 88,
+      bloodGlucose: 86,
       bodyTemp: 36.7,
-      sleepHours: 7.3,
-      mood: 4.3,
+      sleepHours: 7.9,
+      mood: 4.5,
       spo2: 98,
-      respRate: 14,
-      exerciseMinutes: 135,
+      respRate: 15,
+      exerciseMinutes: 150,
     },
   },
   {
@@ -35,16 +36,16 @@ export const DEMO_CREW: CrewMember[] = [
     avatarColor: '#a78bfa',
     priorRadiationMSv: 45,
     baseline: {
-      systolicBP: 121,
-      diastolicBP: 78,
-      heartRate: 58,
-      bloodGlucose: 92,
+      systolicBP: 118,
+      diastolicBP: 76,
+      heartRate: 60,
+      bloodGlucose: 88,
       bodyTemp: 36.6,
-      sleepHours: 6.9,
-      mood: 4.1,
+      sleepHours: 7.6,
+      mood: 4.4,
       spo2: 98,
-      respRate: 13,
-      exerciseMinutes: 140,
+      respRate: 15,
+      exerciseMinutes: 150,
     },
   },
   {
@@ -61,11 +62,11 @@ export const DEMO_CREW: CrewMember[] = [
       heartRate: 66,
       bloodGlucose: 85,
       bodyTemp: 36.8,
-      sleepHours: 7.6,
-      mood: 4.4,
+      sleepHours: 7.9,
+      mood: 4.5,
       spo2: 99,
       respRate: 15,
-      exerciseMinutes: 130,
+      exerciseMinutes: 150,
     },
   },
   {
@@ -77,16 +78,16 @@ export const DEMO_CREW: CrewMember[] = [
     avatarColor: '#fbbf24',
     priorRadiationMSv: 270,
     baseline: {
-      systolicBP: 124,
-      diastolicBP: 80,
+      systolicBP: 113,
+      diastolicBP: 75,
       heartRate: 69,
-      bloodGlucose: 96,
+      bloodGlucose: 89,
       bodyTemp: 36.6,
-      sleepHours: 7.0,
-      mood: 4.0,
+      sleepHours: 7.8,
+      mood: 4.4,
       spo2: 97,
       respRate: 15,
-      exerciseMinutes: 125,
+      exerciseMinutes: 145,
     },
   },
 ];

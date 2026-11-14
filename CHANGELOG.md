@@ -20,6 +20,31 @@ Yalnız `docs/` değişiklikleri kayıt gerektirmez.
 
 <!-- NEW ENTRIES BELOW -->
 
+### 2026-11-14 22:00 — Muhammed Bektaş (feat/core-routine) — Karma görev demo senaryosu; demo verisi takvime birebir
+
+- **Ne:** Yeni varsayılan senaryo **karma görev** (`mixed_mission`): Mira nominal, Kenji warning (önce nabız/uyku öncü
+  işaretleri, sonra ateş), Selin caution (uyku ve ruh hali yavaşça düşüyor), Lucas advisory (tansiyon kendi normalinin +9
+  üstünde, egzersiz aksıyor). Demo verisi artık yalnız takvimdeki ölçümleri üretiyor: ISS'te akşam yalnız nabız (19:30),
+  diğer ortamlarda akşam vitali yok; takvime sabah solunum hızı eklendi. Mürettebat baseline'ları nominal bantların içine
+  çekildi (önceden nominal senaryoda bile herkes caution çıkıyordu). Rover değişmedi.
+- **Neden:** Jüri dört durum seviyesini tek ekranda görsün; ekranda takvimde olmayan ölçüm görünmesin (ADR-037, ADR-038).
+- **Dosyalar:** `src/core/types/simulation.ts`, `src/core/simulation/{generator,scenarios,crew,index}.ts`,
+  `src/core/config/environments.config.ts`, `src/core/config/sources.config.ts`, `src/core/store/useHealthStore.ts`,
+  `src/core/i18n/en.json`, `src/core/i18n/tr.json`, testler (`generator.test.ts`, `staleness.test.ts`),
+  `docs/DEMO_CREW_STORIES.md` (yeni), `docs/ROUTINE_SCHEDULE.md`, `docs/SOURCES.md`, `docs/DECISIONS.md`, `docs/CONTRACTS.md`,
+  `docs/modules/core-routine.md`, `CHANGELOG.md`
+- **Ekip ne yapmalı:** Merge sonrası demo verisi değişir: varsayılan senaryo 'karma görev' — Mira nominal, Kenji warning, Selin caution, crew-4 advisory (motor henüz üretmiyor). Mühendis 3: docs/DEMO_CREW_STORIES.md 'Beklenen durum tablosu'nu motor testlerinde kullan. Emir: senaryonun ekranlara uyarlanması sende, bkz. aynı doküman 'Görselleştirme için'. Tarayıcıda eski demo verisi kalmışsa Ayarlar → Sıfırla → Demo verisini yükle.
+
+### 2026-11-14 21:00 — Muhammed Bektaş (feat/core-routine) — Takvim saatleri ISS gün iskeletine göre; demo verisi saatleri takvimden
+
+- **Ne:** Hatırlatma saatleri ISS gününe göre güncellendi (UTC): uyku kaydı 06:15; sabah tansiyon/nabız/SpO₂/ısı ve
+  açlık şekeri 06:30; egzersiz 17:30; dozimetre ve ISS akşam nabzı 19:30; ruh hali 21:00 (değişmedi). Demo verisi artık
+  ölçüm saatlerini takvimden okuyor (tek kaynak); ölçüm sayısı değişmedi. 3 yeni kaynak (ESA x2, ikincil ClickOrlando).
+- **Neden:** Saatler Faz 0 örneğiydi ve demo verisiyle ayrışmıştı (egzersiz 15:00 vs 17:00) — ADR-036.
+- **Dosyalar:** `src/core/config/environments.config.ts`, `src/core/simulation/generator.ts`,
+  `src/core/config/sources.config.ts`, `src/core/simulation/__tests__/generator.test.ts`, `docs/ROUTINE_SCHEDULE.md`,
+  `docs/SOURCES.md`, `docs/DECISIONS.md`, `docs/modules/core-routine.md`, `CHANGELOG.md`
+- **Ekip ne yapmalı:** Merge sonrası demo verisinde ölçüm saatleri değişir (sabah vitalleri 06:30, egzersiz 17:30, dozimetre 19:30). Saat varsayan testin/ekranın varsa kontrol et.
 ### 2026-11-14 21:30 — Emir (main) — Dört feat/* branch'i main'e fast-forward edildi; skill/kural erişimi netleştirildi
 
 - **Ne:** `feat/assessment`, `feat/core-routine`, `feat/intake`, `feat/visualization` branch'leri main'in ucuna
