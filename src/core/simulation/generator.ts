@@ -1,3 +1,4 @@
+import { CORE_ROUTINE } from '@core/config/environments.config';
 import { METRICS } from '@core/config/metrics.config';
 import type {
   CrewMember,
@@ -7,6 +8,7 @@ import type {
   MetricId,
 } from '@core/types';
 import { clamp, roundToStep } from '@core/utils/format';
+import { isScheduledOn } from '@core/utils/routineSchedule';
 import { MS_PER_DAY, MS_PER_MINUTE, startOfUtcDay } from '@core/utils/time';
 import { createRng, type Rng } from './prng';
 import { SCENARIOS, type ScenarioContext, type ScenarioDefinition } from './scenarios';
@@ -53,6 +55,15 @@ const environmentOffset = (metric: MetricId, env: EnvironmentProfile): number =>
     default:
       return 0;
   }
+};
+
+/**
+ * Demo data follows the reminder schedule (ADR-035): a task with a frequency rule produces data only
+ * on the mission days it is scheduled. Unknown id → every day.
+ */
+const scheduledOn = (templateId: string, missionDay: number): boolean => {
+  const template = CORE_ROUTINE.find((t) => t.id === templateId);
+  return template ? isScheduledOn(template, missionDay) : true;
 };
 
 interface SlotInput {
@@ -114,6 +125,8 @@ export const generateHistory = ({
         day + (h * 60 + m + rng.int(-jitterMin, jitterMin)) * MS_PER_MINUTE;
       const base = { member, crewIndex, dayIndex };
       const morningGroup = `sim-${seed}-${member.id}-d${dayIndex}-am`;
+      // History starts on mission day 1 (store sets missionStart to the first generated day).
+      const missionDay = dayIndex + 1;
 
       emit({ ...base, ts: at(7, 0, 10), slot: 'wake', metrics: [{ metric: 'sleepHours' }] });
       emit({
@@ -130,8 +143,8 @@ export const generateHistory = ({
           { metric: 'bodyTemp', circadian: -0.15 },
         ],
       });
-      // Fasting glucose every 3rd day (finger-stick supplies are limited).
-      if (dayIndex % 3 === 0)
+      // Fasting glucose: weekly, same rule as the reminder schedule (ADR-035).
+      if (scheduledOn('fasting-glucose', missionDay))
         emit({ ...base, ts: at(7, 40, 10), slot: 'glu', metrics: [{ metric: 'bloodGlucose' }] });
       // Optional evening vitals (≈ half of the days) → "1–2 measurements per day".
       if (rng.chance(0.5)) {
@@ -148,7 +161,9 @@ export const generateHistory = ({
           ],
         });
       }
-      emit({ ...base, ts: at(17, 0, 30), slot: 'ex', metrics: [{ metric: 'exerciseMinutes' }] });
+      // Exercise: 6 days a week — every 7th mission day is a rest day (ADR-035).
+      if (scheduledOn('exercise', missionDay))
+        emit({ ...base, ts: at(17, 0, 30), slot: 'ex', metrics: [{ metric: 'exerciseMinutes' }] });
       emit({ ...base, ts: at(20, 30, 10), slot: 'dose', metrics: [{ metric: 'radiationDose' }] });
       emit({ ...base, ts: at(21, 0, 20), slot: 'mood', metrics: [{ metric: 'mood' }] });
     }

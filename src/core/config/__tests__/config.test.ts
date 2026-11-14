@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
   BODY_REGION_IDS,
   BODY_REGIONS,
+  CORE_ROUTINE,
   ENVIRONMENT_IDS,
   ENVIRONMENTS,
   HAZARD_IDS,
@@ -67,6 +68,18 @@ describe('environments', () => {
       schedule.forEach((r) => expect(() => parseTimeOfDay(r.timeOfDayMET)).not.toThrow());
       expect(new Set(schedule.map((r) => r.id)).size).toBe(schedule.length);
     }
+  });
+
+  it('reminder sourceIds exist; every core routine item cites a source (ADR-035)', () => {
+    for (const id of ENVIRONMENT_IDS) {
+      ENVIRONMENTS[id].reminderSchedule
+        .flatMap((r) => r.sourceIds ?? [])
+        .forEach((s) => expect(isKnownSource(s), s).toBe(true));
+    }
+    CORE_ROUTINE.forEach((r) => expect(r.sourceIds?.length ?? 0, r.id).toBeGreaterThan(0));
+    expect(CORE_ROUTINE.map((r) => r.repeat)).toEqual(
+      expect.arrayContaining(['daily', 'weekly', 'monthly']),
+    );
   });
 
   it('gravity and comm delay are physically ordered', () => {

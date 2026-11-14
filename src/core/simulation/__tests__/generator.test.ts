@@ -78,6 +78,26 @@ describe('generateHistory', () => {
     moods.forEach((m) => expect(Number.isInteger(m.value)).toBe(true));
   });
 
+  it('follows the reminder schedule: weekly glucose, exercise rest every 7th mission day (ADR-035)', () => {
+    const out = generateHistory(opts());
+    const first = Date.parse(out[0]?.timestamp ?? '');
+    const dayStart = first - (first % 86_400_000);
+    const missionDayOf = (iso: string) => Math.floor((Date.parse(iso) - dayStart) / 86_400_000) + 1;
+    for (const member of DEMO_CREW) {
+      const mine = out.filter((m) => m.crewId === member.id);
+      const glucoseDays = mine
+        .filter((m) => m.metric === 'bloodGlucose')
+        .map((m) => missionDayOf(m.timestamp));
+      expect(glucoseDays).toEqual([1, 8, 15, 22, 29]);
+      const exerciseDays = mine
+        .filter((m) => m.metric === 'exerciseMinutes')
+        .map((m) => missionDayOf(m.timestamp));
+      expect(exerciseDays).toHaveLength(30 - 4); // rest on days 7, 14, 21, 28
+      [7, 14, 21, 28].forEach((d) => expect(exerciseDays).not.toContain(d));
+      expect(exerciseDays).toContain(8);
+    }
+  });
+
   it('every scenario runs', () => {
     for (const scenario of SCENARIO_IDS) {
       expect(generateHistory(opts({ scenario, days: 10 })).length).toBeGreaterThan(0);

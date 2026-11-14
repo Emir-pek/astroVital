@@ -5,3 +5,4 @@ export * from './time';
 export * from './units';
 export * from './contrast';
 export * from './staleness';
+export * from './routineSchedule';

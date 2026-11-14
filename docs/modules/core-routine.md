@@ -53,6 +53,9 @@ app → hepsi.
 
 ### P1 (Faz 2)
 
+- [x] Takvim yapısı: günlük/haftalık/aylık, NASA/CSA kaynaklı (ADR-035, `docs/ROUTINE_SCHEDULE.md`)
+- [ ] Takvim saatleri (`timeOfDayMET`, ayrı karar)
+- [ ] Ortama göre takvim farkları (ayrı karar)
 - [ ] `useReminders`: aktif ortamın `reminderSchedule`'ını bugünün MET gününe aç; `metric`'i olan
       görevler için o zaman penceresinde ölçüm varsa `done`, süresi geçtiyse `missed` (görünüm: visualization)
 - [ ] Bildirim: uygulama içi toast + izin verildiyse `Notification` API (Settings'te açma anahtarı) (görünüm: visualization)

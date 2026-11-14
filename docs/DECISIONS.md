@@ -110,6 +110,8 @@ Node 24 LTS, npm.
 
 ### ADR-016 — Simülasyon ölçüm sıklığı
 
+> **Kısmen yerine geçti: ADR-035** (şeker sıklığı haftalık, egzersizde 7. gün dinlenme).
+
 - **Karar:** Her gün: uyanışta uyku, 07:30 vital (KB, nabız, SpO₂, solunum, ısı — aynı `groupId`),
   17:00 egzersiz, 20:30 dozimetre, 21:00 ruh hali; günlerin ~%50'sinde 19:00 akşam vitali;
   açlık glukozu **3 günde bir** (parmak ucu sarf malzemesi kısıtlı varsayımı).
@@ -273,3 +275,17 @@ Node 24 LTS, npm.
 - **Sonuç:** `no-radix.test.ts` kaldırıldı; yerine `headless-ui-boundary.test.ts` (U-12) iki kütüphanenin
   de yalnız `src/core/ui` içinde import edildiğini kontrol ediyor (ESLint de zorluyor). Radix şu an kurulu
   değil; ilk ihtiyaç duyan kendi PR'ında kurar ve SETUP_CHECK § 5'e ekler. Sahip: Mühendis 1.
+
+### ADR-035 — Hatırlatma takvimi üç katmanlı (günlük/haftalık/aylık), NASA/CSA pratiğine dayalı
+
+- **Bağlam:** Faz 0 takvimi (`CORE_ROUTINE`) örnek bir şablondu, kaynaksızdı; sıklıklar (ör. şeker
+  "haftalık", simülasyonda "3 günde bir") birbiriyle de tutarsızdı.
+- **Karar:** Takvim üç katman: **günlük** (uyku, sabah tansiyon/nabız/SpO₂/ısı, egzersiz haftada 6 gün,
+  dozimetre, akşam ruh hali), **haftalık** (açlık şekeri, haftalık sağlık özeti), **aylık** (tam muayene,
+  uyku/ekip anketi). `ReminderTemplate` geriye uyumlu genişledi: `repeat`'e `'monthly'`, opsiyonel
+  `restEveryNDays`, `anchorDay` (haftalık = 7, aylık = 30 görev günü) ve `sourceIds`. Gün kuralı saf
+  `isScheduledOn(template, missionDay)` (`@core/utils`). Dayanaklar `sources.config.ts`/`SOURCES.md`'ye
+  eklendi; tablo ve gerekçe `docs/ROUTINE_SCHEDULE.md`. Sahip: Mühendis 1.
+- **Sonuç:** Saatler (`timeOfDayMET`), ortama göre farklar ve görevin zaman penceresi ayrı kararlar.
+  Simülasyon takvimle hizalandı (aynı `isScheduledOn`): 30 gün × 4 kişi 1.484 → 1.452 ölçüm. ADR-016'nın
+  şeker sıklığı ve egzersiz kısmının yerine geçer. Bayatlık için `REPEAT_INTERVAL_MS.monthly` = 30 gün.

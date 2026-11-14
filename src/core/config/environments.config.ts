@@ -9,14 +9,21 @@ export const ENVIRONMENT_IDS: readonly EnvironmentId[] = [
   'mars_base',
 ] as const;
 
-/** Shared daily routine; environments add / remove items. Times are mission-day "HH:mm". */
-const CORE_ROUTINE: ReminderTemplate[] = [
+/**
+ * Shared routine in three tiers — daily / weekly / monthly (ADR-035, docs/ROUTINE_SCHEDULE.md).
+ * Environments add items via `withExtra`. Times are mission-day "HH:mm" (unchanged; a separate
+ * decision). Which mission days a task falls on: `isScheduledOn` in `@core/utils`.
+ * Also drives demo-data frequency in `core/simulation` (ADR-016 → ADR-035).
+ */
+export const CORE_ROUTINE: ReminderTemplate[] = [
+  // ── Daily ──
   {
     id: 'sleep-log',
     metric: 'sleepHours',
     taskKey: 'routine.task.sleepLog',
     timeOfDayMET: '07:00',
     repeat: 'daily',
+    sourceIds: ['nasa-standard-measures', 'ntrs-2018-standard-measures'],
   },
   {
     id: 'morning-bp',
@@ -24,6 +31,7 @@ const CORE_ROUTINE: ReminderTemplate[] = [
     taskKey: 'routine.task.morningVitals',
     timeOfDayMET: '07:30',
     repeat: 'daily',
+    sourceIds: ['csa-bio-monitor'],
   },
   {
     id: 'morning-hr',
@@ -31,6 +39,15 @@ const CORE_ROUTINE: ReminderTemplate[] = [
     taskKey: 'routine.task.restingHeartRate',
     timeOfDayMET: '07:30',
     repeat: 'daily',
+    sourceIds: ['csa-bio-monitor'],
+  },
+  {
+    id: 'morning-spo2',
+    metric: 'spo2',
+    taskKey: 'routine.task.spo2',
+    timeOfDayMET: '07:30',
+    repeat: 'daily',
+    sourceIds: ['csa-bio-monitor'],
   },
   {
     id: 'morning-temp',
@@ -38,13 +55,7 @@ const CORE_ROUTINE: ReminderTemplate[] = [
     taskKey: 'routine.task.temperature',
     timeOfDayMET: '07:35',
     repeat: 'daily',
-  },
-  {
-    id: 'fasting-glucose',
-    metric: 'bloodGlucose',
-    taskKey: 'routine.task.fastingGlucose',
-    timeOfDayMET: '07:40',
-    repeat: 'weekly',
+    sourceIds: ['csa-bio-monitor'],
   },
   {
     id: 'exercise',
@@ -52,6 +63,8 @@ const CORE_ROUTINE: ReminderTemplate[] = [
     taskKey: 'routine.task.exercise',
     timeOfDayMET: '15:00',
     repeat: 'daily',
+    restEveryNDays: 7,
+    sourceIds: ['ntrs-2011-iss-exercise-conditioning', 'ntrs-2009-iss-exrx'],
   },
   {
     id: 'dosimeter',
@@ -59,6 +72,7 @@ const CORE_ROUTINE: ReminderTemplate[] = [
     taskKey: 'routine.task.dosimeter',
     timeOfDayMET: '20:30',
     repeat: 'daily',
+    sourceIds: ['pmc-2024-iss-radiation-crew-dosimetry'],
   },
   {
     id: 'evening-mood',
@@ -66,6 +80,44 @@ const CORE_ROUTINE: ReminderTemplate[] = [
     taskKey: 'routine.task.mood',
     timeOfDayMET: '21:00',
     repeat: 'daily',
+    sourceIds: ['nasa-standard-measures'],
+  },
+  // ── Weekly ──
+  // Not a routine ISS item; weekly because glucose is a challenge indicator (ROUTINE_SCHEDULE.md).
+  {
+    id: 'fasting-glucose',
+    metric: 'bloodGlucose',
+    taskKey: 'routine.task.fastingGlucose',
+    timeOfDayMET: '07:40',
+    repeat: 'weekly',
+    anchorDay: 1,
+    sourceIds: ['ntrs-2006-iss-health-fitness'],
+  },
+  {
+    id: 'weekly-health-summary',
+    taskKey: 'routine.task.weeklyHealthSummary',
+    timeOfDayMET: '10:00',
+    repeat: 'weekly',
+    sourceIds: [
+      'ntrs-2006-iss-health-fitness',
+      'nasa-podcast-crew-health-consoles',
+      'nasa-std-3001-v1-medops',
+    ],
+  },
+  // ── Monthly (every 30 mission days) ──
+  {
+    id: 'monthly-health-exam',
+    taskKey: 'routine.task.monthlyHealthExam',
+    timeOfDayMET: '10:00',
+    repeat: 'monthly',
+    sourceIds: ['ntrs-2006-iss-health-fitness'],
+  },
+  {
+    id: 'monthly-sleep-team-survey',
+    taskKey: 'routine.task.monthlySleepTeamSurvey',
+    timeOfDayMET: '21:00',
+    repeat: 'monthly',
+    sourceIds: ['ntrs-2018-standard-measures'],
   },
 ];
 

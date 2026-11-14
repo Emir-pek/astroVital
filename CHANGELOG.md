@@ -20,6 +20,21 @@ Yalnız `docs/` değişiklikleri kayıt gerektirmez.
 
 <!-- NEW ENTRIES BELOW -->
 
+### 2026-11-14 20:00 — Muhammed Bektaş (feat/core-routine) — Hatırlatma takvimi üç katmanlı (günlük/haftalık/aylık), NASA/CSA kaynaklı
+
+- **Ne:** Takvim günlük / haftalık / aylık katmanlara ayrıldı: sabah SpO₂ eklendi, egzersiz haftada 6 gün, açlık şekeri
+  haftalık; yeni haftalık sağlık özeti, aylık tam muayene ve aylık uyku/ekip anketi. Her madde `sourceIds` ile 9 yeni
+  NASA/CSA kaynağına bağlı. `ReminderTemplate`'e `'monthly'` ve opsiyonel `restEveryNDays`/`anchorDay`/`sourceIds`;
+  yeni saf fonksiyon `isScheduledOn(template, missionDay)` (`@core/utils`). Demo verisi takvimle aynı kuralı izliyor.
+  Saatler değişmedi.
+- **Neden:** Faz 0 takvimi kaynaksız bir örnekti; sıklıklar artık ISS pratiğine dayanıyor (ADR-035).
+- **Dosyalar:** `src/core/types/routine.ts`, `src/core/utils/routineSchedule.ts`, `src/core/utils/staleness.ts`,
+  `src/core/utils/index.ts`, `src/core/config/environments.config.ts`, `src/core/config/sources.config.ts`,
+  `src/core/simulation/generator.ts`, `src/core/i18n/en.json`, `src/core/i18n/tr.json`, testler, `docs/ROUTINE_SCHEDULE.md` (yeni),
+  `docs/SOURCES.md`, `docs/DECISIONS.md`, `docs/CONTRACTS.md`, `docs/modules/core-routine.md`, `CHANGELOG.md`
+- **Ekip ne yapmalı:** git merge origin/main. ReminderTemplate'e opsiyonel alanlar eklendi (kırılma yok). Mühendis 3:
+  sources.config.ts/SOURCES.md'ye takvim kaynakları eklendi, gözden geçir. Demo verisinde şeker artık haftalık, egzersizde 7. gün dinlenme.
+
 ### 2026-11-14 19:00 — Muhammed Bektaş (feat/core-routine) — Base UI ve Radix birlikte kullanılabilir (Radix yasağı kalktı)
 
 - **Ne:** `src/test/no-radix.test.ts` kaldırıldı; yerine `src/test/headless-ui-boundary.test.ts` (U-12) geldi: Base UI
