@@ -7,19 +7,21 @@ export const STAGE = { width: 584, height: 520 } as const;
 export const HIT_SIZE = 104;
 
 /**
- * Invisible tap boxes (top-left corner, px inside STAGE). Four rows at top 0/120/240/360 with
- * 16 px gaps, each box placed over (or next to) the region it opens. Small regions (eyes,
- * immune points, kidneys) get the same 104 px box; the region chips are the second way in.
+ * Invisible tap boxes (top-left corner, px inside STAGE), four rows at top 0/120/240/360 with
+ * 16 px gaps. Every box overlaps at least one of its region's glow shapes (see geometry.ts),
+ * except `immune`: its neck and armpit nodes sit inside the helmet/chest boxes, and four
+ * 104 px boxes cannot share the chest row, so its box sits beside the near armpit. The region
+ * chips are the second way in for small or crowded regions.
  */
 export const HIT_AREAS: Record<BodyRegionId, { left: number; top: number }> = {
-  brain: { left: 180, top: 0 }, // helmet top (left half)
-  eyes: { left: 300, top: 0 }, // visor (right half)
-  immune: { left: 60, top: 120 }, // neck + armpit (left)
-  lungs: { left: 180, top: 120 }, // chest left-centre
-  heart: { left: 300, top: 120 }, // chest (astronaut's left = viewer's right)
-  muscles: { left: 420, top: 120 }, // upper arm (right)
-  blood: { left: 60, top: 240 }, // arm / forearm vessels (left)
-  kidneys: { left: 240, top: 240 }, // waist
-  whole_body: { left: 420, top: 240 }, // silhouette halo (right)
-  bones: { left: 180, top: 360 }, // thigh / shin (left leg)
+  brain: { left: 188, top: 0 }, // back/top of the helmet
+  eyes: { left: 308, top: 0 }, // visor
+  immune: { left: 68, top: 120 }, // beside the near armpit node
+  lungs: { left: 188, top: 120 }, // near lung
+  heart: { left: 308, top: 120 }, // heart (astronaut's left = viewer's right)
+  blood: { left: 126, top: 240 }, // near forearm vessel
+  kidneys: { left: 246, top: 240 }, // lower back, above the waist ring
+  whole_body: { left: 366, top: 240 }, // halo along the far forearm and glove
+  muscles: { left: 188, top: 360 }, // near thigh
+  bones: { left: 308, top: 360 }, // far femur / tibia
 };

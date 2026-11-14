@@ -30,6 +30,29 @@
   --av-duration: 300ms;
   --av-breath: 4.5s;
 }
+/*
+ * Astronaut figure illustration palette (matte white suit under soft top-left light).
+ * Neutral greys only — colour on the figure is reserved for health status.
+ */
+:root {
+  --av-suit-hi: #f8f9fc; /* lit fabric, specular side */
+  --av-suit-base: #e4e7ef; /* fabric half-tone */
+  --av-suit-mid: #c9ceda; /* turning-away edge */
+  --av-suit-shade: #979fb4; /* core shadow */
+  --av-suit-reflect: #c3c9d8; /* reflected light inside the shadow edge */
+  --av-suit-deep: #4f5774; /* ambient occlusion / fold darks (used at low opacity) */
+  --av-suit-hw-hi: #f1f3f8; /* bearings and rings */
+  --av-suit-hw: #b8bfcd;
+  --av-suit-hw-dark: #737b91;
+  --av-suit-pack: #8f97ab; /* life-support pack, mostly in shadow */
+  --av-suit-sole: #3a4159;
+  --av-suit-visor-hi: #2c365d;
+  --av-suit-visor: #131a37;
+  --av-suit-visor-deep: #05070f;
+  --av-suit-lens: #1b2138;
+  --av-suit-sheen: #ffffff; /* specular highlights (low opacity) */
+  --av-suit-ground: #03050d; /* contact shadow */
+}
 [data-env='iss'],
 [data-env='spacecraft'] {
   --av-bg: #0e1530;
