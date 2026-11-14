@@ -6,7 +6,7 @@ export type ButtonSize = 'md' | 'lg';
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: ButtonVariant;
-  /** `lg` = ≥56 px touch target, usable with EVA/IVA gloves. */
+  /** Both sizes meet the ≥104 px touch target (currently identical; kept for API compatibility). */
   size?: ButtonSize;
   icon?: ReactNode;
 }
