@@ -54,46 +54,34 @@
 .av-blink {
   animation: av-blink 333ms steps(1, end) infinite; /* 3 Hz, 50 % duty */
 }
-@keyframes av-sheet-in {
-  from {
-    transform: translateX(100%);
-    opacity: 0;
-  }
-  to {
-    transform: translateX(0);
-    opacity: 1;
-  }
+/* Side sheet (Base UI Drawer): follows the finger while swiping, slides in/out otherwise. */
+.av-sheet {
+  transform: translateX(var(--drawer-swipe-movement-x, 0px));
+  transition: transform var(--av-duration) ease-out;
 }
-@keyframes av-sheet-out {
-  from {
-    transform: translateX(0);
-    opacity: 1;
-  }
-  to {
-    transform: translateX(100%);
-    opacity: 0;
-  }
+.av-sheet[data-starting-style],
+.av-sheet[data-ending-style] {
+  transform: translateX(100%);
 }
-@keyframes av-fade-in {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+.av-sheet[data-swiping] {
+  transition: none;
+  user-select: none;
 }
-@keyframes av-fade-out {
-  from {
-    opacity: 1;
-  }
-  to {
-    opacity: 0;
-  }
+.av-sheet-overlay {
+  opacity: calc(1 - var(--drawer-swipe-progress, 0));
+  transition: opacity var(--av-duration) ease-out;
+}
+.av-sheet-overlay[data-starting-style],
+.av-sheet-overlay[data-ending-style] {
+  opacity: 0;
+}
+.av-sheet-overlay[data-swiping] {
+  transition: none;
 }
 @media (prefers-reduced-motion: reduce) {
   .av-sheet,
   .av-sheet-overlay {
-    animation: none !important;
+    transition: none !important;
   }
   .av-blink {
     animation: none;

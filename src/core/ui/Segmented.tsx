@@ -1,4 +1,5 @@
-import { ToggleGroup } from 'radix-ui';
+import { Radio } from '@base-ui/react/radio';
+import { RadioGroup } from '@base-ui/react/radio-group';
 
 export interface SegmentedProps<T extends string> {
   label: string;
@@ -7,7 +8,7 @@ export interface SegmentedProps<T extends string> {
   onChange: (value: T) => void;
 }
 
-/** Single-select segmented control; deselecting (empty value) is ignored. */
+/** Single-select segmented control (radio semantics); one option is always selected. */
 export function Segmented<T extends string>({
   label,
   value,
@@ -15,24 +16,23 @@ export function Segmented<T extends string>({
   onChange,
 }: SegmentedProps<T>) {
   return (
-    <ToggleGroup.Root
-      type="single"
+    <RadioGroup
       aria-label={label}
       value={value}
-      onValueChange={(v) => {
-        if (v) onChange(v as T);
+      onValueChange={(next) => {
+        if (typeof next === 'string' && next !== '' && next !== value) onChange(next as T);
       }}
       className="inline-flex gap-touch-gap"
     >
       {options.map((o) => (
-        <ToggleGroup.Item
+        <Radio.Root
           key={o.value}
           value={o.value}
-          className="inline-flex min-h-touch min-w-touch items-center justify-center rounded-button bg-raised px-6 text-body text-text focus-visible:outline-2 focus-visible:outline-focus data-[state=on]:border-4 data-[state=on]:border-accent data-[state=on]:font-semibold"
+          className="inline-flex min-h-touch min-w-touch cursor-pointer items-center justify-center rounded-button border-4 border-transparent bg-raised px-6 text-body text-text data-checked:border-accent data-checked:font-semibold"
         >
           {o.label}
-        </ToggleGroup.Item>
+        </Radio.Root>
       ))}
-    </ToggleGroup.Root>
+    </RadioGroup>
   );
 }

@@ -1,4 +1,4 @@
-import { fireEvent, screen, within } from '@testing-library/react';
+import { fireEvent, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
 import { renderWithProviders } from '@test/renderWithProviders';
@@ -90,11 +90,17 @@ describe('RedAlertDialog', () => {
 
   it('clicking outside the dialog content does not close it', () => {
     renderWithProviders(<RedAlertDialog {...dlgProps()} />);
-    // Radix sets pointer-events:none on body, so dispatch raw events outside the content.
+    // The alert is modal, so dispatch raw events on the document outside the popup.
     fireEvent.pointerDown(document.body);
     fireEvent.mouseDown(document.body);
     fireEvent.click(document.body);
     expect(screen.getByRole('alertdialog')).toBeInTheDocument();
+  });
+
+  it('F-04 (B8): focus lands on the first "What should I do?" button when it opens', async () => {
+    renderWithProviders(<RedAlertDialog {...dlgProps()} />);
+    const first = screen.getAllByRole('button', { name: 'What should I do?' })[0]!;
+    await waitFor(() => expect(first).toHaveFocus());
   });
 
   it('closed when items is empty', () => {

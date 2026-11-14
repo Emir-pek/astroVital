@@ -1,7 +1,7 @@
+import { AlertDialog } from '@base-ui/react/alert-dialog';
 import { clsx } from 'clsx';
 import { OctagonAlert } from 'lucide-react';
-import { AlertDialog } from 'radix-ui';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { Button } from './Button';
 
 export interface RedAlertItem {
@@ -22,7 +22,10 @@ export interface RedAlertDialogProps {
   onAcknowledge: (id: string) => void;
 }
 
-/** Full-screen red warning: the only place reversed video is allowed. ESC / outside click never dismiss. */
+/**
+ * Full-screen red warning: the only place reversed video is allowed. Escape and outside presses
+ * never dismiss it; it closes only when every item has been acknowledged (items becomes empty).
+ */
 export function RedAlertDialog({
   items,
   heading,
@@ -33,6 +36,7 @@ export function RedAlertDialog({
 }: RedAlertDialogProps) {
   const [blinking, setBlinking] = useState(true);
   const [openId, setOpenId] = useState<string | null>(null);
+  const firstActionRef = useRef<HTMLButtonElement>(null);
   const [knownIds, setKnownIds] = useState<string[]>(() => items.map((i) => i.id));
 
   // A new warning must always blink again, even after "stop blinking" for an earlier one.
@@ -45,10 +49,16 @@ export function RedAlertDialog({
   }
 
   return (
-    <AlertDialog.Root open={items.length > 0}>
+    <AlertDialog.Root
+      open={items.length > 0}
+      onOpenChange={(_open, details) => {
+        // Controlled by `items`: no user gesture may close a red alert.
+        details.cancel();
+      }}
+    >
       <AlertDialog.Portal>
-        <AlertDialog.Content
-          onEscapeKeyDown={(e) => e.preventDefault()}
+        <AlertDialog.Popup
+          initialFocus={firstActionRef}
           className="fixed inset-0 z-50 flex flex-col gap-touch-gap overflow-y-auto bg-warning-fill p-6 text-on-warning-fill"
         >
           <div className="flex flex-wrap items-center justify-between gap-touch-gap">
@@ -59,7 +69,7 @@ export function RedAlertDialog({
           </div>
           <AlertDialog.Description className="sr-only">{heading}</AlertDialog.Description>
           <ul className="flex flex-col gap-touch-gap">
-            {items.map((item) => (
+            {items.map((item, index) => (
               <li
                 key={item.id}
                 className="flex flex-col gap-3 rounded-card border-2 border-current p-4"
@@ -85,6 +95,7 @@ export function RedAlertDialog({
                 )}
                 <div className="flex flex-wrap gap-touch-gap">
                   <Button
+                    ref={index === 0 ? firstActionRef : undefined}
                     variant="secondary"
                     aria-expanded={openId === item.id}
                     onClick={() => setOpenId(openId === item.id ? null : item.id)}
@@ -98,7 +109,7 @@ export function RedAlertDialog({
               </li>
             ))}
           </ul>
-        </AlertDialog.Content>
+        </AlertDialog.Popup>
       </AlertDialog.Portal>
     </AlertDialog.Root>
   );

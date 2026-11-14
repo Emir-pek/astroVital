@@ -19,6 +19,17 @@ describe('Sheet', () => {
     await userEvent.setup().click(close);
     expect(onOpenChange).toHaveBeenCalledWith(false);
   });
+
+  it('is a right-hand drawer that can be swiped away to the right', () => {
+    renderWithProviders(
+      <Sheet open onOpenChange={vi.fn()} title="Settings" closeLabel="Close">
+        <p>Body</p>
+      </Sheet>,
+    );
+    const popup = screen.getByRole('dialog', { name: 'Settings' });
+    expect(popup).toHaveAttribute('data-swipe-direction', 'right');
+    expect(popup).toHaveClass('av-sheet', 'w-[480px]', 'max-w-full');
+  });
 });
 
 describe('Segmented', () => {
@@ -38,6 +49,8 @@ describe('Segmented', () => {
     const user = userEvent.setup();
     const tr = screen.getByRole('radio', { name: 'Turkce' });
     expect(tr).toHaveClass('min-h-touch');
+    expect(tr).toHaveAttribute('aria-checked', 'false');
+    expect(screen.getByRole('radio', { name: 'English' })).toHaveAttribute('aria-checked', 'true');
     await user.click(tr);
     expect(onChange).toHaveBeenCalledWith('tr');
     onChange.mockClear();
