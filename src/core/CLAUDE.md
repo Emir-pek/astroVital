@@ -16,6 +16,11 @@ paylaşılan durum (`store`), demo verisi (`simulation`), çeviriler (`i18n`), U
 - `simulation/` saf ve deterministik: `Math.random`/`Date.now` yasak, seed'li `createRng` kullan.
 - `ui/` bileşenleri `t()` çağırmaz; çevrilmiş metni prop olarak alır. Sabit renk yok, token kullan.
   `tokens.css` içeriğinin sahibi Mühendis 4'tür.
+  **Davranış Base UI'dan, görünüm token'lardan (ADR-029):** konumlandırma, klavye, odak ve
+  erişilebilirlik `@base-ui/react`'ten; stil yalnız Tailwind + `tokens.css`. `@base-ui/react` yalnız
+  `src/core/ui/**` içinde import edilir (ESLint zorlar). Base UI tipleri/bileşenleri kitin public
+  API'sinden (`index.ts`) **dışarı sızmaz**: props bizim tiplerimizdir, Base UI'ı sarmalayıp
+  yalnız kendi bileşenimizi export ederiz.
 - `store/`: yalnız alan verisi. Şema değişirse `version` artır + `migrate`.
 - `i18n/`: anahtar ekleyen herkes EN + TR'yi aynı commit'te ekler.
 

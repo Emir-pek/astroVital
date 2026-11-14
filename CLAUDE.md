@@ -44,6 +44,7 @@ Kurulum tek komut: `powershell -ExecutionPolicy Bypass -File scripts\setup.ps1` 
   Ayrıntı: `docs/CONTRACTS.md`. Mimari: `docs/ARCHITECTURE.md`. Kararlar: `docs/DECISIONS.md`.
 - Paylaşılan alan verisi `useHealthStore`'da; modül-yerel durum modülün kendi store'unda.
 - Zustand v5: seçiciden yeni dizi/nesne döndürme → ham dilim + `useMemo`.
+- Arayüz parçası gerekiyorsa önce @core/ui'a bak; yoksa kendi versiyonunu yazma, Mühendis 1'den kit'e eklenmesini iste.
 
 ## Kod stili
 

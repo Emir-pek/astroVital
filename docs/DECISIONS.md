@@ -199,3 +199,18 @@ Node 24 LTS, npm.
   sahibi merge eder. `main` branch koruması bunu zorlar. `src/core` PR'larında onaylayan Mühendis 1.
 - **Sonuç:** ADR-026'nın "main'e doğrudan push" kısmının yerine geçer; force push yasağı aynen geçerli.
   Aynı makinede worktree akışı değişmez, yalnız main'e alma adımı PR olur.
+
+### ADR-029 — UI kit davranış katmanı: Base UI (headless)
+
+- **Bağlam:** Modern ve tamamen kendi tasarımımız olan bir arayüz istiyoruz; tarayıcının kendi
+  `<select>` vb. öğeleri açıldığında stillenemiyor; popover/tooltip/konuşma balonu gibi parçaların
+  konumlandırma, klavye ve erişilebilirlik davranışını 48 saatte elle yazmak riskli. Uygulamada 6 ham
+  `<select>` dağınık duruyor.
+- **Karar:** `src/core/ui` bileşenleri davranış için `@base-ui/react` kullanır, görünüm Tailwind +
+  `tokens.css` ile bizim. Base UI sadece `src/core/ui` içinde import edilir (ESLint zorlar); modüller
+  her zaman `@core/ui`'dan alır. Değerlendirilen alternatifler: tamamen kendimiz yazmak
+  (zaman/erişilebilirlik riski), Radix UI (bakımı yavaşladı, ekip odağını Base UI'a kaydırdı), hazır
+  görünümlü kütüphaneler MUI/Ant (kendi tasarımımız olmaz).
+- **Sonuç:** Kit parçaları (Select, Tabs, Slider, ProgressBar, Tooltip/Popover) sıradaki görevde bu
+  temel üzerine yazılacak. Kütüphane yalnız kitin içinde kullanıldığı için ileride değiştirmek sadece
+  `src/core/ui`'yi etkiler. Sahip: Mühendis 1.

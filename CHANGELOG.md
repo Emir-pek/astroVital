@@ -20,6 +20,19 @@ Yalnız `docs/` değişiklikleri kayıt gerektirmez.
 
 <!-- NEW ENTRIES BELOW -->
 
+### 2026-11-14 14:22 — Muhammed Bektaş (feat/core-routine) — UI kit için Base UI (headless) eklendi
+
+- **Ne:** UI kit'in davranış katmanı (konumlandırma, klavye, odak, erişilebilirlik) için `@base-ui/react@^1.9.0`
+  kuruldu; görünüm tamamen bizim (Tailwind + `tokens.css`). Henüz yeni bileşen yok. ESLint artık
+  `@base-ui/react` (alt yolları dahil) importunu `src/core/ui/**` dışında hata olarak işaretliyor.
+- **Neden:** Kendi tasarımımızda modern arayüz; native `<select>` açılınca stillenemiyor, popover/tooltip
+  davranışını elle yazmak 48 saatte riskli (ADR-029).
+- **Dosyalar:** `package.json`, `package-lock.json`, `eslint.config.js`, `docs/DECISIONS.md`,
+  `docs/ARCHITECTURE.md`, `docs/SETUP_CHECK.md`, `src/core/CLAUDE.md`, `CLAUDE.md`, `CHANGELOG.md`
+- **Ekip ne yapmalı:** Kendi branch'inde `git merge origin/main` sonrası `npm ci`. Select/Tabs/Slider/Tooltip gibi
+  parçaları kendin yazma; @core/ui'a eklenene kadar mevcut haliyle bırak veya Mühendis 1'e iste.
+  @base-ui/react'i modülünden doğrudan import etme (lint hata verir).
+
 ### 2026-11-14 13:30 — Emir (main) — Ekip altyapısı: tek komut kurulum, dokümantasyon zorunluluğu, ortak Claude araçları
 
 - **Ne:** Tek komutla kurulum (`scripts/setup.ps1` / `scripts/setup.sh`) ve otomatik kontrol (`npm run doctor`);

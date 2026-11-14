@@ -26,6 +26,7 @@
     "claude:setup": "node scripts/claude-setup.mjs"
   },
   "dependencies": {
+    "@base-ui/react": "^1.9.0",
     "clsx": "^2.1.1",
     "date-fns": "^4.4.0",
     "framer-motion": "^14.14.0",
