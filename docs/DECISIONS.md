@@ -258,5 +258,18 @@ Node 24 LTS, npm.
   `Sheet` → `Drawer` (sağa kaydırarak kapanır), `Segmented` → `RadioGroup`, ortam seçici → `Select`,
   astronot menüsü → `Menu`. Gerekçe: dokunmatik iyileştirmeleri, kaydırarak kapanan Drawer,
   shadcn varsayılanı. Bedel: 3 bileşen yeniden yazıldı; prop imzaları değişmedi.
-- **Sonuç:** `src/test/no-radix.test.ts` (U-12) Radix import'unun geri gelmesini engeller. Base UI
+- **Sonuç:** ~~`src/test/no-radix.test.ts` (U-12) Radix import'unun geri gelmesini engeller.~~ (Radix yasağı
+  ADR-034 ile kaldırıldı.) Base UI
   yalnız davranış katmanıdır; görünüm tamamen `tokens.css`. `Select`'i `Drawer`/`Dialog` içine koyma.
+
+### ADR-034 — Base UI ve Radix birlikte kullanılabilir (ADR-033'teki Radix yasağı kalkar)
+
+- **Bağlam:** ADR-029 kit motorunu esnek bırakıyordu (Base UI veya Radix); ADR-033 mevcut bileşenleri
+  Base UI'a taşırken `no-radix` testiyle Radix'i tamamen yasakladı. İki karar çelişiyordu.
+- **Karar:** ADR-029 geçerli: `src/core/ui` içinde Base UI (`@base-ui/react`) **ve** Radix
+  (`radix-ui` / `@radix-ui/*`) birlikte kullanılabilir; seçim parça bazında, TEAM.md "UI kit envanteri"
+  "Motor" sütununa yazılır. Varsayılan Base UI (mevcut parçalar onda kalır); Radix'te daha iyi bir
+  primitif varsa o parça için Radix seçilebilir. İç içe açılan katmanlar mümkünse aynı motordan.
+- **Sonuç:** `no-radix.test.ts` kaldırıldı; yerine `headless-ui-boundary.test.ts` (U-12) iki kütüphanenin
+  de yalnız `src/core/ui` içinde import edildiğini kontrol ediyor (ESLint de zorluyor). Radix şu an kurulu
+  değil; ilk ihtiyaç duyan kendi PR'ında kurar ve SETUP_CHECK § 5'e ekler. Sahip: Mühendis 1.

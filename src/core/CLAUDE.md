@@ -19,10 +19,11 @@ paylaşılan durum (`store`), demo verisi (`simulation`), çeviriler (`i18n`), U
 - `simulation/` saf ve deterministik: `Math.random`/`Date.now` yasak, seed'li `createRng` kullan.
 - `ui/` bileşenleri `t()` çağırmaz; çevrilmiş metni prop olarak alır. Sabit renk yok, token kullan.
   `tokens.css` içeriğinin sahibi Mühendis 4'tür.
-  **Kendi bileşenlerimiz + gerektiğinde Base UI veya Radix (ADR-029, esnek):** kit parçalarını biz
+  **Kendi bileşenlerimiz + gerektiğinde Base UI ve/veya Radix (ADR-029, ADR-034):** kit parçalarını biz
   yazarız; açılır menü, popover/tooltip, modal gibi konumlanan/odak yöneten parçalarda Base UI
-  (`@base-ui/react`) veya Radix (`radix-ui` / `@radix-ui/*`) kullanılabilir. Bu kütüphaneler yalnız
-  `src/core/ui/**` içinde import edilir (ESLint zorlar); paketi ilk ihtiyaç duyan kendi PR'ında kurar.
+  (`@base-ui/react`, kurulu, varsayılan) ve Radix (`radix-ui` / `@radix-ui/*`) birlikte kullanılabilir. Bu
+  kütüphaneler yalnız `src/core/ui/**` içinde import edilir (ESLint + U-12 testi zorlar); Radix'i ilk
+  ihtiyaç duyan kendi PR'ında kurar.
   Bir parça = bir motor (envanterde "Motor" sütunu); iç içe açılan katmanlar mümkünse aynı kütüphaneden.
   Kütüphane tipleri/bileşenleri kitin public API'sinden (`index.ts`) **dışarı sızmaz**: props bizim
   tiplerimizdir, sarmalayıp yalnız kendi bileşenimizi export ederiz.

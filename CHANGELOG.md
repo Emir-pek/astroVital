@@ -20,6 +20,19 @@ Yalnız `docs/` değişiklikleri kayıt gerektirmez.
 
 <!-- NEW ENTRIES BELOW -->
 
+### 2026-11-14 19:00 — Muhammed Bektaş (feat/core-routine) — Base UI ve Radix birlikte kullanılabilir (Radix yasağı kalktı)
+
+- **Ne:** `src/test/no-radix.test.ts` kaldırıldı; yerine `src/test/headless-ui-boundary.test.ts` (U-12) geldi: Base UI
+  ve Radix'in ikisi de serbest, yalnız `src/core/ui` dışında import edilirse test kırılır (ESLint kuralı zaten aynı).
+  Yeni ADR-034; ADR-033'ün Radix yasağı kaldırıldı. Mevcut parçalar Base UI'da kalır, yeni paket kurulmadı.
+- **Neden:** ADR-029 (esnek motor) ile ADR-033 + `no-radix` testi çelişiyordu; ekip kararı ADR-029 yönünde.
+- **Dosyalar:** `src/test/no-radix.test.ts` (silindi), `src/test/headless-ui-boundary.test.ts`, `docs/DECISIONS.md`,
+  `CLAUDE.md`, `src/core/CLAUDE.md`, `docs/SETUP_CHECK.md`, `docs/superpowers/specs/2026-11-14-astrovital-ui-design.md`,
+  `docs/superpowers/specs/2026-11-14-astrovital-ui-test-plan.md`, `CHANGELOG.md`
+- **Ekip ne yapmalı:** Kendi branch'inde `git merge origin/main`. Kit parçası yazarken Base UI varsayılan; Radix'te daha iyi
+  bir primitif varsa o parça için kullanabilirsin (önce `npm install radix-ui` + SETUP_CHECK § 5 satırı, aynı PR'da). Motoru
+  TEAM.md "UI kit envanteri"ne yaz.
+
 ### 2026-11-14 18:35 — Emir (feat/visualization) — PR #7 main ile birleştirildi, lint hataları ve ADR numaraları düzeltildi
 
 - **Ne:** `main` branch'e alındı (çakışma yok). Lint hataları giderildi: `CrewPicker` ve `EnvironmentPicker`
@@ -85,7 +98,6 @@ Yalnız `docs/` değişiklikleri kayıt gerektirmez.
   çakışma çıkabilir (iki kaydı da tut); sonrakiler otomatik. GitHub web arayüzündeki "Resolve conflicts" bu
   kuralı kullanmaz — merge'ü yerelde yap.
 
-> > > > > > > origin/main
 
 ### 2026-11-14 15:00 — Emir (docs/team-onboarding) — README'ye adım adım ekip kurulumu
 

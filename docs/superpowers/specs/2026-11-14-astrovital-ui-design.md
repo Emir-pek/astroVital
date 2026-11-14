@@ -213,7 +213,7 @@ Sıra her zaman aynı (rakipten alınan iyi pratik: önce eylem):
 
 ## 9. Teknik yaklaşım
 
-**Seçilen:** Base UI primitifleri (`@base-ui/react`; shadcn/ui tarzı, bileşenler projeye kopyalanır) + Tailwind + kendi token'larımız. (14.11.2026'da Radix'ten geçildi — ADR-029.)
+**Seçilen:** Base UI primitifleri (`@base-ui/react`; shadcn/ui tarzı, bileşenler projeye kopyalanır) + Tailwind + kendi token'larımız. (14.11.2026'da mevcut parçalar Radix'ten Base UI'a taşındı — ADR-033. Radix yasak değil; gerekirse parça bazında kullanılabilir — ADR-029, ADR-034.)
 - Gerekçe: odak yönetimi ve erişilebilirlik hazır gelir, dokunmatik desteği güçlü; görünüm tamamen bizde.
 
 | İhtiyaç | Base UI bileşeni |
