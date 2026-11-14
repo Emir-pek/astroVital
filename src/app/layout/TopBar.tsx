@@ -13,12 +13,14 @@ export function TopBar() {
   const navigate = useNavigate();
   return (
     <header className="sticky top-0 z-30 flex flex-wrap items-center justify-between gap-touch-gap bg-bg/80 px-6 py-3 backdrop-blur">
-      <MetClock />
+      <div className="flex flex-col gap-1">
+        <MetClock />
+        <p className="flex items-center gap-2 text-label text-text-2">
+          <FlaskConical aria-hidden="true" className="size-5 shrink-0" strokeWidth={1.75} />
+          {t('topbar.simulated')}
+        </p>
+      </div>
       <EnvironmentPicker />
-      <p className="flex items-center gap-2 text-label text-text-2">
-        <FlaskConical aria-hidden="true" className="size-6 shrink-0" strokeWidth={1.75} />
-        {t('topbar.simulated')}
-      </p>
       <Button
         variant="secondary"
         icon={<OctagonAlert aria-hidden="true" className="size-7 text-warning" />}

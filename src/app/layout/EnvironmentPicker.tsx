@@ -10,7 +10,9 @@ export function EnvironmentPicker() {
   const { t } = useTranslation();
   const active = useHealthStore((s) => s.activeEnvironment);
   const setActive = useHealthStore((s) => s.setActiveEnvironment);
-  const label = t('topbar.environmentValue', { env: t(ENVIRONMENTS[active].labelKey) });
+  const name = t(ENVIRONMENTS[active].labelKey);
+  // The visible text is the name only (the top bar must fit 1180 px); the full phrase is spoken.
+  const label = t('topbar.environmentValue', { env: name });
 
   return (
     <Select.Root
@@ -21,10 +23,10 @@ export function EnvironmentPicker() {
     >
       <Select.Trigger
         aria-label={label}
-        className="inline-flex min-h-touch min-w-touch max-w-[260px] items-center gap-2 rounded-button bg-raised px-4 text-left text-label text-text"
+        className="inline-flex min-h-touch min-w-touch max-w-[220px] items-center gap-2 rounded-button bg-raised px-4 text-left text-label text-text"
       >
         <Orbit aria-hidden="true" className="size-6 shrink-0 text-text-2" strokeWidth={1.75} />
-        <span className="line-clamp-2">{label}</span>
+        <span className="line-clamp-2">{name}</span>
         <ChevronDown aria-hidden="true" className="size-6 shrink-0 text-text-2" />
       </Select.Trigger>
       <Select.Portal>
