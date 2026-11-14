@@ -26,12 +26,16 @@ missions — built for the **NASA Space Apps Challenge 2026 · Health Monitoring
 
 ## Quick start
 
-Requires Node.js ≥ 22 (tested with Node 24 LTS) and npm.
+Requires Node.js ≥ 22 (tested with Node 24 LTS) and npm. No Python/venv needed.
 
 ```bash
-npm install
+npm ci             # exact versions from package-lock.json (fallback: npm install)
 npm run dev        # http://localhost:5173 — demo data loads automatically on first start
 ```
+
+Something missing or out of date? Run the checklist in [docs/SETUP_CHECK.md](docs/SETUP_CHECK.md)
+(tools, dependency versions, health checks + the dependency registry that must be updated whenever a
+package is added).
 
 | Command                                                     | Purpose                                                                |
 | ----------------------------------------------------------- | ---------------------------------------------------------------------- |
@@ -117,8 +121,9 @@ npm run dev -- --port 5174     # use a different port per worktree
 
 Merge into `main` at least twice a day after `npm run verify`. Commits follow
 [Conventional Commits](https://www.conventionalcommits.org/) (`feat(intake): …`, `fix(assessment): …`).
-Changes under `src/core` need Engineer 1's approval. **Local git only — no push, no new remotes**
-(syncing between different computers: see [docs/TEAM.md](docs/TEAM.md)).
+Changes under `src/core` need Engineer 1's approval. Push your own `feat/*` branch freely; push to
+`main` only with a green `npm run verify`; never force-push. Repository:
+`https://github.com/Emir-pek/NasaHackatonAstroVital` (details: [docs/TEAM.md](docs/TEAM.md)).
 
 ## Science
 

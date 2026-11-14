@@ -85,4 +85,4 @@ app → hepsi.
 - ❌ `src/core/types`'ı duyurmadan değiştirme.
 - ❌ Store'a türetilmiş (değerlendirme) veri persist etme.
 - ❌ Ağ isteği gerektiren bağımlılık (CDN font, analitik) ekleme — offline-first.
-- ❌ Push / remote ekleme.
+- ❌ Force push, verify'sız `main` push'u, remote ekleme/değiştirme.

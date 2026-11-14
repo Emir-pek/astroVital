@@ -52,6 +52,19 @@ npm run docs:contracts  # src/core/types → docs/CONTRACTS.md senkronu
 - Her eşik/öneri bir kaynağa (`sourceIds`, `docs/SOURCES.md`) bağlanır.
 - Ağ isteği yok (offline-first): CDN font/script, analitik, harici API ekleme.
 
+## Kurulum ve bağımlılıklar (ZORUNLU)
+
+- Projeyi ilk kez ayağa kaldırırken veya kullanıcı "kurulumu kontrol et" dediğinde:
+  `docs/SETUP_CHECK.md`'deki listeyi sırayla çalıştır ve § 4 "Durum raporu"nu doldurup kullanıcıya ver
+  (eksik araç, geride kalan sürüm, eksik bağımlılık ve düzeltme komutları).
+- **Bağımlılık eklerken, çıkarırken veya sürümünü değiştirirken** (`npm install <paket>`,
+  `npm uninstall`, `package.json` düzenlemesi): **aynı commit'te** `docs/SETUP_CHECK.md` § 5
+  "Bağımlılık kaydı" tablosunu güncelle (paket, `package.json`'daki aralığın birebir aynısı, tür, amaç,
+  ekleyen/tarih). Yeni bir sistem aracı gerekiyorsa § 1'e ekle. Prosedür: § 6.
+  `src/test/setup-check.test.ts` tablo eksikse `npm test`'i kırmızı yapar — testi gevşetme, tabloyu düzelt.
+- Bağımlılık eklemeden önce kullanıcıya/ekibe sor (bundle boyutu, offline çalışma).
+- Python/venv kullanılmaz; izolasyon `node_modules` + `package-lock.json` ile sağlanır.
+
 ## Test kuralı
 
 - **Her yeni motor/saf fonksiyon testli** (`__tests__/` klasöründe, `*.test.ts(x)`).
@@ -59,14 +72,16 @@ npm run docs:contracts  # src/core/types → docs/CONTRACTS.md senkronu
 - Assessment motoru hedefi ≥%90 kapsam.
 - Merge öncesi: `npm run lint && npm run typecheck && npm test` (tercihen `npm run verify`).
 
-## Git kuralı (yerel)
+## Git kuralı
 
 - Branch'ler: `feat/core-routine` (Müh. 1), `feat/intake` (Müh. 2), `feat/assessment` (Müh. 3),
   `feat/visualization` (Müh. 4) — hepsi `main`'den.
 - Conventional Commits: `feat(intake): ...`, `fix(assessment): ...`, `docs(thresholds): ...`.
 - Günde en az 2 kez `main`'e merge; `src/core` değişiklikleri yalnız Mühendis 1 onayıyla.
 - Aynı makinede paralel çalışma: `git worktree` (README + `docs/TEAM.md`).
-- ⛔ **Push yapma, remote ekleme** (mevcut `origin`'e de push yok — ADR-001).
+- Repo: `https://github.com/Emir-pek/NasaHackatonAstroVital` (`origin`). Kullanıcı isterse kendi
+  `feat/*` branch'ini push et; `main`'e push yalnız `npm run verify` yeşilken. ⛔ **Force push yok**,
+  başkasının branch'ine push yok, remote ekleme/değiştirme yok (ADR-026).
 
 ## Nerede ne var
 
@@ -74,4 +89,5 @@ npm run docs:contracts  # src/core/types → docs/CONTRACTS.md senkronu
 - Eşikler: `docs/THRESHOLDS.md` ↔ `src/core/config/thresholds.config.ts`
 - Tehlikeler: `docs/HAZARDS.md` · Kaynaklar: `docs/SOURCES.md` ↔ `src/core/config/sources.config.ts`
 - Plan: `docs/PLAN.md` · Ekip: `docs/TEAM.md` · Demo: `docs/DEMO_SCRIPT.md`
+- Kurulum kontrolü + bağımlılık kaydı: `docs/SETUP_CHECK.md`
 - Her modülün kendi `CLAUDE.md`'si modüle özel kuralları içerir.

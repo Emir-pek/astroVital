@@ -18,9 +18,9 @@
 | `src/core/types/**`                | Yalnız Mühendis 1 merge eder; değişiklik önce kanalda duyurulur, `npm run docs:contracts`                                 |
 | `src/core/i18n/en.json`, `tr.json` | Herkes ekler; **kendi modül önekinde** (`intake.*`, `assessment.*`, `visualization.*`, `routine.*`); EN+TR aynı commit'te |
 | `src/core/config/*.config.ts`      | İçerik sahibi yukarıdaki tabloya göre; yapısal değişiklik = sözleşme değişikliği                                          |
-| `package.json`                     | Yeni bağımlılık eklemeden önce kanalda sor (bundle boyutu, offline)                                                       |
+| `package.json`                     | Yeni bağımlılık eklemeden önce kanalda sor (bundle boyutu, offline); aynı commit'te `docs/SETUP_CHECK.md` § 5'i güncelle  |
 
-## Git akışı (yerel)
+## Git akışı (GitHub: `https://github.com/Emir-pek/NasaHackatonAstroVital`)
 
 - Branch'ler `main`'den: `feat/core-routine`, `feat/intake`, `feat/assessment`, `feat/visualization`.
 - **Conventional Commits:** `feat(intake): add BP pair entry`, `fix(assessment): widen formula sign`,
@@ -33,7 +33,11 @@
 - Merge sırası: önce `main`'i kendi branch'ine al (`git merge main`), çatışmaları çöz, testler
   yeşil → `git switch main && git merge --no-ff feat/<x>`.
 - `src/core` değişiklikleri **yalnız Mühendis 1 onayıyla** main'e girer.
-- **Push yok, remote ekleme yok** (ekip aksi karar verene kadar).
+- **Push (ADR-026):** kendi `feat/*` branch'ini istediğin sıklıkla `git push origin feat/<x>`.
+  `main`'e push yalnız `npm run verify` yeşilken (merge sonrası). **Force push yasak**
+  (`--force`, `--force-with-lease` dahil); başkasının branch'ine push etme.
+- İşe başlarken / merge öncesi: `git pull` (kendi branch'in) ve `git fetch origin && git merge origin/main`.
+- Yeni remote ekleme veya remote adresini değiştirme ekip onayıyla.
 
 ## Aynı bilgisayarda paralel çalışma (git worktree)
 
@@ -49,15 +53,19 @@ git worktree list            # durum
 git worktree remove ../astrovital-intake   # iş bitince
 ```
 
-## Farklı bilgisayarlar (yöntem ekipçe seçilecek — ADR-025)
+## Farklı bilgisayarlar (GitHub üzerinden — ADR-026)
 
-Push yasak olduğundan seçenekler:
+```bash
+git clone https://github.com/Emir-pek/NasaHackatonAstroVital.git
+cd NasaHackatonAstroVital
+git switch feat/intake          # kendi branch'in (uzak branch'ten otomatik takip eder)
+npm ci                          # sonra docs/SETUP_CHECK.md kontrol listesi
+npm run dev
+```
 
-1. **`git bundle` (önerilen):** `git bundle create intake.bundle main..feat/intake` → paylaşılan
-   klasöre/USB'ye koy → alan kişi `git fetch intake.bundle feat/intake:feat/intake`.
-2. **Ortak ağ klasöründe bare repo:** `git init --bare \\server\share\astrovital.git` ve onu
-   _yerel_ ağ remote'u olarak eklemek (bu bir "remote ekleme" olduğundan önce ekip onayı gerekir).
-3. **`git format-patch` / `git am`:** küçük değişiklikler için.
+Günlük döngü: `git pull` → çalış → `npm run verify` → `git commit` → `git push origin feat/<x>`.
+Main'e alma: `git fetch origin && git merge origin/main` (kendi branch'inde, çatışmaları çöz) →
+`npm run verify` → `git switch main && git pull && git merge --no-ff feat/<x> && git push origin main`.
 
 ## İletişim kuralları
 

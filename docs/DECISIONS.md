@@ -13,6 +13,7 @@ eskisine "Yerine geçti: ADR-0xx" notu ekler. Sahibi belirtilmemişse karar Faz 
 - **Karar:** `git init -b main` yerine mevcut `main` üzerine commit atıldı. Mevcut `origin`
   **silinmedi, eklenmedi, push yapılmadı**. Feature branch'ler yerel.
 - **Sonuç:** Ekip push etmeye karar verdiğinde remote hazır; o zamana kadar her şey yerel.
+- **Yerine geçti:** ADR-026 (push serbest bırakıldı).
 
 ### ADR-002 — TypeScript 6.0 (7.0 değil)
 
@@ -164,3 +165,14 @@ Node 24 LTS, npm.
 
 - **Karar:** Push yasak olduğundan yöntem ekipçe seçilecek (bkz. TEAM.md § Farklı bilgisayarlar):
   `git bundle` dosya paylaşımı önerilir.
+- **Yerine geçti:** ADR-026 (senkronizasyon GitHub üzerinden).
+
+### ADR-026 — GitHub'a push serbest; repo yeni adreste
+
+- **Bağlam:** Proje sahibi push'u onayladı (Faz 0 scaffold + 4 branch push edildi). GitHub, repo
+  adının `NasaHackatonTask3` → `NasaHackatonAstroVital` olarak değiştiğini bildirdi (eski adres
+  yönlendiriyor).
+- **Karar:** `origin` = `https://github.com/Emir-pek/NasaHackatonAstroVital.git`. Herkes kendi
+  `feat/*` branch'ine serbestçe push eder; `main`'e push yalnız `npm run verify` yeşilken; force push
+  yasak. Farklı bilgisayarlar arası senkronizasyon GitHub üzerinden (TEAM.md).
+- **Sonuç:** ADR-001'deki "push yok" ve ADR-025'teki `git bundle` önerisi geçersiz.
