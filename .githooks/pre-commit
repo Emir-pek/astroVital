@@ -1,0 +1,4 @@
+#!/usr/bin/env sh
+# Blocks commits that change code/config without a CHANGELOG.md entry.
+# Installed by the setup script (git config core.hooksPath .githooks).
+node scripts/docs-check.mjs --staged

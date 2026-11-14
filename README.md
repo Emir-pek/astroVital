@@ -26,16 +26,32 @@ missions — built for the **NASA Space Apps Challenge 2026 · Health Monitoring
 
 ## Quick start
 
-Requires Node.js ≥ 22 (tested with Node 24 LTS) and npm. No Python/venv needed.
+Requires Node.js ≥ 22 (tested with Node 24 LTS), npm and git. No Python/venv needed.
 
-```bash
-npm ci             # exact versions from package-lock.json (fallback: npm install)
-npm run dev        # http://localhost:5173 — demo data loads automatically on first start
+**One command** (installs dependencies, git hooks, the team's Claude Code plugins, then checks everything):
+
+```powershell
+# Windows (PowerShell)
+git clone https://github.com/Emir-pek/astroVital.git
+cd astroVital
+powershell -ExecutionPolicy Bypass -File scripts\setup.ps1
+npm run dev
 ```
 
-Something missing or out of date? Run the checklist in [docs/SETUP_CHECK.md](docs/SETUP_CHECK.md)
-(tools, dependency versions, health checks + the dependency registry that must be updated whenever a
-package is added).
+```bash
+# macOS / Linux / WSL / Git Bash
+git clone https://github.com/Emir-pek/astroVital.git
+cd astroVital
+bash scripts/setup.sh
+npm run dev
+```
+
+Open http://localhost:5173 — demo data loads automatically on first start. No local install at all?
+Open the repo in **GitHub Codespaces**; the dev container runs the same setup.
+
+Manual alternative: `npm ci && npm run dev`. Something missing or out of date? `npm run doctor`, then
+the full checklist in [docs/SETUP_CHECK.md](docs/SETUP_CHECK.md) (tools, dependency versions, health
+checks + the dependency registry that must be updated whenever a package is added).
 
 | Command                                                     | Purpose                                                                |
 | ----------------------------------------------------------- | ---------------------------------------------------------------------- |
@@ -48,6 +64,9 @@ package is added).
 | `npm run format`                                            | Prettier                                                               |
 | `npm run verify`                                            | lint + typecheck + test + build — run before every merge               |
 | `npm run docs:contracts`                                    | Sync `docs/CONTRACTS.md` from `src/core/types`                         |
+| `npm run doctor`                                            | Check tools, dependencies, git hooks and Claude plugins                |
+| `npm run docs:check`                                        | Check that your changes have a `CHANGELOG.md` entry                    |
+| `npm run claude:setup`                                      | (Re)install the team's Claude Code plugins                             |
 
 ## Architecture at a glance
 
@@ -119,11 +138,27 @@ npm install
 npm run dev -- --port 5174     # use a different port per worktree
 ```
 
-Merge into `main` at least twice a day after `npm run verify`. Commits follow
+Changes reach `main` **only through pull requests**: push your own `feat/*` branch, open a PR, and
+merge after CI (`verify` + `docs`) is green and one teammate approves (changes under `src/core` need
+Engineer 1's approval). Merge into `main` at least twice a day. Commits follow
 [Conventional Commits](https://www.conventionalcommits.org/) (`feat(intake): …`, `fix(assessment): …`).
-Changes under `src/core` need Engineer 1's approval. Push your own `feat/*` branch freely; push to
-`main` only with a green `npm run verify`; never force-push. Repository:
-`https://github.com/Emir-pek/astroVital` (details: [docs/TEAM.md](docs/TEAM.md)).
+Never force-push. Repository: `https://github.com/Emir-pek/astroVital` (details:
+[docs/TEAM.md](docs/TEAM.md)).
+
+## Every change is documented
+
+Every code/config change gets an entry in [CHANGELOG.md](CHANGELOG.md) (newest first: what, why,
+files, what teammates must do), plus the matching `docs/` file when behaviour changes. Enforced by
+a git `pre-commit` hook, the CI `docs` job and a Claude Code `Stop` hook. After `git pull`, a
+`post-merge` hook prints teammates' new entries; every Claude Code session starts with them loaded.
+
+## Claude Code for the team
+
+The team's AI tooling lives in this repo and is maintained by the tooling owner:
+`CLAUDE.md` (rules, per module too), `.claude/skills/` (custom skills), `.claude/settings.json`
+(plugins, hooks, permissions) and `.mcp.json` (MCP servers: Playwright, Context7, GitHub). Clone,
+run setup, start `claude` in the repo and accept the trust prompt. Use local Claude Code sessions:
+cloud sessions load `CLAUDE.md` only. Guide (Turkish): [docs/CLAUDE_SETUP.md](docs/CLAUDE_SETUP.md).
 
 ## Science
 

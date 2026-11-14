@@ -1,5 +1,10 @@
 # SETUP_CHECK — Kurulum Kontrol Listesi
 
+> ⚡ **Hızlı yol:** `powershell -ExecutionPolicy Bypass -File scripts\setup.ps1` (Windows) veya
+> `bash scripts/setup.sh` (macOS/Linux/Git Bash) § 1–2'yi otomatik yapar (`npm ci`, git hook'ları,
+> Claude plugin'leri) ve sonunda `npm run doctor` çalıştırır. § 3 için `npm run verify`. Aşağıdaki
+> liste ayrıntılı/elle kontrol içindir.
+
 > Projeyi ayağa kaldıran kişi (veya onun Claude Code CLI'ı) bu listeyi **yukarıdan aşağı** çalıştırır,
 > her adımın beklenen çıktısını karşılaştırır ve sonunda "Durum raporu"nu doldurur.
 > Komutlar proje kök klasöründe çalıştırılır; Windows PowerShell, Git Bash, macOS/Linux aynıdır.

@@ -1,0 +1,20 @@
+{
+  "name": "AstroVital",
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:1-24-bookworm",
+  "features": {
+    "ghcr.io/devcontainers/features/github-cli:1": {}
+  },
+  "postCreateCommand": "npm i -g @anthropic-ai/claude-code typescript-language-server typescript && bash scripts/setup.sh",
+  "forwardPorts": [5173],
+  "portsAttributes": { "5173": { "label": "AstroVital", "onAutoForward": "openBrowser" } },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "anthropic.claude-code",
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "bradlc.vscode-tailwindcss"
+      ]
+    }
+  }
+}

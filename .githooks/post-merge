@@ -1,0 +1,17 @@
+#!/usr/bin/env sh
+# After `git pull`: show teammates' new CHANGELOG entries and warn if setup must be re-run.
+changed="$(git diff --name-only ORIG_HEAD HEAD 2>/dev/null)"
+if echo "$changed" | grep -q '^CHANGELOG.md$'; then
+  echo ""
+  echo "=== Ekipten yeni değişiklikler (CHANGELOG.md) ==="
+  git diff ORIG_HEAD HEAD -- CHANGELOG.md | grep '^+' | grep -v '^+++' | sed 's/^+//'
+  echo "================================================="
+fi
+if echo "$changed" | grep -qE '^(package-lock.json|\.claude/settings.json|\.mcp.json)$'; then
+  echo ""
+  echo "⚠  Bağımlılıklar veya Claude ayarları değişti. Kurulumu tekrar çalıştır:"
+  echo "   Windows:     powershell -ExecutionPolicy Bypass -File scripts\\setup.ps1"
+  echo "   macOS/Linux: bash scripts/setup.sh"
+  echo "   Açık Claude Code oturumunda: /reload-plugins"
+fi
+exit 0
