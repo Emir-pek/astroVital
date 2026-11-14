@@ -1,0 +1,446 @@
+{
+  "app": {
+    "name": "AstroVital",
+    "tagline": "Crew health, in plain language",
+    "disclaimer": "Prototype — not a medical device. Simulated data. Always follow your Crew Medical Officer and flight surgeons."
+  },
+  "nav": {
+    "label": "Main navigation",
+    "dashboard": "Dashboard",
+    "crew": "Crew member",
+    "log": "Log measurement",
+    "alerts": "Alerts",
+    "learn": "Learn",
+    "mission": "Missions",
+    "settings": "Settings"
+  },
+  "topbar": {
+    "met": "Mission Elapsed Time",
+    "metShort": "MET",
+    "environment": "Environment",
+    "language": "Language",
+    "commDelay": "Signal delay to Earth: {{min}}–{{max}}",
+    "gravity": "Gravity: {{g}} g"
+  },
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "close": "Close",
+    "loading": "Loading…",
+    "noData": "No data yet",
+    "lastMeasured": "Last measured {{when}}",
+    "value": "Value",
+    "unit": "Unit",
+    "crewMember": "Crew member",
+    "metric": "Metric",
+    "comingSoon": "Coming soon",
+    "stubNotice": "Placeholder — this component is being built by {{owner}}.",
+    "sources": "Sources",
+    "seconds": "{{count}} s",
+    "minutes": "{{count}} min",
+    "infinity": "not possible"
+  },
+  "pages": {
+    "dashboard": {
+      "title": "Mission dashboard",
+      "subtitle": "Everyone's status at a glance. Tap a crew member to see their body map."
+    },
+    "crew": {
+      "title": "Crew member health",
+      "subtitle": "Tap a body region to learn what it does and how space affects it.",
+      "notFound": "Crew member not found.",
+      "selectCrew": "Select crew member",
+      "metricLabel": "Chart metric",
+      "rangeLabel": "Time range"
+    },
+    "log": {
+      "title": "Log a measurement",
+      "subtitle": "Type it, tap it, or use the camera. Every entry is checked before it is saved."
+    },
+    "alerts": {
+      "title": "Alerts",
+      "subtitle": "Most urgent first. Each alert says who to contact and what to do."
+    },
+    "learn": {
+      "title": "Learn",
+      "subtitle": "What each measurement means, how to take it in space, and the 5 hazards of spaceflight."
+    },
+    "mission": {
+      "title": "Health missions",
+      "subtitle": "Earn XP for keeping your routine — not for having \"good\" numbers."
+    },
+    "settings": {
+      "title": "Settings",
+      "subtitle": "Environment, language, units and demo data."
+    },
+    "notFound": {
+      "title": "Page not found",
+      "body": "This page does not exist.",
+      "back": "Back to dashboard"
+    }
+  },
+  "status": {
+    "green": "Nominal",
+    "yellow": "Watch",
+    "red": "Action needed",
+    "meaning": {
+      "green": "Within the normal range. Keep your routine.",
+      "yellow": "Slightly outside normal. Follow the guidance and measure again.",
+      "red": "Clearly outside normal. Follow the steps and inform the person shown."
+    }
+  },
+  "escalation": {
+    "self_care": "Self-care",
+    "crew_medical_officer": "Inform Crew Medical Officer",
+    "flight_surgeon": "Contact flight surgeon",
+    "emergency": "Emergency protocol"
+  },
+  "trend": {
+    "improving": "Improving",
+    "stable": "Stable",
+    "worsening": "Worsening",
+    "unknown": "Not enough data"
+  },
+  "source": {
+    "keyboard": "Typed",
+    "click": "Tapped",
+    "camera": "Camera estimate",
+    "ultrasound": "Ultrasound",
+    "simulated": "Simulated",
+    "import": "Imported"
+  },
+  "metrics": {
+    "systolicBP": {
+      "label": "Systolic blood pressure",
+      "description": "The top number of a blood-pressure reading: how hard your blood pushes on artery walls when your heart beats.",
+      "howTo": "Sit still for 5 minutes, strap yourself in, wrap the cuff on your bare upper arm at heart level and start the monitor. Do not talk during the reading."
+    },
+    "diastolicBP": {
+      "label": "Diastolic blood pressure",
+      "description": "The bottom number of a blood-pressure reading: the pressure in your arteries while your heart rests between beats.",
+      "howTo": "Recorded together with systolic pressure by the same cuff reading."
+    },
+    "heartRate": {
+      "label": "Resting heart rate",
+      "description": "How many times your heart beats per minute while you are calm and still.",
+      "howTo": "Rest for 5 minutes. Use the pulse oximeter, the cuff reading, or count your wrist pulse for 30 seconds and double it."
+    },
+    "bloodGlucose": {
+      "label": "Blood sugar (fasting)",
+      "description": "How much sugar (glucose) is in your blood before breakfast. It is your body's main fuel.",
+      "howTo": "Before eating, wash and dry a fingertip, prick the side of it with a lancet and touch the drop to the meter strip. Capture the lancet safely — it can float away."
+    },
+    "bodyTemp": {
+      "label": "Body temperature",
+      "description": "How warm your body is inside. A rise can mean infection; in weightlessness it naturally runs a little higher.",
+      "howTo": "Use the in-ear or under-tongue thermometer after 15 minutes without eating, drinking or exercising."
+    },
+    "sleepHours": {
+      "label": "Sleep",
+      "description": "Hours you actually slept in the last 24 hours. Noise, light and stress in space often cut sleep short.",
+      "howTo": "Right after waking, enter the hours you slept (or read them from your actigraphy watch)."
+    },
+    "mood": {
+      "label": "Mood",
+      "description": "How you feel overall today, from 1 (very bad) to 5 (very good). Being honest helps the crew support each other.",
+      "howTo": "Once a day, in the evening, pick the face that matches your day. There is no wrong answer."
+    },
+    "spo2": {
+      "label": "Blood oxygen (SpO₂)",
+      "description": "The percentage of your red blood cells carrying oxygen. Low values can come from cabin air problems or lung trouble.",
+      "howTo": "Clip the pulse oximeter on a warm fingertip, keep your hand still at heart level and wait for a steady number (about 30 seconds)."
+    },
+    "respRate": {
+      "label": "Breathing rate",
+      "description": "How many breaths you take per minute at rest. Fast breathing can be an early warning sign.",
+      "howTo": "Rest, then count how many times your chest rises in 30 seconds and double it. A crewmate can count for you."
+    },
+    "radiationDose": {
+      "label": "Radiation dose",
+      "description": "Radiation your body absorbed today, read from your personal dosimeter. The app adds it up across your whole career.",
+      "howTo": "In the evening, read your personal dosimeter and enter today's value in millisieverts (mSv)."
+    },
+    "exerciseMinutes": {
+      "label": "Exercise",
+      "description": "Minutes of exercise today. In low gravity, bones and muscles weaken quickly without daily training.",
+      "howTo": "Enter the total minutes of treadmill, bike and resistance training you did today."
+    }
+  },
+  "hazards": {
+    "radiation": {
+      "label": "Space radiation",
+      "description": "Outside Earth's protective magnetic field, energetic particles pass through the body and can damage cells and DNA. This raises long-term cancer risk and can affect the eyes, heart and brain.",
+      "countermeasures": "Wear your dosimeter, follow shelter alerts during solar storms, and keep exposure as low as reasonably achievable."
+    },
+    "isolation": {
+      "label": "Isolation & confinement",
+      "description": "Living for months in a small space with the same few people can cause poor sleep, low mood, tension and fatigue.",
+      "countermeasures": "Keep a regular sleep schedule, check in with your crewmates, talk to your support team and log your mood honestly."
+    },
+    "distance": {
+      "label": "Distance from Earth",
+      "description": "The farther from Earth, the longer messages take and the harder it is to get help or come home. On Mars the crew must handle medical problems mostly on its own.",
+      "countermeasures": "Know your on-board medical kit and protocols; the Crew Medical Officer leads care and reports to the ground."
+    },
+    "gravity": {
+      "label": "Altered gravity",
+      "description": "Without normal gravity, body fluids shift toward the head, bones lose minerals, muscles shrink and balance changes. Returning to gravity can make you dizzy when standing up.",
+      "countermeasures": "Exercise every day, stay hydrated, and stand up slowly after landing."
+    },
+    "environment": {
+      "label": "Hostile & closed environment",
+      "description": "The spacecraft is a sealed bubble: air quality, CO₂, temperature, noise and microbes all affect your health.",
+      "countermeasures": "Watch cabin air readings, keep hygiene up, and report headaches or breathlessness early."
+    }
+  },
+  "body": {
+    "brain": {
+      "label": "Brain & mind",
+      "function": "Controls thinking, mood, sleep and every other body system.",
+      "spaceRisk": "Isolation, poor sleep and radiation can affect mood, focus and memory."
+    },
+    "eyes": {
+      "label": "Eyes",
+      "function": "Turn light into images and send them to the brain.",
+      "spaceRisk": "Fluid shifting toward the head can swell the back of the eye (SANS) and blur vision; radiation raises cataract risk."
+    },
+    "heart": {
+      "label": "Heart & blood vessels",
+      "function": "Pumps blood carrying oxygen and nutrients to the whole body.",
+      "spaceRisk": "In weightlessness the heart works less and can weaken; back in gravity, blood pressure may drop when standing."
+    },
+    "lungs": {
+      "label": "Lungs",
+      "function": "Bring oxygen into the blood and remove carbon dioxide.",
+      "spaceRisk": "Cabin air problems (high CO₂, dust) and infections affect breathing and oxygen levels."
+    },
+    "blood": {
+      "label": "Blood & metabolism",
+      "function": "Carries oxygen and fuel (sugar) and keeps energy balanced.",
+      "spaceRisk": "Inactivity and stress can disturb blood sugar control; space can change red blood cell counts."
+    },
+    "bones": {
+      "label": "Bones",
+      "function": "Hold you up, protect organs and store calcium.",
+      "spaceRisk": "Without gravity, bones can lose about 1% of their mass per month — exercise slows this."
+    },
+    "muscles": {
+      "label": "Muscles",
+      "function": "Move the body and keep posture.",
+      "spaceRisk": "Leg and back muscles shrink quickly when they don't carry weight."
+    },
+    "immune": {
+      "label": "Immune system",
+      "function": "Defends the body against infections.",
+      "spaceRisk": "Stress, radiation and poor sleep weaken immunity; dormant viruses can wake up."
+    },
+    "kidneys": {
+      "label": "Kidneys",
+      "function": "Filter blood, balance fluids and control blood pressure.",
+      "spaceRisk": "Calcium from bones and low fluid intake raise the risk of kidney stones."
+    },
+    "whole_body": {
+      "label": "Whole body (radiation)",
+      "function": "Radiation affects every cell; the total dose over a career matters most.",
+      "spaceRisk": "Higher cumulative dose raises long-term cancer risk; solar storms can deliver large doses in hours."
+    }
+  },
+  "environments": {
+    "iss": {
+      "label": "Space station (ISS)",
+      "description": "Low Earth orbit. Weightless, mission control always reachable, return to Earth within about a day."
+    },
+    "spacecraft": {
+      "label": "Deep-space spacecraft",
+      "description": "Transit to the Moon or Mars. Weightless, higher radiation, growing signal delay, no quick way home."
+    },
+    "rover": {
+      "label": "Pressurised rover",
+      "description": "Short surface trips in a small cabin. Watch air quality closely; exercise is limited."
+    },
+    "lunar_base": {
+      "label": "Lunar base",
+      "description": "One-sixth gravity, ~1.3 s signal delay, 3–5 days to return to Earth."
+    },
+    "mars_base": {
+      "label": "Mars base",
+      "description": "About one-third gravity, up to ~24 min signal delay. The crew must manage medical events on its own."
+    }
+  },
+  "scenarios": {
+    "nominal": {
+      "label": "Nominal",
+      "description": "Healthy crew with normal day-to-day variation."
+    },
+    "space_adaptation": {
+      "label": "Space adaptation",
+      "description": "First 3 days: motion sickness, fluid shift and poor sleep."
+    },
+    "solar_particle_event": {
+      "label": "Solar particle event",
+      "description": "A solar storm causes a sudden radiation spike; the crew shelters."
+    },
+    "isolation_stress": {
+      "label": "Isolation stress",
+      "description": "Long Mars transit: sleep and mood slowly decline."
+    },
+    "fever_dehydration": {
+      "label": "Fever & dehydration",
+      "description": "One crew member develops a fever with fast heart rate."
+    },
+    "orthostatic_return": {
+      "label": "Return to gravity",
+      "description": "After landing, blood pressure drops when standing and heart rate rises."
+    }
+  },
+  "thresholds": {
+    "normal": "{{metric}} is in the normal range.",
+    "low": "{{metric}} is a little low.",
+    "high": "{{metric}} is a little high.",
+    "criticalLow": "{{metric}} is too low.",
+    "criticalHigh": "{{metric}} is too high.",
+    "emergencyLow": "{{metric}} is dangerously low.",
+    "emergencyHigh": "{{metric}} is dangerously high.",
+    "radiation": {
+      "underHalf": "Career radiation dose is below half of the limit.",
+      "halfToEighty": "Career radiation dose is between 50% and 80% of the limit.",
+      "overEighty": "Career radiation dose is above 80% of the limit."
+    },
+    "sustained": {
+      "shortSleep": "Less than 6.5 hours of sleep for 3 days in a row.",
+      "severeSleepLoss": "Less than 4 hours of sleep for 2 days in a row.",
+      "noExercise": "Less than 60 minutes of exercise for 3 days in a row."
+    }
+  },
+  "routine": {
+    "task": {
+      "sleepLog": "Log last night's sleep",
+      "morningVitals": "Morning blood pressure",
+      "restingHeartRate": "Resting heart rate",
+      "eveningHeartRate": "Evening heart rate",
+      "temperature": "Body temperature",
+      "fastingGlucose": "Fasting blood sugar",
+      "exercise": "Exercise session",
+      "dosimeter": "Read your dosimeter",
+      "mood": "How do you feel today?",
+      "spo2": "Blood oxygen check",
+      "crewCheckin": "Crew check-in chat",
+      "weeklySurgeonReport": "Send weekly report to flight surgeons"
+    },
+    "reminders": {
+      "title": "Today's routine",
+      "empty": "No reminders scheduled yet."
+    },
+    "missions": {
+      "title": "Missions",
+      "empty": "No missions yet.",
+      "xp": "XP",
+      "level": "Level {{level}}",
+      "streak": "{{count}}-day streak",
+      "teamScore": "Team score",
+      "badges": "Badges"
+    }
+  },
+  "assessment": {
+    "stub": {
+      "summary": "{{metric}}: assessment engine not active yet.",
+      "explanation": "The rules engine is under construction. Values are shown as nominal for now."
+    },
+    "alerts": {
+      "title": "Alert center",
+      "empty": "No active alerts. All crew members nominal."
+    },
+    "recommendations": {
+      "title": "What to do",
+      "empty": "No actions needed."
+    },
+    "learn": {
+      "metricsTitle": "Measurements",
+      "hazardsTitle": "The 5 hazards of human spaceflight",
+      "whatIs": "What is it?",
+      "howTo": "How to measure it in space",
+      "colors": "What do the colours mean?"
+    }
+  },
+  "intake": {
+    "form": {
+      "title": "Manual entry",
+      "metric": "What are you measuring?",
+      "value": "Value ({{unit}})",
+      "note": "Note (optional)",
+      "submit": "Save measurement",
+      "saved": "Saved: {{metric}} {{value}} {{unit}}",
+      "errorRange": "Enter a value between {{min}} and {{max}} {{unit}}.",
+      "errorNumber": "Please enter a number."
+    },
+    "quickLog": {
+      "title": "Quick log",
+      "moodQuestion": "How do you feel right now?"
+    },
+    "mood": {
+      "1": "Very bad",
+      "2": "Bad",
+      "3": "Okay",
+      "4": "Good",
+      "5": "Very good"
+    },
+    "camera": {
+      "title": "Camera heart rate",
+      "description": "Estimate your pulse from tiny colour changes in your fingertip or face (experimental)."
+    },
+    "ultrasound": {
+      "title": "Ultrasound image",
+      "description": "Upload an ultrasound image (heart, bladder, optic nerve sheath) and measure it with calipers."
+    }
+  },
+  "visualization": {
+    "bodyMap": {
+      "title": "Body map",
+      "regionButton": "{{region}}: {{status}}"
+    },
+    "regionDetail": {
+      "title": "Region details",
+      "function": "What it does",
+      "spaceRisk": "How space affects it",
+      "metrics": "Related measurements",
+      "empty": "Select a body region to see details.",
+      "noMetrics": "No direct measurement yet for this region."
+    },
+    "trend": {
+      "title": "Trend",
+      "points": "{{count}} measurements in range",
+      "range": {
+        "24h": "24 h",
+        "7d": "7 days",
+        "30d": "30 days",
+        "all": "Whole mission"
+      }
+    },
+    "vitals": {
+      "title": "Latest vitals"
+    },
+    "crewOverview": {
+      "title": "Crew",
+      "open": "Open {{name}}"
+    }
+  },
+  "settings": {
+    "environment": "Mission environment",
+    "language": "Language",
+    "units": "Units",
+    "temperature": "Temperature",
+    "glucose": "Blood sugar",
+    "simulation": "Demo data (simulation)",
+    "scenario": "Scenario",
+    "seed": "Random seed",
+    "days": "Days of history",
+    "loadDemo": "Load demo data",
+    "reset": "Reset all data",
+    "resetConfirmTitle": "Reset all data?",
+    "resetConfirmBody": "All measurements will be deleted from this device. This cannot be undone.",
+    "demoLoaded": "Demo data loaded: {{count}} measurements.",
+    "resetDone": "All data cleared.",
+    "measurementsStored": "{{count}} measurements stored on this device."
+  }
+}

@@ -1,0 +1,141 @@
+import type { MetricDefinition, MetricId } from '@core/types';
+
+/** Display/iteration order of metrics across the app. */
+export const METRIC_IDS: readonly MetricId[] = [
+  'systolicBP',
+  'diastolicBP',
+  'heartRate',
+  'spo2',
+  'respRate',
+  'bodyTemp',
+  'bloodGlucose',
+  'sleepHours',
+  'mood',
+  'exerciseMinutes',
+  'radiationDose',
+] as const;
+
+const keys = (id: MetricId) => ({
+  labelKey: `metrics.${id}.label`,
+  descriptionKey: `metrics.${id}.description`,
+  measurementHowToKey: `metrics.${id}.howTo`,
+});
+
+/**
+ * Static metric catalogue. `min`/`max` are INPUT plausibility bounds (reject typos),
+ * not health thresholds — those live in thresholds.config.ts.
+ */
+export const METRICS: Record<MetricId, MetricDefinition> = {
+  systolicBP: {
+    id: 'systolicBP',
+    unit: 'mmHg',
+    ...keys('systolicBP'),
+    min: 50,
+    max: 260,
+    step: 1,
+    bodyRegions: ['heart', 'kidneys'],
+    hazards: ['gravity', 'environment'],
+  },
+  diastolicBP: {
+    id: 'diastolicBP',
+    unit: 'mmHg',
+    ...keys('diastolicBP'),
+    min: 30,
+    max: 160,
+    step: 1,
+    bodyRegions: ['heart', 'kidneys'],
+    hazards: ['gravity', 'environment'],
+  },
+  heartRate: {
+    id: 'heartRate',
+    unit: 'bpm',
+    ...keys('heartRate'),
+    min: 25,
+    max: 230,
+    step: 1,
+    bodyRegions: ['heart'],
+    hazards: ['gravity', 'environment'],
+  },
+  bloodGlucose: {
+    id: 'bloodGlucose',
+    unit: 'mg/dL',
+    ...keys('bloodGlucose'),
+    min: 20,
+    max: 600,
+    step: 1,
+    bodyRegions: ['blood'],
+    hazards: ['gravity', 'environment'],
+  },
+  bodyTemp: {
+    id: 'bodyTemp',
+    unit: '°C',
+    ...keys('bodyTemp'),
+    min: 32,
+    max: 43,
+    step: 0.1,
+    bodyRegions: ['immune', 'whole_body'],
+    hazards: ['environment', 'gravity'],
+  },
+  sleepHours: {
+    id: 'sleepHours',
+    unit: 'h',
+    ...keys('sleepHours'),
+    min: 0,
+    max: 16,
+    step: 0.25,
+    bodyRegions: ['brain'],
+    hazards: ['isolation', 'environment'],
+  },
+  mood: {
+    id: 'mood',
+    unit: '/5',
+    ...keys('mood'),
+    min: 1,
+    max: 5,
+    step: 1,
+    bodyRegions: ['brain'],
+    hazards: ['isolation', 'distance'],
+  },
+  spo2: {
+    id: 'spo2',
+    unit: '%',
+    ...keys('spo2'),
+    min: 60,
+    max: 100,
+    step: 1,
+    bodyRegions: ['lungs', 'blood'],
+    hazards: ['environment'],
+  },
+  respRate: {
+    id: 'respRate',
+    unit: '/min',
+    ...keys('respRate'),
+    min: 4,
+    max: 60,
+    step: 1,
+    bodyRegions: ['lungs'],
+    hazards: ['environment'],
+  },
+  radiationDose: {
+    id: 'radiationDose',
+    unit: 'mSv',
+    ...keys('radiationDose'),
+    min: 0,
+    max: 1000,
+    step: 0.01,
+    bodyRegions: ['whole_body', 'eyes', 'immune'],
+    hazards: ['radiation'],
+  },
+  exerciseMinutes: {
+    id: 'exerciseMinutes',
+    unit: 'min',
+    ...keys('exerciseMinutes'),
+    min: 0,
+    max: 480,
+    step: 5,
+    bodyRegions: ['muscles', 'bones', 'heart'],
+    hazards: ['gravity'],
+  },
+};
+
+export const getMetric = (id: MetricId): MetricDefinition => METRICS[id];

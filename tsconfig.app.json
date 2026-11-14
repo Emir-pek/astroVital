@@ -1,0 +1,45 @@
+{
+  "compilerOptions": {
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
+    "target": "es2023",
+    "lib": ["ES2023", "DOM", "DOM.Iterable"],
+    "module": "esnext",
+    "types": ["vite/client"],
+    "skipLibCheck": true,
+
+    /* Bundler mode */
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
+    "verbatimModuleSyntax": true,
+    "moduleDetection": "force",
+    "noEmit": true,
+    "jsx": "react-jsx",
+
+    /* Strictness */
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitOverride": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "erasableSyntaxOnly": true,
+    "forceConsistentCasingInFileNames": true,
+
+    /*
+     * Path aliases — keep in sync with vite.config.ts.
+     * Modules expose ONLY their index.ts: there is intentionally no "@modules/*" wildcard,
+     * so a deep import like "@modules/intake/components/X" fails typecheck.
+     */
+    "paths": {
+      "@core/*": ["./src/core/*"],
+      "@app/*": ["./src/app/*"],
+      "@test/*": ["./src/test/*"],
+      "@modules/intake": ["./src/modules/intake/index.ts"],
+      "@modules/assessment": ["./src/modules/assessment/index.ts"],
+      "@modules/visualization": ["./src/modules/visualization/index.ts"],
+      "@modules/routine": ["./src/modules/routine/index.ts"]
+    }
+  },
+  "include": ["src"]
+}

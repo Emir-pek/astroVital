@@ -1,0 +1,220 @@
+import type { EnvironmentId, EnvironmentProfile, ReminderTemplate } from '@core/types';
+
+export const ENVIRONMENT_IDS: readonly EnvironmentId[] = [
+  'iss',
+  'spacecraft',
+  'rover',
+  'lunar_base',
+  'mars_base',
+] as const;
+
+/** Shared daily routine; environments add / remove items. Times are mission-day "HH:mm". */
+const CORE_ROUTINE: ReminderTemplate[] = [
+  {
+    id: 'sleep-log',
+    metric: 'sleepHours',
+    taskKey: 'routine.task.sleepLog',
+    timeOfDayMET: '07:00',
+    repeat: 'daily',
+  },
+  {
+    id: 'morning-bp',
+    metric: 'systolicBP',
+    taskKey: 'routine.task.morningVitals',
+    timeOfDayMET: '07:30',
+    repeat: 'daily',
+  },
+  {
+    id: 'morning-hr',
+    metric: 'heartRate',
+    taskKey: 'routine.task.restingHeartRate',
+    timeOfDayMET: '07:30',
+    repeat: 'daily',
+  },
+  {
+    id: 'morning-temp',
+    metric: 'bodyTemp',
+    taskKey: 'routine.task.temperature',
+    timeOfDayMET: '07:35',
+    repeat: 'daily',
+  },
+  {
+    id: 'fasting-glucose',
+    metric: 'bloodGlucose',
+    taskKey: 'routine.task.fastingGlucose',
+    timeOfDayMET: '07:40',
+    repeat: 'weekly',
+  },
+  {
+    id: 'exercise',
+    metric: 'exerciseMinutes',
+    taskKey: 'routine.task.exercise',
+    timeOfDayMET: '15:00',
+    repeat: 'daily',
+  },
+  {
+    id: 'dosimeter',
+    metric: 'radiationDose',
+    taskKey: 'routine.task.dosimeter',
+    timeOfDayMET: '20:30',
+    repeat: 'daily',
+  },
+  {
+    id: 'evening-mood',
+    metric: 'mood',
+    taskKey: 'routine.task.mood',
+    timeOfDayMET: '21:00',
+    repeat: 'daily',
+  },
+];
+
+const withExtra = (...extra: ReminderTemplate[]): ReminderTemplate[] => [...CORE_ROUTINE, ...extra];
+
+/**
+ * Environment profiles. Numbers are configurable starting points; every value is backed
+ * by `sourceIds` (docs/SOURCES.md) and justified in docs/THRESHOLDS.md § Ortam düzeltmeleri.
+ */
+export const ENVIRONMENTS: Record<EnvironmentId, EnvironmentProfile> = {
+  iss: {
+    id: 'iss',
+    labelKey: 'environments.iss.label',
+    descriptionKey: 'environments.iss.description',
+    gravityG: 0,
+    // Observed range ~0.3–0.8 mSv/day depending on solar cycle & orbit; midpoint used.
+    expectedDailyRadiationMSv: 0.5,
+    oneWayCommDelaySec: [0, 1],
+    evacuationTimeHours: 24,
+    medicalCapability: 'full_ground_support',
+    thresholdModifiers: {
+      // Core body temperature rises up to ~1 °C in long-duration microgravity (Stahn 2017).
+      // Conservative +0.3 °C so a real fever is not masked.
+      bodyTemp: { shift: 0.3 },
+    },
+    reminderSchedule: withExtra({
+      id: 'evening-hr',
+      metric: 'heartRate',
+      taskKey: 'routine.task.eveningHeartRate',
+      timeOfDayMET: '19:00',
+      repeat: 'daily',
+    }),
+    sourceIds: ['csa-radiation', 'stahn-2017-core-temp', 'nasa-iss-exercise'],
+  },
+  spacecraft: {
+    id: 'spacecraft',
+    labelKey: 'environments.spacecraft.label',
+    descriptionKey: 'environments.spacecraft.description',
+    gravityG: 0,
+    // MSL/RAD cruise measurement: ~1.84 mSv/day in deep-space transit (Zeitlin 2013).
+    expectedDailyRadiationMSv: 1.8,
+    // Deep-space transit (e.g. to Mars): delay grows from seconds to ~20+ minutes.
+    oneWayCommDelaySec: [5, 1340],
+    evacuationTimeHours: Number.POSITIVE_INFINITY,
+    medicalCapability: 'limited',
+    thresholdModifiers: {
+      bodyTemp: { shift: 0.3 },
+    },
+    reminderSchedule: withExtra({
+      id: 'crew-checkin',
+      taskKey: 'routine.task.crewCheckin',
+      timeOfDayMET: '18:00',
+      repeat: 'daily',
+    }),
+    sourceIds: ['zeitlin-2013-msl-rad', 'stahn-2017-core-temp', 'nasa-hrp-5-hazards'],
+  },
+  rover: {
+    id: 'rover',
+    labelKey: 'environments.rover.label',
+    descriptionKey: 'environments.rover.description',
+    // Assumption: pressurised rover on a lunar sortie (see docs/DECISIONS.md ADR-011).
+    gravityG: 0.16,
+    expectedDailyRadiationMSv: 1.3,
+    oneWayCommDelaySec: [1.25, 1.4],
+    evacuationTimeHours: 8, // drive back to base
+    medicalCapability: 'limited',
+    thresholdModifiers: {
+      // Small cabin volume → CO₂ build-up risk: treat SpO₂/respiration more strictly.
+      spo2: { shift: 1 },
+      respRate: { widen: -1 },
+      // Short sorties in cramped cabin: lower exercise expectation (green ≥ 60 min).
+      exerciseMinutes: { shift: -60 },
+    },
+    reminderSchedule: [
+      {
+        id: 'rover-spo2',
+        metric: 'spo2',
+        taskKey: 'routine.task.spo2',
+        timeOfDayMET: '08:00',
+        repeat: 'twice_daily',
+      },
+      {
+        id: 'rover-hr',
+        metric: 'heartRate',
+        taskKey: 'routine.task.restingHeartRate',
+        timeOfDayMET: '08:00',
+        repeat: 'twice_daily',
+      },
+      {
+        id: 'rover-mood',
+        metric: 'mood',
+        taskKey: 'routine.task.mood',
+        timeOfDayMET: '21:00',
+        repeat: 'daily',
+      },
+      {
+        id: 'rover-dosimeter',
+        metric: 'radiationDose',
+        taskKey: 'routine.task.dosimeter',
+        timeOfDayMET: '20:30',
+        repeat: 'daily',
+      },
+    ],
+    sourceIds: ['zhang-2020-lunar-surface', 'nasa-hrp-5-hazards'],
+  },
+  lunar_base: {
+    id: 'lunar_base',
+    labelKey: 'environments.lunar_base.label',
+    descriptionKey: 'environments.lunar_base.description',
+    gravityG: 0.166,
+    // Chang'E 4 LND: ~1.37 mSv/day dose equivalent on the lunar surface (Zhang 2020).
+    expectedDailyRadiationMSv: 1.3,
+    oneWayCommDelaySec: [1.25, 1.4],
+    evacuationTimeHours: 120, // ~3–5 days back to Earth; worst case used
+    medicalCapability: 'limited',
+    thresholdModifiers: {
+      exerciseMinutes: { shift: -30 },
+    },
+    reminderSchedule: withExtra(),
+    sourceIds: ['zhang-2020-lunar-surface', 'nasa-hrp-5-hazards'],
+  },
+  mars_base: {
+    id: 'mars_base',
+    labelKey: 'environments.mars_base.label',
+    descriptionKey: 'environments.mars_base.description',
+    gravityG: 0.38,
+    // Curiosity RAD on Gale crater surface: ~0.64 mSv/day (Hassler 2014).
+    expectedDailyRadiationMSv: 0.64,
+    oneWayCommDelaySec: [240, 1440],
+    evacuationTimeHours: Number.POSITIVE_INFINITY,
+    medicalCapability: 'autonomous',
+    thresholdModifiers: {
+      exerciseMinutes: { shift: -30 },
+    },
+    reminderSchedule: withExtra(
+      {
+        id: 'crew-checkin',
+        taskKey: 'routine.task.crewCheckin',
+        timeOfDayMET: '18:00',
+        repeat: 'daily',
+      },
+      {
+        id: 'weekly-report',
+        taskKey: 'routine.task.weeklySurgeonReport',
+        timeOfDayMET: '10:00',
+        repeat: 'weekly',
+      },
+    ),
+    sourceIds: ['hassler-2014-mars-surface', 'nasa-mars-comm-delay', 'nasa-hrp-5-hazards'],
+  },
+};
+
+export const getEnvironment = (id: EnvironmentId): EnvironmentProfile => ENVIRONMENTS[id];

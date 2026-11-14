@@ -1,0 +1,60 @@
+/*
+ * AstroVital design tokens — dark "mission control" theme.
+ * Raw values live here as CSS variables; src/index.css maps them into Tailwind's
+ * theme (`bg-surface`, `text-muted`, `text-ok` ...). Never hard-code colours in components.
+ */
+:root {
+  color-scheme: dark;
+
+  --av-bg: #070b14;
+  --av-surface: #0e1525;
+  --av-surface-2: #152036;
+  --av-border: #23314d;
+  --av-text: #e6edf7;
+  --av-muted: #8b9bb8;
+  --av-accent: #38bdf8;
+  --av-accent-strong: #0ea5e9;
+  --av-focus: #f0abfc;
+
+  /* Traffic-light status — WCAG AA on --av-surface, always paired with icon + text. */
+  --av-status-green: #34d399;
+  --av-status-yellow: #fbbf24;
+  --av-status-red: #f87171;
+
+  /* Environment tint (overridden per data-env below). */
+  --av-env-tint: #38bdf8;
+
+  --av-radius: 0.75rem;
+  --av-font-sans: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --av-font-mono: 'JetBrains Mono', 'Cascadia Code', ui-monospace, monospace;
+
+  /* Animation speeds for status "pulse" (faster when worse). */
+  --av-pulse-green: 3.2s;
+  --av-pulse-yellow: 1.8s;
+  --av-pulse-red: 0.9s;
+}
+
+/* Environment-adaptive tint (set on <html data-env="..."> by ThemeSync). */
+[data-env='iss'] {
+  --av-env-tint: #38bdf8;
+}
+[data-env='spacecraft'] {
+  --av-env-tint: #818cf8;
+}
+[data-env='rover'] {
+  --av-env-tint: #a3e635;
+}
+[data-env='lunar_base'] {
+  --av-env-tint: #cbd5e1;
+}
+[data-env='mars_base'] {
+  --av-env-tint: #fb923c;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --av-pulse-green: 0s;
+    --av-pulse-yellow: 0s;
+    --av-pulse-red: 0s;
+  }
+}

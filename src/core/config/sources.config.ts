@@ -1,0 +1,145 @@
+/**
+ * Scientific source registry — code mirror of docs/SOURCES.md.
+ * Every threshold, environment number, hazard and recommendation references IDs from here.
+ * `verified: false` = URL/claim not yet re-checked by Engineer 3 (Phase 3 task).
+ */
+export interface SourceRef {
+  id: string;
+  title: string;
+  publisher: string;
+  url: string;
+  verified: boolean;
+}
+
+export const SOURCES = {
+  'nasa-hrp-5-hazards': {
+    id: 'nasa-hrp-5-hazards',
+    title: '5 Hazards of Human Spaceflight',
+    publisher: 'NASA Human Research Program',
+    url: 'https://www.nasa.gov/hrp/hazards/',
+    verified: false,
+  },
+  'nasa-hrp-risks': {
+    id: 'nasa-hrp-risks',
+    title: 'Risks of Human Spaceflight (Human Research Roadmap)',
+    publisher: 'NASA Human Research Program',
+    url: 'https://humanresearchroadmap.nasa.gov/risks/',
+    verified: false,
+  },
+  'nasa-hrp-research': {
+    id: 'nasa-hrp-research',
+    title: 'Ongoing HRP Research in Space',
+    publisher: 'NASA Human Research Program',
+    url: 'https://www.nasa.gov/hrp/research/',
+    verified: false,
+  },
+  'csa-radiation': {
+    id: 'csa-radiation',
+    title: 'Monitoring Radiation for Astronaut Health',
+    publisher: 'Canadian Space Agency',
+    url: 'https://www.asc-csa.gc.ca/eng/sciences/radiation/',
+    verified: false,
+  },
+  'csa-why-science': {
+    id: 'csa-why-science',
+    title: 'Why Do We Conduct Science Experiments in Space?',
+    publisher: 'Canadian Space Agency',
+    url: 'https://www.asc-csa.gc.ca/eng/sciences/',
+    verified: false,
+  },
+  'nasa-std-3001': {
+    id: 'nasa-std-3001',
+    title: 'NASA-STD-3001 Vol. 1 Rev. B — Crew Health (career radiation limit 600 mSv)',
+    publisher: 'NASA Office of the Chief Health & Medical Officer',
+    url: 'https://www.nasa.gov/ochmo/human-spaceflight-standards/',
+    verified: false,
+  },
+  'acc-aha-bp-2017': {
+    id: 'acc-aha-bp-2017',
+    title: '2017 ACC/AHA Guideline for High Blood Pressure in Adults (Whelton et al.)',
+    publisher: 'Hypertension / AHA',
+    url: 'https://doi.org/10.1161/HYP.0000000000000065',
+    verified: false,
+  },
+  'ada-standards-glycemia': {
+    id: 'ada-standards-glycemia',
+    title: 'ADA Standards of Care — Diagnosis & Glycemic Goals / Hypoglycemia levels',
+    publisher: 'American Diabetes Association',
+    url: 'https://diabetesjournals.org/care/issue/48/Supplement_1',
+    verified: false,
+  },
+  'rcp-news2': {
+    id: 'rcp-news2',
+    title: 'National Early Warning Score (NEWS2)',
+    publisher: 'Royal College of Physicians',
+    url: 'https://www.rcp.ac.uk/improving-care/resources/national-early-warning-score-news-2/',
+    verified: false,
+  },
+  'nsf-sleep-2015': {
+    id: 'nsf-sleep-2015',
+    title: 'National Sleep Foundation sleep duration recommendations (Hirshkowitz et al. 2015)',
+    publisher: 'Sleep Health',
+    url: 'https://doi.org/10.1016/j.sleh.2014.12.010',
+    verified: false,
+  },
+  'stahn-2017-core-temp': {
+    id: 'stahn-2017-core-temp',
+    title: 'Increased core body temperature in astronauts during long-duration space missions',
+    publisher: 'Scientific Reports (Stahn et al. 2017)',
+    url: 'https://doi.org/10.1038/s41598-017-15560-w',
+    verified: false,
+  },
+  'zeitlin-2013-msl-rad': {
+    id: 'zeitlin-2013-msl-rad',
+    title: 'Measurements of energetic particle radiation in transit to Mars on the MSL',
+    publisher: 'Science (Zeitlin et al. 2013)',
+    url: 'https://doi.org/10.1126/science.1235989',
+    verified: false,
+  },
+  'hassler-2014-mars-surface': {
+    id: 'hassler-2014-mars-surface',
+    title: "Mars' surface radiation environment measured with the Curiosity rover",
+    publisher: 'Science (Hassler et al. 2014)',
+    url: 'https://doi.org/10.1126/science.1244797',
+    verified: false,
+  },
+  'zhang-2020-lunar-surface': {
+    id: 'zhang-2020-lunar-surface',
+    title: "First measurements of the radiation dose on the lunar surface (Chang'E 4 LND)",
+    publisher: 'Science Advances (Zhang et al. 2020)',
+    url: 'https://doi.org/10.1126/sciadv.aaz1334',
+    verified: false,
+  },
+  'nasa-iss-exercise': {
+    id: 'nasa-iss-exercise',
+    title: 'Exercise countermeasures on the ISS (~2 h/day)',
+    publisher: 'NASA',
+    url: 'https://www.nasa.gov/humans-in-space/',
+    verified: false,
+  },
+  'nasa-sans': {
+    id: 'nasa-sans',
+    title: 'Spaceflight Associated Neuro-ocular Syndrome (SANS) — Lee et al. 2020',
+    publisher: 'npj Microgravity',
+    url: 'https://doi.org/10.1038/s41526-020-0097-9',
+    verified: false,
+  },
+  'verkruysse-2008-rppg': {
+    id: 'verkruysse-2008-rppg',
+    title: 'Remote plethysmographic imaging using ambient light (camera heart-rate)',
+    publisher: 'Optics Express (Verkruysse et al. 2008)',
+    url: 'https://doi.org/10.1364/OE.16.021434',
+    verified: false,
+  },
+  'nasa-mars-comm-delay': {
+    id: 'nasa-mars-comm-delay',
+    title: 'Mars communication delay (one-way light time ~4–24 min)',
+    publisher: 'NASA Mars Exploration',
+    url: 'https://mars.nasa.gov/',
+    verified: false,
+  },
+} as const satisfies Record<string, SourceRef>;
+
+export type SourceId = keyof typeof SOURCES;
+
+export const isKnownSource = (id: string): id is SourceId => id in SOURCES;

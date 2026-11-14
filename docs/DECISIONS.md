@@ -1,0 +1,166 @@
+# DECISIONS — Karar Kaydı (ADR tarzı, kısa)
+
+Format: **Bağlam → Karar → Sonuç**. Yeni karar = yeni numara; eski kararı değiştiren karar,
+eskisine "Yerine geçti: ADR-0xx" notu ekler. Sahibi belirtilmemişse karar Faz 0'da mimar
+(kurulum) tarafından verilmiştir.
+
+---
+
+### ADR-001 — Mevcut klonlanmış repo kullanıldı (`git init` yapılmadı)
+
+- **Bağlam:** Klasör zaten bir git reposu (`main`, "Initial commit", LICENSE) ve `origin`
+  remote'u GitHub'a işaret ediyor. Talimat: "push yapma, remote ekleme".
+- **Karar:** `git init -b main` yerine mevcut `main` üzerine commit atıldı. Mevcut `origin`
+  **silinmedi, eklenmedi, push yapılmadı**. Feature branch'ler yerel.
+- **Sonuç:** Ekip push etmeye karar verdiğinde remote hazır; o zamana kadar her şey yerel.
+
+### ADR-002 — TypeScript 6.0 (7.0 değil)
+
+- **Bağlam:** `create-vite` şablonu TS 7.0 kullanıyor; ancak `typescript-eslint@8.72` peer
+  bağımlılığı `typescript <6.1`.
+- **Karar:** `typescript ~6.0.3`. ESLint (no-restricted-imports + type-aware olmayan kurallar) çalışıyor.
+- **Sonuç:** typescript-eslint TS 7 desteği gelince yükseltilebilir.
+
+### ADR-003 — Güncel yığın sürümleri
+
+Vite 8, React 19.3, React Router 8 (`react-router` paketi), Zustand 5, Zod 4, Recharts 3,
+Framer Motion 14, Tailwind CSS 4 (`@tailwindcss/vite`), i18next 27 / react-i18next 18,
+date-fns 4, lucide-react, Vitest 5 + RTL 16 + jsdom 31, ESLint 10 (flat config), Prettier 3.
+Node 24 LTS, npm.
+
+### ADR-004 — Modül sınırları iki katmanda zorlanır
+
+- **Karar:** (1) ESLint `no-restricted-imports` regex desenleri, katman başına üretilir
+  (`eslint.config.js > boundary()`); (2) `tsconfig.app.json > paths` modüller için sadece
+  `index.ts`'i tanımlar (wildcard yok).
+- **Doğrulama (Faz 0):** 3 geçici dosyada 8 ihlal denendi (yasak modül, derin import, `@app`,
+  göreli `../../core`, `@test`, kendi index'ini import, core→modül, visualization→intake) —
+  hepsi `error` verdi; izinli `visualization → assessment` hata vermedi. Dosyalar silindi.
+
+### ADR-005 — Paylaşılan veri core store'da, modül-yerel durum modülde
+
+- **Karar:** `useHealthStore` yalnız alan verisi tutar (ölçümler, mürettebat, ortam, ayarlar).
+  Uyarı onayları (assessment), XP/rozet (routine) gibi durumlar modülün **kendi** persist'li
+  zustand store'unda (`astrovital:<modül>` anahtarı).
+- **Sonuç:** `src/core` değişikliği gerektirmeden paralel çalışma; merge çatışması azalır.
+
+### ADR-006 — i18n: tek namespace, tipli anahtar yok, testle güvence
+
+- **Karar:** `translation` tek namespace; config'teki anahtarlar dinamik (`metrics.${id}.label`)
+  olduğundan i18next tip artırımı kullanılmadı. Bunun yerine `keys.test.ts`: (a) EN/TR anahtar
+  kümeleri eşit, (b) config'te geçen her anahtar `en.json`'da var.
+- **Sonuç:** Eksik çeviri CI'da (test) yakalanır.
+
+### ADR-007 — Hash router + `base: './'` (offline-first)
+
+- **Bağlam:** Uzay aracında sunucu yeniden yazma kuralı olmayan statik bir dosya paylaşımından
+  çalışabilmeli.
+- **Karar:** `createHashRouter`, Vite `base: './'`.
+- **Sonuç:** `dist/` herhangi bir klasörden servis edilebilir; URL'ler `/#/crew/crew-1` biçiminde.
+
+### ADR-008 — Tasarım token'ları CSS değişkeni, Tailwind'e `@theme inline` ile eşleme
+
+- **Karar:** `core/ui/tokens.css` ham değerler; `index.css` `@theme inline` ile `bg-surface`,
+  `text-ok/warn/crit`, `text-env` sınıflarını üretir. Ortam tonu `<html data-env>` ile değişir.
+- **Sonuç:** Bileşenlerde sabit renk yok; Mühendis 4 ortam temalarını tek dosyadan yönetir.
+
+### ADR-009 — İlk açılışta demo verisi otomatik yüklenir
+
+- **Karar:** `DemoDataBootstrap`, uygulama **açılışında bir kez**, cihazda hiç veri yoksa
+  (`measurements.length === 0 && demoLoadedAt === null`) `loadDemoData()` çağırır. Oturum
+  içindeki "Tüm veriyi sıfırla" korunur; sonraki açılışta demo yeniden yüklenir.
+- **Sonuç:** Jüri asla boş ekran görmez. Gerçek kullanımda bu davranış Settings'ten
+  kapatılabilir hale getirilmeli (Mühendis 1, P2).
+
+### ADR-010 — Radyasyon ölçümü = günlük doz; kariyer dozu türetilir
+
+- **Bağlam:** Eşik tablosu kümülatif (kariyer limitinin yüzdesi), dozimetre ise günlük okunur.
+- **Karar:** `Measurement.value` (radiationDose) = o günün dozu (mSv). `MetricThreshold.basis =
+'cumulativeSum'`; motor `crew.priorRadiationMSv + Σ günlük doz` hesaplar.
+  `CrewMember.priorRadiationMSv` (opsiyonel) sözleşmeye eklendi. SPE kuralı ham günlük doz üzerinden.
+
+### ADR-011 — `rover` = Ay yüzeyinde basınçlı gezgin araç
+
+- **Karar:** g = 0.16, doz = Ay yüzeyi, gecikme ~1.3 sn, tahliye ~8 sa (üsse dönüş), `limited`.
+  Mars rover'ı gerekirse ayrı ortam olarak eklenir.
+
+### ADR-012 — Uyku > 9 sa = sarı
+
+- **Bağlam:** Spesifikasyon sadece 7–9 yeşil diyor; üst sınır tanımsız.
+- **Karar:** ≥9 sa → sarı/self_care ("hastalık/yorgunluk işareti olabilir"). Mühendis 3 doğrular.
+
+### ADR-013 — Egzersiz: tek gün kırmızı = self_care
+
+- **Bağlam:** "Tek metrik kırmızı → CMO" kuralı, kaçırılmış tek bir antrenman için aşırı.
+- **Karar:** <60 dk bandı kırmızı ama `self_care`; **3 gün üst üste** <60 dk → `sustained`
+  kuralı ile CMO. Uyku <6 sa tek gün için de aynı yaklaşım (3 gün <6.5 → CMO).
+
+### ADR-014 — Sözleşme eklemeleri ve yarı açık bantlar
+
+- **Karar:** Spesifikasyondaki tipler korunarak eklemeler yapıldı (tam liste: CONTRACTS.md
+  "Orijinal spesifikasyona yapılan eklemeler"). Bantlar `[min, max)`; bitişiklik testle zorlanır.
+  `escalation: 'emergency'` bantlarda kullanılmaz — motor, otonom ortamlarda `flight_surgeon`'ı
+  `emergency`'ye yükseltir.
+
+### ADR-015 — `generateHistory`'ye `end` parametresi
+
+- **Karar:** Saflık için "şimdi" dışarıdan verilir (`end: Date`). Store `loadDemoData({ now })`
+  ile test edilebilir.
+
+### ADR-016 — Simülasyon ölçüm sıklığı
+
+- **Karar:** Her gün: uyanışta uyku, 07:30 vital (KB, nabız, SpO₂, solunum, ısı — aynı `groupId`),
+  17:00 egzersiz, 20:30 dozimetre, 21:00 ruh hali; günlerin ~%50'sinde 19:00 akşam vitali;
+  açlık glukozu **3 günde bir** (parmak ucu sarf malzemesi kısıtlı varsayımı).
+- **Sonuç:** 30 gün × 4 kişi ≈ 2.000 ölçüm (localStorage için güvenli). 180 gün ≈ 12.000 ölçüm
+  (~2.5 MB) — sınırda; Mühendis 1 P2'de gerekirse sıkıştırma/IndexedDB.
+
+### ADR-017 — ISS/transit vücut ısısı kaydırması +0.3 °C
+
+- **Karar:** Literatür ~1 °C'ye kadar artış gösterse de ateşi maskelememek için muhafazakâr
+  +0.3 °C. Simülasyon da mikro-g'de +0.3 °C ekler.
+
+### ADR-018 — Dil politikası
+
+- **Karar:** Kod/yorum/değişken İngilizce; `docs/` ve `CLAUDE.md` dosyaları Türkçe (ekip içi);
+  `README.md` İngilizce (uluslararası jüri). UI metinleri yalnız i18n anahtarı ile (EN varsayılan + TR).
+
+### ADR-019 — CONTRACTS.md tip bloğu otomatik üretilir
+
+- **Karar:** `npm run docs:contracts` (`scripts/sync-contracts.mjs`) `src/core/types/*.ts`'i
+  CONTRACTS.md'ye birebir kopyalar; `contracts-sync.test.ts` kaymayı yakalar. CONTRACTS.md
+  Prettier'dan hariç tutuldu.
+
+### ADR-020 — Ortak test yardımcıları `@test/*`
+
+- **Karar:** `src/test/renderWithProviders.tsx` (i18n + Toast + MemoryRouter). ESLint, `@test/*`
+  importunu yalnız `__tests__` klasörlerinde serbest bırakır.
+
+### ADR-021 — Bundle boyutu uyarısı kabul edildi (Faz 0)
+
+- **Bağlam:** `npm run build` 711 kB (gzip 225 kB) tek chunk uyarısı veriyor (Recharts, Framer
+  Motion, i18n kaynakları).
+- **Karar:** Faz 0'da kabul; Mühendis 1 P2'de sayfa bazlı `React.lazy` ile bölecek. Offline
+  uygulama olduğu için kritik değil.
+
+### ADR-022 — Kaynak URL'leri henüz doğrulanmadı
+
+- **Karar:** `SOURCES.md` ve `sources.config.ts`'teki tüm kayıtlar `verified: false` / ⏳.
+  Faz 0'da internet doğrulaması yapılmadı. Mühendis 3 Faz 3'te doğrular.
+
+### ADR-023 — README İngilizce, ekip adı/isimleri TBD
+
+- **Karar:** TEAM.md'de mühendisler "Mühendis 1–4" olarak geçer; gerçek isimler ekip tarafından
+  doldurulacak.
+
+### ADR-024 — Mars iletişim gecikmesi [240, 1440] sn
+
+- **Bağlam:** Spesifikasyon "~4–24 dk" diyor; NASA sayfaları genelde "3–22 dk" (gezegen
+  konumuna göre) belirtir.
+- **Karar:** Spesifikasyon değeri kullanıldı; Mühendis 3 `nasa-mars-comm-delay` doğrulamasında
+  günceller.
+
+### ADR-025 — Farklı bilgisayarlar arası senkronizasyon yöntemi açık
+
+- **Karar:** Push yasak olduğundan yöntem ekipçe seçilecek (bkz. TEAM.md § Farklı bilgisayarlar):
+  `git bundle` dosya paylaşımı önerilir.

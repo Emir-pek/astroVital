@@ -1,0 +1,446 @@
+{
+  "app": {
+    "name": "AstroVital",
+    "tagline": "Mürettebat sağlığı, sade bir dille",
+    "disclaimer": "Prototip — tıbbi cihaz değildir. Veriler simülasyondur. Her zaman Mürettebat Sağlık Görevlinize ve uçuş doktorlarına uyun."
+  },
+  "nav": {
+    "label": "Ana menü",
+    "dashboard": "Gösterge paneli",
+    "crew": "Mürettebat üyesi",
+    "log": "Ölçüm gir",
+    "alerts": "Uyarılar",
+    "learn": "Öğren",
+    "mission": "Görevler",
+    "settings": "Ayarlar"
+  },
+  "topbar": {
+    "met": "Görev Süresi (MET)",
+    "metShort": "MET",
+    "environment": "Ortam",
+    "language": "Dil",
+    "commDelay": "Dünya'ya sinyal gecikmesi: {{min}}–{{max}}",
+    "gravity": "Yerçekimi: {{g}} g"
+  },
+  "common": {
+    "save": "Kaydet",
+    "cancel": "Vazgeç",
+    "confirm": "Onayla",
+    "close": "Kapat",
+    "loading": "Yükleniyor…",
+    "noData": "Henüz veri yok",
+    "lastMeasured": "Son ölçüm {{when}}",
+    "value": "Değer",
+    "unit": "Birim",
+    "crewMember": "Mürettebat üyesi",
+    "metric": "Ölçüm",
+    "comingSoon": "Yakında",
+    "stubNotice": "Yer tutucu — bu bileşeni {{owner}} geliştiriyor.",
+    "sources": "Kaynaklar",
+    "seconds": "{{count}} sn",
+    "minutes": "{{count}} dk",
+    "infinity": "mümkün değil"
+  },
+  "pages": {
+    "dashboard": {
+      "title": "Görev paneli",
+      "subtitle": "Herkesin durumu tek bakışta. Vücut haritasını görmek için bir mürettebat üyesine dokunun."
+    },
+    "crew": {
+      "title": "Mürettebat üyesi sağlığı",
+      "subtitle": "Ne işe yaradığını ve uzayın onu nasıl etkilediğini öğrenmek için bir vücut bölgesine dokunun.",
+      "notFound": "Mürettebat üyesi bulunamadı.",
+      "selectCrew": "Mürettebat üyesi seçin",
+      "metricLabel": "Grafik ölçümü",
+      "rangeLabel": "Zaman aralığı"
+    },
+    "log": {
+      "title": "Ölçüm kaydet",
+      "subtitle": "Yazın, dokunun ya da kamerayı kullanın. Her giriş kaydedilmeden önce kontrol edilir."
+    },
+    "alerts": {
+      "title": "Uyarılar",
+      "subtitle": "En acil olan en üstte. Her uyarı kime haber vereceğinizi ve ne yapacağınızı söyler."
+    },
+    "learn": {
+      "title": "Öğren",
+      "subtitle": "Her ölçüm ne anlama gelir, uzayda nasıl yapılır ve insanlı uzay uçuşunun 5 tehlikesi."
+    },
+    "mission": {
+      "title": "Sağlık görevleri",
+      "subtitle": "XP, \"iyi\" değerler için değil, rutininize uyduğunuz için kazanılır."
+    },
+    "settings": {
+      "title": "Ayarlar",
+      "subtitle": "Ortam, dil, birimler ve demo verisi."
+    },
+    "notFound": {
+      "title": "Sayfa bulunamadı",
+      "body": "Bu sayfa mevcut değil.",
+      "back": "Panele dön"
+    }
+  },
+  "status": {
+    "green": "Normal",
+    "yellow": "Dikkat",
+    "red": "Müdahale gerekli",
+    "meaning": {
+      "green": "Normal aralıkta. Rutininize devam edin.",
+      "yellow": "Normalin biraz dışında. Önerileri uygulayın ve yeniden ölçün.",
+      "red": "Belirgin şekilde normal dışı. Adımları izleyin ve gösterilen kişiye haber verin."
+    }
+  },
+  "escalation": {
+    "self_care": "Öz bakım",
+    "crew_medical_officer": "Mürettebat Sağlık Görevlisine bildir",
+    "flight_surgeon": "Uçuş doktoruna ulaş",
+    "emergency": "Acil durum protokolü"
+  },
+  "trend": {
+    "improving": "İyileşiyor",
+    "stable": "Sabit",
+    "worsening": "Kötüleşiyor",
+    "unknown": "Yeterli veri yok"
+  },
+  "source": {
+    "keyboard": "Yazıldı",
+    "click": "Dokunuldu",
+    "camera": "Kamera tahmini",
+    "ultrasound": "Ultrason",
+    "simulated": "Simülasyon",
+    "import": "İçe aktarıldı"
+  },
+  "metrics": {
+    "systolicBP": {
+      "label": "Sistolik tansiyon (büyük tansiyon)",
+      "description": "Tansiyon ölçümündeki üstteki sayı: kalbiniz attığında kanın damar duvarlarına ne kadar güçlü bastırdığı.",
+      "howTo": "5 dakika hareketsiz oturun, kendinizi sabitleyin, manşonu çıplak üst kolunuza kalp hizasında sarın ve cihazı başlatın. Ölçüm sırasında konuşmayın."
+    },
+    "diastolicBP": {
+      "label": "Diastolik tansiyon (küçük tansiyon)",
+      "description": "Tansiyon ölçümündeki alttaki sayı: kalbiniz iki atış arasında dinlenirken damarlardaki basınç.",
+      "howTo": "Sistolik tansiyonla aynı manşon ölçümünde birlikte kaydedilir."
+    },
+    "heartRate": {
+      "label": "İstirahat nabzı",
+      "description": "Sakin ve hareketsizken kalbinizin dakikada kaç kez attığı.",
+      "howTo": "5 dakika dinlenin. Nabız oksimetresini veya tansiyon cihazını kullanın ya da bileğinizdeki nabzı 30 saniye sayıp ikiyle çarpın."
+    },
+    "bloodGlucose": {
+      "label": "Kan şekeri (açlık)",
+      "description": "Kahvaltıdan önce kanınızdaki şeker (glukoz) miktarı. Vücudunuzun ana yakıtıdır.",
+      "howTo": "Yemekten önce parmak ucunuzu yıkayıp kurulayın, yan tarafından lanset ile delin ve damlayı ölçüm çubuğuna değdirin. Lanseti güvenle toplayın — uçup gidebilir."
+    },
+    "bodyTemp": {
+      "label": "Vücut ısısı",
+      "description": "Vücudunuzun iç sıcaklığı. Yükselmesi enfeksiyon işareti olabilir; ağırlıksız ortamda doğal olarak biraz yüksek seyreder.",
+      "howTo": "15 dakika yemeden, içmeden ve egzersiz yapmadan sonra kulak ya da dil altı termometresini kullanın."
+    },
+    "sleepHours": {
+      "label": "Uyku",
+      "description": "Son 24 saatte gerçekten uyuduğunuz saat. Uzaydaki gürültü, ışık ve stres uykuyu sık sık kısaltır.",
+      "howTo": "Uyandıktan hemen sonra uyuduğunuz saati girin (veya aktigrafi saatinizden okuyun)."
+    },
+    "mood": {
+      "label": "Ruh hali",
+      "description": "Bugün genel olarak nasıl hissettiğiniz, 1 (çok kötü) ile 5 (çok iyi) arası. Dürüst olmak ekibin birbirini desteklemesine yardım eder.",
+      "howTo": "Günde bir kez, akşam, gününüze uyan yüzü seçin. Yanlış cevap yoktur."
+    },
+    "spo2": {
+      "label": "Kandaki oksijen (SpO₂)",
+      "description": "Oksijen taşıyan kırmızı kan hücrelerinin yüzdesi. Düşük değer kabin havası sorunlarından veya akciğer sorunlarından kaynaklanabilir.",
+      "howTo": "Nabız oksimetresini sıcak bir parmak ucuna takın, elinizi kalp hizasında sabit tutun ve sayı sabitlenene kadar (yaklaşık 30 saniye) bekleyin."
+    },
+    "respRate": {
+      "label": "Solunum sayısı",
+      "description": "Dinlenirken dakikada kaç nefes aldığınız. Hızlı solunum erken bir uyarı işareti olabilir.",
+      "howTo": "Dinlenin, ardından göğsünüzün 30 saniyede kaç kez kalktığını sayıp ikiyle çarpın. Bir ekip arkadaşınız sizin için sayabilir."
+    },
+    "radiationDose": {
+      "label": "Radyasyon dozu",
+      "description": "Bugün vücudunuzun aldığı radyasyon; kişisel dozimetrenizden okunur. Uygulama bunu tüm kariyeriniz boyunca toplar.",
+      "howTo": "Akşam kişisel dozimetrenizi okuyun ve bugünkü değeri milisievert (mSv) olarak girin."
+    },
+    "exerciseMinutes": {
+      "label": "Egzersiz",
+      "description": "Bugünkü egzersiz dakikanız. Düşük yerçekiminde kemik ve kaslar günlük antrenman olmadan hızla zayıflar.",
+      "howTo": "Bugün koşu bandı, bisiklet ve direnç antrenmanında geçirdiğiniz toplam dakikayı girin."
+    }
+  },
+  "hazards": {
+    "radiation": {
+      "label": "Uzay radyasyonu",
+      "description": "Dünya'nın koruyucu manyetik alanının dışında yüksek enerjili parçacıklar vücuttan geçer ve hücrelere, DNA'ya zarar verebilir. Uzun vadeli kanser riskini artırır; gözleri, kalbi ve beyni etkileyebilir.",
+      "countermeasures": "Dozimetrenizi takın, güneş fırtınalarında sığınak uyarılarına uyun ve maruziyeti makul olan en düşük seviyede tutun."
+    },
+    "isolation": {
+      "label": "İzolasyon ve kapalı alan",
+      "description": "Aylarca küçük bir alanda aynı birkaç kişiyle yaşamak kötü uyku, düşük ruh hali, gerginlik ve yorgunluğa yol açabilir.",
+      "countermeasures": "Düzenli uyku saatinizi koruyun, ekip arkadaşlarınızla konuşun, destek ekibinizle görüşün ve ruh halinizi dürüstçe kaydedin."
+    },
+    "distance": {
+      "label": "Dünya'dan uzaklık",
+      "description": "Dünya'dan uzaklaştıkça mesajlar daha geç ulaşır, yardım almak ve eve dönmek zorlaşır. Mars'ta ekip tıbbi sorunları büyük ölçüde kendi başına çözmelidir.",
+      "countermeasures": "Gemideki tıbbi kiti ve protokolleri bilin; bakımı Mürettebat Sağlık Görevlisi yönetir ve yere rapor verir."
+    },
+    "gravity": {
+      "label": "Değişen yerçekimi",
+      "description": "Normal yerçekimi olmadan vücut sıvıları başa doğru kayar, kemikler mineral kaybeder, kaslar küçülür ve denge değişir. Yerçekimine dönünce ayağa kalkarken baş dönmesi olabilir.",
+      "countermeasures": "Her gün egzersiz yapın, yeterli sıvı alın ve inişten sonra yavaşça ayağa kalkın."
+    },
+    "environment": {
+      "label": "Kapalı ve düşmanca ortam",
+      "description": "Uzay aracı kapalı bir balondur: hava kalitesi, CO₂, sıcaklık, gürültü ve mikroplar sağlığınızı etkiler.",
+      "countermeasures": "Kabin havası değerlerini takip edin, hijyene dikkat edin ve baş ağrısı ya da nefes darlığını erkenden bildirin."
+    }
+  },
+  "body": {
+    "brain": {
+      "label": "Beyin ve zihin",
+      "function": "Düşünmeyi, ruh halini, uykuyu ve diğer tüm vücut sistemlerini yönetir.",
+      "spaceRisk": "İzolasyon, kötü uyku ve radyasyon ruh halini, odaklanmayı ve hafızayı etkileyebilir."
+    },
+    "eyes": {
+      "label": "Gözler",
+      "function": "Işığı görüntüye çevirip beyne gönderir.",
+      "spaceRisk": "Başa doğru kayan sıvı göz arkasında şişmeye (SANS) ve bulanık görmeye yol açabilir; radyasyon katarakt riskini artırır."
+    },
+    "heart": {
+      "label": "Kalp ve damarlar",
+      "function": "Oksijen ve besin taşıyan kanı tüm vücuda pompalar.",
+      "spaceRisk": "Ağırlıksızlıkta kalp daha az çalışır ve zayıflayabilir; yerçekimine dönünce ayağa kalkarken tansiyon düşebilir."
+    },
+    "lungs": {
+      "label": "Akciğerler",
+      "function": "Kana oksijen alır, karbondioksidi atar.",
+      "spaceRisk": "Kabin havası sorunları (yüksek CO₂, toz) ve enfeksiyonlar solunumu ve oksijen seviyesini etkiler."
+    },
+    "blood": {
+      "label": "Kan ve metabolizma",
+      "function": "Oksijen ve yakıt (şeker) taşır, enerji dengesini korur.",
+      "spaceRisk": "Hareketsizlik ve stres kan şekeri kontrolünü bozabilir; uzay kırmızı kan hücresi sayısını değiştirebilir."
+    },
+    "bones": {
+      "label": "Kemikler",
+      "function": "Sizi ayakta tutar, organları korur ve kalsiyum depolar.",
+      "spaceRisk": "Yerçekimi olmadan kemikler ayda yaklaşık %1 kütle kaybedebilir — egzersiz bunu yavaşlatır."
+    },
+    "muscles": {
+      "label": "Kaslar",
+      "function": "Vücudu hareket ettirir ve duruşu korur.",
+      "spaceRisk": "Ağırlık taşımayan bacak ve sırt kasları hızla küçülür."
+    },
+    "immune": {
+      "label": "Bağışıklık sistemi",
+      "function": "Vücudu enfeksiyonlara karşı korur.",
+      "spaceRisk": "Stres, radyasyon ve kötü uyku bağışıklığı zayıflatır; uyuyan virüsler yeniden aktifleşebilir."
+    },
+    "kidneys": {
+      "label": "Böbrekler",
+      "function": "Kanı süzer, sıvı dengesini ve tansiyonu düzenler.",
+      "spaceRisk": "Kemiklerden çıkan kalsiyum ve az sıvı alımı böbrek taşı riskini artırır."
+    },
+    "whole_body": {
+      "label": "Tüm vücut (radyasyon)",
+      "function": "Radyasyon her hücreyi etkiler; en önemlisi kariyer boyunca alınan toplam dozdur.",
+      "spaceRisk": "Toplam doz arttıkça uzun vadeli kanser riski artar; güneş fırtınaları saatler içinde yüksek doz verebilir."
+    }
+  },
+  "environments": {
+    "iss": {
+      "label": "Uzay istasyonu (ISS)",
+      "description": "Alçak Dünya yörüngesi. Ağırlıksız, görev kontrol her an ulaşılabilir, Dünya'ya yaklaşık bir günde dönüş."
+    },
+    "spacecraft": {
+      "label": "Derin uzay aracı",
+      "description": "Ay'a veya Mars'a transit. Ağırlıksız, daha yüksek radyasyon, artan sinyal gecikmesi, hızlı dönüş yok."
+    },
+    "rover": {
+      "label": "Basınçlı gezgin araç (rover)",
+      "description": "Küçük kabinde kısa yüzey gezileri. Hava kalitesini yakından izleyin; egzersiz kısıtlı."
+    },
+    "lunar_base": {
+      "label": "Ay üssü",
+      "description": "Altıda bir yerçekimi, ~1,3 sn sinyal gecikmesi, Dünya'ya dönüş 3–5 gün."
+    },
+    "mars_base": {
+      "label": "Mars üssü",
+      "description": "Yaklaşık üçte bir yerçekimi, ~24 dk'ya varan sinyal gecikmesi. Ekip tıbbi olayları kendi başına yönetmelidir."
+    }
+  },
+  "scenarios": {
+    "nominal": {
+      "label": "Normal",
+      "description": "Günlük olağan dalgalanmalarla sağlıklı mürettebat."
+    },
+    "space_adaptation": {
+      "label": "Uzaya uyum",
+      "description": "İlk 3 gün: hareket hastalığı, sıvı kayması ve kötü uyku."
+    },
+    "solar_particle_event": {
+      "label": "Güneş parçacık olayı",
+      "description": "Güneş fırtınası ani radyasyon artışına yol açar; ekip sığınağa geçer."
+    },
+    "isolation_stress": {
+      "label": "İzolasyon stresi",
+      "description": "Uzun Mars transiti: uyku ve ruh hali yavaşça düşer."
+    },
+    "fever_dehydration": {
+      "label": "Ateş ve sıvı kaybı",
+      "description": "Bir mürettebat üyesinde ateş ve hızlı nabız gelişir."
+    },
+    "orthostatic_return": {
+      "label": "Yerçekimine dönüş",
+      "description": "İnişten sonra ayağa kalkınca tansiyon düşer, nabız yükselir."
+    }
+  },
+  "thresholds": {
+    "normal": "{{metric}} normal aralıkta.",
+    "low": "{{metric}} biraz düşük.",
+    "high": "{{metric}} biraz yüksek.",
+    "criticalLow": "{{metric}} çok düşük.",
+    "criticalHigh": "{{metric}} çok yüksek.",
+    "emergencyLow": "{{metric}} tehlikeli derecede düşük.",
+    "emergencyHigh": "{{metric}} tehlikeli derecede yüksek.",
+    "radiation": {
+      "underHalf": "Kariyer radyasyon dozu limitin yarısının altında.",
+      "halfToEighty": "Kariyer radyasyon dozu limitin %50–80'i arasında.",
+      "overEighty": "Kariyer radyasyon dozu limitin %80'inin üzerinde."
+    },
+    "sustained": {
+      "shortSleep": "3 gün üst üste 6,5 saatten az uyku.",
+      "severeSleepLoss": "2 gün üst üste 4 saatten az uyku.",
+      "noExercise": "3 gün üst üste 60 dakikadan az egzersiz."
+    }
+  },
+  "routine": {
+    "task": {
+      "sleepLog": "Dün geceki uykunu kaydet",
+      "morningVitals": "Sabah tansiyonu",
+      "restingHeartRate": "İstirahat nabzı",
+      "eveningHeartRate": "Akşam nabzı",
+      "temperature": "Vücut ısısı",
+      "fastingGlucose": "Açlık kan şekeri",
+      "exercise": "Egzersiz seansı",
+      "dosimeter": "Dozimetreni oku",
+      "mood": "Bugün nasıl hissediyorsun?",
+      "spo2": "Kandaki oksijen kontrolü",
+      "crewCheckin": "Ekip sohbeti",
+      "weeklySurgeonReport": "Uçuş doktorlarına haftalık rapor gönder"
+    },
+    "reminders": {
+      "title": "Bugünkü rutin",
+      "empty": "Henüz planlanmış hatırlatma yok."
+    },
+    "missions": {
+      "title": "Görevler",
+      "empty": "Henüz görev yok.",
+      "xp": "XP",
+      "level": "Seviye {{level}}",
+      "streak": "{{count}} günlük seri",
+      "teamScore": "Ekip skoru",
+      "badges": "Rozetler"
+    }
+  },
+  "assessment": {
+    "stub": {
+      "summary": "{{metric}}: değerlendirme motoru henüz aktif değil.",
+      "explanation": "Kural motoru yapım aşamasında. Değerler şimdilik normal gösteriliyor."
+    },
+    "alerts": {
+      "title": "Uyarı merkezi",
+      "empty": "Aktif uyarı yok. Tüm mürettebat normal."
+    },
+    "recommendations": {
+      "title": "Ne yapmalı",
+      "empty": "Yapılması gereken bir şey yok."
+    },
+    "learn": {
+      "metricsTitle": "Ölçümler",
+      "hazardsTitle": "İnsanlı uzay uçuşunun 5 tehlikesi",
+      "whatIs": "Nedir?",
+      "howTo": "Uzayda nasıl ölçülür?",
+      "colors": "Renkler ne anlama gelir?"
+    }
+  },
+  "intake": {
+    "form": {
+      "title": "Elle giriş",
+      "metric": "Neyi ölçüyorsunuz?",
+      "value": "Değer ({{unit}})",
+      "note": "Not (isteğe bağlı)",
+      "submit": "Ölçümü kaydet",
+      "saved": "Kaydedildi: {{metric}} {{value}} {{unit}}",
+      "errorRange": "{{min}} ile {{max}} {{unit}} arasında bir değer girin.",
+      "errorNumber": "Lütfen bir sayı girin."
+    },
+    "quickLog": {
+      "title": "Hızlı kayıt",
+      "moodQuestion": "Şu an nasıl hissediyorsunuz?"
+    },
+    "mood": {
+      "1": "Çok kötü",
+      "2": "Kötü",
+      "3": "İdare eder",
+      "4": "İyi",
+      "5": "Çok iyi"
+    },
+    "camera": {
+      "title": "Kamerayla nabız",
+      "description": "Parmak ucunuzdaki veya yüzünüzdeki küçük renk değişimlerinden nabzınızı tahmin edin (deneysel)."
+    },
+    "ultrasound": {
+      "title": "Ultrason görüntüsü",
+      "description": "Bir ultrason görüntüsü yükleyin (kalp, mesane, optik sinir kılıfı) ve kaliperle ölçün."
+    }
+  },
+  "visualization": {
+    "bodyMap": {
+      "title": "Vücut haritası",
+      "regionButton": "{{region}}: {{status}}"
+    },
+    "regionDetail": {
+      "title": "Bölge ayrıntıları",
+      "function": "Ne işe yarar",
+      "spaceRisk": "Uzay onu nasıl etkiler",
+      "metrics": "İlgili ölçümler",
+      "empty": "Ayrıntıları görmek için bir vücut bölgesi seçin.",
+      "noMetrics": "Bu bölge için henüz doğrudan bir ölçüm yok."
+    },
+    "trend": {
+      "title": "Eğilim",
+      "points": "Aralıkta {{count}} ölçüm",
+      "range": {
+        "24h": "24 sa",
+        "7d": "7 gün",
+        "30d": "30 gün",
+        "all": "Tüm görev"
+      }
+    },
+    "vitals": {
+      "title": "Son yaşamsal değerler"
+    },
+    "crewOverview": {
+      "title": "Mürettebat",
+      "open": "{{name}} sayfasını aç"
+    }
+  },
+  "settings": {
+    "environment": "Görev ortamı",
+    "language": "Dil",
+    "units": "Birimler",
+    "temperature": "Sıcaklık",
+    "glucose": "Kan şekeri",
+    "simulation": "Demo verisi (simülasyon)",
+    "scenario": "Senaryo",
+    "seed": "Rastgelelik tohumu (seed)",
+    "days": "Geçmiş gün sayısı",
+    "loadDemo": "Demo verisini yükle",
+    "reset": "Tüm veriyi sıfırla",
+    "resetConfirmTitle": "Tüm veri sıfırlansın mı?",
+    "resetConfirmBody": "Bu cihazdaki tüm ölçümler silinecek. Bu işlem geri alınamaz.",
+    "demoLoaded": "Demo verisi yüklendi: {{count}} ölçüm.",
+    "resetDone": "Tüm veri silindi.",
+    "measurementsStored": "Bu cihazda {{count}} ölçüm kayıtlı."
+  }
+}

@@ -1,0 +1,42 @@
+@import 'tailwindcss';
+@import './core/ui/tokens.css';
+
+/* Map design tokens (CSS variables) into Tailwind utilities: bg-surface, text-muted, text-ok ... */
+@theme inline {
+  --color-bg: var(--av-bg);
+  --color-surface: var(--av-surface);
+  --color-surface-2: var(--av-surface-2);
+  --color-border: var(--av-border);
+  --color-text: var(--av-text);
+  --color-muted: var(--av-muted);
+  --color-accent: var(--av-accent);
+  --color-accent-strong: var(--av-accent-strong);
+  --color-focus: var(--av-focus);
+  --color-env: var(--av-env-tint);
+  --color-ok: var(--av-status-green);
+  --color-warn: var(--av-status-yellow);
+  --color-crit: var(--av-status-red);
+  --font-sans: var(--av-font-sans);
+  --font-mono: var(--av-font-mono);
+}
+
+@layer base {
+  html,
+  body,
+  #root {
+    min-height: 100%;
+  }
+  body {
+    @apply bg-bg font-sans text-text antialiased;
+    background-image: radial-gradient(
+      ellipse at top right,
+      color-mix(in srgb, var(--av-env-tint) 12%, transparent),
+      transparent 55%
+    );
+    background-attachment: fixed;
+  }
+  :focus-visible {
+    outline: 2px solid var(--av-focus);
+    outline-offset: 2px;
+  }
+}
