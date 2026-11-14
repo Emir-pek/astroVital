@@ -52,3 +52,39 @@ describe('ValueCard', () => {
     expect(screen.getByRole('img', { name: 'Heart rate gauge' })).toBeInTheDocument();
   });
 });
+
+describe('U-05 / U-07 extras', () => {
+  it('U-05: warning + down shows the down arrow with its label', () => {
+    renderWithProviders(
+      <ValueCard {...base} status="warning" direction="down" directionLabel="below normal" />,
+    );
+    expect(screen.getByLabelText('below normal')).toHaveTextContent('▼');
+  });
+
+  it('U-05: stale dims the value but keeps the re-measure text at full contrast', () => {
+    renderWithProviders(
+      <ValueCard {...base} status="stale" measuredText="Last measured 14 h ago · measure again" />,
+    );
+    expect(screen.getByText('72').closest('.opacity-50')).not.toBeNull();
+    expect(screen.getByText(/measure again/).closest('.opacity-50')).toBeNull();
+  });
+
+  it('U-07 (B4): an off-scale value is marked and announced', () => {
+    const gauge = { value: 250, min: 30, max: 220, bands: [], label: 'Heart rate gauge' };
+    renderWithProviders(
+      <ValueCard {...base} status="warning" gauge={{ ...gauge, offScaleLabel: 'off scale' }} />,
+    );
+    const high = screen.getByRole('img', { name: 'Heart rate gauge · off scale' });
+    expect(high).toHaveAttribute('data-off-scale', 'high');
+    expect(high).toHaveTextContent('▶');
+  });
+
+  it('U-07: an in-range value has no off-scale marker', () => {
+    const gauge = { value: 80, min: 30, max: 220, bands: [], label: 'Heart rate gauge' };
+    renderWithProviders(
+      <ValueCard {...base} status="nominal" gauge={{ ...gauge, offScaleLabel: 'off scale' }} />,
+    );
+    const img = screen.getByRole('img', { name: 'Heart rate gauge' });
+    expect(img).not.toHaveAttribute('data-off-scale');
+  });
+});

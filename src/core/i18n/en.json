@@ -441,7 +441,8 @@
       "above": "above normal",
       "below": "below normal",
       "staleText": "Last measured {{when}} · measure again",
-      "gauge": "{{metric}} gauge"
+      "gauge": "{{metric}} gauge",
+      "offScale": "off scale"
     },
     "crewOverview": {
       "title": "Crew"

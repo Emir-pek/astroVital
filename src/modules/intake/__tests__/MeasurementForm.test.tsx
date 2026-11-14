@@ -45,4 +45,15 @@ describe('<MoodPicker/>', () => {
     expect(screen.getAllByRole('radio')).toHaveLength(5);
     expect(screen.getByRole('radio', { name: /Very good/ })).toBeInTheDocument();
   });
+
+  it('U-10 (B1): five glove-sized radios, no emoji, selection is announced', () => {
+    renderWithProviders(<MoodPicker value={4} onChange={() => undefined} />);
+    const radios = screen.getAllByRole('radio');
+    expect(radios).toHaveLength(5);
+    for (const radio of radios) {
+      expect(radio).toHaveClass('min-h-touch', 'min-w-touch');
+      expect(radio.textContent ?? '').not.toMatch(/\p{Extended_Pictographic}/u);
+    }
+    expect(screen.getByRole('radio', { name: /Good$/ })).toHaveAttribute('aria-checked', 'true');
+  });
 });

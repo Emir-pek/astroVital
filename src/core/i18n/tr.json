@@ -441,7 +441,8 @@
       "above": "normalin üstünde",
       "below": "normalin altında",
       "staleText": "Son ölçüm {{when}} · yeniden ölç",
-      "gauge": "{{metric}} göstergesi"
+      "gauge": "{{metric}} göstergesi",
+      "offScale": "skala dışı"
     },
     "crewOverview": {
       "title": "Mürettebat"

@@ -62,7 +62,11 @@ export function VitalsPanel({ crewId }: VitalsPanelProps) {
               measuredText={measuredText(card)}
               gauge={
                 card.gauge
-                  ? { ...card.gauge, label: t('visualization.vitals.gauge', { metric: label }) }
+                  ? {
+                      ...card.gauge,
+                      label: t('visualization.vitals.gauge', { metric: label }),
+                      offScaleLabel: t('visualization.vitals.offScale'),
+                    }
                   : undefined
               }
             />

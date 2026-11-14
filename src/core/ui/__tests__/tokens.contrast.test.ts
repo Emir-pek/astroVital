@@ -37,10 +37,26 @@ describe('design token contrast', () => {
     expect(Object.keys(tokens.env).length).toBeGreaterThan(0);
   });
 
-  it.each(Object.entries(tokens.env))('text-3 on env %s bg is >= 6:1', (_name, env) => {
-    const bg = env['bg'];
-    const fg = tokens.root['text-3'];
-    if (!bg || !fg) throw new Error('missing bg or text-3');
-    expect(contrastRatio(fg, bg)).toBeGreaterThanOrEqual(MIN);
-  });
+  const ON_ENV_BG = [
+    'text',
+    'text-2',
+    'text-3',
+    'status-nominal',
+    'status-advisory',
+    'status-caution',
+    'status-warning',
+  ];
+
+  it.each(Object.entries(tokens.env))(
+    'U-11: text and status colours on env %s bg are >= 6:1',
+    (_name, env) => {
+      const bg = env['bg'];
+      if (!bg) throw new Error('missing env bg');
+      for (const name of ON_ENV_BG) {
+        const fg = tokens.root[name];
+        if (!fg) throw new Error(`missing token ${name}`);
+        expect(contrastRatio(fg, bg), `${name} on ${bg}`).toBeGreaterThanOrEqual(MIN);
+      }
+    },
+  );
 });

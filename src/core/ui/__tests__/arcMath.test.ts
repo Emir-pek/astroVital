@@ -9,6 +9,11 @@ describe('valueToAngle', () => {
     expect(valueToAngle(-5, 0, 100)).toBe(180);
     expect(valueToAngle(500, 0, 100)).toBe(0);
   });
+
+  it('U-06: a degenerate range (max <= min) is safe', () => {
+    expect(valueToAngle(5, 10, 10)).toBe(180);
+    expect(valueToAngle(5, 10, 0)).toBe(180);
+  });
 });
 
 describe('arcPath', () => {
