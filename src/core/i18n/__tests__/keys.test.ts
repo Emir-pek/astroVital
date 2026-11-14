@@ -67,7 +67,10 @@ describe('i18n resources', () => {
         ];
       }),
       ...SCENARIO_IDS.flatMap((id) => [SCENARIOS[id].labelKey, SCENARIOS[id].descriptionKey]),
-      ...['green', 'yellow', 'red'].flatMap((s) => [`status.${s}`, `status.meaning.${s}`]),
+      ...['nominal', 'advisory', 'caution', 'warning'].flatMap((s) => [
+        `status.${s}`,
+        `status.meaning.${s}`,
+      ]),
       ...['self_care', 'crew_medical_officer', 'flight_surgeon', 'emergency'].map(
         (e) => `escalation.${e}`,
       ),

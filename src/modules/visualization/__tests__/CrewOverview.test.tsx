@@ -8,12 +8,12 @@ import { CrewOverview, filterByRange } from '../index';
 describe('<CrewOverview/>', () => {
   beforeEach(() => useHealthStore.getState().resetAll());
 
-  it('renders one link per crew member with a status badge', () => {
+  it('lists name and role only: no links, no status (privacy)', () => {
     renderWithProviders(<CrewOverview />);
-    const links = screen.getAllByRole('link');
-    expect(links).toHaveLength(4);
-    expect(links[0]).toHaveAttribute('href', '/crew/crew-1');
-    expect(screen.getAllByText('Nominal')).toHaveLength(4);
+    expect(screen.queryAllByRole('link')).toHaveLength(0);
+    expect(screen.queryByText('Nominal')).not.toBeInTheDocument();
+    expect(screen.getAllByRole('listitem')).toHaveLength(4);
+    expect(screen.getByText('Kenji Arata')).toBeInTheDocument();
   });
 });
 

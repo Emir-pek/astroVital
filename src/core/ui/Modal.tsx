@@ -40,7 +40,7 @@ export function Modal({ open, onClose, title, closeLabel, children, footer }: Mo
             role="dialog"
             aria-modal="true"
             aria-labelledby={titleId}
-            className="w-full max-w-md rounded-[var(--av-radius)] border border-border bg-surface p-5"
+            className="w-full max-w-md rounded-card border border-border bg-surface p-5"
             initial={{ scale: 0.95, y: 10 }}
             animate={{ scale: 1, y: 0 }}
             exit={{ scale: 0.95, y: 10 }}

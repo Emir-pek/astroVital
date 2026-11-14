@@ -2,17 +2,16 @@
   "app": {
     "name": "AstroVital",
     "tagline": "Mürettebat sağlığı, sade bir dille",
-    "disclaimer": "Prototip — tıbbi cihaz değildir. Veriler simülasyondur. Her zaman Mürettebat Sağlık Görevlinize ve uçuş doktorlarına uyun."
+    "disclaimer": "Prototip — tıbbi cihaz değildir. Veriler simülasyondur. Her zaman Mürettebat Sağlık Görevlinize ve uçuş doktorlarına uyun.",
+    "rotateDevice": "Tableti yatay çevirin"
   },
   "nav": {
     "label": "Ana menü",
-    "dashboard": "Gösterge paneli",
-    "crew": "Mürettebat üyesi",
-    "log": "Ölçüm gir",
-    "alerts": "Uyarılar",
-    "learn": "Öğren",
-    "mission": "Görevler",
-    "settings": "Ayarlar"
+    "status": "Durum",
+    "measure": "Ölçüm",
+    "history": "Geçmiş",
+    "team": "Ekip",
+    "routine": "Rutin"
   },
   "topbar": {
     "met": "Görev Süresi (MET)",
@@ -20,7 +19,13 @@
     "environment": "Ortam",
     "language": "Dil",
     "commDelay": "Dünya'ya sinyal gecikmesi: {{min}}–{{max}}",
-    "gravity": "Yerçekimi: {{g}} g"
+    "gravity": "Yerçekimi: {{g}} g",
+    "simulated": "Simüle veri",
+    "emergency": "Acil",
+    "environmentValue": "Ortam: {{env}}",
+    "demoSettings": "Demo ayarları",
+    "crewPickerValue": "Giriş yapan astronot: {{name}}",
+    "languageValue": "Dil: {{code}}"
   },
   "time": {
     "missionDay": "Gün {{n}}",
@@ -46,33 +51,37 @@
     "infinity": "mümkün değil"
   },
   "pages": {
-    "dashboard": {
-      "title": "Görev paneli",
-      "subtitle": "Herkesin durumu tek bakışta. Vücut haritasını görmek için bir mürettebat üyesine dokunun."
+    "status": {
+      "title": "Durum",
+      "subtitle": "Sağlığınız tek bakışta."
     },
-    "crew": {
-      "title": "Mürettebat üyesi sağlığı",
-      "subtitle": "Ne işe yaradığını ve uzayın onu nasıl etkilediğini öğrenmek için bir vücut bölgesine dokunun.",
-      "notFound": "Mürettebat üyesi bulunamadı.",
-      "selectCrew": "Mürettebat üyesi seçin",
-      "metricLabel": "Grafik ölçümü",
-      "rangeLabel": "Zaman aralığı"
-    },
-    "log": {
-      "title": "Ölçüm kaydet",
+    "measure": {
+      "title": "Ölçüm",
       "subtitle": "Yazın, dokunun ya da kamerayı kullanın. Her giriş kaydedilmeden önce kontrol edilir."
     },
-    "alerts": {
-      "title": "Uyarılar",
-      "subtitle": "En acil olan en üstte. Her uyarı kime haber vereceğinizi ve ne yapacağınızı söyler."
+    "history": {
+      "title": "Geçmiş",
+      "subtitle": "Değerlerinizin zaman içindeki değişimi.",
+      "rangeLabel": "Zaman aralığı"
     },
-    "learn": {
-      "title": "Öğren",
-      "subtitle": "Her ölçüm ne anlama gelir, uzayda nasıl yapılır ve insanlı uzay uçuşunun 5 tehlikesi."
+    "team": {
+      "title": "Ekip",
+      "subtitle": "Mürettebatta kimler var."
     },
-    "mission": {
-      "title": "Sağlık görevleri",
-      "subtitle": "XP, \"iyi\" değerler için değil, rutininize uyduğunuz için kazanılır."
+    "routine": {
+      "title": "Rutin",
+      "subtitle": "Bugünkü görevler ve sağlık görevleri."
+    },
+    "emergency": {
+      "title": "Acil durum prosedürü",
+      "subtitle": "Adımları sırayla izleyin. Sorunu çözen ilk adımda durun.",
+      "autonomous": "Dünya'dan yardım saatler uzakta — bakımı ekip yürütür.",
+      "steps": {
+        "self_care": "Dinlenin, ekrandaki yönergeyi izleyin ve birkaç dakika sonra yeniden ölçün.",
+        "crew_medical_officer": "Mürettebat Sağlık Görevlisine ne hissettiğinizi söyleyin ve son değerlerinizi gösterin.",
+        "flight_surgeon": "Tıbbi kanaldan uçuş doktorunu arayın ve durumu anlatın.",
+        "emergency": "Acil durum protokolünü başlatın: tüm ekibi çağırın, kişiyi güvene alın ve yaşam desteğini başlatın."
+      }
     },
     "settings": {
       "title": "Ayarlar",
@@ -81,17 +90,19 @@
     "notFound": {
       "title": "Sayfa bulunamadı",
       "body": "Bu sayfa mevcut değil.",
-      "back": "Panele dön"
+      "back": "Durum sayfasına dön"
     }
   },
   "status": {
-    "green": "Normal",
-    "yellow": "Dikkat",
-    "red": "Müdahale gerekli",
+    "nominal": "Normal",
+    "advisory": "Bilgi",
+    "caution": "Dikkat",
+    "warning": "Uyarı",
     "meaning": {
-      "green": "Normal aralıkta. Rutininize devam edin.",
-      "yellow": "Normalin biraz dışında. Önerileri uygulayın ve yeniden ölçün.",
-      "red": "Belirgin şekilde normal dışı. Adımları izleyin ve gösterilen kişiye haber verin."
+      "nominal": "Normal aralıkta. Rutininize devam edin.",
+      "advisory": "Bilmenizde fayda var. Şu an bir şey yapmanız gerekmiyor.",
+      "caution": "Normalin biraz dışında. Önerileri uygulayın ve yeniden ölçün.",
+      "warning": "Belirgin şekilde normal dışı. Adımları izleyin ve gösterilen kişiye haber verin."
     }
   },
   "escalation": {
@@ -403,12 +414,19 @@
       "title": "Vücut haritası",
       "regionButton": "{{region}}: {{status}}"
     },
+    "status": {
+      "stale": "Eski veri",
+      "none": "Veri yok"
+    },
     "regionDetail": {
       "title": "Bölge ayrıntıları",
+      "whatToDo": "Ne yapmalıyım?",
+      "nothingToDo": "Şu an yapılacak bir şey yok. Rutininize devam edin.",
+      "currentValues": "Güncel değerler",
+      "whyItMatters": "Neden önemli",
+      "sourceAndAge": "Kaynak ve verinin yaşı",
       "function": "Ne işe yarar",
       "spaceRisk": "Uzay onu nasıl etkiler",
-      "metrics": "İlgili ölçümler",
-      "empty": "Ayrıntıları görmek için bir vücut bölgesi seçin.",
       "noMetrics": "Bu bölge için henüz doğrudan bir ölçüm yok."
     },
     "trend": {
@@ -422,11 +440,27 @@
       }
     },
     "vitals": {
-      "title": "Son yaşamsal değerler"
+      "title": "Son değerler",
+      "bloodPressure": "Tansiyon",
+      "above": "normalin üstünde",
+      "below": "normalin altında",
+      "staleText": "Son ölçüm {{when}} · yeniden ölç",
+      "gauge": "{{metric}} göstergesi",
+      "offScale": "skala dışı"
     },
     "crewOverview": {
-      "title": "Mürettebat",
-      "open": "{{name}} sayfasını aç"
+      "title": "Mürettebat"
+    },
+    "alerts": {
+      "label": "Uyarılar",
+      "allNominal": "Tüm göstergeler normal · son ölçüm {{when}}",
+      "noData": "Henüz ölçüm yok. İlk ölçümünüzü yapın.",
+      "redHeading": "Uyarı — hemen harekete geçin",
+      "whatToDo": "Ne yapmalıyım?",
+      "acknowledge": "Gördüm",
+      "stopBlinking": "Yanıp sönmeyi durdur",
+      "snooze": "2 sa ertele",
+      "more": "{{count}} uyarı daha"
     }
   },
   "settings": {

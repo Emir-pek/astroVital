@@ -56,8 +56,9 @@ Kurulum tek komut: `powershell -ExecutionPolicy Bypass -File scripts\setup.ps1` 
 - Kod, değişken adları, yorumlar **İngilizce**; `docs/` Türkçe.
 - **i18n anahtarı olmadan UI metni yazma.** Yeni anahtarı hem `en.json` hem `tr.json`'a, kendi
   modül önekinle ekle (test eşitliği zorlar). `core/ui` bileşenleri `t()` çağırmaz, çevrilmiş metin alır.
-- Renkleri sabit yazma; `tokens.css` + Tailwind token sınıfları (`bg-surface`, `text-ok/warn/crit`).
-- Durum her zaman **renk + ikon + metin** (`StatusBadge`). Butonlar eldiven dostu (`size="lg"`).
+- Renkleri sabit yazma; `tokens.css` + Tailwind token sınıfları (`bg-surface`, `bg-raised`, `text-nominal/advisory/caution/warning`). Eski takma adlar (`text-ok/warn/crit`, `text-muted`, `bg-surface-2`, `border-border`) yeni kodda yasak.
+- Durum her zaman **renk + ikon + metin** (`StatusBadge`). Tüm dokunma hedefleri ≥ 104 px (`min-h-touch min-w-touch`; `Button` bunu kendisi sağlar), aralık ≥ 16 px (`gap-touch-gap`), metin ≥ 16 px (`text-label`).
+- Arayüz tasarımı: `docs/superpowers/specs/2026-11-14-astrovital-ui-design.md` (bağlayıcı). Davranış katmanı Base UI (`@base-ui/react`); Radix yok (ADR-033).
 - Her eşik/öneri bir kaynağa (`sourceIds`, `docs/SOURCES.md`) bağlanır.
 - Ağ isteği yok (offline-first): CDN font/script, analitik, harici API ekleme.
 

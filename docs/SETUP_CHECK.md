@@ -70,43 +70,46 @@ Yeni satır eklerken: paket, aralık, tür, amaç, kimin eklediği / tarih.
 
 <!-- DEPS:BEGIN -->
 
-| Paket                         | Aralık     | Tür     | Amaç                                      | Ekleyen / tarih    |
-| ----------------------------- | ---------- | ------- | ----------------------------------------- | ------------------ |
-| `react`                       | `^19.3.1`  | runtime | UI kütüphanesi                            | Faz 0 / 2026-11-14 |
-| `react-dom`                   | `^19.3.1`  | runtime | React DOM render                          | Faz 0 / 2026-11-14 |
-| `react-router`                | `^8.5.1`   | runtime | Sayfa yönlendirme (hash router)           | Faz 0 / 2026-11-14 |
-| `zustand`                     | `^5.1.0`   | runtime | Global durum + persist (localStorage)     | Faz 0 / 2026-11-14 |
-| `zod`                         | `^4.6.7`   | runtime | Form/import veri doğrulama                | Faz 0 / 2026-11-14 |
-| `recharts`                    | `^3.10.1`  | runtime | Zaman serisi grafikleri                   | Faz 0 / 2026-11-14 |
-| `framer-motion`               | `^14.14.0` | runtime | Animasyonlar                              | Faz 0 / 2026-11-14 |
-| `i18next`                     | `^27.1.1`  | runtime | Çeviri altyapısı (EN/TR)                  | Faz 0 / 2026-11-14 |
-| `react-i18next`               | `^18.0.1`  | runtime | i18next React bağlayıcısı                 | Faz 0 / 2026-11-14 |
-| `date-fns`                    | `^4.4.0`   | runtime | Tarih biçimlendirme                       | Faz 0 / 2026-11-14 |
-| `lucide-react`                | `^1.73.0`  | runtime | İkonlar                                   | Faz 0 / 2026-11-14 |
-| `clsx`                        | `^2.1.1`   | runtime | Koşullu CSS sınıfları                     | Faz 0 / 2026-11-14 |
-| `vite`                        | `^8.3.8`   | dev     | Geliştirme sunucusu + build               | Faz 0 / 2026-11-14 |
-| `@vitejs/plugin-react`        | `^6.3.0`   | dev     | Vite React eklentisi                      | Faz 0 / 2026-11-14 |
-| `typescript`                  | `~6.0.3`   | dev     | Tip kontrolü (6.0'da sabit — ADR-002)     | Faz 0 / 2026-11-14 |
-| `@types/react`                | `^19.3.0`  | dev     | React tipleri                             | Faz 0 / 2026-11-14 |
-| `@types/react-dom`            | `^19.3.0`  | dev     | React DOM tipleri                         | Faz 0 / 2026-11-14 |
-| `@types/node`                 | `^24.19.2` | dev     | Node tipleri (config dosyaları)           | Faz 0 / 2026-11-14 |
-| `tailwindcss`                 | `^4.3.5`   | dev     | CSS framework                             | Faz 0 / 2026-11-14 |
-| `@tailwindcss/vite`           | `^4.3.5`   | dev     | Tailwind Vite entegrasyonu                | Faz 0 / 2026-11-14 |
-| `vitest`                      | `^5.1.0`   | dev     | Test çalıştırıcı                          | Faz 0 / 2026-11-14 |
-| `@vitest/coverage-v8`         | `^5.1.0`   | dev     | Test kapsam raporu                        | Faz 0 / 2026-11-14 |
-| `jsdom`                       | `^31.0.1`  | dev     | Testlerde tarayıcı ortamı                 | Faz 0 / 2026-11-14 |
-| `@testing-library/react`      | `^16.3.3`  | dev     | Bileşen testleri                          | Faz 0 / 2026-11-14 |
-| `@testing-library/dom`        | `^10.4.2`  | dev     | RTL peer bağımlılığı                      | Faz 0 / 2026-11-14 |
-| `@testing-library/jest-dom`   | `^7.0.1`   | dev     | DOM eşleştiricileri (`toBeInTheDocument`) | Faz 0 / 2026-11-14 |
-| `@testing-library/user-event` | `^14.6.10` | dev     | Kullanıcı etkileşimi simülasyonu          | Faz 0 / 2026-11-14 |
-| `eslint`                      | `^10.15.0` | dev     | Lint + modül sınırı kuralları             | Faz 0 / 2026-11-14 |
-| `@eslint/js`                  | `^10.0.1`  | dev     | ESLint temel kurallar                     | Faz 0 / 2026-11-14 |
-| `typescript-eslint`           | `^8.72.2`  | dev     | TypeScript lint                           | Faz 0 / 2026-11-14 |
-| `eslint-plugin-react-hooks`   | `^7.1.1`   | dev     | Hook kuralları                            | Faz 0 / 2026-11-14 |
-| `eslint-plugin-react-refresh` | `^0.5.7`   | dev     | Fast refresh uyumu                        | Faz 0 / 2026-11-14 |
-| `eslint-config-prettier`      | `^10.1.8`  | dev     | ESLint ↔ Prettier çakışmasını kapatır     | Faz 0 / 2026-11-14 |
-| `globals`                     | `^17.14.0` | dev     | ESLint global tanımları                   | Faz 0 / 2026-11-14 |
-| `prettier`                    | `^3.10.1`  | dev     | Kod biçimlendirme                         | Faz 0 / 2026-11-14 |
+| Paket                                    | Aralık     | Tür     | Amaç                                                                         | Ekleyen / tarih        |
+| ---------------------------------------- | ---------- | ------- | ---------------------------------------------------------------------------- | ---------------------- |
+| `react`                                  | `^19.3.1`  | runtime | UI kütüphanesi                                                               | Faz 0 / 2026-11-14     |
+| `react-dom`                              | `^19.3.1`  | runtime | React DOM render                                                             | Faz 0 / 2026-11-14     |
+| `react-router`                           | `^8.5.1`   | runtime | Sayfa yönlendirme (hash router)                                              | Faz 0 / 2026-11-14     |
+| `zustand`                                | `^5.1.0`   | runtime | Global durum + persist (localStorage)                                        | Faz 0 / 2026-11-14     |
+| `zod`                                    | `^4.6.7`   | runtime | Form/import veri doğrulama                                                   | Faz 0 / 2026-11-14     |
+| `recharts`                               | `^3.10.1`  | runtime | Zaman serisi grafikleri                                                      | Faz 0 / 2026-11-14     |
+| `framer-motion`                          | `^14.14.0` | runtime | Animasyonlar                                                                 | Faz 0 / 2026-11-14     |
+| `i18next`                                | `^27.1.1`  | runtime | Çeviri altyapısı (EN/TR)                                                     | Faz 0 / 2026-11-14     |
+| `react-i18next`                          | `^18.0.1`  | runtime | i18next React bağlayıcısı                                                    | Faz 0 / 2026-11-14     |
+| `date-fns`                               | `^4.4.0`   | runtime | Tarih biçimlendirme                                                          | Faz 0 / 2026-11-14     |
+| `lucide-react`                           | `^1.73.0`  | runtime | İkonlar                                                                      | Faz 0 / 2026-11-14     |
+| `clsx`                                   | `^2.1.1`   | runtime | Koşullu CSS sınıfları                                                        | Faz 0 / 2026-11-14     |
+| `vite`                                   | `^8.3.8`   | dev     | Geliştirme sunucusu + build                                                  | Faz 0 / 2026-11-14     |
+| `@vitejs/plugin-react`                   | `^6.3.0`   | dev     | Vite React eklentisi                                                         | Faz 0 / 2026-11-14     |
+| `typescript`                             | `~6.0.3`   | dev     | Tip kontrolü (6.0'da sabit — ADR-002)                                        | Faz 0 / 2026-11-14     |
+| `@types/react`                           | `^19.3.0`  | dev     | React tipleri                                                                | Faz 0 / 2026-11-14     |
+| `@types/react-dom`                       | `^19.3.0`  | dev     | React DOM tipleri                                                            | Faz 0 / 2026-11-14     |
+| `@types/node`                            | `^24.19.2` | dev     | Node tipleri (config dosyaları)                                              | Faz 0 / 2026-11-14     |
+| `tailwindcss`                            | `^4.3.5`   | dev     | CSS framework                                                                | Faz 0 / 2026-11-14     |
+| `@tailwindcss/vite`                      | `^4.3.5`   | dev     | Tailwind Vite entegrasyonu                                                   | Faz 0 / 2026-11-14     |
+| `vitest`                                 | `^5.1.0`   | dev     | Test çalıştırıcı                                                             | Faz 0 / 2026-11-14     |
+| `@vitest/coverage-v8`                    | `^5.1.0`   | dev     | Test kapsam raporu                                                           | Faz 0 / 2026-11-14     |
+| `jsdom`                                  | `^31.0.1`  | dev     | Testlerde tarayıcı ortamı                                                    | Faz 0 / 2026-11-14     |
+| `@testing-library/react`                 | `^16.3.3`  | dev     | Bileşen testleri                                                             | Faz 0 / 2026-11-14     |
+| `@testing-library/dom`                   | `^10.4.2`  | dev     | RTL peer bağımlılığı                                                         | Faz 0 / 2026-11-14     |
+| `@testing-library/jest-dom`              | `^7.0.1`   | dev     | DOM eşleştiricileri (`toBeInTheDocument`)                                    | Faz 0 / 2026-11-14     |
+| `@testing-library/user-event`            | `^14.6.10` | dev     | Kullanıcı etkileşimi simülasyonu                                             | Faz 0 / 2026-11-14     |
+| `eslint`                                 | `^10.15.0` | dev     | Lint + modül sınırı kuralları                                                | Faz 0 / 2026-11-14     |
+| `@eslint/js`                             | `^10.0.1`  | dev     | ESLint temel kurallar                                                        | Faz 0 / 2026-11-14     |
+| `typescript-eslint`                      | `^8.72.2`  | dev     | TypeScript lint                                                              | Faz 0 / 2026-11-14     |
+| `eslint-plugin-react-hooks`              | `^7.1.1`   | dev     | Hook kuralları                                                               | Faz 0 / 2026-11-14     |
+| `eslint-plugin-react-refresh`            | `^0.5.7`   | dev     | Fast refresh uyumu                                                           | Faz 0 / 2026-11-14     |
+| `eslint-config-prettier`                 | `^10.1.8`  | dev     | ESLint ↔ Prettier çakışmasını kapatır                                        | Faz 0 / 2026-11-14     |
+| `globals`                                | `^17.14.0` | dev     | ESLint global tanımları                                                      | Faz 0 / 2026-11-14     |
+| `prettier`                               | `^3.10.1`  | dev     | Kod biçimlendirme                                                            | Faz 0 / 2026-11-14     |
+| `@base-ui/react`                         | `^1.9.0`   | runtime | Erişilebilir UI primitifleri (AlertDialog, Drawer, RadioGroup, Select, Menu) | UI Plan 1 / 2026-11-14 |
+| `@fontsource/atkinson-hyperlegible-next` | `^5.3.0`   | runtime | Metin fontu (yerel, offline)                                                 | UI Plan 1 / 2026-11-14 |
+| `@fontsource/jetbrains-mono`             | `^5.3.0`   | runtime | Sayı fontu (yerel, offline)                                                  | UI Plan 1 / 2026-11-14 |
 
 <!-- DEPS:END -->
 

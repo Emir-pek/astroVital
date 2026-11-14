@@ -12,6 +12,12 @@
 - "Acil" sütunu, `escalation: 'flight_surgeon'` olan kırmızı bantlardır. Mars'ta (otonom)
   motor bunu `emergency`'ye yükseltir (bkz. Eskalasyon kuralları).
 
+## Durum lejantı
+
+Dört seviye (NASA-STD-3001 Ek F): yeşil = `nominal`, mavi = `advisory`, sarı = `caution`,
+kırmızı = `warning`. Tablodaki Yeşil/Sarı/Kırmızı sütunları sırasıyla `nominal`/`caution`/`warning`
+bantlarıdır; `advisory` şimdilik motor tarafından üretilmez.
+
 ## Tablo
 
 | Metrik                     | Yeşil      | Sarı                    | Kırmızı (→ CMO)                                         | Acil (→ flight surgeon)                           | Kaynak ID'leri                                           | Doğrulandı |

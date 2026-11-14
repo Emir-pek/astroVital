@@ -20,6 +20,29 @@ Yalnız `docs/` değişiklikleri kayıt gerektirmez.
 
 <!-- NEW ENTRIES BELOW -->
 
+### 2026-11-14 18:35 — Emir (feat/visualization) — PR #7 main ile birleştirildi, lint hataları ve ADR numaraları düzeltildi
+
+- **Ne:** `main` branch'e alındı (çakışma yok). Lint hataları giderildi: `CrewPicker` ve `EnvironmentPicker`
+  Base UI'ı doğrudan import ediyordu → `src/core/ui/Menu.tsx` artık Base UI `Menu`'nün kit sarmalayıcısı
+  (önceki sürüm açılıp kapanmayan bir taslaktı), yeni `src/core/ui/Select.tsx`; ikisi `@core/ui`'dan alınıyor
+  ve testli. `MetClock`: kullanılmayan `met` değeri, bileşen yorumunda yazdığı gibi tooltip'e (`title`) bağlandı.
+  Çakışan ADR numaraları: visualization'ın ADR-029/030/031'i → **ADR-031/032/033** (main'deki ADR-029 UI kit,
+  ADR-030 zaman modeli aynen kaldı).
+- **Neden:** PR #7'nin `verify` kontrolü kırmızıydı (3 lint hatası) ve iki branch aynı ADR numaralarını kullanıyordu.
+- **Dosyalar:** `src/core/ui/Menu.tsx`, `src/core/ui/Select.tsx`, `src/core/ui/index.ts`,
+  `src/core/ui/__tests__/MenuSelect.test.tsx`, `src/app/layout/CrewPicker.tsx`, `src/app/layout/EnvironmentPicker.tsx`,
+  `src/modules/routine/components/MetClock.tsx`, `docs/DECISIONS.md`, `CLAUDE.md`, `CHANGELOG.md`
+- **Ekip ne yapmalı:** `npm ci`. Base UI parçası gerekiyorsa `@core/ui`'dan al (`Menu`, `Select`). **Karar
+  bekliyor:** ADR-029 "Base UI veya Radix serbest" derken ADR-033 ve `no-radix` testi Radix'i yasaklıyor —
+  ekip hangisinin geçerli olduğunu netleştirmeli.
+
+### 2026-11-14 16:45 — Visualization Ekibi (feat/visualization) — AstroVital UI Plan 1: Dört seviyeli durum, Base UI bileşenleri, eldiven dostu kabuk ve Durum ekranı
+
+- **Ne:** NASA-STD-3001 Ek F uyumlu 4 seviyeli durum (`nominal` / `advisory` / `caution` / `warning`), yerel fontlar (`@fontsource/atkinson-hyperlegible-next`, `@fontsource/jetbrains-mono`), `@base-ui/react` tabanlı `AlertStrip`, `RedAlertDialog`, `Sheet`, `Segmented`, `ArcGauge`, `ValueCard` bileşenleri, 5 sekmeli eldiven dostu `AppShell` (≥ 104 px dokunma hedefleri), katmanlı astronot figürü (`SuitArt`), bölge detay çekmecesi ve Vital kartlarıyla yeni Durum (`/`) ekranı eklendi.
+- **Neden:** Onaylı AstroVital UI tasarım spesifikasyonu (`docs/superpowers/specs/2026-11-14-astrovital-ui-design.md`) ve ADR-031..033 kararlarının uygulanması.
+- **Dosyalar:** `src/core/ui/`, `src/core/types/assessment.ts`, `src/core/config/thresholds.config.ts`, `src/core/utils/`, `src/core/i18n/`, `src/app/`, `src/modules/visualization/`, `package.json`, `docs/DECISIONS.md`, `docs/CONTRACTS.md`, `docs/SETUP_CHECK.md`
+- **Ekip ne yapmalı:** `npm ci` (yeni `@base-ui/react` ve `@fontsource/*` paketleri için). `Status` tipi artık `'nominal' | 'advisory' | 'caution' | 'warning'` değerlerini alır (ADR-029).
+
 ### 2026-11-14 16:35 — Muhammed Bektaş (feat/core-time-model) — Zaman modeli: UTC + ortama göre gün etiketi (Mars'ta Sol)
 
 - **Ne:** Görev saati artık "Day 12 · 04:33:10" biçiminde; Mars üssünde gerçek sol uzunluğuyla "Sol 12 · …" gösteriyor

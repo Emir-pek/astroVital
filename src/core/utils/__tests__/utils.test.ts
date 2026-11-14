@@ -100,8 +100,10 @@ describe('format', () => {
 
 describe('status', () => {
   it('worst status / highest escalation', () => {
-    expect(worstStatus([])).toBe('green');
-    expect(worstStatus(['green', 'red', 'yellow'])).toBe('red');
+    expect(worstStatus([])).toBe('nominal');
+    expect(worstStatus(['nominal', 'advisory', 'warning', 'caution'])).toBe('warning');
+    expect(worstStatus(['advisory', 'nominal'])).toBe('advisory');
+    expect(worstStatus(['caution', 'advisory'])).toBe('caution');
     expect(highestEscalation(['self_care', 'flight_surgeon', 'crew_medical_officer'])).toBe(
       'flight_surgeon',
     );

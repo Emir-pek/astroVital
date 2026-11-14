@@ -1,23 +1,53 @@
 @import 'tailwindcss';
 @import './core/ui/tokens.css';
 
-/* Map design tokens (CSS variables) into Tailwind utilities: bg-surface, text-muted, text-ok ... */
+/* Map design tokens (CSS variables) into Tailwind utilities: bg-raised, text-text-2, text-nominal ... */
 @theme inline {
   --color-bg: var(--av-bg);
   --color-surface: var(--av-surface);
-  --color-surface-2: var(--av-surface-2);
-  --color-border: var(--av-border);
+  --color-raised: var(--av-raised);
+  --color-line: var(--av-line);
   --color-text: var(--av-text);
-  --color-muted: var(--av-muted);
+  --color-text-2: var(--av-text-2);
+  --color-text-3: var(--av-text-3);
   --color-accent: var(--av-accent);
-  --color-accent-strong: var(--av-accent-strong);
-  --color-focus: var(--av-focus);
-  --color-env: var(--av-env-tint);
-  --color-ok: var(--av-status-green);
-  --color-warn: var(--av-status-yellow);
-  --color-crit: var(--av-status-red);
+  --color-nominal: var(--av-status-nominal);
+  --color-advisory: var(--av-status-advisory);
+  --color-caution: var(--av-status-caution);
+  --color-warning: var(--av-status-warning);
+  --color-warning-fill: var(--av-status-warning-fill);
+  --color-on-warning-fill: var(--av-on-warning-fill);
   --font-sans: var(--av-font-sans);
   --font-mono: var(--av-font-mono);
+  --radius-card: var(--av-radius-card);
+  --radius-button: var(--av-radius-button);
+  --shadow-soft: var(--av-shadow-soft);
+  --spacing-touch: var(--av-touch-min);
+  --spacing-touch-gap: var(--av-touch-gap);
+  --text-body: 18px;
+  --text-label: 16px;
+  --text-value: 40px;
+  --text-title: 28px;
+  --text-headline: 24px;
+
+  /* LEGACY — do not use in new code (removed in Plan 3) */
+  --color-surface-2: var(--av-raised);
+  --color-border: var(--av-line);
+  --color-muted: var(--av-text-2);
+  --color-ok: var(--av-status-nominal);
+  --color-warn: var(--av-status-caution);
+  --color-crit: var(--av-status-warning);
+  --color-accent-strong: var(--av-accent);
+  --color-focus: var(--av-accent);
+  --color-env: var(--av-text-2);
+}
+
+@utility card-surface {
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--av-surface), white 4%),
+    var(--av-surface)
+  );
 }
 
 @layer base {
@@ -27,16 +57,13 @@
     min-height: 100%;
   }
   body {
-    @apply bg-bg font-sans text-text antialiased;
-    background-image: radial-gradient(
-      ellipse at top right,
-      color-mix(in srgb, var(--av-env-tint) 12%, transparent),
-      transparent 55%
-    );
-    background-attachment: fixed;
+    @apply bg-bg font-sans text-body text-text antialiased;
   }
   :focus-visible {
-    outline: 2px solid var(--av-focus);
-    outline-offset: 2px;
+    outline: 3px solid var(--av-accent);
+    outline-offset: 3px;
+  }
+  .font-mono {
+    font-variant-numeric: tabular-nums slashed-zero;
   }
 }

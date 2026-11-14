@@ -1,7 +1,12 @@
 import type { Escalation, Status } from '@core/types';
 
 /** Severity order (higher = worse). */
-export const STATUS_ORDER: Record<Status, number> = { green: 0, yellow: 1, red: 2 };
+export const STATUS_ORDER: Record<Status, number> = {
+  nominal: 0,
+  advisory: 1,
+  caution: 2,
+  warning: 3,
+};
 export const ESCALATION_ORDER: Record<Escalation, number> = {
   self_care: 0,
   crew_medical_officer: 1,
@@ -9,9 +14,9 @@ export const ESCALATION_ORDER: Record<Escalation, number> = {
   emergency: 3,
 };
 
-/** Worst status of a list; empty list ⇒ 'green' (no data = nothing flagged). */
+/** Worst status of a list; empty list ⇒ 'nominal' (no data = nothing flagged). */
 export const worstStatus = (statuses: Iterable<Status>): Status => {
-  let worst: Status = 'green';
+  let worst: Status = 'nominal';
   for (const s of statuses) if (STATUS_ORDER[s] > STATUS_ORDER[worst]) worst = s;
   return worst;
 };

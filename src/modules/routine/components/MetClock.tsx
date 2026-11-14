@@ -21,10 +21,10 @@ export function MetClock() {
 
   return (
     <span
-      className="inline-flex items-center gap-2 font-mono text-sm"
-      title={`${t('topbar.met')}: ${met}`}
+      className="inline-flex items-center gap-2 font-mono text-body"
+      title={`${t('topbar.met')} ${met}`}
     >
-      <Clock aria-hidden="true" className="size-4 text-env" />
+      <Clock aria-hidden="true" className="size-4 text-text-2" />
       <span className="text-muted">{t('topbar.metShort')}</span>
       <time aria-label={t('topbar.met')}>
         {label} · {formatTimeInDay(missionStart, now, dayLengthSec)}

@@ -31,18 +31,20 @@
 
 ## Rotalar (URL sözleşmesi)
 
-Hash router kullanılır (`/#/crew/crew-1`). Bileşenler bu yollara link verebilir:
+Hash router kullanılır (`/#/measure`). Bileşenler bu yollara link verebilir:
 
 | Yol | Sayfa | Bileşenler |
 |---|---|---|
-| `/` | Dashboard | `CrewOverview`, `AlertCenter compact`, `ReminderCenter scope="today"` |
-| `/crew` | → seçili mürettebata yönlendirir | — |
-| `/crew/:id` | CrewMember | `BodyMap`, `RegionDetailPanel`, `VitalsGrid`, `MetricTrendChart` |
-| `/log` | LogMeasurement | `QuickLogPanel`, `MeasurementForm`, `CameraHeartRate`, `UltrasoundUpload` |
-| `/alerts` | Alerts | `AlertCenter` |
-| `/learn` | Learn | `LearnPanel` |
-| `/mission` | Mission | `MissionBoard` |
-| `/settings` | Settings | ortam, dil, birimler, senaryo, sıfırla |
+| `/` | Durum | `BodyMap`, `VitalsPanel`, `RegionSheet` |
+| `/measure` | Ölçüm | `QuickLogPanel`, `MeasurementForm` (Plan 2'de yeniden yapılacak) |
+| `/history` | Geçmiş | `Segmented` (aralık), `MetricTrendChart` |
+| `/team` | Ekip | `CrewOverview` (tıbbi değer/durum yok) |
+| `/routine` | Rutin | `ReminderCenter scope="today"`, `MissionBoard` |
+| `/emergency` | Acil durum prosedürü | eskalasyon zinciri (üst bardaki Acil butonu) |
+| `/settings` | Ayarlar (menüde yok; astronot menüsünden) | ortam, dil, birimler, senaryo, sıfırla |
+
+Kabuk (`AppShell`) her sayfada `AlertLayer`'ı (uyarı şeridi + kırmızı tam ekran uyarı) gösterir.
+Ekranda her zaman yalnız **seçili astronotun** (`selectedCrewId`) verisi vardır.
 
 ## Public API — modül `index.ts` imzaları
 
@@ -84,16 +86,19 @@ validateValue(metric: MetricId, value: number): 'errorNumber' | 'errorRange' | n
 ### `@modules/visualization` (Mühendis 4) — bağımlılık: `@core/*`, `@modules/assessment`
 
 ```ts
-<BodyMap crewId: string onRegionSelect: (r: BodyRegionId) => void selectedRegion?: BodyRegionId | null />
-<RegionDetailPanel crewId: string region: BodyRegionId | null />
+<BodyMap crewId: string selectedRegion: BodyRegionId | null onRegionSelect: (r: BodyRegionId) => void />
+<RegionSheet crewId: string region: BodyRegionId | null onClose: () => void />
+<RegionDetailPanel crewId: string region: BodyRegionId />
+<VitalsPanel crewId: string />
+<AlertLayer crewId: string />                  // uyarı şeridi + kırmızı tam ekran uyarı
 <MetricTrendChart crewId: string metric: MetricId range: TrendRange />
-<VitalsGrid crewId: string />
-<CrewOverview />
+<CrewOverview />                               // isim + rol; tıbbi durum YOK
 filterByRange(series: Measurement[], range: TrendRange, now: Date): Measurement[]
 TREND_RANGES: readonly TrendRange[]           // TrendRange = '24h' | '7d' | '30d' | 'all'
 ```
 
-Faz 0: `BodyMap` = bölge butonları (SVG figür yok), `MetricTrendChart` = nokta sayısı.
+`BodyMap` = elle çizilmiş SVG astronot figürü + 104 px tıklama alanları + bölge çipleri.
+`MetricTrendChart` hâlâ yer tutucu (Plan 2).
 
 ### `@modules/routine` (Mühendis 1) — bağımlılık: `@core/*`, `@modules/assessment`
 
@@ -141,8 +146,8 @@ import type { EnvironmentProfile } from './environment';
 import type { Measurement } from './measurement';
 import type { MetricId } from './metrics';
 
-/** Traffic-light status. Always rendered as colour + icon + text (colour-blind safe). */
-export type Status = 'green' | 'yellow' | 'red';
+/** Four-level status (NASA-STD-3001 App. F). Always rendered as colour + icon + text (colour-blind safe). */
+export type Status = 'nominal' | 'advisory' | 'caution' | 'warning';
 
 /** Who must act, in increasing order of severity. */
 export type Escalation =
@@ -165,7 +170,7 @@ export interface ThresholdBand {
   messageKey: string;
 }
 
-/** Rule over consecutive days, e.g. "sleep < 6.5 h for 3 days in a row → red". */
+/** Rule over consecutive days, e.g. "sleep < 6.5 h for 3 days in a row → warning". */
 export interface SustainedRule {
   days: number;
   /** Rule matches when the daily value is >= min (if set) ... */
@@ -236,7 +241,7 @@ export interface Assessment {
 
 export interface RegionHealth {
   region: BodyRegionId;
-  /** Worst status among `assessments`; 'green' with empty assessments = no data. */
+  /** Worst status among `assessments`; 'nominal' with empty assessments = no data. */
   status: Status;
   assessments: Assessment[];
   functionKey: string;
