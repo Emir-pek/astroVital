@@ -22,6 +22,10 @@
     "commDelay": "Dünya'ya sinyal gecikmesi: {{min}}–{{max}}",
     "gravity": "Yerçekimi: {{g}} g"
   },
+  "time": {
+    "missionDay": "Gün {{n}}",
+    "sol": "Sol {{n}}"
+  },
   "common": {
     "save": "Kaydet",
     "cancel": "Vazgeç",

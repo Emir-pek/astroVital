@@ -3,11 +3,15 @@ import {
   celsiusToFahrenheit,
   computeMET,
   decimalsForStep,
+  EARTH_DAY_SEC,
   fahrenheitToCelsius,
   formatMET,
+  formatTimeInDay,
   highestEscalation,
+  MARS_SOL_SEC,
   mgdlToMmol,
   missionDay,
+  missionDayFor,
   mmolToMgdl,
   parseTimeOfDay,
   roundToStep,
@@ -29,6 +33,35 @@ describe('time (MET)', () => {
     const parts = computeMET(start, new Date('2026-10-31T23:00:00Z'));
     expect(parts.negative).toBe(true);
     expect(formatMET(parts)).toBe('-000/01:00:00');
+  });
+
+  it('missionDayFor: day 1 at mission start, default (Earth day) behaviour unchanged', () => {
+    expect(missionDayFor(start, start)).toBe(1);
+    expect(missionDayFor(start, start, MARS_SOL_SEC)).toBe(1);
+    const now = new Date('2026-11-13T04:33:10Z');
+    expect(missionDayFor(start, now)).toBe(missionDay(start, now));
+    expect(missionDayFor(start, now, EARTH_DAY_SEC)).toBe(13);
+  });
+
+  it('missionDayFor: 30 Earth days ≈ 29 sols', () => {
+    const after30Days = new Date(start.getTime() + 30 * 86_400_000);
+    expect(missionDayFor(start, after30Days)).toBe(31); // 30 full days elapsed → day 31
+    expect(missionDayFor(start, after30Days, MARS_SOL_SEC)).toBe(30); // 29.2 sols elapsed → sol 30
+    expect(Math.floor((30 * 86_400) / MARS_SOL_SEC)).toBe(29);
+  });
+
+  it('missionDayFor: before mission start is 0 or negative', () => {
+    expect(missionDayFor(start, new Date('2026-10-31T23:00:00Z'))).toBe(0);
+    expect(missionDayFor(start, new Date('2026-10-30T12:00:00Z'))).toBe(-1);
+    expect(missionDayFor(start, new Date('2026-10-31T23:00:00Z'), MARS_SOL_SEC)).toBe(0);
+  });
+
+  it('formatTimeInDay: time within the current day / sol', () => {
+    expect(formatTimeInDay(start, new Date('2026-11-13T04:33:10Z'))).toBe('04:33:10');
+    // Last second of sol 1: Earth clock is past midnight, sol clock reads 24:39:35.
+    const endOfSol1 = new Date(start.getTime() + MARS_SOL_SEC * 1000 - 100);
+    expect(formatTimeInDay(start, endOfSol1, MARS_SOL_SEC)).toBe('24:39:35');
+    expect(missionDayFor(start, endOfSol1, MARS_SOL_SEC)).toBe(1);
   });
 
   it('parses HH:mm and rejects garbage', () => {

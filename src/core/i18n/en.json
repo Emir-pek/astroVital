@@ -22,6 +22,10 @@
     "commDelay": "Signal delay to Earth: {{min}}–{{max}}",
     "gravity": "Gravity: {{g}} g"
   },
+  "time": {
+    "missionDay": "Day {{n}}",
+    "sol": "Sol {{n}}"
+  },
   "common": {
     "save": "Save",
     "cancel": "Cancel",

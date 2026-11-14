@@ -50,6 +50,7 @@ Kurulum tek komut: `powershell -ExecutionPolicy Bypass -File scripts\setup.ps1` 
 
 - Fonksiyonel React bileşenleri + hook'lar; sınıf yok.
 - **Saf fonksiyonları tercih et** (motor, simülasyon, utils). Saat gerekiyorsa `now` parametresi al.
+- Bileşenlerde güncel zaman için `new Date()` değil `useNow()` kullan; zaman hesaplayan fonksiyonlar `now`'ı parametre olarak alır (test edilebilirlik). Tüm zaman hesapları UTC.
 - TypeScript strict; **`any` yasak** (`unknown` + daraltma kullan). `import type` kullan.
 - Kod, değişken adları, yorumlar **İngilizce**; `docs/` Türkçe.
 - **i18n anahtarı olmadan UI metni yazma.** Yeni anahtarı hem `en.json` hem `tr.json`'a, kendi
