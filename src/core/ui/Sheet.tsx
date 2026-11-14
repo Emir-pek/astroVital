@@ -15,10 +15,10 @@ export function Sheet({ open, onOpenChange, title, closeLabel, children }: Sheet
   return (
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
       <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 z-40 bg-black/60 transition-opacity duration-300 ease-out data-[state=closed]:opacity-0 data-[state=open]:opacity-100" />
+        <Dialog.Overlay className="av-sheet-overlay fixed inset-0 z-40 bg-black/60 data-[state=open]:animate-[av-fade-in_300ms_ease-out] data-[state=closed]:animate-[av-fade-out_300ms_ease-out]" />
         <Dialog.Content
           aria-describedby={undefined}
-          className="fixed right-0 top-0 z-50 flex h-full w-[480px] max-w-full translate-x-full flex-col gap-touch-gap overflow-y-auto bg-surface p-6 opacity-0 shadow-soft transition-[transform,opacity] duration-300 ease-out data-[state=open]:translate-x-0 data-[state=open]:opacity-100"
+          className="av-sheet fixed right-0 top-0 z-50 flex h-full w-[480px] max-w-full flex-col gap-touch-gap overflow-y-auto bg-surface p-6 shadow-soft data-[state=open]:animate-[av-sheet-in_300ms_ease-out] data-[state=closed]:animate-[av-sheet-out_300ms_ease-out]"
         >
           <header className="flex items-center justify-between gap-touch-gap">
             <Dialog.Title className="text-headline font-semibold">{title}</Dialog.Title>

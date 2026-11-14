@@ -1,4 +1,4 @@
-import { screen, within } from '@testing-library/react';
+import { fireEvent, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
 import { renderWithProviders } from '@test/renderWithProviders';
@@ -76,6 +76,25 @@ describe('RedAlertDialog', () => {
     expect(dialog.querySelectorAll('.av-blink').length).toBe(2);
     await userEvent.setup().click(screen.getByRole('button', { name: 'Stop blinking' }));
     expect(dialog.querySelectorAll('.av-blink').length).toBe(0);
+  });
+
+  it('a new warning blinks again after stop blinking', async () => {
+    const { rerender } = renderWithProviders(<RedAlertDialog {...dlgProps()} />);
+    await userEvent.setup().click(screen.getByRole('button', { name: 'Stop blinking' }));
+    const dialog = screen.getByRole('alertdialog');
+    expect(dialog.querySelectorAll('.av-blink').length).toBe(0);
+    const extra = { ...redItems[0]!, id: 'c', title: 'New one' };
+    rerender(<RedAlertDialog {...dlgProps({ items: [...redItems, extra] })} />);
+    expect(screen.getByRole('alertdialog').querySelectorAll('.av-blink').length).toBe(3);
+  });
+
+  it('clicking outside the dialog content does not close it', () => {
+    renderWithProviders(<RedAlertDialog {...dlgProps()} />);
+    // Radix sets pointer-events:none on body, so dispatch raw events outside the content.
+    fireEvent.pointerDown(document.body);
+    fireEvent.mouseDown(document.body);
+    fireEvent.click(document.body);
+    expect(screen.getByRole('alertdialog')).toBeInTheDocument();
   });
 
   it('closed when items is empty', () => {

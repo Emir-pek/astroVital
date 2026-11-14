@@ -33,6 +33,16 @@ export function RedAlertDialog({
 }: RedAlertDialogProps) {
   const [blinking, setBlinking] = useState(true);
   const [openId, setOpenId] = useState<string | null>(null);
+  const [knownIds, setKnownIds] = useState<string[]>(() => items.map((i) => i.id));
+
+  // A new warning must always blink again, even after "stop blinking" for an earlier one.
+  if (items.some((i) => !knownIds.includes(i.id))) {
+    setKnownIds(items.map((i) => i.id));
+    setBlinking(true);
+    setOpenId(null);
+  } else if (knownIds.length !== items.length) {
+    setKnownIds(items.map((i) => i.id));
+  }
 
   return (
     <AlertDialog.Root open={items.length > 0}>
@@ -66,8 +76,8 @@ export function RedAlertDialog({
                 {openId === item.id && (
                   <div className="text-body">
                     <ol className="list-decimal pl-6">
-                      {item.steps.map((s) => (
-                        <li key={s}>{s}</li>
+                      {item.steps.map((s, i) => (
+                        <li key={`${i}-${s}`}>{s}</li>
                       ))}
                     </ol>
                     <p className="mt-2 font-medium">{item.escalationText}</p>
