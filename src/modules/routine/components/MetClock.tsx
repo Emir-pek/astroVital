@@ -1,25 +1,31 @@
 import { Clock } from 'lucide-react';
-import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSettings } from '@core/store';
-import { computeMET, formatMET } from '@core/utils/time';
+import { useNow } from '@core/hooks';
+import { useActiveEnvironment, useSettings } from '@core/store';
+import { computeMET, formatMET, formatTimeInDay, missionDayFor } from '@core/utils/time';
 
-/** Live Mission Elapsed Time "DDD/HH:MM:SS" since settings.missionStart. */
+/**
+ * Live mission clock: "Day 12 · 04:33:10", or "Sol 12 · 04:33:10" on a Mars base (ADR-030).
+ * The full MET (DDD/HH:MM:SS, Earth days) stays available as the tooltip.
+ */
 export function MetClock() {
   const { t } = useTranslation();
   const { missionStart } = useSettings();
-  const [now, setNow] = useState(() => new Date());
+  const env = useActiveEnvironment();
+  const now = useNow();
 
-  useEffect(() => {
-    const id = window.setInterval(() => setNow(new Date()), 1000);
-    return () => window.clearInterval(id);
-  }, []);
+  const dayLengthSec = env.dayLengthSec ?? 86_400;
+  const day = missionDayFor(missionStart, now, dayLengthSec);
+  const label = t(env.dayLabelKey ?? 'time.missionDay', { n: day });
+  const met = formatMET(computeMET(missionStart, now));
 
   return (
     <span className="inline-flex items-center gap-2 font-mono text-body" title={t('topbar.met')}>
       <Clock aria-hidden="true" className="size-4 text-text-2" />
       <span className="text-muted">{t('topbar.metShort')}</span>
-      <time aria-label={t('topbar.met')}>{formatMET(computeMET(missionStart, now))}</time>
+      <time aria-label={t('topbar.met')}>
+        {label} · {formatTimeInDay(missionStart, now, dayLengthSec)}
+      </time>
     </span>
   );
 }

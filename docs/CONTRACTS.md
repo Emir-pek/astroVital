@@ -122,7 +122,8 @@ Faz 0: listeler boş.
 | `@core/store` | `useHealthStore` (+ `addMeasurement`, `addMeasurements`, `removeMeasurement`, `setActiveEnvironment`, `setSelectedCrew`, `updateSettings`, `loadDemoData`, `resetAll`), saf seçiciler `getCrewMeasurements`, `getMetricSeries`, `getLatestByMetric`, hook'lar `useCrew`, `useCrewMember`, `useCrewMeasurements`, `useMetricSeries`, `useLatestByMetric`, `useActiveEnvironment`, `useSettings` |
 | `@core/simulation` | `generateHistory`, `SCENARIOS`, `SCENARIO_IDS`, `DEMO_CREW`, `DEMO_DEFAULTS`, `createRng`, `mulberry32` |
 | `@core/ui` | `Button`, `Card`, `StatusBadge`, `STATUS_STYLE`, `Modal`, `ToastProvider`, `useToast`, `EmptyState`, `PlaceholderNotice` |
-| `@core/utils` | `computeMET`, `formatMET`, `missionDay`, `parseTimeOfDay`, `startOfUtcDay`, birim dönüşümleri (`toDisplay`, `toCanonical`, ...), `formatNumber`, `formatRelative`, `roundToStep`, `clamp`, `worstStatus`, `highestEscalation`, `STATUS_ORDER`, `ESCALATION_ORDER`, `createId` |
+| `@core/hooks` | `useNow(intervalMs = 1000)` — güncel zaman (tek paylaşılan zamanlayıcı); bileşenlerde `new Date()` yerine (ADR-030) |
+| `@core/utils` | `computeMET`, `formatMET`, `missionDay`, `missionDayFor`, `formatTimeInDay`, `EARTH_DAY_SEC`, `MARS_SOL_SEC`, `parseTimeOfDay`, `startOfUtcDay`, birim dönüşümleri (`toDisplay`, `toCanonical`, ...), `formatNumber`, `formatRelative`, `roundToStep`, `clamp`, `worstStatus`, `highestEscalation`, `STATUS_ORDER`, `ESCALATION_ORDER`, `createId` |
 | `@core/i18n` | `i18n`, `SUPPORTED_LANGUAGES`, `en.json`, `tr.json` |
 
 **Zustand v5 uyarısı:** store seçicisinden doğrudan yeni dizi/nesne döndürmeyin (sonsuz render).
@@ -385,6 +386,13 @@ export interface EnvironmentProfile {
   reminderSchedule: ReminderTemplate[];
   /** Source IDs backing the numbers above. */
   sourceIds: string[];
+  /**
+   * Length of one local day in seconds, used ONLY to label the mission clock (ADR-030).
+   * Default 86400 (Earth day). Mars sol = 88775.244. All calculations stay in UTC.
+   */
+  dayLengthSec?: number;
+  /** i18n key for the day label, interpolated with `{{n}}`. Default `time.missionDay`. */
+  dayLabelKey?: string;
 }
 ```
 

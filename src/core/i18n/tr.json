@@ -27,6 +27,10 @@
     "crewPickerValue": "Giriş yapan astronot: {{name}}",
     "languageValue": "Dil: {{code}}"
   },
+  "time": {
+    "missionDay": "Gün {{n}}",
+    "sol": "Sol {{n}}"
+  },
   "common": {
     "save": "Kaydet",
     "cancel": "Vazgeç",

@@ -27,6 +27,10 @@
     "crewPickerValue": "Signed-in astronaut: {{name}}",
     "languageValue": "Language: {{code}}"
   },
+  "time": {
+    "missionDay": "Day {{n}}",
+    "sol": "Sol {{n}}"
+  },
   "common": {
     "save": "Save",
     "cancel": "Cancel",

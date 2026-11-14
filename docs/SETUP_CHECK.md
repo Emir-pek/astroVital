@@ -64,6 +64,10 @@ Eksikler ve önerilen komutlar:
 `Aralık` sütunu `package.json`'daki değerle **birebir** aynı olmalı (test kontrol eder).
 Yeni satır eklerken: paket, aralık, tür, amaç, kimin eklediği / tarih.
 
+> **UI kit motorları (ADR-029):** Base UI (`@base-ui/react`) ve Radix (`radix-ui` / `@radix-ui/*`)
+> **şu an kurulu değildir**. Bir kit parçası için ilk ihtiyaç duyan kendi PR'ında kurar ve satırını
+> buraya **o PR'da** ekler. Yalnız `src/core/ui` içinde import edilir (ESLint zorlar).
+
 <!-- DEPS:BEGIN -->
 
 | Paket                                    | Aralık     | Tür     | Amaç                                                                         | Ekleyen / tarih        |

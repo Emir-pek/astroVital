@@ -1,5 +1,6 @@
 import { screen } from '@testing-library/react';
-import { describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it } from 'vitest';
+import { useHealthStore } from '@core/store';
 import { renderWithProviders } from '@test/renderWithProviders';
 import { levelForXp, levelProgress, MetClock } from '../index';
 
@@ -14,10 +15,21 @@ describe('levels', () => {
 });
 
 describe('<MetClock/>', () => {
-  it('renders a DDD/HH:MM:SS clock', () => {
+  beforeEach(() => useHealthStore.getState().resetAll());
+
+  it('shows "Day N · HH:MM:SS" outside Mars', () => {
+    useHealthStore.getState().setActiveEnvironment('iss');
     renderWithProviders(<MetClock />);
     expect(screen.getByLabelText('Mission Elapsed Time')).toHaveTextContent(
-      /^-?\d{3}\/\d{2}:\d{2}:\d{2}$/,
+      /^Day -?\d+ · \d{2}:\d{2}:\d{2}$/,
+    );
+  });
+
+  it('shows "Sol N" on a Mars base', () => {
+    useHealthStore.getState().setActiveEnvironment('mars_base');
+    renderWithProviders(<MetClock />);
+    expect(screen.getByLabelText('Mission Elapsed Time')).toHaveTextContent(
+      /^Sol -?\d+ · \d{2}:\d{2}:\d{2}$/,
     );
   });
 });

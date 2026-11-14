@@ -40,4 +40,11 @@ export interface EnvironmentProfile {
   reminderSchedule: ReminderTemplate[];
   /** Source IDs backing the numbers above. */
   sourceIds: string[];
+  /**
+   * Length of one local day in seconds, used ONLY to label the mission clock (ADR-030).
+   * Default 86400 (Earth day). Mars sol = 88775.244. All calculations stay in UTC.
+   */
+  dayLengthSec?: number;
+  /** i18n key for the day label, interpolated with `{{n}}`. Default `time.missionDay`. */
+  dayLabelKey?: string;
 }

@@ -229,3 +229,33 @@ Node 24 LTS, npm.
   shadcn varsayılanı. Bedel: 3 bileşen yeniden yazıldı; prop imzaları değişmedi.
 - **Sonuç:** `src/test/no-radix.test.ts` (U-12) Radix import'unun geri gelmesini engeller. Base UI
   yalnız davranış katmanıdır; görünüm tamamen `tokens.css`. `Select`'i `Drawer`/`Dialog` içine koyma.
+### ADR-029 — UI kit: kendi bileşenlerimiz + gerektiğinde Base UI veya Radix (esnek)
+
+- **Bağlam:** Modern ve tamamen kendi tasarımımız olan bir arayüz istiyoruz; tarayıcının kendi
+  `<select>` vb. öğeleri açıldığında stillenemiyor; popover/tooltip/konuşma balonu gibi parçaların
+  konumlandırma, klavye ve erişilebilirlik davranışını 48 saatte elle yazmak riskli. Uygulamada 6 ham
+  `<select>` dağınık duruyor. Tasarım sahibi kit parçalarını kendi yapısıyla yazmaya başladı. Tasarım
+  sahibi geniş yelpazede çalışabilmeli; tek kütüphaneye kilitlenmek istemiyoruz.
+- **Karar:** Kit parçaları kendi bileşenlerimiz; konumlanan/odak yöneten parçalarda Base UI
+  (`@base-ui/react`) veya Radix (`radix-ui` / `@radix-ui/*`) serbest. Kütüphaneler yalnız
+  `src/core/ui`'da (ESLint). Paketi ilk ihtiyaç duyan kurar. Tavsiyeler: (a) bir parça = bir motor,
+  envanterde "Motor" sütununa yazılır; (b) iç içe açılabilen katmanlar (modal/popover/tooltip/menü)
+  mümkünse aynı kütüphaneden — odak/dış tıklama davranışı çakışmasın. Not: Base UI ve Radix ayrı
+  kütüphanelerdir; Base UI, Radix/Floating UI/MUI geliştiricilerinden, aktif geliştiriliyor.
+- **Sonuç:** Kit'e her mühendis katkı verebilir (açık model): genel/2+ modülde kullanılan parçalar
+  src/core/ui'a, modüle özgü parçalar modülde. Çakışmayı TEAM.md 'UI kit envanteri' önler. Mimari onay
+  Mühendis 1, görünüm onayı tasarım sahibi. Kütüphane seçimi parça bazında, yalnız kitin içinde olduğu
+  için değiştirmek modülleri etkilemez.
+
+### ADR-030 — Zaman modeli: UTC tabanı + ortama göre gün etiketi
+
+- **Bağlam:** Hatırlatma, grafik ve trend hesapları "şimdi"ye bağlı. ISS'de resmî saat UTC; Ay için henüz
+  resmî saat yok (Coordinated Lunar Time strateji çalışması 2026 sonuna kadar), pratikte UTC; Mars'ta gün
+  (sol) 24 sa 39 dk 35.244 sn ve Mars saatine göre çalışan NASA ekiplerinde vücut saati kaymasının uyku ve
+  ruh halini etkilediği gözlenmiş.
+- **Karar:** Tüm hesaplar UTC. Görev saati gösterimi ortama göre etiketlenir: Mars üssünde "Sol N"
+  (gerçek sol uzunluğuyla hesaplanır), diğer ortamlarda "Görev günü N". Hatırlatma takvimi her ortamda
+  UTC. Saati ileri sarma / geliştirici arayüzü yok; zaman mantığı `now`'ı parametre alan saf
+  fonksiyonlarla test edilir. Bileşenler güncel zamanı ortak `useNow()` hook'undan alır. Sahip: Mühendis 1.
+- **Sonuç:** EnvironmentProfile'a opsiyonel `dayLengthSec`/`dayLabelKey` eklendi (kırılma yok). Gerçek sol
+  zamanına göre kayan takvim "sonra" kapsamında; sunumda gelecek adım olarak anılabilir.

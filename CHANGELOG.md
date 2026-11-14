@@ -26,6 +26,58 @@ Yalnız `docs/` değişiklikleri kayıt gerektirmez.
 - **Neden:** Onaylı AstroVital UI tasarım spesifikasyonu (`docs/superpowers/specs/2026-11-14-astrovital-ui-design.md`) ve ADR-029..031 kararlarının uygulanması.
 - **Dosyalar:** `src/core/ui/`, `src/core/types/assessment.ts`, `src/core/config/thresholds.config.ts`, `src/core/utils/`, `src/core/i18n/`, `src/app/`, `src/modules/visualization/`, `package.json`, `docs/DECISIONS.md`, `docs/CONTRACTS.md`, `docs/SETUP_CHECK.md`
 - **Ekip ne yapmalı:** `npm ci` (yeni `@base-ui/react` ve `@fontsource/*` paketleri için). `Status` tipi artık `'nominal' | 'advisory' | 'caution' | 'warning'` değerlerini alır (ADR-029).
+### 2026-11-14 16:35 — Muhammed Bektaş (feat/core-time-model) — Zaman modeli: UTC + ortama göre gün etiketi (Mars'ta Sol)
+
+- **Ne:** Görev saati artık "Day 12 · 04:33:10" biçiminde; Mars üssünde gerçek sol uzunluğuyla "Sol 12 · …" gösteriyor
+  (tam MET ipucu olarak duruyor). Yeni ortak hook `useNow()` (`@core/hooks`, tek paylaşılan zamanlayıcı); yeni saf
+  fonksiyonlar `missionDayFor`, `formatTimeInDay`. `EnvironmentProfile`'a opsiyonel `dayLengthSec` / `dayLabelKey`.
+- **Neden:** Tüm hesaplar UTC; yalnız gösterim ortama göre etiketlenir. Saati ileri sarma/geliştirici arayüzü yok,
+  zaman mantığı `now` parametresiyle test edilir (ADR-030).
+- **Dosyalar:** `src/core/types/environment.ts`, `src/core/config/environments.config.ts`, `src/core/utils/time.ts`,
+  `src/core/hooks/`, `src/modules/routine/components/MetClock.tsx`, `src/core/i18n/en.json`, `src/core/i18n/tr.json`, testler,
+  `docs/DECISIONS.md`, `docs/CONTRACTS.md`, `src/core/CLAUDE.md`, `CLAUDE.md`, `CHANGELOG.md`
+- **Ekip ne yapmalı:** Kendi branch'inde `git merge origin/main`. Bileşende güncel zaman gerekiyorsa `new Date()` yerine `@core`'dan `useNow()` kullan; zaman hesaplayan fonksiyonlarına `now`'ı parametre olarak ver. EnvironmentProfile'a opsiyonel `dayLengthSec`/`dayLabelKey` eklendi (kırılma yok).
+
+### 2026-11-14 16:25 — Muhammed Bektaş (feat/core-routine) — Mimari kural: paylaşılan veri dosyalarının yeri
+
+- **Ne:** Yeni kural: tek modülün kullandığı veri dosyası (ör. gömülü uzay ajansı verisi) o modülde kalır; birden fazla modül
+  veya `core/simulation` kullanacaksa `src/core/config/` altına konur (içerik sahibi veriyi getiren, merge onayı Mühendis 1).
+- **Neden:** Modüller core'dan okuyabilir, core hiçbir modülden okuyamaz (ESLint) — paylaşılan veri modülde kalırsa diğerleri erişemez.
+- **Dosyalar:** `CLAUDE.md`, `src/core/CLAUDE.md`, `docs/ARCHITECTURE.md`, `CHANGELOG.md`
+- **Ekip ne yapmalı:** Hiçbir şey; yeni bir veri dosyası eklerken bu kurala göre yer seç.
+
+### 2026-11-14 15:22 — Muhammed Bektaş (feat/core-routine) — UI kit kuralları: açık katkı modeli + Base UI/Radix yalnız core/ui'da
+
+- **Ne:** UI kit (`src/core/ui`) açık katkı modeline geçti: genel/2+ modülde kullanılacak parçaları her
+  mühendis ekleyebilir, önce `docs/TEAM.md` "UI kit envanteri"ne adını ve motorunu yazar (yeni "Motor"
+  sütunu). Konumlanan/odak yöneten parçalarda Base UI veya Radix serbest; ESLint `@base-ui/react`,
+  `radix-ui` ve `@radix-ui/*` importunu `src/core/ui/**` dışında hata olarak işaretliyor. Yeni paket kurulmadı.
+- **Neden:** Tasarım sahibini tek kütüphaneye kilitlememek; kütüphaneler kitin içinde kaldığı için seçim
+  parça bazında değişebilir ve modülleri etkilemez (ADR-029).
+- **Dosyalar:** `eslint.config.js`, `docs/DECISIONS.md`, `docs/ARCHITECTURE.md`, `docs/TEAM.md`,
+  `docs/SETUP_CHECK.md`, `src/core/CLAUDE.md`, `CLAUDE.md`, `CHANGELOG.md`
+- **Ekip ne yapmalı:** Kendi branch'inde `git merge origin/main`. Genel arayüz parçası gerekiyorsa src/core/ui'a ekle; önce docs/TEAM.md 'UI kit envanteri'ne adını ve motorunu (kendi/Base UI/Radix) yaz. Base UI veya Radix gerekiyorsa paketi kendi PR'ında kur; yalnız src/core/ui içinde import et (lint zorlar).
+
+### 2026-11-14 15:25 — Emir (chore/changelog-union) — CHANGELOG çakışmaları yerel merge'te otomatik çözülür
+
+- **Ne:** `.gitattributes`'a `CHANGELOG.md merge=union` eklendi: kendi branch'inde `git merge origin/main`
+  yaptığında iki taraftaki CHANGELOG kayıtları otomatik birleşir, çakışma çıkmaz.
+- **Neden:** Paralel PR'lar kaydı hep aynı yere (en üst) eklediği için her seferinde çakışıyordu (PR #2).
+- **Dosyalar:** `.gitattributes`, `docs/TEAM.md`, `CHANGELOG.md`
+- **Ekip ne yapmalı:** Hiçbir şey. Bu kuralı içeren main'i branch'ine aldığın **ilk** merge'te bir kez daha
+  çakışma çıkabilir (iki kaydı da tut); sonrakiler otomatik. GitHub web arayüzündeki "Resolve conflicts" bu
+  kuralı kullanmaz — merge'ü yerelde yap.
+
+> > > > > > > origin/main
+
+### 2026-11-14 15:00 — Emir (docs/team-onboarding) — README'ye adım adım ekip kurulumu
+
+- **Ne:** README'ye "Team onboarding (step by step)" bölümü: araç kurulumu → klonlama → setup → verify →
+  uygulamayı çalıştırma → Claude Code trust + MCP/plugin/skill/hook doğrulama → dokümantasyon
+  kontrolü denemesi → günlük akış; her adımda beklenen çıktı ve sonda kontrol listesi.
+- **Neden:** Her ekip üyesinin kurulumunu kendi başına yapıp doğru çalıştığından emin olabilmesi.
+- **Dosyalar:** `README.md`, `docs/TEAM.md`
+- **Ekip ne yapmalı:** README › Team onboarding'i baştan sona uygula ve kontrol listesini tamamla.
 
 ### 2026-11-14 13:30 — Emir (main) — Ekip altyapısı: tek komut kurulum, dokümantasyon zorunluluğu, ortak Claude araçları
 

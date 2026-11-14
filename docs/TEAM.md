@@ -11,18 +11,41 @@
 
 \* `src/core` altındadır → içerik sahibi o mühendis, ama merge'ü Mühendis 1 onaylar.
 
+**Yeni katılan:** önce README › _Team onboarding (step by step)_ bölümünü uygula (her adımda doğrulama var).
+
 **Araç sahibi (Claude skill/plugin/MCP/hook, kurulum script'leri):** Emir — `docs/CLAUDE_SETUP.md`.
 
 ## Ortak dosyalar (çatışma noktaları)
 
-| Dosya                              | Kural                                                                                                                     |
-| ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
-| `src/core/types/**`                | Yalnız Mühendis 1 merge eder; değişiklik önce kanalda duyurulur, `npm run docs:contracts`                                 |
-| `src/core/i18n/en.json`, `tr.json` | Herkes ekler; **kendi modül önekinde** (`intake.*`, `assessment.*`, `visualization.*`, `routine.*`); EN+TR aynı commit'te |
-| `src/core/config/*.config.ts`      | İçerik sahibi yukarıdaki tabloya göre; yapısal değişiklik = sözleşme değişikliği                                          |
-| `CHANGELOG.md`                     | Herkes ekler, **en üste**; merge çatışmasında iki kaydı da tut (sıra: tarih)                                              |
-| `.claude/**`, `.mcp.json`          | Yalnız araç sahibi değiştirir (ADR-027)                                                                                   |
-| `package.json`                     | Yeni bağımlılık eklemeden önce kanalda sor (bundle boyutu, offline); aynı commit'te `docs/SETUP_CHECK.md` § 5'i güncelle  |
+| Dosya                              | Kural                                                                                                                                                          |
+| ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `src/core/types/**`                | Yalnız Mühendis 1 merge eder; değişiklik önce kanalda duyurulur, `npm run docs:contracts`                                                                      |
+| `src/core/i18n/en.json`, `tr.json` | Herkes ekler; **kendi modül önekinde** (`intake.*`, `assessment.*`, `visualization.*`, `routine.*`); EN+TR aynı commit'te                                      |
+| `src/core/config/*.config.ts`      | İçerik sahibi yukarıdaki tabloya göre; yapısal değişiklik = sözleşme değişikliği                                                                               |
+| `CHANGELOG.md`                     | Herkes ekler, **en üste**. `.gitattributes` `merge=union` ile yerel `git merge origin/main` iki kaydı otomatik tutar; GitHub web'de çakışırsa iki kaydı da tut |
+| `.claude/**`, `.mcp.json`          | Yalnız araç sahibi değiştirir (ADR-027)                                                                                                                        |
+| `package.json`                     | Yeni bağımlılık eklemeden önce kanalda sor (bundle boyutu, offline); aynı commit'te `docs/SETUP_CHECK.md` § 5'i güncelle                                       |
+
+## UI kit envanteri (`src/core/ui` — açık model, ADR-029)
+
+- **Tasarım sahibi:** _TBD_ (görünüm onayı)
+- **Mimari onay:** Mühendis 1
+
+| Parça           | Kim yazıyor | Motor | Durum |
+| --------------- | ----------- | ----- | ----- |
+| Button          | Faz 0       | kendi | hazır |
+| Card            | Faz 0       | kendi | hazır |
+| Modal           | Faz 0       | kendi | hazır |
+| StatusBadge     | Faz 0       | kendi | hazır |
+| Toast           | Faz 0       | kendi | hazır |
+| EmptyState      | Faz 0       | kendi | hazır |
+| Select          |             | —     | boşta |
+| Tabs            |             | —     | boşta |
+| Slider          |             | —     | boşta |
+| ProgressBar     |             | —     | boşta |
+| Tooltip/Popover |             | —     | boşta |
+
+Başlamadan önce adını ve motorunu (kendi / Base UI / Radix) yaz ve push et; aynı parçayı iki kişi yazmasın. İç içe açılan katmanlar (modal/popover/tooltip/menü) mümkünse aynı motordan (ADR-029).
 
 ## Git akışı (GitHub: `https://github.com/Emir-pek/astroVital`)
 

@@ -44,11 +44,14 @@ Kurulum tek komut: `powershell -ExecutionPolicy Bypass -File scripts\setup.ps1` 
   Ayrıntı: `docs/CONTRACTS.md`. Mimari: `docs/ARCHITECTURE.md`. Kararlar: `docs/DECISIONS.md`.
 - Paylaşılan alan verisi `useHealthStore`'da; modül-yerel durum modülün kendi store'unda.
 - Zustand v5: seçiciden yeni dizi/nesne döndürme → ham dilim + `useMemo`.
+- Paylaşılan veri dosyaları: tek modülün kullandığı veri (ör. gömülü uzay ajansı verisi) o modülün klasöründe durur; birden fazla modül veya `core/simulation` kullanacaksa `src/core/config/`'a konur (içerik sahibi veriyi getiren mühendis, merge onayı Mühendis 1). Neden: modüller core'dan okuyabilir, core hiçbir modülden okuyamaz (ESLint).
+- Arayüz parçası gerekiyorsa önce @core/ui'a bak. Yoksa ve genel bir parçaysa veya 2+ modülde kullanılacaksa kendin src/core/ui'a ekle: önce docs/TEAM.md 'UI kit envanteri'ne adını ve motorunu (kendi/Base UI/Radix) yaz; kurallara uy (Base UI/Radix yalnız kitte, t() yok, renkler token'dan, test zorunlu). Tek modüle özgü parça (ör. BodyMap) o modülde kalır. Kit PR'larında mimari onay Mühendis 1, görünüm onayı tasarım sahibi.
 
 ## Kod stili
 
 - Fonksiyonel React bileşenleri + hook'lar; sınıf yok.
 - **Saf fonksiyonları tercih et** (motor, simülasyon, utils). Saat gerekiyorsa `now` parametresi al.
+- Bileşenlerde güncel zaman için `new Date()` değil `useNow()` kullan; zaman hesaplayan fonksiyonlar `now`'ı parametre olarak alır (test edilebilirlik). Tüm zaman hesapları UTC.
 - TypeScript strict; **`any` yasak** (`unknown` + daraltma kullan). `import type` kullan.
 - Kod, değişken adları, yorumlar **İngilizce**; `docs/` Türkçe.
 - **i18n anahtarı olmadan UI metni yazma.** Yeni anahtarı hem `en.json` hem `tr.json`'a, kendi
