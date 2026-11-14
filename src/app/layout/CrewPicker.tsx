@@ -1,6 +1,6 @@
-import { Menu } from '@base-ui/react/menu';
 import { Check, ChevronDown, Settings, UserRound } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { Menu } from '@core/ui';
 import { useNavigate } from 'react-router';
 import { useCrew, useHealthStore } from '@core/store';
 

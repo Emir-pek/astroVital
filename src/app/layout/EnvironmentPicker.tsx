@@ -1,6 +1,6 @@
-import { Select } from '@base-ui/react/select';
 import { Check, ChevronDown, Orbit } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { Select } from '@core/ui';
 import { ENVIRONMENT_IDS, ENVIRONMENTS } from '@core/config';
 import { useHealthStore } from '@core/store';
 import type { EnvironmentId } from '@core/types';

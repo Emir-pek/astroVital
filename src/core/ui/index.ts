@@ -13,5 +13,7 @@ export { AlertStrip, type AlertStripItem, type AlertStripProps } from './AlertSt
 export { RedAlertDialog, type RedAlertItem, type RedAlertDialogProps } from './RedAlertDialog';
 export { Sheet, type SheetProps } from './Sheet';
 export { Segmented, type SegmentedProps } from './Segmented';
+export { Menu } from './Menu';
+export { Select } from './Select';
 export { ToastProvider } from './Toast';
 export { useToast, type ToastApi, type ToastInput } from './toastContext';
