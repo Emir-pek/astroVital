@@ -2,17 +2,16 @@
   "app": {
     "name": "AstroVital",
     "tagline": "Crew health, in plain language",
-    "disclaimer": "Prototype — not a medical device. Simulated data. Always follow your Crew Medical Officer and flight surgeons."
+    "disclaimer": "Prototype — not a medical device. Simulated data. Always follow your Crew Medical Officer and flight surgeons.",
+    "rotateDevice": "Turn the tablet to landscape"
   },
   "nav": {
     "label": "Main navigation",
-    "dashboard": "Dashboard",
-    "crew": "Crew member",
-    "log": "Log measurement",
-    "alerts": "Alerts",
-    "learn": "Learn",
-    "mission": "Missions",
-    "settings": "Settings"
+    "status": "Status",
+    "measure": "Measure",
+    "history": "History",
+    "team": "Team",
+    "routine": "Routine"
   },
   "topbar": {
     "met": "Mission Elapsed Time",
@@ -20,7 +19,13 @@
     "environment": "Environment",
     "language": "Language",
     "commDelay": "Signal delay to Earth: {{min}}–{{max}}",
-    "gravity": "Gravity: {{g}} g"
+    "gravity": "Gravity: {{g}} g",
+    "simulated": "Simulated data",
+    "emergency": "Emergency",
+    "environmentValue": "Environment: {{env}}",
+    "demoSettings": "Demo settings",
+    "crewPickerValue": "Signed-in astronaut: {{name}}",
+    "languageValue": "Language: {{code}}"
   },
   "common": {
     "save": "Save",
@@ -42,33 +47,37 @@
     "infinity": "not possible"
   },
   "pages": {
-    "dashboard": {
-      "title": "Mission dashboard",
-      "subtitle": "Everyone's status at a glance. Tap a crew member to see their body map."
+    "status": {
+      "title": "Status",
+      "subtitle": "Your health at a glance."
     },
-    "crew": {
-      "title": "Crew member health",
-      "subtitle": "Tap a body region to learn what it does and how space affects it.",
-      "notFound": "Crew member not found.",
-      "selectCrew": "Select crew member",
-      "metricLabel": "Chart metric",
-      "rangeLabel": "Time range"
-    },
-    "log": {
-      "title": "Log a measurement",
+    "measure": {
+      "title": "Measure",
       "subtitle": "Type it, tap it, or use the camera. Every entry is checked before it is saved."
     },
-    "alerts": {
-      "title": "Alerts",
-      "subtitle": "Most urgent first. Each alert says who to contact and what to do."
+    "history": {
+      "title": "History",
+      "subtitle": "How your numbers changed over time.",
+      "rangeLabel": "Time range"
     },
-    "learn": {
-      "title": "Learn",
-      "subtitle": "What each measurement means, how to take it in space, and the 5 hazards of spaceflight."
+    "team": {
+      "title": "Team",
+      "subtitle": "Who is on the crew."
     },
-    "mission": {
-      "title": "Health missions",
-      "subtitle": "Earn XP for keeping your routine — not for having \"good\" numbers."
+    "routine": {
+      "title": "Routine",
+      "subtitle": "Today's tasks and health missions."
+    },
+    "emergency": {
+      "title": "Emergency procedure",
+      "subtitle": "Work through the steps in order. Stop at the first step that solves the problem.",
+      "autonomous": "Earth help is hours away — the crew leads care.",
+      "steps": {
+        "self_care": "Rest, follow the guidance on screen and measure again in a few minutes.",
+        "crew_medical_officer": "Tell the Crew Medical Officer what you feel and show your latest values.",
+        "flight_surgeon": "Call the flight surgeon on the medical channel and describe the situation.",
+        "emergency": "Start the emergency protocol: call the whole crew, secure the person and begin life support."
+      }
     },
     "settings": {
       "title": "Settings",
@@ -77,7 +86,7 @@
     "notFound": {
       "title": "Page not found",
       "body": "This page does not exist.",
-      "back": "Back to dashboard"
+      "back": "Back to Status"
     }
   },
   "status": {

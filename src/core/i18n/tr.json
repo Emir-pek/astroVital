@@ -2,17 +2,16 @@
   "app": {
     "name": "AstroVital",
     "tagline": "Mürettebat sağlığı, sade bir dille",
-    "disclaimer": "Prototip — tıbbi cihaz değildir. Veriler simülasyondur. Her zaman Mürettebat Sağlık Görevlinize ve uçuş doktorlarına uyun."
+    "disclaimer": "Prototip — tıbbi cihaz değildir. Veriler simülasyondur. Her zaman Mürettebat Sağlık Görevlinize ve uçuş doktorlarına uyun.",
+    "rotateDevice": "Tableti yatay çevirin"
   },
   "nav": {
     "label": "Ana menü",
-    "dashboard": "Gösterge paneli",
-    "crew": "Mürettebat üyesi",
-    "log": "Ölçüm gir",
-    "alerts": "Uyarılar",
-    "learn": "Öğren",
-    "mission": "Görevler",
-    "settings": "Ayarlar"
+    "status": "Durum",
+    "measure": "Ölçüm",
+    "history": "Geçmiş",
+    "team": "Ekip",
+    "routine": "Rutin"
   },
   "topbar": {
     "met": "Görev Süresi (MET)",
@@ -20,7 +19,13 @@
     "environment": "Ortam",
     "language": "Dil",
     "commDelay": "Dünya'ya sinyal gecikmesi: {{min}}–{{max}}",
-    "gravity": "Yerçekimi: {{g}} g"
+    "gravity": "Yerçekimi: {{g}} g",
+    "simulated": "Simüle veri",
+    "emergency": "Acil",
+    "environmentValue": "Ortam: {{env}}",
+    "demoSettings": "Demo ayarları",
+    "crewPickerValue": "Giriş yapan astronot: {{name}}",
+    "languageValue": "Dil: {{code}}"
   },
   "common": {
     "save": "Kaydet",
@@ -42,33 +47,37 @@
     "infinity": "mümkün değil"
   },
   "pages": {
-    "dashboard": {
-      "title": "Görev paneli",
-      "subtitle": "Herkesin durumu tek bakışta. Vücut haritasını görmek için bir mürettebat üyesine dokunun."
+    "status": {
+      "title": "Durum",
+      "subtitle": "Sağlığınız tek bakışta."
     },
-    "crew": {
-      "title": "Mürettebat üyesi sağlığı",
-      "subtitle": "Ne işe yaradığını ve uzayın onu nasıl etkilediğini öğrenmek için bir vücut bölgesine dokunun.",
-      "notFound": "Mürettebat üyesi bulunamadı.",
-      "selectCrew": "Mürettebat üyesi seçin",
-      "metricLabel": "Grafik ölçümü",
-      "rangeLabel": "Zaman aralığı"
-    },
-    "log": {
-      "title": "Ölçüm kaydet",
+    "measure": {
+      "title": "Ölçüm",
       "subtitle": "Yazın, dokunun ya da kamerayı kullanın. Her giriş kaydedilmeden önce kontrol edilir."
     },
-    "alerts": {
-      "title": "Uyarılar",
-      "subtitle": "En acil olan en üstte. Her uyarı kime haber vereceğinizi ve ne yapacağınızı söyler."
+    "history": {
+      "title": "Geçmiş",
+      "subtitle": "Değerlerinizin zaman içindeki değişimi.",
+      "rangeLabel": "Zaman aralığı"
     },
-    "learn": {
-      "title": "Öğren",
-      "subtitle": "Her ölçüm ne anlama gelir, uzayda nasıl yapılır ve insanlı uzay uçuşunun 5 tehlikesi."
+    "team": {
+      "title": "Ekip",
+      "subtitle": "Mürettebatta kimler var."
     },
-    "mission": {
-      "title": "Sağlık görevleri",
-      "subtitle": "XP, \"iyi\" değerler için değil, rutininize uyduğunuz için kazanılır."
+    "routine": {
+      "title": "Rutin",
+      "subtitle": "Bugünkü görevler ve sağlık görevleri."
+    },
+    "emergency": {
+      "title": "Acil durum prosedürü",
+      "subtitle": "Adımları sırayla izleyin. Sorunu çözen ilk adımda durun.",
+      "autonomous": "Dünya'dan yardım saatler uzakta — bakımı ekip yürütür.",
+      "steps": {
+        "self_care": "Dinlenin, ekrandaki yönergeyi izleyin ve birkaç dakika sonra yeniden ölçün.",
+        "crew_medical_officer": "Mürettebat Sağlık Görevlisine ne hissettiğinizi söyleyin ve son değerlerinizi gösterin.",
+        "flight_surgeon": "Tıbbi kanaldan uçuş doktorunu arayın ve durumu anlatın.",
+        "emergency": "Acil durum protokolünü başlatın: tüm ekibi çağırın, kişiyi güvene alın ve yaşam desteğini başlatın."
+      }
     },
     "settings": {
       "title": "Ayarlar",
@@ -77,7 +86,7 @@
     "notFound": {
       "title": "Sayfa bulunamadı",
       "body": "Bu sayfa mevcut değil.",
-      "back": "Panele dön"
+      "back": "Durum sayfasına dön"
     }
   },
   "status": {

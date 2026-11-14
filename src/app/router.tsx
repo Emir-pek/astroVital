@@ -1,27 +1,26 @@
 import { createHashRouter, type RouteObject } from 'react-router';
 import { AppShell } from './layout/AppShell';
-import { AlertsPage } from './pages/AlertsPage';
-import { CrewIndexRedirect, CrewMemberPage } from './pages/CrewMemberPage';
-import { DashboardPage } from './pages/DashboardPage';
-import { LearnPage } from './pages/LearnPage';
-import { LogMeasurementPage } from './pages/LogMeasurementPage';
-import { MissionPage } from './pages/MissionPage';
+import { EmergencyPage } from './pages/EmergencyPage';
+import { HistoryPage } from './pages/HistoryPage';
+import { MeasurePage } from './pages/MeasurePage';
 import { NotFoundPage } from './pages/NotFoundPage';
+import { RoutinePage } from './pages/RoutinePage';
 import { SettingsPage } from './pages/SettingsPage';
+import { StatusPage } from './pages/StatusPage';
+import { TeamPage } from './pages/TeamPage';
 
-/** Route table — the URL contract is documented in docs/CONTRACTS.md § Routes. */
+/** Route table. The URL contract is documented in docs/CONTRACTS.md (Routes). */
 export const routes: RouteObject[] = [
   {
     path: '/',
     element: <AppShell />,
     children: [
-      { index: true, element: <DashboardPage /> },
-      { path: 'crew', element: <CrewIndexRedirect /> },
-      { path: 'crew/:id', element: <CrewMemberPage /> },
-      { path: 'log', element: <LogMeasurementPage /> },
-      { path: 'alerts', element: <AlertsPage /> },
-      { path: 'learn', element: <LearnPage /> },
-      { path: 'mission', element: <MissionPage /> },
+      { index: true, element: <StatusPage /> },
+      { path: 'measure', element: <MeasurePage /> },
+      { path: 'history', element: <HistoryPage /> },
+      { path: 'team', element: <TeamPage /> },
+      { path: 'routine', element: <RoutinePage /> },
+      { path: 'emergency', element: <EmergencyPage /> },
       { path: 'settings', element: <SettingsPage /> },
       { path: '*', element: <NotFoundPage /> },
     ],
