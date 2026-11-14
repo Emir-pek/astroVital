@@ -9,7 +9,7 @@ export default mergeConfig(
       setupFiles: ['./src/test/setup.ts'],
       include: ['src/**/*.test.{ts,tsx}'],
       // Raw-import tokens.css for the contrast guard; all other CSS stays stubbed.
-      css: { include: [/tokens\.css$/] },
+      css: { include: [/tokens\.css/] },
       restoreMocks: true,
       coverage: {
         provider: 'v8',
