@@ -217,3 +217,16 @@ Node 24 LTS, npm.
   src/core/ui'a, modüle özgü parçalar modülde. Çakışmayı TEAM.md 'UI kit envanteri' önler. Mimari onay
   Mühendis 1, görünüm onayı tasarım sahibi. Kütüphane seçimi parça bazında, yalnız kitin içinde olduğu
   için değiştirmek modülleri etkilemez.
+
+### ADR-030 — Zaman modeli: UTC tabanı + ortama göre gün etiketi
+
+- **Bağlam:** Hatırlatma, grafik ve trend hesapları "şimdi"ye bağlı. ISS'de resmî saat UTC; Ay için henüz
+  resmî saat yok (Coordinated Lunar Time strateji çalışması 2026 sonuna kadar), pratikte UTC; Mars'ta gün
+  (sol) 24 sa 39 dk 35.244 sn ve Mars saatine göre çalışan NASA ekiplerinde vücut saati kaymasının uyku ve
+  ruh halini etkilediği gözlenmiş.
+- **Karar:** Tüm hesaplar UTC. Görev saati gösterimi ortama göre etiketlenir: Mars üssünde "Sol N"
+  (gerçek sol uzunluğuyla hesaplanır), diğer ortamlarda "Görev günü N". Hatırlatma takvimi her ortamda
+  UTC. Saati ileri sarma / geliştirici arayüzü yok; zaman mantığı `now`'ı parametre alan saf
+  fonksiyonlarla test edilir. Bileşenler güncel zamanı ortak `useNow()` hook'undan alır. Sahip: Mühendis 1.
+- **Sonuç:** EnvironmentProfile'a opsiyonel `dayLengthSec`/`dayLabelKey` eklendi (kırılma yok). Gerçek sol
+  zamanına göre kayan takvim "sonra" kapsamında; sunumda gelecek adım olarak anılabilir.

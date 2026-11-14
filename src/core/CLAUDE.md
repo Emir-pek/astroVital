@@ -32,6 +32,8 @@ paylaşılan durum (`store`), demo verisi (`simulation`), çeviriler (`i18n`), U
   görünüm onayı tasarım sahibi; her yeni parça render testli.
 - `store/`: yalnız alan verisi. Şema değişirse `version` artır + `migrate`.
 - `i18n/`: anahtar ekleyen herkes EN + TR'yi aynı commit'te ekler.
+- Zaman (ADR-030): Bileşenlerde güncel zaman için `new Date()` değil `useNow()` (`@core/hooks`) kullan;
+  zaman hesaplayan fonksiyonlar `now`'ı parametre olarak alır (test edilebilirlik). Tüm zaman hesapları UTC.
 
 ## Dokunma
 

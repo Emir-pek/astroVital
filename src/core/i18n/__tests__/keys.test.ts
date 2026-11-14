@@ -52,7 +52,12 @@ describe('i18n resources', () => {
       }),
       ...ENVIRONMENT_IDS.flatMap((id) => {
         const e = ENVIRONMENTS[id];
-        return [e.labelKey, e.descriptionKey, ...e.reminderSchedule.map((r) => r.taskKey)];
+        return [
+          e.labelKey,
+          e.descriptionKey,
+          e.dayLabelKey ?? 'time.missionDay',
+          ...e.reminderSchedule.map((r) => r.taskKey),
+        ];
       }),
       ...METRIC_IDS.flatMap((id) => {
         const t = THRESHOLDS[id];

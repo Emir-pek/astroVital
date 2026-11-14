@@ -20,6 +20,18 @@ Yalnız `docs/` değişiklikleri kayıt gerektirmez.
 
 <!-- NEW ENTRIES BELOW -->
 
+### 2026-11-14 16:35 — Muhammed Bektaş (feat/core-time-model) — Zaman modeli: UTC + ortama göre gün etiketi (Mars'ta Sol)
+
+- **Ne:** Görev saati artık "Day 12 · 04:33:10" biçiminde; Mars üssünde gerçek sol uzunluğuyla "Sol 12 · …" gösteriyor
+  (tam MET ipucu olarak duruyor). Yeni ortak hook `useNow()` (`@core/hooks`, tek paylaşılan zamanlayıcı); yeni saf
+  fonksiyonlar `missionDayFor`, `formatTimeInDay`. `EnvironmentProfile`'a opsiyonel `dayLengthSec` / `dayLabelKey`.
+- **Neden:** Tüm hesaplar UTC; yalnız gösterim ortama göre etiketlenir. Saati ileri sarma/geliştirici arayüzü yok,
+  zaman mantığı `now` parametresiyle test edilir (ADR-030).
+- **Dosyalar:** `src/core/types/environment.ts`, `src/core/config/environments.config.ts`, `src/core/utils/time.ts`,
+  `src/core/hooks/`, `src/modules/routine/components/MetClock.tsx`, `src/core/i18n/en.json`, `src/core/i18n/tr.json`, testler,
+  `docs/DECISIONS.md`, `docs/CONTRACTS.md`, `src/core/CLAUDE.md`, `CLAUDE.md`, `CHANGELOG.md`
+- **Ekip ne yapmalı:** Kendi branch'inde `git merge origin/main`. Bileşende güncel zaman gerekiyorsa `new Date()` yerine `@core`'dan `useNow()` kullan; zaman hesaplayan fonksiyonlarına `now`'ı parametre olarak ver. EnvironmentProfile'a opsiyonel `dayLengthSec`/`dayLabelKey` eklendi (kırılma yok).
+
 ### 2026-11-14 16:25 — Muhammed Bektaş (feat/core-routine) — Mimari kural: paylaşılan veri dosyalarının yeri
 
 - **Ne:** Yeni kural: tek modülün kullandığı veri dosyası (ör. gömülü uzay ajansı verisi) o modülde kalır; birden fazla modül

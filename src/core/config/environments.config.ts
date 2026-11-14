@@ -1,4 +1,5 @@
 import type { EnvironmentId, EnvironmentProfile, ReminderTemplate } from '@core/types';
+import { MARS_SOL_SEC } from '@core/utils/time';
 
 export const ENVIRONMENT_IDS: readonly EnvironmentId[] = [
   'iss',
@@ -195,6 +196,9 @@ export const ENVIRONMENTS: Record<EnvironmentId, EnvironmentProfile> = {
     expectedDailyRadiationMSv: 0.64,
     oneWayCommDelaySec: [240, 1440],
     evacuationTimeHours: Number.POSITIVE_INFINITY,
+    // One sol = 24 h 39 min 35.244 s — mission clock shows "Sol N" (ADR-030).
+    dayLengthSec: MARS_SOL_SEC,
+    dayLabelKey: 'time.sol',
     medicalCapability: 'autonomous',
     thresholdModifiers: {
       exerciseMinutes: { shift: -30 },
