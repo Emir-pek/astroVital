@@ -2,6 +2,11 @@
 
 **Branch:** `feat/visualization` · **Sahip:** Mühendis 4 (_TBD_)
 
+> **Güncel kaynak (14.11.2026):** tasarım `docs/superpowers/specs/2026-11-14-astrovital-ui-design.md`,
+> uygulama planı `docs/superpowers/plans/2026-11-14-astrovital-ui-p1-foundation.md`, test planı
+> `docs/superpowers/specs/2026-11-14-astrovital-ui-test-plan.md`. Aşağıdaki P0 maddeleri Plan 1 ile
+> karşılandı; Öğren paneli trendi, Ölçüm/Geçmiş/Ekip/Rutin ekranları Plan 2'de.
+
 ## Amaç
 
 Sağlık durumunu **net, animasyonlu ve etkileşimli** göstermek: tıklanabilir insan figürü,

@@ -65,7 +65,7 @@ Kaynak: NASA-STD-3001 Vol. 2, Ek F (Display Standard), MIL-STD-1472 (dokunmatik 
 8. Tema: **koyu ama yumuşak** (gece mavisi + pastel aksanlar).
 9. Görsel dil: kalite ve yumuşaklık; **tatlılık/sevimlilik değil**.
 10. Karakter: **skafandrlı astronot**, mat, hacimli, yumuşak ışıklı 2D illüstrasyon (referans: mat beyaz skafandr, yuvarlak hacimler, dağınık yumuşak ışık). Sağlık bölgeleri kıyafetin altından yumuşak ışık olarak belirir; dokununca yan panelde şematik organ illüstrasyonu açılır.
-11. Arayüz bileşenleri: **Radix tabanlı (shadcn/ui tarzı) + kendi tasarım değişkenlerimiz**.
+11. Arayüz bileşenleri: **Base UI tabanlı (`@base-ui/react`, shadcn/ui tarzı) + kendi tasarım değişkenlerimiz**.
 
 ## 5. Tasarım sistemi (token'lar)
 
@@ -137,7 +137,7 @@ Kurallar:
 
 - **Sol menü:** sabit, 5 öğe, her biri ≥ 104 px yüksek, ikon + etiket. Seçili öğe `accent`.
 - **Üst bar:** görev saati (MET, mono), ortam seçici, sürekli görünen "Simüle veri" etiketi (jüriye dürüstlük), **Acil** butonu (acil durum protokolüne götürür; Modül 3'ün eskalasyon zincirine bağlanır), dil seçici, aktif astronot seçici.
-- **Öğren paneli** ayrı sayfa değil; figürde/uyarıda bir şeye dokununca sağdan açılan panel (Radix Dialog/Sheet).
+- **Öğren paneli** ayrı sayfa değil; figürde/uyarıda bir şeye dokununca sağdan açılan, sağa kaydırarak da kapanan panel (Base UI `Drawer`).
 
 ## 7. Ekranlar
 
@@ -160,7 +160,7 @@ Kurallar:
 - **Değer kartları:** sağda. Her kart: etiket, değer (mono, 40 px), birim, durum ikonu, eşik dışıysa ▲/▼, son ölçüm zamanı. Kart içinde ince **yay gösterge** ve üzerinde sarı/kırmızı eşik bantları (Open MCT'den alınan fikir).
 
 ### 7.2 Kırmızı tam ekran uyarı
-- Radix `AlertDialog`, kapatılamaz (ESC ve dışarı tıklama kapalı).
+- Base UI `AlertDialog`, kapatılamaz (ESC ve dışarı tıklama kapalı).
 - Zemin `status-warning-fill`, beyaz yazı (ters video, F.5.10'a uygun tek yer).
 - İçerik: ikon (3 Hz yanıp söner), gösterge adı + değer, tek cümle açıklama.
 - Butonlar (≥ 104 px): **"Ne yapmalıyım?"** (prosedürü açar) ve **"Gördüm"** (onaylar). Onaydan sonra uyarı şeride kırmızı olarak iner, çözülene kadar orada kalır.
@@ -213,8 +213,17 @@ Sıra her zaman aynı (rakipten alınan iyi pratik: önce eylem):
 
 ## 9. Teknik yaklaşım
 
-**Seçilen:** Radix UI primitifleri (shadcn/ui tarzı, bileşenler projeye kopyalanır) + Tailwind + kendi token'larımız.
-- Gerekçe: kırmızı tam ekran (AlertDialog), Öğren paneli (Dialog/Sheet), sekmeler, kaydırıcı, seçiciler için odak yönetimi ve erişilebilirlik hazır gelir; görünüm tamamen bizde.
+**Seçilen:** Base UI primitifleri (`@base-ui/react`; shadcn/ui tarzı, bileşenler projeye kopyalanır) + Tailwind + kendi token'larımız. (14.11.2026'da Radix'ten geçildi — ADR-029.)
+- Gerekçe: odak yönetimi ve erişilebilirlik hazır gelir, dokunmatik desteği güçlü; görünüm tamamen bizde.
+
+| İhtiyaç | Base UI bileşeni |
+|---|---|
+| Kırmızı tam ekran uyarı | `AlertDialog` |
+| Öğren paneli | `Drawer` (sağdan, kaydırarak kapanır) |
+| Segmentli seçici | `RadioGroup` |
+| Seçiciler | `Select` (bir `Drawer`/`Dialog` içine konmaz) |
+| Astronot menüsü | `Menu` |
+| Kaydırıcı (uyku) | `Slider` |
 
 **Elenenler:**
 - Sıfırdan Tailwind: erişilebilirliği ve odak yönetimini sıfırdan yazmak 48 saatte riskli.

@@ -176,3 +176,33 @@ Node 24 LTS, npm.
   `feat/*` branch'ine serbestçe push eder; `main`'e push yalnız `npm run verify` yeşilken; force push
   yasak. Farklı bilgisayarlar arası senkronizasyon GitHub üzerinden (TEAM.md).
 - **Sonuç:** ADR-001'deki "push yok" ve ADR-025'teki `git bundle` önerisi geçersiz.
+
+### ADR-027 — Durum dört seviyeli: nominal / advisory / caution / warning
+
+- **Bağlam:** UI tasarım belgesi NASA-STD-3001 Ek F (F.6.4.1–3) renk kodunu zorunlu kılıyor:
+  warning = kırmızı, caution = sarı, advisory = mavi; normal = nane yeşili.
+- **Karar:** `Status` = `'nominal' | 'advisory' | 'caution' | 'warning'`. Eski değerlerin karşılığı:
+  green → nominal, yellow → caution, red → warning. `advisory` yeni; değerlendirme motoru henüz
+  üretmiyor (Mühendis 3'e görev).
+- **Sonuç:** `src/core/types`, eşik tablosu, i18n (`status.*`) ve tüm modüller yeni adları kullanır.
+
+### ADR-028 — Arayüzün tamamı tek tasarım belgesine göre; sahibi visualization ekibi
+
+- **Bağlam:** `docs/superpowers/specs/2026-11-14-astrovital-ui-design.md` (onaylı). Proje sahibinin
+  kararı (14.11.2026): repodaki eski arayüz geçersiz, her şey belgeye göre yenilenir.
+- **Karar:** `src/core/ui`, `src/app` (kabuk, rotalar, sayfalar) ve intake/routine ekranlarının
+  **görünümü** visualization ekibindedir; modüllerin mantığı sahiplerinde kalır. Tüm dokunma
+  hedefleri ≥ 104 px (`min-h-touch`), metin ≥ 16 px, fontlar yerel (`@fontsource`).
+  Eski renk takma adları (`text-ok/warn/crit`, `bg-surface-2`, `text-muted`, `border-border`)
+  geçicidir ve Plan 3'te kaldırılır; yeni kodda kullanılmaz.
+- **Sonuç:** Rotalar değişti (CONTRACTS.md § Rotalar). Ekip sayfası tıbbi değer/durum göstermez.
+
+### ADR-029 — Davranış katmanı Radix yerine Base UI
+
+- **Bağlam:** Ekip kararı (14.11.2026). Ana senaryo eldivenli tablet.
+- **Karar:** `radix-ui` kaldırıldı, `@base-ui/react` eklendi. `RedAlertDialog` → `AlertDialog`,
+  `Sheet` → `Drawer` (sağa kaydırarak kapanır), `Segmented` → `RadioGroup`, ortam seçici → `Select`,
+  astronot menüsü → `Menu`. Gerekçe: dokunmatik iyileştirmeleri, kaydırarak kapanan Drawer,
+  shadcn varsayılanı. Bedel: 3 bileşen yeniden yazıldı; prop imzaları değişmedi.
+- **Sonuç:** `src/test/no-radix.test.ts` (U-12) Radix import'unun geri gelmesini engeller. Base UI
+  yalnız davranış katmanıdır; görünüm tamamen `tokens.css`. `Select`'i `Drawer`/`Dialog` içine koyma.

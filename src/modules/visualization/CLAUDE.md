@@ -14,8 +14,8 @@ bölge detay paneli, zaman serisi grafikleri (Recharts), vital kartları, müret
 
 ## Public API (`index.ts` — tek giriş noktası)
 
-`BodyMap`, `RegionDetailPanel`, `MetricTrendChart`, `VitalsGrid`, `CrewOverview`,
-`filterByRange`, `TREND_RANGES`, `TrendRange`.
+`BodyMap`, `RegionSheet`, `RegionDetailPanel`, `VitalsPanel`, `AlertLayer`, `MetricTrendChart`,
+`CrewOverview`, `filterByRange`, `TREND_RANGES`, `TrendRange`.
 
 ## Bağımlılık
 
@@ -27,7 +27,11 @@ bölge detay paneli, zaman serisi grafikleri (Recharts), vital kartları, müret
 - Durumu **kendin hesaplama** — `useCrewHealth().regions/assessments` tek doğruluk kaynağı.
 - Figür ve ikonlar kendi çizimin (telifli asset yok, harici CDN yok).
 - Erişilebilirlik: klavye gezinmesi, `aria-label`, renk + ikon + metin, `prefers-reduced-motion`.
-- Animasyon hızları `--av-pulse-*` token'larından; renkler token sınıflarından.
+- Hareket: nominal bölge 4–5 sn hafif nefes; caution/warning sabit; yanıp sönme yalnız kırmızı uyarı
+  ikonunda. Renkler token'lardan (`STATUS_COLOR_VAR`, `--av-suit-*`).
+- Eski veri asla "normal" görünmez (`isStale`, `regionDisplayStatus`, `buildVitalCards`).
+- Ekip görünümünde tıbbi değer/durum yok; ekranda yalnız seçili astronotun verisi (`AlertLayer`).
+- Tasarım: `docs/superpowers/specs/2026-11-14-astrovital-ui-design.md` · ADR-027/028/029.
 - Saf yardımcılar `services/` altında ve testli.
 
 ## Dokunulmaması gerekenler

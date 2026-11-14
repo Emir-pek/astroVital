@@ -1,11 +1,12 @@
 # CLAUDE.md — src/app (uygulama kabuğu)
 
-**Sahip:** Mühendis 1. Görev listesi: `docs/modules/core-routine.md`.
+**Sahip:** görünüm visualization ekibinde (ADR-028); provider'lar Mühendis 1. Görev listesi: `docs/modules/core-routine.md`.
 
 ## Amaç
 
 Modülleri **birleştirmek**: router (`router.tsx`, hash router), layout (`AppShell`, `Sidebar`,
-`TopBar` — MET saati, ortam rozeti, dil seçici, `Disclaimer`), provider'lar (i18n, toast,
+`TopBar` — MET saati, ortam seçici, "simüle veri" etiketi, Acil, dil, astronot menüsü; `Disclaimer`;
+`PortraitNotice`; `AlertLayer` yuvası), provider'lar (i18n, toast,
 tema/dil senkronu, ilk açılışta demo verisi) ve sayfalar (`pages/`).
 
 ## Kurallar
