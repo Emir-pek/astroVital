@@ -20,6 +20,17 @@ Yalnız `docs/` değişiklikleri kayıt gerektirmez.
 
 <!-- NEW ENTRIES BELOW -->
 
+### 2026-11-14 15:22 — Muhammed Bektaş (feat/core-routine) — UI kit kuralları: açık katkı modeli + Radix yalnız core/ui'da
+
+- **Ne:** UI kit (`src/core/ui`) açık katkı modeline geçti: genel/2+ modülde kullanılacak parçaları her
+  mühendis ekleyebilir, önce `docs/TEAM.md` "UI kit envanteri"ne adını yazar. ESLint artık `radix-ui` ve
+  `@radix-ui/*` importunu `src/core/ui/**` dışında hata olarak işaretliyor. Yeni paket kurulmadı.
+- **Neden:** Kit parçaları ekibin kendi bileşenleri; konumlanan/odak yöneten parçalarda gerekirse Radix
+  kullanılacak ve yalnız kitin içinde kalacak. Base UI değerlendirildi, ekip tercihiyle seçilmedi (ADR-029).
+- **Dosyalar:** `eslint.config.js`, `docs/DECISIONS.md`, `docs/ARCHITECTURE.md`, `docs/TEAM.md`,
+  `src/core/CLAUDE.md`, `CLAUDE.md`, `CHANGELOG.md`
+- **Ekip ne yapmalı:** Kendi branch'inde `git merge origin/main`. Genel arayüz parçası gerekiyorsa src/core/ui'a ekle; önce docs/TEAM.md 'UI kit envanteri'ne adını yaz. Radix gerekirse paketi kendi PR'ında kur, yalnız src/core/ui içinde kullan (lint zorlar).
+
 ### 2026-11-14 15:00 — Emir (docs/team-onboarding) — README'ye adım adım ekip kurulumu
 
 - **Ne:** README'ye "Team onboarding (step by step)" bölümü: araç kurulumu → klonlama → setup → verify →

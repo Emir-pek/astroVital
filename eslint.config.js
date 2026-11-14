@@ -19,15 +19,15 @@ import tseslint from 'typescript-eslint';
  * - Relative imports that leave the current layer/module (`../../core/...`) are forbidden;
  *   use `@core/*` / `@modules/<name>` so the rule below can see them.
  * - core never imports from modules or app.
- * - `@base-ui/react` (headless behaviour layer of the UI kit, ADR-029) may be imported ONLY inside
- *   `src/core/ui/**`; everyone else uses the kit via `@core/ui`.
+ * - Radix primitives (`radix-ui`, `@radix-ui/*` — optional headless layer of the UI kit, ADR-029) may be
+ *   imported ONLY inside `src/core/ui/**`; everyone else uses the kit via `@core/ui`.
  */
 const MODULES = ['intake', 'assessment', 'visualization', 'routine'];
 
 /**
- * @param {{ files: string[]; allowModules: string[]; allowApp: boolean; self?: string; layer: string; allowBaseUi?: boolean }} opts
+ * @param {{ files: string[]; allowModules: string[]; allowApp: boolean; self?: string; layer: string; allowRadix?: boolean }} opts
  */
-function boundary({ files, allowModules, allowApp, self, layer, allowBaseUi = false }) {
+function boundary({ files, allowModules, allowApp, self, layer, allowRadix = false }) {
   const forbidden = MODULES.filter((m) => !allowModules.includes(m) && m !== self);
   /** @type {Array<{ regex: string; message: string }>} */
   const patterns = [
@@ -64,10 +64,10 @@ function boundary({ files, allowModules, allowApp, self, layer, allowBaseUi = fa
       message: `[${layer}] may not import from the app shell. Only the app composes modules.`,
     });
   }
-  if (!allowBaseUi) {
+  if (!allowRadix) {
     patterns.push({
-      regex: '^@base-ui/react(/|$)',
-      message: "Base UI yalnız src/core/ui içinde kullanılır; bileşeni @core/ui'dan al.",
+      regex: '^(radix-ui|@radix-ui/.+)(/|$)',
+      message: "Radix yalnız src/core/ui içinde kullanılır; bileşeni @core/ui'dan al.",
     });
   }
   const testFiles = files
@@ -134,13 +134,13 @@ export default defineConfig([
   // ---- Module boundary enforcement -------------------------------------------------
   ...boundary({ files: ['src/core/**'], allowModules: [], allowApp: false, layer: 'core' }),
   // Must come AFTER the src/core/** entry: the last matching config wins, so only the UI kit
-  // gets the Base UI exemption (all other core boundaries stay identical).
+  // gets the Radix exemption (all other core boundaries stay identical).
   ...boundary({
     files: ['src/core/ui/**'],
     allowModules: [],
     allowApp: false,
     layer: 'core/ui',
-    allowBaseUi: true,
+    allowRadix: true,
   }),
   ...boundary({
     files: ['src/modules/intake/**'],

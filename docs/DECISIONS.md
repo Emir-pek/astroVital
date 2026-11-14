@@ -200,16 +200,16 @@ Node 24 LTS, npm.
 - **Sonuç:** ADR-026'nın "main'e doğrudan push" kısmının yerine geçer; force push yasağı aynen geçerli.
   Aynı makinede worktree akışı değişmez, yalnız main'e alma adımı PR olur.
 
-### ADR-029 — UI kit davranış katmanı: Base UI (headless)
+### ADR-029 — UI kit: kendi bileşenlerimiz, gerekirse Radix (headless)
 
 - **Bağlam:** Modern ve tamamen kendi tasarımımız olan bir arayüz istiyoruz; tarayıcının kendi
   `<select>` vb. öğeleri açıldığında stillenemiyor; popover/tooltip/konuşma balonu gibi parçaların
   konumlandırma, klavye ve erişilebilirlik davranışını 48 saatte elle yazmak riskli. Uygulamada 6 ham
-  `<select>` dağınık duruyor.
-- **Karar:** `src/core/ui` bileşenleri davranış için `@base-ui/react` kullanır, görünüm Tailwind +
-  `tokens.css` ile bizim. Base UI sadece `src/core/ui` içinde import edilir (ESLint zorlar); modüller
-  her zaman `@core/ui`'dan alır. Değerlendirilen alternatifler: tamamen kendimiz yazmak
-  (zaman/erişilebilirlik riski), Radix UI (bakımı yavaşladı, ekip odağını Base UI'a kaydırdı), hazır
-  görünümlü kütüphaneler MUI/Ant (kendi tasarımımız olmaz).
-- **Sonuç:** Kit'e her mühendis katkı verebilir (açık model): genel/2+ modülde kullanılan parçalar src/core/ui'a, modüle özgü parçalar modülde. Çakışmayı TEAM.md 'UI kit envanteri' önler. Mimari onay Mühendis 1, görünüm onayı tasarım sahibi. Kütüphane yalnız kitin içinde kullanıldığı için ileride değiştirmek sadece
-  `src/core/ui`'yi etkiler. Sahip: Mühendis 1.
+  `<select>` dağınık duruyor. Tasarım sahibi kit parçalarını kendi yapısıyla yazmaya başladı.
+- **Karar:** Kit parçaları ekibin kendi bileşenleridir; açılır menü, popover/tooltip, modal gibi
+  konumlanan/odak yöneten parçalarda gerekirse Radix primitives kullanılabilir. Radix yalnız
+  `src/core/ui` içinde import edilir (ESLint zorlar), paketi ilk ihtiyaç duyan kurar. Base UI
+  değerlendirildi, ekip tercihiyle seçilmedi.
+- **Sonuç:** Kit'e her mühendis katkı verebilir (açık model): genel/2+ modülde kullanılan parçalar
+  src/core/ui'a, modüle özgü parçalar modülde. Çakışmayı TEAM.md 'UI kit envanteri' önler. Mimari onay
+  Mühendis 1, görünüm onayı tasarım sahibi.
