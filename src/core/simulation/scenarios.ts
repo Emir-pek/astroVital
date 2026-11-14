@@ -30,6 +30,17 @@ const NONE: ScenarioEffect = {};
 const ramp = (x: number, from: number, to: number): number =>
   x <= from ? 0 : x >= to ? 1 : (x - from) / (to - from);
 
+/** Sums `add` and multiplies `mul` of several effects on the same metric. */
+const combine = (...effects: ScenarioEffect[]): ScenarioEffect => {
+  let add = 0;
+  let mul = 1;
+  for (const e of effects) {
+    add += e.add ?? 0;
+    mul *= e.mul ?? 1;
+  }
+  return { ...(add !== 0 ? { add } : {}), ...(mul !== 1 ? { mul } : {}) };
+};
+
 const scenario = (
   def: Omit<ScenarioDefinition, 'labelKey' | 'descriptionKey'>,
 ): ScenarioDefinition => ({
@@ -180,6 +191,78 @@ export const SCENARIOS: Record<ScenarioId, ScenarioDefinition> = {
       }
     },
   }),
+
+  /**
+   * Default demo (ADR-038): one crew, four stories, four status levels at the same time.
+   * crew-1 nominal · crew-2 warning (fever, with early signs) · crew-3 caution (isolation trend)
+   * · crew-4 advisory (personal-baseline drift inside the population range). See DEMO_CREW_STORIES.md.
+   */
+  mixed_mission: scenario({
+    id: 'mixed_mission',
+    recommendedEnvironment: 'iss',
+    effect: (metric, ctx) => {
+      const { dayIndex, days, crewIndex } = ctx;
+      const last = days - 1;
+      switch (crewIndex) {
+        case 1: {
+          // Early signs (resting HR up, shorter sleep) 1–2 days before the fever ramp, then fever.
+          const precursor = dayIndex >= last - MIXED.kenjiPrecursorDays + 1;
+          const early: ScenarioEffect =
+            precursor && metric === 'heartRate'
+              ? { add: MIXED.kenjiPrecursorHr }
+              : precursor && metric === 'sleepHours'
+                ? { add: MIXED.kenjiPrecursorSleep }
+                : NONE;
+          return combine(early, SCENARIOS.fever_dehydration.effect(metric, ctx));
+        }
+        case 2: {
+          const k = ramp(dayIndex, MIXED.selinStartDay, last);
+          if (k === 0) return NONE;
+          switch (metric) {
+            case 'sleepHours':
+              return { add: MIXED.selinSleep * k };
+            case 'mood':
+              return { add: MIXED.selinMood * k };
+            case 'exerciseMinutes':
+              return { add: MIXED.selinExercise * k };
+            default:
+              return NONE;
+          }
+        }
+        case 3: {
+          if (metric === 'systolicBP' && dayIndex > last - MIXED.lucasDriftDays)
+            return { add: MIXED.lucasSystolic };
+          if (
+            metric === 'exerciseMinutes' &&
+            (MIXED.lucasLowExerciseOffsets as readonly number[]).includes(last - dayIndex)
+          )
+            return { mul: MIXED.lucasLowExerciseMul };
+          return NONE;
+        }
+        default:
+          return NONE;
+      }
+    },
+  }),
 };
 
 export const SCENARIO_IDS = Object.keys(SCENARIOS) as ScenarioId[];
+
+/** Mixed-mission story constants (docs/DEMO_CREW_STORIES.md). Exported for tests. */
+export const MIXED = {
+  /** Kenji: early signs start this many days before the last day (fever ramp: last 3 days). */
+  kenjiPrecursorDays: 5,
+  kenjiPrecursorHr: 7,
+  kenjiPrecursorSleep: -0.7,
+  /** Selin: slow decline starts on this 0-based day (≈ mission day 10) and peaks on the last day. */
+  selinStartDay: 9,
+  selinSleep: -1.1,
+  selinMood: -1.2,
+  selinExercise: -40,
+  /** Lucas: systolic drift over the last N days; exercise below target on 4 of the last 7 days. */
+  lucasDriftDays: 10,
+  lucasSystolic: 9,
+  /** Offsets from the last day (0 = last day) with low exercise (≈ 70–90 min). */
+  lucasLowExerciseOffsets: [6, 5, 4, 3],
+  lucasLowExerciseMul: 0.6,
+} as const;

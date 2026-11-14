@@ -1,6 +1,6 @@
 # ROUTINE_SCHEDULE — Hatırlatma takvimi (günlük / haftalık / aylık)
 
-**Sahip:** Mühendis 1 · **Kararlar:** ADR-035 (yapı), ADR-036 (saatler) · **Kod:** `CORE_ROUTINE` in
+**Sahip:** Mühendis 1 · **Kararlar:** ADR-035 (yapı), ADR-036 (saatler), ADR-037 (veri = takvim) · **Kod:** `CORE_ROUTINE` in
 `src/core/config/environments.config.ts`, gün kuralı `isScheduledOn()` in `src/core/utils/routineSchedule.ts`
 · **Kaynaklar:** `docs/SOURCES.md` § Hatırlatma takvimi kaynakları.
 
@@ -29,6 +29,7 @@ her gün aynı saatlere bağlı.
 | Günlük   | `morning-bp`                | `systolicBP`      | 06:30      | her gün                                   | `csa-bio-monitor` + sabah bloğu¹                                                               | Diastolik aynı ölçümde; bilinçli sapma (aşağıda)       |
 | Günlük   | `morning-hr`                | `heartRate`       | 06:30      | her gün                                   | `csa-bio-monitor` + sabah bloğu¹                                                               | İstirahat nabzı                                        |
 | Günlük   | `morning-spo2`              | `spo2`            | 06:30      | her gün                                   | `csa-bio-monitor` + sabah bloğu¹                                                               | Sabah vital bloğu                                      |
+| Günlük   | `morning-resp`              | `respRate`        | 06:30      | her gün                                   | `csa-bio-monitor` + sabah bloğu¹                                                               | Sabah vital bloğu (ADR-037)                            |
 | Günlük   | `morning-temp`              | `bodyTemp`        | 06:30      | her gün                                   | `csa-bio-monitor` + sabah bloğu¹                                                               | Sabah vital bloğu                                      |
 | Günlük   | `exercise`                  | `exerciseMinutes` | 17:30      | haftada 6 gün (`restEveryNDays: 7`)       | `ntrs-2011-iss-exercise-conditioning`, `ntrs-2009-iss-exrx`, `nasa-std-3001-v1-medops`         | 7., 14., 21. … gün dinlenme; günün toplamı             |
 | Günlük   | `dosimeter`                 | `radiationDose`   | 19:30      | her gün                                   | `pmc-2024-iss-radiation-crew-dosimetry` + akşam bloğu²                                         | Kişisel dozimetre                                      |
@@ -82,26 +83,28 @@ değişmedi (ortam farkları ayrı karar).
 - **Açlık şekeri haftalık:** ISS'in rutin listesinde yok. Challenge kan şekerini açıkça gösterge olarak
   saydığı için takip ediyoruz; günlük parmak ucu ölçümü yerine (sarf malzemesi ve yük) haftalık.
 
-## Simülasyon uyumu (ADR-016 → ADR-035, ADR-036)
+## Simülasyon uyumu: veri = takvim (ADR-016 → ADR-035, ADR-036, ADR-037)
 
-Demo verisi takvimle aynı kaynağı kullanır (`generator.ts`):
+Demo verisi takvimin kendisinden üretilir (`generator.ts`): bir metrik, aktif ortamın takviminde o gün
+düşen bir hatırlatması varsa ve o hatırlatmanın saatinde (± birkaç dakika giriş gürültüsü) üretilir.
+Takvimde olmayan hiçbir ölçüm üretilmez.
 
 - **Gün kuralı** `isScheduledOn`: açlık şekeri 1, 8, 15, 22, 29. günlerde; egzersiz 7. günlerde yok.
-- **Saat** aktif ortamın takviminden, metrik eşleşmesiyle (sabah/akşam yarısına göre): ISS'te uyku 06:15,
-  sabah vital grubu (KB, nabız, SpO₂, solunum, ısı — tek `groupId`) ve şeker 06:30, egzersiz 17:30,
-  dozimetre ve akşam vitali 19:30, ruh hali 21:00. Girişler birkaç dakika gürültüyle (±10–30 dk) saçılır.
-- 30 gün × 4 kişi (seed 42, ISS, nominal): **1.452 ölçüm** (saat değişikliği sayıyı etkilemez).
+- **Saat** takvimden: ISS'te uyku 06:15; sabah vital grubu (KB, nabız, SpO₂, solunum, ısı; tek `groupId`)
+  ve şeker 06:30; egzersiz 17:30; dozimetre ve akşam nabzı 19:30; ruh hali 21:00.
+- **Akşam:** ISS'te yalnız takvimdeki akşam nabzı (her gün 19:30). Transit, Ay ve Mars'ta akşam vitali yok.
+  ADR-016'daki "günlerin ~%50'sinde akşam vitali" kuralı bu ortamlarda kalktı.
+- Diastolik, sistolikle aynı manşon ölçümünde gelir (`morning-bp`'ye bağlı, ayrı maddesi yok).
+- Ölçüm sayısı (30 gün × 4 kişi, ISS): **1.324** (nominal ve karma görev aynı; önce 1.452).
+  Fark: akşam KB + ısı + yarım günlük nabız kalktı, her gün akşam nabzı geldi.
 
 ## Açık konular
 
-- **Takvimle eşleşmeyen simülasyon ölçümleri** (davranışları değişmedi, ADR-016 saatleriyle):
-  - Akşam vitali (KB + nabız + ısı, günlerin ~%50'si): ISS'te saat takvimden (19:30) ama takvimde yalnız
-    nabız var ve her gün; diğer ortamlarda takvim karşılığı yok → 19:00.
-  - Solunum hızı (`respRate`): takvimde ayrı maddesi yok; sabah grubuyla geliyor.
-  - Rover: uyku (07:00), açlık şekeri (07:40), egzersiz (17:00) takvim maddesi olmadığı için eski
-    saatlerinde; rover'ın `twice_daily` ikinci ölçümü (20:00) simüle edilmiyor. Rover'da sabah vital
-    grubu kendi takvimindeki 08:00'e, dozimetre 20:30'a kaydı.
-  - Transit, Ay ve Mars: akşam vitali 19:00 (takvim karşılığı yok); geri kalan her şey takvimden.
+- **Rover (ortam farkları kararı bekliyor):** rover kendi takvimini kullanıyor ve `CORE_ROUTINE`'i
+  içermiyor; bu yüzden üretici rover'da "eski" moda geçer: takvimde maddesi olan metrikler (SpO₂/nabız
+  08:00, dozimetre 20:30, ruh hali 21:00) takvimden, olmayanlar ADR-016 davranışıyla: uyku 07:00, KB +
+  solunum + ısı sabah grubuyla 08:00, açlık şekeri haftalık 07:40, egzersiz 17:00, akşam vitali günlerin
+  ~%50'sinde 19:00. Rover'ın `twice_daily` ikinci ölçümü (20:00) simüle edilmiyor.
 - **Ortam farkları:** Ortama göre takvim farkları ayrı karar. Mars'ta `weekly-report` ile
   `weekly-health-summary` aynı işi tarif ediyor; ortam kararında birleştirilmeli.
 - **Zaman penceresi:** Bir görevin ne zaman "yapıldı/kaçırıldı" sayılacağı (`useReminders`) ayrı karar.

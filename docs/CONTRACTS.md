@@ -570,7 +570,9 @@ export type ScenarioId =
   | 'solar_particle_event'
   | 'isolation_stress'
   | 'fever_dehydration'
-  | 'orthostatic_return';
+  | 'orthostatic_return'
+  /** Default demo: each crew member has a small health story; all four status levels at once. */
+  | 'mixed_mission';
 
 export interface GenerateHistoryOptions {
   /** PRNG seed — same seed + same options ⇒ identical output. */

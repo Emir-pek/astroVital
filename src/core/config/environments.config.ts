@@ -71,6 +71,14 @@ export const CORE_ROUTINE: ReminderTemplate[] = [
     ],
   },
   {
+    id: 'morning-resp',
+    metric: 'respRate',
+    taskKey: 'routine.task.respRate',
+    timeOfDayMET: '06:30',
+    repeat: 'daily',
+    sourceIds: ['csa-bio-monitor'],
+  },
+  {
     id: 'morning-temp',
     metric: 'bodyTemp',
     taskKey: 'routine.task.temperature',

@@ -229,6 +229,15 @@ export const SOURCES = {
     url: 'https://www.clickorlando.com/news/space-news/2020/11/14/a-day-in-space-heres-what-an-astronauts-daily-routine-looks-like/',
     verified: false,
   },
+  // ── Demo crew size (ADR-038) — content read 2026-11-14; Engineer 3 verifies. ──
+  'nasa-nesc-mars-crew-size': {
+    id: 'nasa-nesc-mars-crew-size',
+    title:
+      'Chaikin — Humans to Mars, But How Many? A historical review of crew size determinations for Mars missions',
+    publisher: 'NASA Engineering and Safety Center (NESC Academy)',
+    url: 'https://nescacademy.nasa.gov/downloadFile/1389',
+    verified: false,
+  },
 } as const satisfies Record<string, SourceRef>;
 
 export type SourceId = keyof typeof SOURCES;

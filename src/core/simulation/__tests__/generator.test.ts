@@ -1,8 +1,18 @@
 import { describe, expect, it } from 'vitest';
 import { ENVIRONMENTS } from '@core/config/environments.config';
+import { THRESHOLDS } from '@core/config/thresholds.config';
 import { METRICS } from '@core/config/metrics.config';
-import { createRng, DEMO_CREW, generateHistory, mulberry32, SCENARIO_IDS } from '@core/simulation';
-import type { GenerateHistoryOptions } from '@core/types';
+import {
+  createRng,
+  DEMO_CREW,
+  DEMO_DEFAULTS,
+  generateHistory,
+  MIXED,
+  mulberry32,
+  SCENARIO_IDS,
+} from '@core/simulation';
+import type { GenerateHistoryOptions, Measurement, MetricId, Status } from '@core/types';
+import { isScheduledOn, parseTimeOfDay } from '@core/utils';
 
 const END = new Date('2026-11-14T22:00:00.000Z');
 
@@ -122,7 +132,7 @@ describe('generateHistory', () => {
     const AM = (min: number) => min < 12 * 60;
     const PM = (min: number) => min >= 12 * 60;
 
-    it('ISS: wake 06:15, morning vitals + glucose 06:30, exercise 17:30, evening 19:30, mood 21:00', () => {
+    it('ISS: wake 06:15, morning vitals + glucose 06:30, exercise 17:30, evening HR 19:30, mood 21:00', () => {
       const out = generateHistory(opts());
       within(out, 'sleepHours', 6 * 60 + 15, 10);
       ['systolicBP', 'diastolicBP', 'heartRate', 'spo2', 'respRate', 'bodyTemp'].forEach((m) =>
@@ -131,7 +141,7 @@ describe('generateHistory', () => {
       within(out, 'bloodGlucose', 6 * 60 + 30, 10);
       within(out, 'exerciseMinutes', 17 * 60 + 30, 30);
       within(out, 'radiationDose', 19 * 60 + 30, 10);
-      ['systolicBP', 'heartRate'].forEach((m) => within(out, m, 19 * 60 + 30, 30, PM));
+      within(out, 'heartRate', 19 * 60 + 30, 30, PM);
       within(out, 'mood', 21 * 60, 20);
     });
 
@@ -174,5 +184,145 @@ describe('generateHistory', () => {
     );
     const last = temps[temps.length - 1];
     expect(last?.value).toBeGreaterThanOrEqual(38);
+  });
+
+  it('same seed → identical output for mixed_mission', () => {
+    expect(generateHistory(opts({ scenario: 'mixed_mission' }))).toEqual(
+      generateHistory(opts({ scenario: 'mixed_mission' })),
+    );
+  });
+});
+
+const DAY_MS = 86_400_000;
+const missionDayOf = (out: Measurement[], iso: string) => {
+  const first = Date.parse(out[0]?.timestamp ?? '');
+  const dayStart = first - (first % DAY_MS);
+  return Math.floor((Date.parse(iso) - dayStart) / DAY_MS) + 1;
+};
+const minuteOfDay = (iso: string) => {
+  const d = new Date(iso);
+  return d.getUTCHours() * 60 + d.getUTCMinutes();
+};
+
+describe('data = schedule (ADR-037)', () => {
+  const env = ENVIRONMENTS.iss;
+  const out = generateHistory(opts());
+  const alias = (m: MetricId): MetricId => (m === 'diastolicBP' ? 'systolicBP' : m);
+
+  it('ISS: every measurement belongs to a reminder that falls on that day, near its time', () => {
+    for (const m of out) {
+      const day = missionDayOf(out, m.timestamp);
+      const minute = minuteOfDay(m.timestamp);
+      const match = env.reminderSchedule.find(
+        (t) =>
+          t.metric === alias(m.metric) &&
+          isScheduledOn(t, day) &&
+          Math.abs(parseTimeOfDay(t.timeOfDayMET) - minute) <= 30,
+      );
+      expect(match, `${m.metric} on day ${day} at ${minute} min`).toBeDefined();
+    }
+  });
+
+  it('ISS: every reminder with a metric is answered on each of its scheduled days', () => {
+    for (const member of DEMO_CREW) {
+      const mine = out.filter((m) => m.crewId === member.id);
+      for (const t of env.reminderSchedule) {
+        if (!t.metric) continue;
+        const target = parseTimeOfDay(t.timeOfDayMET);
+        for (let day = 1; day <= 30; day++) {
+          if (!isScheduledOn(t, day)) continue;
+          const hit = mine.some(
+            (m) =>
+              m.metric === t.metric &&
+              missionDayOf(out, m.timestamp) === day &&
+              Math.abs(minuteOfDay(m.timestamp) - target) <= 30,
+          );
+          expect(hit, `${member.id} ${t.id} day ${day}`).toBe(true);
+        }
+      }
+    }
+  });
+
+  it('ISS: no evening vitals besides the scheduled heart rate; other environments have none', () => {
+    const evening = (o: Measurement[]) =>
+      o.filter((m) => m.id.includes('-pm-')).map((m) => m.metric);
+    expect(new Set(evening(out))).toEqual(new Set(['heartRate']));
+    expect(evening(generateHistory(opts({ environment: ENVIRONMENTS.lunar_base })))).toEqual([]);
+  });
+});
+
+describe('mixed_mission stories (ADR-038, docs/DEMO_CREW_STORIES.md)', () => {
+  // Default demo parameters: seed 2026, ISS, 30 days, generated late on the last day.
+  const out = generateHistory(
+    opts({ scenario: 'mixed_mission', seed: DEMO_DEFAULTS.seed, days: DEMO_DEFAULTS.days }),
+  );
+  const series = (crewId: string, metric: MetricId) =>
+    out.filter((m) => m.crewId === crewId && m.metric === metric);
+  const values = (crewId: string, metric: MetricId) => series(crewId, metric).map((m) => m.value);
+  const mean = (xs: number[]) => xs.reduce((a, b) => a + b, 0) / xs.length;
+  const onDays = (crewId: string, metric: MetricId, from: number, to: number) =>
+    series(crewId, metric)
+      .filter((m) => {
+        const d = missionDayOf(out, m.timestamp);
+        return d >= from && d <= to && !m.id.includes('-pm-');
+      })
+      .map((m) => m.value);
+  const bandStatus = (metric: MetricId, v: number): Status => {
+    const shift = ENVIRONMENTS.iss.thresholdModifiers[metric]?.shift ?? 0;
+    const band = THRESHOLDS[metric].bands.find(
+      (b) => v >= (b.min ?? -Infinity) + shift && v < (b.max ?? Infinity) + shift,
+    );
+    return band?.status ?? 'nominal';
+  };
+  const latestStatuses = (crewId: string) => {
+    const metrics = [...new Set(out.filter((m) => m.crewId === crewId).map((m) => m.metric))];
+    return metrics
+      .filter((m) => m !== 'radiationDose') // cumulative rule, checked by the engine
+      .map((metric) => {
+        const v = values(crewId, metric).at(-1) ?? 0;
+        return { metric, v, status: bandStatus(metric, v) };
+      });
+  };
+  const baseline = (i: number) => DEMO_CREW[i]?.baseline ?? {};
+
+  it('crew-1 Mira: nominal — every latest value in its nominal band, means near baseline', () => {
+    latestStatuses('crew-1').forEach((r) => expect(r.status, `${r.metric}=${r.v}`).toBe('nominal'));
+    expect(mean(values('crew-1', 'sleepHours'))).toBeCloseTo(baseline(0).sleepHours ?? 0, 0);
+    expect(
+      Math.abs(mean(onDays('crew-1', 'systolicBP', 1, 30)) - (baseline(0).systolicBP ?? 0)),
+    ).toBeLessThan(3);
+  });
+
+  it('crew-2 Kenji: warning — early signs first, then fever ≥ 38 °C', () => {
+    const last = DEMO_DEFAULTS.days;
+    const preFrom = last - MIXED.kenjiPrecursorDays + 1; // mission days with early signs only
+    const hrBase = mean(onDays('crew-2', 'heartRate', 1, preFrom - 1));
+    expect(mean(onDays('crew-2', 'heartRate', preFrom, preFrom + 1)) - hrBase).toBeGreaterThan(3);
+    onDays('crew-2', 'bodyTemp', preFrom, preFrom + 1).forEach((v) => expect(v).toBeLessThan(37.8));
+    expect(values('crew-2', 'bodyTemp').at(-1)).toBeGreaterThanOrEqual(38);
+    expect(bandStatus('bodyTemp', values('crew-2', 'bodyTemp').at(-1) ?? 0)).toBe('warning');
+  });
+
+  it('crew-3 Selin: caution — slow sleep/mood decline, no single warning-band value', () => {
+    const sleepLast7 = mean(onDays('crew-3', 'sleepHours', 24, 30));
+    expect(sleepLast7).toBeLessThan(7); // caution band 6–7
+    expect(sleepLast7).toBeGreaterThanOrEqual(6.5); // above the "3 days < 6.5" sustained warning
+    const moodFirst = mean(onDays('crew-3', 'mood', 1, 9));
+    const moodLast = mean(onDays('crew-3', 'mood', 24, 30));
+    expect(moodFirst - moodLast).toBeGreaterThan(0.8);
+    const latest = latestStatuses('crew-3');
+    expect(latest.some((r) => r.status === 'caution')).toBe(true);
+    expect(latest.some((r) => r.status === 'warning')).toBe(false);
+  });
+
+  it('crew-4 Lucas: advisory — systolic ~ +9 over personal baseline, still in the nominal band', () => {
+    const before = mean(onDays('crew-4', 'systolicBP', 1, 30 - MIXED.lucasDriftDays));
+    const drift = mean(onDays('crew-4', 'systolicBP', 30 - MIXED.lucasDriftDays + 1, 30));
+    expect(drift - before).toBeGreaterThan(6);
+    expect(drift - before).toBeLessThan(12);
+    const lowDays = onDays('crew-4', 'exerciseMinutes', 24, 30).filter((v) => v < 120);
+    expect(lowDays).toHaveLength(4);
+    lowDays.forEach((v) => expect(v).toBeGreaterThanOrEqual(60));
+    latestStatuses('crew-4').forEach((r) => expect(r.status, `${r.metric}=${r.v}`).toBe('nominal'));
   });
 });

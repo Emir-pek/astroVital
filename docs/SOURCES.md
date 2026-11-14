@@ -56,6 +56,12 @@
 | `esa-pesquet-blog-presleep`             | ESA — Thomas Pesquet blogu (OSTPV)                                                                                                              | https://blogs.esa.int/thomas-pesquet/?p=503                                                                               | Uyku öncesi blok ~19:30–21:30 GMT → dozimetre/akşam nabzı 19:30, ruh hali 21:00 (ADR-036)                                                                        | ⏳ (içerik 14.11.2026'da okundu)             |
 | `clickorlando-2020-day-in-space`        | ClickOrlando (2020) — A day in space — **ikincil kaynak** (NASA'ya atıfla)                                                                      | https://www.clickorlando.com/news/space-news/2020/11/14/a-day-in-space-heres-what-an-astronauts-daily-routine-looks-like/ | İş günü ~06:00–21:30 GMT, 8 sa uyku → gün iskeleti (ADR-036)                                                                                                     | ⏳ ikincil (içerik 14.11.2026'da okundu)     |
 
+## Demo mürettebatı (ADR-038)
+
+| ID                         | Kaynak                                                                                                            | URL                                            | Desteklediği kararlar                                                                                    | Durum                            |
+| -------------------------- | ----------------------------------------------------------------------------------------------------------------- | ---------------------------------------------- | -------------------------------------------------------------------------------------------------------- | -------------------------------- |
+| `nasa-nesc-mars-crew-size` | NESC — Chaikin, "Humans to Mars, But How Many? A historical review of crew size determinations for Mars missions" | https://nescacademy.nasa.gov/downloadFile/1389 | Mürettebat 4 kişi: Evolvable Mars Campaign (2014–2016) 4, DRA 5.0 (2009) 6 (`docs/DEMO_CREW_STORIES.md`) | ⏳ (içerik 14.11.2026'da okundu) |
+
 ## Doğrulama kontrol listesi (Mühendis 3, Faz 3)
 
 - [ ] Her URL açılıyor mu? Kırık olanı güncel NASA/CSA sayfasıyla değiştir.

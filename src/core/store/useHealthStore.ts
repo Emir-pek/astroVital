@@ -68,7 +68,7 @@ const defaultMissionStart = (): string =>
 export const DEFAULT_SETTINGS: AppSettings = {
   language: 'en',
   units: DEFAULT_UNITS,
-  scenario: 'nominal',
+  scenario: 'mixed_mission',
   seed: DEMO_DEFAULTS.seed,
   historyDays: DEMO_DEFAULTS.days,
   missionStart: defaultMissionStart(),

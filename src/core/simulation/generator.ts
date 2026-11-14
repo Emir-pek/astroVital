@@ -6,6 +6,7 @@ import type {
   GenerateHistoryOptions,
   Measurement,
   MetricId,
+  ReminderTemplate,
 } from '@core/types';
 import { clamp, roundToStep } from '@core/utils/format';
 import { isScheduledOn } from '@core/utils/routineSchedule';
@@ -57,38 +58,122 @@ const environmentOffset = (metric: MetricId, env: EnvironmentProfile): number =>
   }
 };
 
+/** Minutes after midnight; splits morning and evening slots of the same metric. */
+const NOON_MIN = 12 * 60;
+
+/** Metrics recorded together with another metric's reminder (one cuff reading → both values). */
+const SCHEDULE_ALIAS: Partial<Record<MetricId, MetricId>> = { diastolicBP: 'systolicBP' };
+
+type Half = 'am' | 'pm';
+
+/** Reminder template for `metric` in the given half of the day, if the environment has one. */
+const templateFor = (
+  env: EnvironmentProfile,
+  metric: MetricId,
+  half: Half,
+): ReminderTemplate | undefined => {
+  const scheduled = SCHEDULE_ALIAS[metric] ?? metric;
+  return env.reminderSchedule.find(
+    (t) => t.metric === scheduled && (half === 'am') === parseTimeOfDay(t.timeOfDayMET) < NOON_MIN,
+  );
+};
+
 /**
- * Demo data follows the reminder schedule (ADR-035): a task with a frequency rule produces data only
- * on the mission days it is scheduled. Unknown id → every day.
+ * "Data = schedule" (ADR-037) applies to environments whose schedule contains the whole shared
+ * CORE_ROUTINE. Others (today: rover, own schedule — environment differences are a separate decision)
+ * keep the legacy ADR-016 behaviour for slots their schedule does not cover.
  */
-const scheduledOn = (templateId: string, missionDay: number): boolean => {
+const followsCoreRoutine = (env: EnvironmentProfile): boolean =>
+  CORE_ROUTINE.every((c) => env.reminderSchedule.some((t) => t.id === c.id));
+
+/** Legacy day rule (rover only): CORE_ROUTINE frequency by template id, unknown id → every day. */
+const legacyScheduledOn = (templateId: string, missionDay: number): boolean => {
   const template = CORE_ROUTINE.find((t) => t.id === templateId);
   return template ? isScheduledOn(template, missionDay) : true;
 };
 
-/** Minutes after midnight; splits morning and evening slots of the same metric. */
-const NOON_MIN = 12 * 60;
+interface SlotMetric {
+  metric: MetricId;
+  circadian?: number;
+}
 
 /**
- * Time of day (minutes) of a simulated slot, read from the environment's reminder schedule (ADR-036):
- * the first template whose metric is in `metrics` and that lies in the requested half of the day.
- * No matching template → `fallbackMin` (slots without a schedule item keep their ADR-016 time).
+ * One data-entry moment of the day. Metrics of a slot share timestamp (and groupId when `grouped`).
+ * Legacy fields (`legacy*`) are used only in legacy mode for metrics without a schedule item.
  */
-const slotMinute = (
-  env: EnvironmentProfile,
-  metrics: readonly MetricId[],
-  half: 'am' | 'pm',
-  fallbackMin: number,
-): number => {
-  for (const metric of metrics) {
-    for (const t of env.reminderSchedule) {
-      if (t.metric !== metric) continue;
-      const min = parseTimeOfDay(t.timeOfDayMET);
-      if ((half === 'am') === min < NOON_MIN) return min;
-    }
-  }
-  return fallbackMin;
-};
+interface SlotDef {
+  slot: string;
+  half: Half;
+  jitterMin: number;
+  grouped?: boolean;
+  metrics: SlotMetric[];
+  legacyMinute: number;
+  /** Legacy day rule: CORE_ROUTINE id, 'coin' (≈50 % of days, ADR-016) or undefined = every day. */
+  legacyRule?: string;
+}
+
+const SLOTS: SlotDef[] = [
+  {
+    slot: 'wake',
+    half: 'am',
+    jitterMin: 10,
+    metrics: [{ metric: 'sleepHours' }],
+    legacyMinute: 420,
+  },
+  {
+    slot: 'am',
+    half: 'am',
+    jitterMin: 15,
+    grouped: true,
+    metrics: [
+      { metric: 'systolicBP' },
+      { metric: 'diastolicBP' },
+      { metric: 'heartRate' },
+      { metric: 'spo2' },
+      { metric: 'respRate' },
+      { metric: 'bodyTemp', circadian: -0.15 },
+    ],
+    legacyMinute: 450,
+  },
+  {
+    slot: 'glu',
+    half: 'am',
+    jitterMin: 10,
+    metrics: [{ metric: 'bloodGlucose' }],
+    legacyMinute: 460,
+    legacyRule: 'fasting-glucose',
+  },
+  {
+    slot: 'pm',
+    half: 'pm',
+    jitterMin: 30,
+    grouped: true,
+    metrics: [
+      { metric: 'systolicBP', circadian: 3 },
+      { metric: 'diastolicBP', circadian: 2 },
+      { metric: 'heartRate', circadian: 5 },
+      { metric: 'bodyTemp', circadian: 0.25 },
+    ],
+    legacyMinute: 1140,
+    legacyRule: 'coin',
+  },
+  {
+    slot: 'ex',
+    half: 'pm',
+    jitterMin: 30,
+    metrics: [{ metric: 'exerciseMinutes' }],
+    legacyMinute: 1020,
+    legacyRule: 'exercise',
+  },
+  {
+    slot: 'dose',
+    half: 'pm',
+    jitterMin: 10,
+    metrics: [{ metric: 'radiationDose' }],
+    legacyMinute: 1230,
+  },
+  { slot: 'mood', half: 'pm', jitterMin: 20, metrics: [{ metric: 'mood' }], legacyMinute: 1260 },
+];
 
 interface SlotInput {
   member: CrewMember;
@@ -96,7 +181,7 @@ interface SlotInput {
   dayIndex: number;
   ts: number;
   slot: string;
-  metrics: { metric: MetricId; circadian?: number }[];
+  metrics: SlotMetric[];
   groupId?: string;
 }
 
@@ -104,6 +189,10 @@ interface SlotInput {
  * Generates a deterministic measurement history.
  * PURE: identical options ⇒ identical output (no Date.now, no Math.random).
  * Measurements later than `end` are not produced.
+ *
+ * Data = schedule (ADR-035 frequency, ADR-036 times, ADR-037 content): a metric is produced on a
+ * mission day only if the active environment's schedule has a reminder for it that falls on that day,
+ * at that reminder's time (± a few minutes of entry noise).
  */
 export const generateHistory = ({
   seed,
@@ -118,17 +207,7 @@ export const generateHistory = ({
   const endMs = end.getTime();
   const firstDayMs = startOfUtcDay(end).getTime() - (days - 1) * MS_PER_DAY;
   const out: Measurement[] = [];
-
-  // Slot times (minutes after mission-day midnight) come from the schedule; fallbacks = ADR-016 times.
-  const T = {
-    wake: slotMinute(environment, ['sleepHours'], 'am', 7 * 60),
-    am: slotMinute(environment, ['systolicBP', 'heartRate', 'spo2', 'bodyTemp'], 'am', 7 * 60 + 30),
-    glu: slotMinute(environment, ['bloodGlucose'], 'am', 7 * 60 + 40),
-    pm: slotMinute(environment, ['heartRate', 'systolicBP', 'bodyTemp'], 'pm', 19 * 60),
-    ex: slotMinute(environment, ['exerciseMinutes'], 'pm', 17 * 60),
-    dose: slotMinute(environment, ['radiationDose'], 'pm', 20 * 60 + 30),
-    mood: slotMinute(environment, ['mood'], 'pm', 21 * 60),
-  };
+  const strict = followsCoreRoutine(environment);
 
   const emit = (input: SlotInput) => {
     if (input.ts > endMs) return;
@@ -156,53 +235,48 @@ export const generateHistory = ({
   crew.forEach((member, crewIndex) => {
     for (let dayIndex = 0; dayIndex < days; dayIndex++) {
       const day = firstDayMs + dayIndex * MS_PER_DAY;
-      // Realism noise: entries are made a few minutes around the scheduled time.
-      const at = (minuteOfDay: number, jitterMin: number) =>
-        day + (minuteOfDay + rng.int(-jitterMin, jitterMin)) * MS_PER_MINUTE;
-      const base = { member, crewIndex, dayIndex };
-      const morningGroup = `sim-${seed}-${member.id}-d${dayIndex}-am`;
       // History starts on mission day 1 (store sets missionStart to the first generated day).
       const missionDay = dayIndex + 1;
 
-      emit({ ...base, ts: at(T.wake, 10), slot: 'wake', metrics: [{ metric: 'sleepHours' }] });
-      emit({
-        ...base,
-        ts: at(T.am, 15),
-        slot: 'am',
-        groupId: morningGroup,
-        metrics: [
-          { metric: 'systolicBP' },
-          { metric: 'diastolicBP' },
-          { metric: 'heartRate' },
-          { metric: 'spo2' },
-          { metric: 'respRate' },
-          { metric: 'bodyTemp', circadian: -0.15 },
-        ],
-      });
-      // Fasting glucose: weekly, same rule as the reminder schedule (ADR-035).
-      if (scheduledOn('fasting-glucose', missionDay))
-        emit({ ...base, ts: at(T.glu, 10), slot: 'glu', metrics: [{ metric: 'bloodGlucose' }] });
-      // Optional evening vitals (≈ half of the days, ADR-016) → "1–2 measurements per day".
-      // Time from the schedule's evening heart-rate item if the environment has one (ISS: 19:30).
-      if (rng.chance(0.5)) {
+      for (const s of SLOTS) {
+        let minute: number | undefined;
+        const metrics: SlotMetric[] = [];
+        let legacyChecked = false;
+        let legacyOn = true;
+        for (const m of s.metrics) {
+          const t = templateFor(environment, m.metric, s.half);
+          if (t) {
+            if (!isScheduledOn(t, missionDay)) continue;
+            minute ??= parseTimeOfDay(t.timeOfDayMET);
+            metrics.push(m);
+          } else if (!strict) {
+            // Legacy mode (rover): metric without a schedule item keeps its ADR-016 behaviour.
+            if (!legacyChecked) {
+              legacyChecked = true;
+              legacyOn =
+                s.legacyRule === 'coin'
+                  ? rng.chance(0.5)
+                  : s.legacyRule === undefined || legacyScheduledOn(s.legacyRule, missionDay);
+            }
+            if (legacyOn) metrics.push(m);
+          }
+        }
+        if (metrics.length === 0) continue;
+        // Realism noise: entries are made a few minutes around the scheduled time.
+        const ts =
+          day + ((minute ?? s.legacyMinute) + rng.int(-s.jitterMin, s.jitterMin)) * MS_PER_MINUTE;
         emit({
-          ...base,
-          ts: at(T.pm, 30),
-          slot: 'pm',
-          groupId: `sim-${seed}-${member.id}-d${dayIndex}-pm`,
-          metrics: [
-            { metric: 'systolicBP', circadian: 3 },
-            { metric: 'diastolicBP', circadian: 2 },
-            { metric: 'heartRate', circadian: 5 },
-            { metric: 'bodyTemp', circadian: 0.25 },
-          ],
+          member,
+          crewIndex,
+          dayIndex,
+          ts,
+          slot: s.slot,
+          metrics,
+          ...(s.grouped && metrics.length > 1
+            ? { groupId: `sim-${seed}-${member.id}-d${dayIndex}-${s.slot}` }
+            : {}),
         });
       }
-      // Exercise: 6 days a week — every 7th mission day is a rest day (ADR-035).
-      if (scheduledOn('exercise', missionDay))
-        emit({ ...base, ts: at(T.ex, 30), slot: 'ex', metrics: [{ metric: 'exerciseMinutes' }] });
-      emit({ ...base, ts: at(T.dose, 10), slot: 'dose', metrics: [{ metric: 'radiationDose' }] });
-      emit({ ...base, ts: at(T.mood, 20), slot: 'mood', metrics: [{ metric: 'mood' }] });
     }
   });
 
