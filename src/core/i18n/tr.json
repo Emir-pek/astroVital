@@ -87,7 +87,7 @@
     "warning": "Uyarı",
     "meaning": {
       "nominal": "Normal aralıkta. Rutininize devam edin.",
-      "advisory": "Bilmekte fayda var. Şu an bir şey yapman gerekmiyor.",
+      "advisory": "Bilmenizde fayda var. Şu an bir şey yapmanız gerekmiyor.",
       "caution": "Normalin biraz dışında. Önerileri uygulayın ve yeniden ölçün.",
       "warning": "Belirgin şekilde normal dışı. Adımları izleyin ve gösterilen kişiye haber verin."
     }

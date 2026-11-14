@@ -13,7 +13,7 @@ export function Card({ title, actions, placeholder, className, children, ...rest
   return (
     <section
       className={clsx(
-        'rounded-[var(--av-radius)] border bg-surface p-4 shadow-lg shadow-black/20',
+        'rounded-card border bg-surface p-4 shadow-lg shadow-black/20',
         placeholder ? 'border-dashed border-border/80' : 'border-border',
         className,
       )}

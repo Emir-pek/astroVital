@@ -1,60 +1,65 @@
 /*
- * AstroVital design tokens — dark "mission control" theme.
- * Raw values live here as CSS variables; src/index.css maps them into Tailwind's
- * theme (`bg-surface`, `text-muted`, `text-ok` ...). Never hard-code colours in components.
+ * AstroVital design tokens. Raw values live here as CSS variables; src/index.css maps them into
+ * Tailwind's theme. Never hard-code colours in components. Hex contrast is guarded by
+ * src/core/ui/__tests__/tokens.contrast.test.ts (>= 6:1).
  */
 :root {
   color-scheme: dark;
-
-  --av-bg: #070b14;
-  --av-surface: #0e1525;
-  --av-surface-2: #152036;
-  --av-border: #23314d;
-  --av-text: #e6edf7;
-  --av-muted: #8b9bb8;
-  --av-accent: #38bdf8;
-  --av-accent-strong: #0ea5e9;
-  --av-focus: #f0abfc;
-
-  /* Traffic-light status — WCAG AA on --av-surface, always paired with icon + text. */
-  --av-status-green: #34d399;
-  --av-status-yellow: #fbbf24;
-  --av-status-red: #f87171;
-
-  /* Environment tint (overridden per data-env below). */
-  --av-env-tint: #38bdf8;
-
-  --av-radius: 0.75rem;
-  --av-font-sans: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
-  --av-font-mono: 'JetBrains Mono', 'Cascadia Code', ui-monospace, monospace;
-
-  /* Animation speeds for status "pulse" (faster when worse). */
-  --av-pulse-green: 3.2s;
-  --av-pulse-yellow: 1.8s;
-  --av-pulse-red: 0.9s;
+  --av-bg: #0e1530;
+  --av-surface: #172042;
+  --av-raised: #212c55;
+  --av-line: #2a3561;
+  --av-text: #f4f6fb;
+  --av-text-2: #b9c1dc;
+  --av-text-3: #adb6d6;
+  --av-accent: #c3b5ff;
+  --av-status-nominal: #7fe0b8;
+  --av-status-advisory: #7dbdff;
+  --av-status-caution: #ffd35c;
+  --av-status-warning: #ff8f99;
+  --av-status-warning-fill: #a51d2d;
+  --av-on-warning-fill: #ffffff;
+  --av-suit-accent: #e8a66b; /* figure suit details ONLY */
+  --av-font-sans: 'Atkinson Hyperlegible Next', system-ui, sans-serif;
+  --av-font-mono: 'JetBrains Mono', ui-monospace, monospace;
+  --av-radius-card: 24px;
+  --av-radius-button: 20px;
+  --av-shadow-soft: 0 12px 32px rgba(0, 0, 0, 0.35);
+  --av-touch-min: 104px;
+  --av-touch-gap: 16px;
+  --av-duration: 300ms;
+  --av-breath: 4.5s;
 }
-
-/* Environment-adaptive tint (set on <html data-env="..."> by ThemeSync). */
-[data-env='iss'] {
-  --av-env-tint: #38bdf8;
-}
+[data-env='iss'],
 [data-env='spacecraft'] {
-  --av-env-tint: #818cf8;
+  --av-bg: #0e1530;
 }
+[data-env='lunar_base'],
 [data-env='rover'] {
-  --av-env-tint: #a3e635;
-}
-[data-env='lunar_base'] {
-  --av-env-tint: #cbd5e1;
+  --av-bg: #11152c;
 }
 [data-env='mars_base'] {
-  --av-env-tint: #fb923c;
+  --av-bg: #14142c;
 }
-
+@keyframes av-blink {
+  0%,
+  49.99% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0.15;
+  }
+}
+.av-blink {
+  animation: av-blink 333ms steps(1, end) infinite; /* 3 Hz, 50 % duty */
+}
 @media (prefers-reduced-motion: reduce) {
-  :root {
-    --av-pulse-green: 0s;
-    --av-pulse-yellow: 0s;
-    --av-pulse-red: 0s;
+  .av-blink {
+    animation: none;
+  }
+  .av-blink-frame {
+    outline: 6px solid currentColor;
+    outline-offset: 4px;
   }
 }

@@ -8,7 +8,8 @@ export default mergeConfig(
       environment: 'jsdom',
       setupFiles: ['./src/test/setup.ts'],
       include: ['src/**/*.test.{ts,tsx}'],
-      css: false,
+      // Raw-import tokens.css for the contrast guard; all other CSS stays stubbed.
+      css: { include: [/tokens\.css$/] },
       restoreMocks: true,
       coverage: {
         provider: 'v8',
