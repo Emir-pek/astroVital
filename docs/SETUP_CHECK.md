@@ -98,6 +98,9 @@ Yeni satır eklerken: paket, aralık, tür, amaç, kimin eklediği / tarih.
 | `eslint-config-prettier`      | `^10.1.8`  | dev     | ESLint ↔ Prettier çakışmasını kapatır     | Faz 0 / 2026-11-14 |
 | `globals`                     | `^17.14.0` | dev     | ESLint global tanımları                   | Faz 0 / 2026-11-14 |
 | `prettier`                    | `^3.10.1`  | dev     | Kod biçimlendirme                         | Faz 0 / 2026-11-14 |
+| `radix-ui`                    | `^1.8.1`   | runtime | Erişilebilir UI primitifleri (AlertDialog, Dialog, ToggleGroup, Select, DropdownMenu) | UI Plan 1 / 2026-11-14 |
+| `@fontsource/atkinson-hyperlegible-next` | `^5.3.0` | runtime | Metin fontu (yerel, offline) | UI Plan 1 / 2026-11-14 |
+| `@fontsource/jetbrains-mono`  | `^5.3.0`   | runtime | Sayı fontu (yerel, offline)               | UI Plan 1 / 2026-11-14 |
 
 <!-- DEPS:END -->
 
