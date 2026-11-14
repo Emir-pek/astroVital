@@ -829,7 +829,7 @@ export function AlertLayer(props: { crewId: string }): JSX.Element; // useCrewHe
     - boş liste → "All indicators nominal"
   - `RegionDetailPanel.test.tsx`: açıklama yokken h3 sırası `['What should I do?', 'Current values', 'What it does', 'How space affects it', 'Source and data age']` ("Why it matters" yok)
   - `VitalsPanel.test.tsx`:
-    - demo verisiyle (`loadDemoData({ seed: 1, days: 30, now })`) 6 kart; "Heart rate" kartında mono değer var
+    - demo verisiyle (`loadDemoData({ seed: 1, days: 30, now })`) 6 kart; "Resting heart rate" (`metrics.heartRate.label`) kartında mono değer var
     - boş store'da kartlar "No data"
 - [ ] **Step 2:** Testleri çalıştır. Beklenen: FAIL.
 - [ ] **Step 3:** Uygula. `routes.test.tsx`'teki `/` testi değişmeden geçmeli.
