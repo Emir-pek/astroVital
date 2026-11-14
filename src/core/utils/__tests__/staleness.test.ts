@@ -26,3 +26,9 @@ describe('staleness', () => {
     expect(isStale('2026-11-12T23:59:00Z', 'heartRate', ENVIRONMENTS.iss, now)).toBe(true);
   });
 });
+
+describe('isStale fail-safe', () => {
+  it('treats an unparseable timestamp as stale', () => {
+    expect(isStale('not-a-date', 'heartRate', ENVIRONMENTS.iss, now)).toBe(true);
+  });
+});

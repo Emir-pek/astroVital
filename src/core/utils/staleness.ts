@@ -36,5 +36,8 @@ export function isStale(
   env: EnvironmentProfile,
   now: Date,
 ): boolean {
-  return now.getTime() - new Date(measuredAtIso).getTime() > maxValidityMs(metric, env);
+  const measuredAt = Date.parse(measuredAtIso);
+  // Fail safe: an unparseable timestamp counts as stale.
+  if (Number.isNaN(measuredAt)) return true;
+  return now.getTime() - measuredAt > maxValidityMs(metric, env);
 }
