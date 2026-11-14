@@ -2,3 +2,6 @@
 *.png binary
 *.jpg binary
 *.ico binary
+
+# Parallel PRs all add entries at the top of CHANGELOG.md; keep both sides on local merges.
+CHANGELOG.md merge=union
