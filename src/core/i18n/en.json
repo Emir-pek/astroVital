@@ -401,6 +401,10 @@
       "title": "Body map",
       "regionButton": "{{region}}: {{status}}"
     },
+    "status": {
+      "stale": "Stale data",
+      "none": "No data"
+    },
     "regionDetail": {
       "title": "Region details",
       "function": "What it does",

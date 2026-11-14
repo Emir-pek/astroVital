@@ -401,6 +401,10 @@
       "title": "Vücut haritası",
       "regionButton": "{{region}}: {{status}}"
     },
+    "status": {
+      "stale": "Eski veri",
+      "none": "Veri yok"
+    },
     "regionDetail": {
       "title": "Bölge ayrıntıları",
       "function": "Ne işe yarar",
