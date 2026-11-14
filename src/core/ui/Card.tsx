@@ -13,15 +13,15 @@ export function Card({ title, actions, placeholder, className, children, ...rest
   return (
     <section
       className={clsx(
-        'rounded-card border bg-surface p-4 shadow-lg shadow-black/20',
-        placeholder ? 'border-dashed border-border/80' : 'border-border',
+        'card-surface rounded-card shadow-soft p-6',
+        placeholder && 'border border-dashed border-line',
         className,
       )}
       {...rest}
     >
       {(title || actions) && (
         <header className="mb-3 flex items-center justify-between gap-2">
-          {title && <h2 className="text-base font-semibold text-text">{title}</h2>}
+          {title && <h2 className="text-headline font-semibold text-text">{title}</h2>}
           {actions}
         </header>
       )}
