@@ -20,6 +20,17 @@ Yalnız `docs/` değişiklikleri kayıt gerektirmez.
 
 <!-- NEW ENTRIES BELOW -->
 
+### 2026-11-14 21:00 — Muhammed Bektaş (feat/core-routine) — Takvim saatleri ISS gün iskeletine göre; demo verisi saatleri takvimden
+
+- **Ne:** Hatırlatma saatleri ISS gününe göre güncellendi (UTC): uyku kaydı 06:15; sabah tansiyon/nabız/SpO₂/ısı ve
+  açlık şekeri 06:30; egzersiz 17:30; dozimetre ve ISS akşam nabzı 19:30; ruh hali 21:00 (değişmedi). Demo verisi artık
+  ölçüm saatlerini takvimden okuyor (tek kaynak); ölçüm sayısı değişmedi. 3 yeni kaynak (ESA x2, ikincil ClickOrlando).
+- **Neden:** Saatler Faz 0 örneğiydi ve demo verisiyle ayrışmıştı (egzersiz 15:00 vs 17:00) — ADR-036.
+- **Dosyalar:** `src/core/config/environments.config.ts`, `src/core/simulation/generator.ts`,
+  `src/core/config/sources.config.ts`, `src/core/simulation/__tests__/generator.test.ts`, `docs/ROUTINE_SCHEDULE.md`,
+  `docs/SOURCES.md`, `docs/DECISIONS.md`, `docs/modules/core-routine.md`, `CHANGELOG.md`
+- **Ekip ne yapmalı:** Merge sonrası demo verisinde ölçüm saatleri değişir (sabah vitalleri 06:30, egzersiz 17:30, dozimetre 19:30). Saat varsayan testin/ekranın varsa kontrol et.
+
 ### 2026-11-14 20:00 — Muhammed Bektaş (feat/core-routine) — Hatırlatma takvimi üç katmanlı (günlük/haftalık/aylık), NASA/CSA kaynaklı
 
 - **Ne:** Takvim günlük / haftalık / aylık katmanlara ayrıldı: sabah SpO₂ eklendi, egzersiz haftada 6 gün, açlık şekeri

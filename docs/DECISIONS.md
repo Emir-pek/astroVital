@@ -111,6 +111,7 @@ Node 24 LTS, npm.
 ### ADR-016 — Simülasyon ölçüm sıklığı
 
 > **Kısmen yerine geçti: ADR-035** (şeker sıklığı haftalık, egzersizde 7. gün dinlenme).
+> **Kısmen yerine geçti: ADR-036** (ölçüm saatleri).
 
 - **Karar:** Her gün: uyanışta uyku, 07:30 vital (KB, nabız, SpO₂, solunum, ısı — aynı `groupId`),
   17:00 egzersiz, 20:30 dozimetre, 21:00 ruh hali; günlerin ~%50'sinde 19:00 akşam vitali;
@@ -289,3 +290,20 @@ Node 24 LTS, npm.
 - **Sonuç:** Saatler (`timeOfDayMET`), ortama göre farklar ve görevin zaman penceresi ayrı kararlar.
   Simülasyon takvimle hizalandı (aynı `isScheduledOn`): 30 gün × 4 kişi 1.484 → 1.452 ölçüm. ADR-016'nın
   şeker sıklığı ve egzersiz kısmının yerine geçer. Bayatlık için `REPEAT_INTERVAL_MS.monthly` = 30 gün.
+
+### ADR-036 — Takvim saatleri ISS gün iskeletine göre; simülasyon saatleri takvimden okunur
+
+- **Bağlam:** ADR-035 takvimin yapısını kaynaklara bağladı ama saatler Faz 0 örneğiydi. Simülasyon
+  ölçüm saatlerini kendi içinde sabit yazıyordu; takvimle ayrışmıştı (ör. egzersiz takvimde 15:00,
+  demo verisinde 17:00).
+- **Karar:** Saatler ISS gün iskeletine göre (UTC): 06:00 uyanış → 06:00–07:00 uyku sonrası blok → mesai →
+  19:30–21:30 uyku öncesi blok → 21:30 uyku. Uyku kaydı 06:15; sabah vitalleri (KB, nabız, SpO₂, ısı) ve
+  açlık şekeri 06:30; egzersiz 17:30 (günün toplamı); dozimetre ve ISS akşam nabzı 19:30; ruh hali ve aylık
+  anket 21:00; haftalık özet ve aylık muayene 10:00 (1. gün muayenesi = kişisel başlangıç). Simülasyon her
+  slotun saatini aktif ortamın takviminden, metrik eşleşmesiyle okur; takvimde karşılığı olmayan slotlar
+  ADR-016 saatinde kalır. Dayanak: `esa-outpost42-daily-schedule`, `esa-pesquet-blog-presleep`,
+  `clickorlando-2020-day-in-space` (ikincil), `nasa-std-3001-v1-medops`. Sahip: Mühendis 1.
+- **Sonuç:** Takvim ve demo verisi tek kaynaktan; ölçüm sayısı değişmez (30 gün × 4 kişi ISS: 1.452).
+  Rover ve diğer ortam-özel saatler değişmedi. Takvimle eşleşmeyen simülasyon ölçümleri (akşam vitali,
+  rover'daki eksik maddeler) `docs/ROUTINE_SCHEDULE.md` § Açık konular'da; hizalama ayrı karar.
+  ADR-016'nın ölçüm saatleri kısmının yerine geçer.

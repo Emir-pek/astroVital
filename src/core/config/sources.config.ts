@@ -205,6 +205,30 @@ export const SOURCES = {
     url: 'https://pmc.ncbi.nlm.nih.gov/articles/PMC10919966',
     verified: false,
   },
+  // ── Reminder times / ISS day skeleton (ADR-036) — content read 2026-11-14; Engineer 3 verifies. ──
+  'esa-outpost42-daily-schedule': {
+    id: 'esa-outpost42-daily-schedule',
+    title:
+      'The astronaut daily schedule (Columbus Control Centre blog: ~1 h post-sleep, morning/evening Daily Planning Conference)',
+    publisher: 'ESA',
+    url: 'https://outpost42.esa.int/blog/the-astronaut-daily-schedule/',
+    verified: false,
+  },
+  'esa-pesquet-blog-presleep': {
+    id: 'esa-pesquet-blog-presleep',
+    title: 'Thomas Pesquet blog: pre-sleep block ~19:30-21:30 GMT per OSTPV',
+    publisher: 'ESA',
+    url: 'https://blogs.esa.int/thomas-pesquet/?p=503',
+    verified: false,
+  },
+  'clickorlando-2020-day-in-space': {
+    id: 'clickorlando-2020-day-in-space',
+    title:
+      'A day in space: daily routine of an astronaut (secondary; cites NASA: workday ~06:00-21:30 GMT, 8 h sleep)',
+    publisher: 'ClickOrlando (2020, secondary source)',
+    url: 'https://www.clickorlando.com/news/space-news/2020/11/14/a-day-in-space-heres-what-an-astronauts-daily-routine-looks-like/',
+    verified: false,
+  },
 } as const satisfies Record<string, SourceRef>;
 
 export type SourceId = keyof typeof SOURCES;

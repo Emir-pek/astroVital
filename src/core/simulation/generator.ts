@@ -9,7 +9,7 @@ import type {
 } from '@core/types';
 import { clamp, roundToStep } from '@core/utils/format';
 import { isScheduledOn } from '@core/utils/routineSchedule';
-import { MS_PER_DAY, MS_PER_MINUTE, startOfUtcDay } from '@core/utils/time';
+import { MS_PER_DAY, MS_PER_MINUTE, parseTimeOfDay, startOfUtcDay } from '@core/utils/time';
 import { createRng, type Rng } from './prng';
 import { SCENARIOS, type ScenarioContext, type ScenarioDefinition } from './scenarios';
 
@@ -66,6 +66,30 @@ const scheduledOn = (templateId: string, missionDay: number): boolean => {
   return template ? isScheduledOn(template, missionDay) : true;
 };
 
+/** Minutes after midnight; splits morning and evening slots of the same metric. */
+const NOON_MIN = 12 * 60;
+
+/**
+ * Time of day (minutes) of a simulated slot, read from the environment's reminder schedule (ADR-036):
+ * the first template whose metric is in `metrics` and that lies in the requested half of the day.
+ * No matching template → `fallbackMin` (slots without a schedule item keep their ADR-016 time).
+ */
+const slotMinute = (
+  env: EnvironmentProfile,
+  metrics: readonly MetricId[],
+  half: 'am' | 'pm',
+  fallbackMin: number,
+): number => {
+  for (const metric of metrics) {
+    for (const t of env.reminderSchedule) {
+      if (t.metric !== metric) continue;
+      const min = parseTimeOfDay(t.timeOfDayMET);
+      if ((half === 'am') === min < NOON_MIN) return min;
+    }
+  }
+  return fallbackMin;
+};
+
 interface SlotInput {
   member: CrewMember;
   crewIndex: number;
@@ -95,6 +119,17 @@ export const generateHistory = ({
   const firstDayMs = startOfUtcDay(end).getTime() - (days - 1) * MS_PER_DAY;
   const out: Measurement[] = [];
 
+  // Slot times (minutes after mission-day midnight) come from the schedule; fallbacks = ADR-016 times.
+  const T = {
+    wake: slotMinute(environment, ['sleepHours'], 'am', 7 * 60),
+    am: slotMinute(environment, ['systolicBP', 'heartRate', 'spo2', 'bodyTemp'], 'am', 7 * 60 + 30),
+    glu: slotMinute(environment, ['bloodGlucose'], 'am', 7 * 60 + 40),
+    pm: slotMinute(environment, ['heartRate', 'systolicBP', 'bodyTemp'], 'pm', 19 * 60),
+    ex: slotMinute(environment, ['exerciseMinutes'], 'pm', 17 * 60),
+    dose: slotMinute(environment, ['radiationDose'], 'pm', 20 * 60 + 30),
+    mood: slotMinute(environment, ['mood'], 'pm', 21 * 60),
+  };
+
   const emit = (input: SlotInput) => {
     if (input.ts > endMs) return;
     const ctx: ScenarioContext = {
@@ -121,17 +156,18 @@ export const generateHistory = ({
   crew.forEach((member, crewIndex) => {
     for (let dayIndex = 0; dayIndex < days; dayIndex++) {
       const day = firstDayMs + dayIndex * MS_PER_DAY;
-      const at = (h: number, m: number, jitterMin: number) =>
-        day + (h * 60 + m + rng.int(-jitterMin, jitterMin)) * MS_PER_MINUTE;
+      // Realism noise: entries are made a few minutes around the scheduled time.
+      const at = (minuteOfDay: number, jitterMin: number) =>
+        day + (minuteOfDay + rng.int(-jitterMin, jitterMin)) * MS_PER_MINUTE;
       const base = { member, crewIndex, dayIndex };
       const morningGroup = `sim-${seed}-${member.id}-d${dayIndex}-am`;
       // History starts on mission day 1 (store sets missionStart to the first generated day).
       const missionDay = dayIndex + 1;
 
-      emit({ ...base, ts: at(7, 0, 10), slot: 'wake', metrics: [{ metric: 'sleepHours' }] });
+      emit({ ...base, ts: at(T.wake, 10), slot: 'wake', metrics: [{ metric: 'sleepHours' }] });
       emit({
         ...base,
-        ts: at(7, 30, 15),
+        ts: at(T.am, 15),
         slot: 'am',
         groupId: morningGroup,
         metrics: [
@@ -145,12 +181,13 @@ export const generateHistory = ({
       });
       // Fasting glucose: weekly, same rule as the reminder schedule (ADR-035).
       if (scheduledOn('fasting-glucose', missionDay))
-        emit({ ...base, ts: at(7, 40, 10), slot: 'glu', metrics: [{ metric: 'bloodGlucose' }] });
-      // Optional evening vitals (≈ half of the days) → "1–2 measurements per day".
+        emit({ ...base, ts: at(T.glu, 10), slot: 'glu', metrics: [{ metric: 'bloodGlucose' }] });
+      // Optional evening vitals (≈ half of the days, ADR-016) → "1–2 measurements per day".
+      // Time from the schedule's evening heart-rate item if the environment has one (ISS: 19:30).
       if (rng.chance(0.5)) {
         emit({
           ...base,
-          ts: at(19, 0, 30),
+          ts: at(T.pm, 30),
           slot: 'pm',
           groupId: `sim-${seed}-${member.id}-d${dayIndex}-pm`,
           metrics: [
@@ -163,9 +200,9 @@ export const generateHistory = ({
       }
       // Exercise: 6 days a week — every 7th mission day is a rest day (ADR-035).
       if (scheduledOn('exercise', missionDay))
-        emit({ ...base, ts: at(17, 0, 30), slot: 'ex', metrics: [{ metric: 'exerciseMinutes' }] });
-      emit({ ...base, ts: at(20, 30, 10), slot: 'dose', metrics: [{ metric: 'radiationDose' }] });
-      emit({ ...base, ts: at(21, 0, 20), slot: 'mood', metrics: [{ metric: 'mood' }] });
+        emit({ ...base, ts: at(T.ex, 30), slot: 'ex', metrics: [{ metric: 'exerciseMinutes' }] });
+      emit({ ...base, ts: at(T.dose, 10), slot: 'dose', metrics: [{ metric: 'radiationDose' }] });
+      emit({ ...base, ts: at(T.mood, 20), slot: 'mood', metrics: [{ metric: 'mood' }] });
     }
   });
 

@@ -98,6 +98,62 @@ describe('generateHistory', () => {
     }
   });
 
+  describe('slot times come from the environment schedule (ADR-036)', () => {
+    const minuteOfDay = (iso: string) => {
+      const d = new Date(iso);
+      return d.getUTCHours() * 60 + d.getUTCMinutes();
+    };
+    /** [metric, filter, scheduled minute, jitter] — every measurement must lie within ±jitter. */
+    const within = (
+      out: ReturnType<typeof generateHistory>,
+      metric: string,
+      centre: number,
+      jitter: number,
+      pick: (min: number) => boolean = () => true,
+    ) => {
+      const mins = out.filter((m) => m.metric === metric).map((m) => minuteOfDay(m.timestamp));
+      const sel = mins.filter(pick);
+      expect(sel.length, metric).toBeGreaterThan(0);
+      sel.forEach((min) => {
+        expect(min, metric).toBeGreaterThanOrEqual(centre - jitter);
+        expect(min, metric).toBeLessThanOrEqual(centre + jitter);
+      });
+    };
+    const AM = (min: number) => min < 12 * 60;
+    const PM = (min: number) => min >= 12 * 60;
+
+    it('ISS: wake 06:15, morning vitals + glucose 06:30, exercise 17:30, evening 19:30, mood 21:00', () => {
+      const out = generateHistory(opts());
+      within(out, 'sleepHours', 6 * 60 + 15, 10);
+      ['systolicBP', 'diastolicBP', 'heartRate', 'spo2', 'respRate', 'bodyTemp'].forEach((m) =>
+        within(out, m, 6 * 60 + 30, 15, AM),
+      );
+      within(out, 'bloodGlucose', 6 * 60 + 30, 10);
+      within(out, 'exerciseMinutes', 17 * 60 + 30, 30);
+      within(out, 'radiationDose', 19 * 60 + 30, 10);
+      ['systolicBP', 'heartRate'].forEach((m) => within(out, m, 19 * 60 + 30, 30, PM));
+      within(out, 'mood', 21 * 60, 20);
+    });
+
+    it('systolic and diastolic of one group share timestamp and groupId', () => {
+      const out = generateHistory(opts());
+      const sys = out.filter((m) => m.metric === 'systolicBP');
+      for (const s of sys) {
+        const dia = out.find((m) => m.metric === 'diastolicBP' && m.groupId === s.groupId);
+        expect(dia?.timestamp).toBe(s.timestamp);
+      }
+    });
+
+    it('rover: own schedule (08:00) where it has an item, ADR-016 fallback where it has none', () => {
+      const out = generateHistory(opts({ environment: ENVIRONMENTS.rover }));
+      within(out, 'heartRate', 8 * 60, 15, AM);
+      within(out, 'radiationDose', 20 * 60 + 30, 10);
+      within(out, 'sleepHours', 7 * 60, 10);
+      within(out, 'bloodGlucose', 7 * 60 + 40, 10);
+      within(out, 'exerciseMinutes', 17 * 60, 30);
+    });
+  });
+
   it('every scenario runs', () => {
     for (const scenario of SCENARIO_IDS) {
       expect(generateHistory(opts({ scenario, days: 10 })).length).toBeGreaterThan(0);
