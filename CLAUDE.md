@@ -23,7 +23,13 @@ npm run typecheck    # tsc -b --noEmit
 npm run format       # prettier --write
 npm run verify       # lint + typecheck + test + build (merge öncesi)
 npm run docs:contracts  # src/core/types → docs/CONTRACTS.md senkronu
+npm run doctor       # ortam kontrolü (SETUP_CHECK § 1–2 otomatik)
+npm run docs:check   # değişiklik CHANGELOG'a yazılmış mı?
+npm run claude:setup # ekip Claude plugin'lerini kur
 ```
+
+Kurulum tek komut: `powershell -ExecutionPolicy Bypass -File scripts\setup.ps1` (Windows) ·
+`bash scripts/setup.sh` (macOS/Linux/Git Bash).
 
 ## Mimari kurallar (ESLint ile zorlanır)
 
@@ -65,6 +71,16 @@ npm run docs:contracts  # src/core/types → docs/CONTRACTS.md senkronu
 - Bağımlılık eklemeden önce kullanıcıya/ekibe sor (bundle boyutu, offline çalışma).
 - Python/venv kullanılmaz; izolasyon `node_modules` + `package-lock.json` ile sağlanır.
 
+## Dokümantasyon (ZORUNLU)
+
+- Kod/config'e dokunan **her değişiklikte** `CHANGELOG.md`'ye kayıt ekle (`<!-- NEW ENTRIES BELOW -->`
+  altına, en yeni en üstte: Ne / Neden / Dosyalar / Ekip ne yapmalı) ve davranış değiştiyse ilgili
+  `docs/` dosyasını güncelle — `document-change` skill'ini kullan. Pre-commit hook, CI ve Stop hook zorlar.
+- İşe başlarken `CHANGELOG.md`'nin son kayıtlarını oku (SessionStart hook bağlama koyar); "Ekip ne
+  yapmalı" satırında kullanıcıyı etkileyen bir şey varsa söyle.
+- Ekip Claude araçları (`.claude/`, `.mcp.json`) yalnız araç sahibi (Emir) tarafından değiştirilir:
+  `docs/CLAUDE_SETUP.md`, `/add-team-tool`.
+
 ## Test kuralı
 
 - **Her yeni motor/saf fonksiyon testli** (`__tests__/` klasöründe, `*.test.ts(x)`).
@@ -77,11 +93,12 @@ npm run docs:contracts  # src/core/types → docs/CONTRACTS.md senkronu
 - Branch'ler: `feat/core-routine` (Müh. 1), `feat/intake` (Müh. 2), `feat/assessment` (Müh. 3),
   `feat/visualization` (Müh. 4) — hepsi `main`'den.
 - Conventional Commits: `feat(intake): ...`, `fix(assessment): ...`, `docs(thresholds): ...`.
-- Günde en az 2 kez `main`'e merge; `src/core` değişiklikleri yalnız Mühendis 1 onayıyla.
+- `main`'e **yalnız Pull Request** ile (ADR-028): kendi `feat/*` branch'ine push → PR → CI (`verify` +
+  `docs`) yeşil + en az 1 onay → merge. Günde en az 2 kez main'e al. `src/core` PR'larını Mühendis 1 onaylar.
 - Aynı makinede paralel çalışma: `git worktree` (README + `docs/TEAM.md`).
-- Repo: `https://github.com/Emir-pek/astroVital` (`origin`). Kullanıcı isterse kendi
-  `feat/*` branch'ini push et; `main`'e push yalnız `npm run verify` yeşilken. ⛔ **Force push yok**,
-  başkasının branch'ine push yok, remote ekleme/değiştirme yok (ADR-026).
+- Repo: `https://github.com/Emir-pek/astroVital` (`origin`). Kullanıcı isterse kendi `feat/*` branch'ini
+  push et ve PR aç. ⛔ **`main`'e doğrudan push yok, force push yok**, başkasının branch'ine push yok,
+  remote ekleme/değiştirme yok (ADR-026, ADR-028).
 
 ## Nerede ne var
 
@@ -90,4 +107,5 @@ npm run docs:contracts  # src/core/types → docs/CONTRACTS.md senkronu
 - Tehlikeler: `docs/HAZARDS.md` · Kaynaklar: `docs/SOURCES.md` ↔ `src/core/config/sources.config.ts`
 - Plan: `docs/PLAN.md` · Ekip: `docs/TEAM.md` · Demo: `docs/DEMO_SCRIPT.md`
 - Kurulum kontrolü + bağımlılık kaydı: `docs/SETUP_CHECK.md`
+- Değişiklik günlüğü: `CHANGELOG.md` · Ortak Claude kurulumu: `docs/CLAUDE_SETUP.md`
 - Her modülün kendi `CLAUDE.md`'si modüle özel kuralları içerir.

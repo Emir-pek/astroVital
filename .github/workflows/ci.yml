@@ -1,0 +1,29 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: lint + typecheck + test + build
+        run: npm run verify
+
+  docs:
+    if: github.event_name == 'pull_request' && !contains(github.event.pull_request.title, '[skip-docs]')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: CHANGELOG updated?
+        run: node scripts/docs-check.mjs --base origin/${{ github.base_ref }}

@@ -11,6 +11,8 @@
 
 \* `src/core` altındadır → içerik sahibi o mühendis, ama merge'ü Mühendis 1 onaylar.
 
+**Araç sahibi (Claude skill/plugin/MCP/hook, kurulum script'leri):** Emir — `docs/CLAUDE_SETUP.md`.
+
 ## Ortak dosyalar (çatışma noktaları)
 
 | Dosya                              | Kural                                                                                                                     |
@@ -18,6 +20,8 @@
 | `src/core/types/**`                | Yalnız Mühendis 1 merge eder; değişiklik önce kanalda duyurulur, `npm run docs:contracts`                                 |
 | `src/core/i18n/en.json`, `tr.json` | Herkes ekler; **kendi modül önekinde** (`intake.*`, `assessment.*`, `visualization.*`, `routine.*`); EN+TR aynı commit'te |
 | `src/core/config/*.config.ts`      | İçerik sahibi yukarıdaki tabloya göre; yapısal değişiklik = sözleşme değişikliği                                          |
+| `CHANGELOG.md`                     | Herkes ekler, **en üste**; merge çatışmasında iki kaydı da tut (sıra: tarih)                                              |
+| `.claude/**`, `.mcp.json`          | Yalnız araç sahibi değiştirir (ADR-027)                                                                                   |
 | `package.json`                     | Yeni bağımlılık eklemeden önce kanalda sor (bundle boyutu, offline); aynı commit'te `docs/SETUP_CHECK.md` § 5'i güncelle  |
 
 ## Git akışı (GitHub: `https://github.com/Emir-pek/astroVital`)
@@ -26,15 +30,15 @@
 - **Conventional Commits:** `feat(intake): add BP pair entry`, `fix(assessment): widen formula sign`,
   `docs(thresholds): verify NEWS2 bands`, `test(visualization): body map keyboard nav`.
   Kapsamlar: `core`, `app`, `intake`, `assessment`, `visualization`, `routine`, `docs`, `build`.
-- **Günde en az 2 kez main'e merge**, öncesinde mutlaka:
+- **`main`'e yalnız Pull Request ile (ADR-028).** Günde en az 2 kez main'e al. PR açmadan önce:
   ```bash
-  npm run lint && npm run typecheck && npm test   # ya da: npm run verify (build dahil)
+  git fetch origin && git merge origin/main   # kendi branch'inde, çatışmaları çöz
+  npm run verify                              # lint + typecheck + test + build
   ```
-- Merge sırası: önce `main`'i kendi branch'ine al (`git merge main`), çatışmaları çöz, testler
-  yeşil → `git switch main && git merge --no-ff feat/<x>`.
-- `src/core` değişiklikleri **yalnız Mühendis 1 onayıyla** main'e girer.
-- **Push (ADR-026):** kendi `feat/*` branch'ini istediğin sıklıkla `git push origin feat/<x>`.
-  `main`'e push yalnız `npm run verify` yeşilken (merge sonrası). **Force push yasak**
+- PR → GitHub Actions CI (`verify` + `docs`) yeşil + **en az 1 onay** → PR sahibi merge eder (GitHub'da
+  "Create a merge commit"). `main` branch koruması doğrudan push'u reddeder.
+- `src/core` değişiklikleri içeren PR'ı **Mühendis 1 onaylar**.
+- **Push:** kendi `feat/*` branch'ini istediğin sıklıkla `git push origin feat/<x>`. **Force push yasak**
   (`--force`, `--force-with-lease` dahil); başkasının branch'ine push etme.
 - İşe başlarken / merge öncesi: `git pull` (kendi branch'in) ve `git fetch origin && git merge origin/main`.
 - Yeni remote ekleme veya remote adresini değiştirme ekip onayıyla.
@@ -59,17 +63,19 @@ git worktree remove ../astrovital-intake   # iş bitince
 git clone https://github.com/Emir-pek/astroVital.git
 cd astroVital
 git switch feat/intake          # kendi branch'in (uzak branch'ten otomatik takip eder)
-npm ci                          # sonra docs/SETUP_CHECK.md kontrol listesi
+powershell -ExecutionPolicy Bypass -File scripts\setup.ps1   # Windows; macOS/Linux: bash scripts/setup.sh
 npm run dev
 ```
 
-Günlük döngü: `git pull` → çalış → `npm run verify` → `git commit` → `git push origin feat/<x>`.
+Günlük döngü: `git pull` (yeni CHANGELOG kayıtları ekrana basılır) → çalış → `CHANGELOG.md` kaydı →
+`npm run verify` → `git commit` (pre-commit kaydı kontrol eder) → `git push origin feat/<x>`.
 Main'e alma: `git fetch origin && git merge origin/main` (kendi branch'inde, çatışmaları çöz) →
-`npm run verify` → `git switch main && git pull && git merge --no-ff feat/<x> && git push origin main`.
+`npm run verify` → `git push origin feat/<x>` → GitHub'da PR aç (şablon otomatik gelir) → CI yeşil + onay → merge.
 
 ## İletişim kuralları
 
 - Günlük 3 senkron: 0. sa (kickoff), her 6 saatte 10 dk stand-up (dün/bugün/engel), 44. sa demo provası.
 - Sözleşme değişikliği, yeni bağımlılık, `src/core` değişikliği → **önce yaz, sonra kodla**.
 - Engel (blocker) 30 dakikadan uzun sürerse kanala yaz; stub ile ilerle, sonra değiştir.
-- Kod incelemesi: main'e merge öncesi en az 1 kişinin hızlı göz atması (özellikle `src/core`).
+- Kod incelemesi: her PR'a en az 1 kişi onay verir (`src/core` için Mühendis 1). İlk tur için Claude'da
+  `/pr-review-toolkit:review-pr` kullanılabilir.

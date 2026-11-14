@@ -176,3 +176,26 @@ Node 24 LTS, npm.
   `feat/*` branch'ine serbestçe push eder; `main`'e push yalnız `npm run verify` yeşilken; force push
   yasak. Farklı bilgisayarlar arası senkronizasyon GitHub üzerinden (TEAM.md).
 - **Sonuç:** ADR-001'deki "push yok" ve ADR-025'teki `git bundle` önerisi geçersiz.
+- **Yerine geçti (kısmen):** ADR-028 (`main`'e yalnız PR ile).
+
+### ADR-027 — Ortak Claude kurulumu repoda; her değişiklik CHANGELOG'a
+
+- **Bağlam:** Dört mühendis Claude kullanıyor. claude.ai'nin yeni Projects görünümü tek kullanıcılık,
+  paylaşılamıyor; bulut oturumları repo skill'lerini, `.mcp.json`'ı ve `settings.json` plugin'lerini
+  yüklemiyor. Paralel branch'lerde kimin neyi değiştirdiği kayboluyordu.
+- **Karar:** `.claude/` (settings, skills, hooks) ve `.mcp.json` repoda; sahibi Emir. Kurulum tek
+  komut (`scripts/setup.ps1` / `scripts/setup.sh`) — `npm ci`, git hook'ları, Claude plugin'leri,
+  `doctor`. Kod/config değişikliği `CHANGELOG.md`'ye yazılır; pre-commit hook, CI `docs` job'u ve
+  Claude Stop hook'u zorlar; post-merge ve SessionStart hook'ları yeni kayıtları ekibe okutur.
+- **Sonuç:** Repo üzerinde yerel Claude Code kullanılır. Plugin eklenince herkes bir kez
+  `npm run claude:setup` çalıştırır. Ayrıntı: `docs/CLAUDE_SETUP.md`.
+
+### ADR-028 — `main`'e yalnız PR ile; CI yeşil olmadan merge yok
+
+- **Bağlam:** ADR-026 `main`'e doğrudan merge + push'a izin veriyordu. 4 kişi aynı anda main'e push
+  edince çakışma ve kırık main riski var (14 Kasım'da aynı dakikalarda iki ayrı push oldu).
+- **Karar:** Herkes kendi `feat/*` branch'ine push eder ve **Pull Request** açar. GitHub Actions CI
+  (`verify`: lint + typecheck + test + build, `docs`: CHANGELOG kontrolü) yeşil + en az 1 onay → PR
+  sahibi merge eder. `main` branch koruması bunu zorlar. `src/core` PR'larında onaylayan Mühendis 1.
+- **Sonuç:** ADR-026'nın "main'e doğrudan push" kısmının yerine geçer; force push yasağı aynen geçerli.
+  Aynı makinede worktree akışı değişmez, yalnız main'e alma adımı PR olur.
