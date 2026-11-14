@@ -1,6 +1,10 @@
 # Mühendis 1 — Platform, Çekirdek & Görev Rutini
 
-**Branch:** `feat/core-routine` · **Sahip:** Mühendis 1 (_TBD_)
+**Branch:** `feat/core-routine` · **Sahip:** Mühendis 1 (Muhammed Bektaş)
+
+> **ADR-032 (14.11.2026) sonrası:** `src/app` ve `src/core/ui`'ın **görünümü** visualization ekibinde (Emir).
+> Mühendis 1'de kalanlar: core (types, config, store, simulation, i18n altyapısı, utils), app'in
+> mantığı/rotaları/entegrasyonu, routine modülünün mantığı, sözleşme bakımı ve PR mimari onayı.
 
 ## Amaç
 
@@ -32,23 +36,36 @@ app → hepsi.
 - [x] Store + persist, seçiciler, simülasyon üreticisi + 6 senaryo, `loadDemoData`/`resetAll`
 - [x] i18n altyapısı (EN/TR) + anahtar eşitlik testi
 - [x] MET saati (`MetClock`)
-- [ ] Koyu "mission control" temasını cilala (tipografi, ızgara arka plan, cam efektli paneller)
-- [ ] Ortam seçici: TopBar rozetinden hızlı geçiş (popover), ortam değişince toast
-- [ ] UI kit tamamla: `Tabs`, `Select`, `Slider`, `Tooltip`, `ProgressBar`, `Skeleton` (çevrilmiş metin alır)
-- [ ] Senaryo seçince `recommendedEnvironment`'ı öner (tek tıkla ortamı da değiştir)
+- ~~Koyu "mission control" temasını cilala (tipografi, ızgara arka plan, cam efektli paneller)~~ → Devredildi: visualization (ADR-032)
+- ~~UI kit tamamla: `Tabs`, `Select`, `Slider`, `Tooltip`, `ProgressBar`, `Skeleton` (çevrilmiş metin alır)~~ →
+  Devredildi: visualization (ADR-032). Not: `Select`/`Menu`/`Segmented`/`Sheet`/`RedAlertDialog` hazır;
+  `Tabs`/`Slider`/`ProgressBar`/`Tooltip` envanterde boşta (TEAM.md "UI kit envanteri").
+- ~~Ortam seçici: TopBar rozetinden hızlı geçiş (popover), ortam değişince toast~~ → Görünüm devredildi: visualization (ADR-032)
+  - [ ] Mantık: ortam değişince store güncellenir, toast tetiklenir, hatırlatma takvimi ve eşikler yeni
+        ortama göre yeniden hesaplanır (görünüm: visualization)
+- ~~Senaryo seçince `recommendedEnvironment`'ı öner (tek tıkla ortamı da değiştir)~~ → Görünüm devredildi: visualization (ADR-032)
+  - [ ] Mantık: senaryo seçilince `recommendedEnvironment` önerisi ve tek aksiyonla hem senaryo hem ortamı
+        uygulayan store aksiyonu (görünüm: visualization)
+- [ ] Sözleşme uyumu: ADR-031 dört seviyeli `Status` sonrası `CONTRACTS.md` (`npm run docs:contracts`),
+      `thresholds.config`, i18n `status.*` ve simülasyon/store kodunda eski green/yellow/red kalıntısı
+      olmadığını kontrol et
 - [ ] Sözleşme bakımı: diğer mühendislerin ekleme isteklerini değerlendir, `npm run docs:contracts`
 
 ### P1 (Faz 2)
 
+- [x] Takvim yapısı: günlük/haftalık/aylık, NASA/CSA kaynaklı (ADR-035, `docs/ROUTINE_SCHEDULE.md`)
+- [ ] Takvim saatleri (`timeOfDayMET`, ayrı karar)
+- [ ] Ortama göre takvim farkları (ayrı karar)
 - [ ] `useReminders`: aktif ortamın `reminderSchedule`'ını bugünün MET gününe aç; `metric`'i olan
-      görevler için o zaman penceresinde ölçüm varsa `done`, süresi geçtiyse `missed`
-- [ ] Bildirim: uygulama içi toast + izin verildiyse `Notification` API (Settings'te açma anahtarı)
-- [ ] Kaçırılan ölçüm takibi (Dashboard'da rozet)
+      görevler için o zaman penceresinde ölçüm varsa `done`, süresi geçtiyse `missed` (görünüm: visualization)
+- [ ] Bildirim: uygulama içi toast + izin verildiyse `Notification` API (Settings'te açma anahtarı) (görünüm: visualization)
+- [ ] Kaçırılan ölçüm takibi (Dashboard'da rozet) (görünüm: visualization)
 - [ ] Oyunlaştırma: modül-yerel persist store (`astrovital:routine`), XP, seviye, seri (streak),
-      rozetler, ekip skoru, günlük görevler (egzersiz, hidrasyon, uyku hijyeni, ekip sohbeti, öğren)
+      rozetler, ekip skoru, günlük görevler (egzersiz, hidrasyon, uyku hijyeni, ekip sohbeti, öğren);
+      astronot pet fikri — kuralları Mühendis 1, görünümü visualization; karar bekliyor (görünüm: visualization)
 - [ ] **Kural:** XP yalnız **uyum** için (ölçüm yapıldı, görev tamamlandı) — değerin "iyi" olması
-      ödüllendirilmez. Bunu `MissionBoard`'da kullanıcıya da açıkla.
-- [ ] Uçtan uca entegrasyon testi `src/app/__tests__/e2e-flow.test.tsx`
+      ödüllendirilmez. Bunu `MissionBoard`'da kullanıcıya da açıkla. (görünüm: visualization)
+- [ ] Uçtan uca entegrasyon testi `src/app/__tests__/e2e-flow.test.tsx` (görünüm: visualization)
 
 ### P2 (Faz 3)
 
@@ -62,7 +79,8 @@ app → hepsi.
 ## Kabul kriterleri
 
 - `npm run verify` her merge'de yeşil; tüm sayfalar açılıyor (routes testi).
-- Ortam değişince: tema tonu, TopBar rozeti, hatırlatma takvimi ve eşikler (motor üzerinden) değişir.
+- Ortam değişince: hatırlatma takvimi ve eşikler (motor üzerinden) değişir; tema tonu ve TopBar rozeti
+  değişimi visualization ile birlikte.
 - Hatırlatma "yapıldı" durumu ilgili ölçüm girilince ≤1 sn'de güncellenir.
 - Gamification hiçbir yerde ölçüm **değerine** bağlı değil (kod incelemesinde kontrol).
 
@@ -77,7 +95,8 @@ app → hepsi.
 
 - **Mühendis 2:** `useAddMeasurement` → store → `useReminders` "done" algılar.
 - **Mühendis 3:** `useCrewHealth` sonucu kırmızıysa routine "yeniden ölç" görevi üretir.
-- **Mühendis 4:** `tokens.css` ortam tonları, `data-env`; sunum modu için global bayrak gerekirse store'a eklenir.
+- **Mühendis 4 / visualization (Emir):** Ekranların görünümü visualization'da; Mühendis 1 hook/store/aksiyon
+  sağlar, Emir bağlar. `tokens.css` ortam tonları, `data-env`; sunum modu için global bayrak gerekirse store'a eklenir.
 
 ## Yapma listesi
 

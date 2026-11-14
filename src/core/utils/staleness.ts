@@ -6,6 +6,7 @@ export const REPEAT_INTERVAL_MS: Record<ReminderTemplate['repeat'], number> = {
   twice_daily: 12 * MS_PER_HOUR,
   daily: MS_PER_DAY,
   weekly: 7 * MS_PER_DAY,
+  monthly: 30 * MS_PER_DAY,
 };
 
 /** A value stays valid for this many scheduled intervals. */

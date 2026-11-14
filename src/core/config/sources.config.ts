@@ -138,6 +138,73 @@ export const SOURCES = {
     url: 'https://mars.nasa.gov/',
     verified: false,
   },
+  // ── Reminder schedule (ADR-035) — content read 2026-11-14 by Engineer 1; Engineer 3 verifies. ──
+  'nasa-std-3001-v1-medops': {
+    id: 'nasa-std-3001-v1-medops',
+    title: 'NASA-STD-3001 Vol. 1 §6 — Medical Operations',
+    publisher: 'NASA Office of the Chief Health & Medical Officer',
+    url: 'https://www.nasa.gov/reference/6-0-medical-operations/',
+    verified: false,
+  },
+  'ntrs-2006-iss-health-fitness': {
+    id: 'ntrs-2006-iss-health-fitness',
+    title: 'Roden & Ewert — Health and Fitness Evaluations for Long Duration Microgravity Exposure',
+    publisher: 'NASA Technical Reports Server (2006)',
+    url: 'https://ntrs.nasa.gov/citations/20060051792',
+    verified: false,
+  },
+  'nasa-podcast-crew-health-consoles': {
+    id: 'nasa-podcast-crew-health-consoles',
+    title: 'Houston We Have a Podcast Ep. 377 — Mission Control Crew Health Consoles',
+    publisher: 'NASA',
+    url: 'https://www.nasa.gov/podcasts/houston-we-have-a-podcast/mission-control-crew-health-consoles',
+    verified: false,
+  },
+  'ntrs-2011-iss-exercise-conditioning': {
+    id: 'ntrs-2011-iss-exercise-conditioning',
+    title:
+      'Guilliams et al. — ISS exercise / reconditioning (in-flight 2.5 h blocks, 6 days/week, 1.5 h resistance)',
+    publisher: 'NASA Technical Reports Server (2011)',
+    url: 'https://ntrs.nasa.gov/api/citations/20110016265/downloads/20110016265.pdf',
+    verified: false,
+  },
+  'ntrs-2009-iss-exrx': {
+    id: 'ntrs-2009-iss-exrx',
+    title: 'ISS exercise prescription (aerobic ~30 min at ~70 % HRmax)',
+    publisher: 'NASA Technical Reports Server (2009)',
+    url: 'https://ntrs.nasa.gov/api/citations/20090013286/downloads/20090013286.pdf',
+    verified: false,
+  },
+  'nasa-standard-measures': {
+    id: 'nasa-standard-measures',
+    title: 'Spaceflight Standard Measures — Characterizing How Humans Adapt in Space',
+    publisher: 'NASA',
+    url: 'https://www.nasa.gov/humans-in-space/spaceflight-standard-measures-characterizing-how-humans-adapt-in-space',
+    verified: false,
+  },
+  'ntrs-2018-standard-measures': {
+    id: 'ntrs-2018-standard-measures',
+    title: 'Spaceflight Standard Measures — experiment design',
+    publisher: 'NASA Technical Reports Server (2018)',
+    url: 'https://ntrs.nasa.gov/api/citations/20180002943/downloads/20180002943.pdf',
+    verified: false,
+  },
+  'csa-bio-monitor': {
+    id: 'csa-bio-monitor',
+    title:
+      'Bio-Monitor (heart rate/ECG, blood pressure, breathing, SpO₂, skin temperature, activity)',
+    publisher: 'Canadian Space Agency',
+    url: 'https://www.asc-csa.gc.ca/eng/sciences/bio-monitor.asp',
+    verified: false,
+  },
+  'pmc-2024-iss-radiation-crew-dosimetry': {
+    id: 'pmc-2024-iss-radiation-crew-dosimetry',
+    title:
+      'ISS multi-agency radiation dosimetry (Crew Active Dosimeter: personal, time-resolved dose)',
+    publisher: 'PubMed Central (2024)',
+    url: 'https://pmc.ncbi.nlm.nih.gov/articles/PMC10919966',
+    verified: false,
+  },
 } as const satisfies Record<string, SourceRef>;
 
 export type SourceId = keyof typeof SOURCES;

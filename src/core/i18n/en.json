@@ -341,7 +341,10 @@
       "mood": "How do you feel today?",
       "spo2": "Blood oxygen check",
       "crewCheckin": "Crew check-in chat",
-      "weeklySurgeonReport": "Send weekly report to flight surgeons"
+      "weeklySurgeonReport": "Send weekly report to flight surgeons",
+      "weeklyHealthSummary": "Weekly health summary for the flight surgeon",
+      "monthlyHealthExam": "Monthly full check-up: all measurements",
+      "monthlySleepTeamSurvey": "Monthly sleep and team survey"
     },
     "reminders": {
       "title": "Today's routine",

@@ -341,7 +341,10 @@
       "mood": "Bugün nasıl hissediyorsun?",
       "spo2": "Kandaki oksijen kontrolü",
       "crewCheckin": "Ekip sohbeti",
-      "weeklySurgeonReport": "Uçuş doktorlarına haftalık rapor gönder"
+      "weeklySurgeonReport": "Uçuş doktorlarına haftalık rapor gönder",
+      "weeklyHealthSummary": "Uçuş doktoru için haftalık sağlık özeti",
+      "monthlyHealthExam": "Aylık tam kontrol: tüm ölçümler",
+      "monthlySleepTeamSurvey": "Aylık uyku ve ekip anketi"
     },
     "reminders": {
       "title": "Bugünkü rutin",

@@ -50,7 +50,7 @@ Var olanlar korunur. Eklenecekler:
 | U-09 | Eski renk sınıfları (B7) | `src/` içinde `text-ok`, `bg-surface-2` vb. kalmadı | Plan 3 sonrası |
 | U-10 | `MoodPicker` (B1) | 5 seçenek, emoji yok, `role=radio`, her biri `min-h-touch` | — |
 | U-11 | Token kontrastı | Ortam temalarında (Ay/Mars zemini) `text`, `text-2` ve 4 durum rengi de ≥ 6:1 | Şu an sadece `text-3` kontrol ediliyor |
-| U-12 | Bağımlılık koruması | `src/` içinde `radix` import'u kalmadı (Base UI geçişi sonrası) | 0 eşleşme |
+| U-12 | Bağımlılık koruması | Base UI / Radix import'u yalnız `src/core/ui` içinde (ADR-034; ikisi de serbest) | Kit dışında 0 eşleşme |
 
 ## 4. Fonksiyonel testler (Vitest + Testing Library) — kullanıcı eylemi → beklenen davranış
 

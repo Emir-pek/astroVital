@@ -2,12 +2,12 @@
 
 > İsimleri ekip doldurur (ADR-023).
 
-| Rol                                                | İsim  | Branch               | Sahip olunan klasörler                                                                                                         | Görev listesi                                |
-| -------------------------------------------------- | ----- | -------------------- | ------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------- |
-| **Mühendis 1** — Platform, Çekirdek & Görev Rutini | _TBD_ | `feat/core-routine`  | `src/app/`, `src/core/`, `src/modules/routine/`, kök config, `src/test/`                                                       | [core-routine.md](modules/core-routine.md)   |
-| **Mühendis 2** — Veri Toplama (Intake)             | _TBD_ | `feat/intake`        | `src/modules/intake/`                                                                                                          | [intake.md](modules/intake.md)               |
-| **Mühendis 3** — Değerlendirme, Risk & Yönlendirme | _TBD_ | `feat/assessment`    | `src/modules/assessment/`, `docs/THRESHOLDS.md`, `docs/HAZARDS.md`, `docs/SOURCES.md`, `src/core/config/thresholds.config.ts`* | [assessment.md](modules/assessment.md)       |
-| **Mühendis 4** — Görselleştirme & Dashboard        | _TBD_ | `feat/visualization` | `src/modules/visualization/`, `src/core/ui/tokens.css`*                                                                        | [visualization.md](modules/visualization.md) |
+| Rol                                                | İsim            | Branch               | Sahip olunan klasörler                                                                                                             | Görev listesi                                |
+| -------------------------------------------------- | --------------- | -------------------- | ---------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------- |
+| **Mühendis 1** — Platform, Çekirdek & Görev Rutini | Muhammed Bektaş | `feat/core-routine`  | `src/app/`, `src/core/`, `src/modules/routine/`, kök config, `src/test/` (src/app ve src/core/ui görünümü: visualization, ADR-032) | [core-routine.md](modules/core-routine.md)   |
+| **Mühendis 2** — Veri Toplama (Intake)             | _TBD_           | `feat/intake`        | `src/modules/intake/`                                                                                                              | [intake.md](modules/intake.md)               |
+| **Mühendis 3** — Değerlendirme, Risk & Yönlendirme | _TBD_           | `feat/assessment`    | `src/modules/assessment/`, `docs/THRESHOLDS.md`, `docs/HAZARDS.md`, `docs/SOURCES.md`, `src/core/config/thresholds.config.ts`*     | [assessment.md](modules/assessment.md)       |
+| **Mühendis 4** — Görselleştirme & Dashboard        | _TBD_           | `feat/visualization` | `src/modules/visualization/`, `src/core/ui/tokens.css`*                                                                            | [visualization.md](modules/visualization.md) |
 
 \* `src/core` altındadır → içerik sahibi o mühendis, ama merge'ü Mühendis 1 onaylar.
 
@@ -26,24 +26,31 @@
 | `.claude/**`, `.mcp.json`          | Yalnız araç sahibi değiştirir (ADR-027)                                                                                                                        |
 | `package.json`                     | Yeni bağımlılık eklemeden önce kanalda sor (bundle boyutu, offline); aynı commit'te `docs/SETUP_CHECK.md` § 5'i güncelle                                       |
 
-## UI kit envanteri (`src/core/ui` — açık model, ADR-029)
+## UI kit envanteri (`src/core/ui` — açık model, ADR-029, ADR-034)
 
-- **Tasarım sahibi:** _TBD_ (görünüm onayı)
+- **Tasarım sahibi:** visualization ekibi (Emir) — ADR-032 (görünüm onayı)
 - **Mimari onay:** Mühendis 1
 
-| Parça           | Kim yazıyor | Motor | Durum |
-| --------------- | ----------- | ----- | ----- |
-| Button          | Faz 0       | kendi | hazır |
-| Card            | Faz 0       | kendi | hazır |
-| Modal           | Faz 0       | kendi | hazır |
-| StatusBadge     | Faz 0       | kendi | hazır |
-| Toast           | Faz 0       | kendi | hazır |
-| EmptyState      | Faz 0       | kendi | hazır |
-| Select          |             | —     | boşta |
-| Tabs            |             | —     | boşta |
-| Slider          |             | —     | boşta |
-| ProgressBar     |             | —     | boşta |
-| Tooltip/Popover |             | —     | boşta |
+| Parça           | Kim yazıyor | Motor   | Durum |
+| --------------- | ----------- | ------- | ----- |
+| Button          | Faz 0       | kendi   | hazır |
+| Card            | Faz 0       | kendi   | hazır |
+| Modal           | Faz 0       | kendi   | hazır |
+| StatusBadge     | Faz 0       | kendi   | hazır |
+| Toast           | Faz 0       | kendi   | hazır |
+| EmptyState      | Faz 0       | kendi   | hazır |
+| ArcGauge        | Emir        | kendi   | hazır |
+| ValueCard       | Emir        | kendi   | hazır |
+| AlertStrip      | Emir        | kendi   | hazır |
+| RedAlertDialog  | Emir        | Base UI | hazır |
+| Sheet           | Emir        | Base UI | hazır |
+| Segmented       | Emir        | Base UI | hazır |
+| Menu            | Emir        | Base UI | hazır |
+| Select          | Emir        | Base UI | hazır |
+| Tabs            |             | —       | boşta |
+| Slider          |             | —       | boşta |
+| ProgressBar     |             | —       | boşta |
+| Tooltip/Popover |             | —       | boşta |
 
 Başlamadan önce adını ve motorunu (kendi / Base UI / Radix) yaz ve push et; aynı parçayı iki kişi yazmasın. İç içe açılan katmanlar (modal/popover/tooltip/menü) mümkünse aynı motordan (ADR-029).
 

@@ -110,6 +110,8 @@ Node 24 LTS, npm.
 
 ### ADR-016 — Simülasyon ölçüm sıklığı
 
+> **Kısmen yerine geçti: ADR-035** (şeker sıklığı haftalık, egzersizde 7. gün dinlenme).
+
 - **Karar:** Her gün: uyanışta uyku, 07:30 vital (KB, nabız, SpO₂, solunum, ısı — aynı `groupId`),
   17:00 egzersiz, 20:30 dozimetre, 21:00 ruh hali; günlerin ~%50'sinde 19:00 akşam vitali;
   açlık glukozu **3 günde bir** (parmak ucu sarf malzemesi kısıtlı varsayımı).
@@ -258,5 +260,32 @@ Node 24 LTS, npm.
   `Sheet` → `Drawer` (sağa kaydırarak kapanır), `Segmented` → `RadioGroup`, ortam seçici → `Select`,
   astronot menüsü → `Menu`. Gerekçe: dokunmatik iyileştirmeleri, kaydırarak kapanan Drawer,
   shadcn varsayılanı. Bedel: 3 bileşen yeniden yazıldı; prop imzaları değişmedi.
-- **Sonuç:** `src/test/no-radix.test.ts` (U-12) Radix import'unun geri gelmesini engeller. Base UI
+- **Sonuç:** ~~`src/test/no-radix.test.ts` (U-12) Radix import'unun geri gelmesini engeller.~~ (Radix yasağı
+  ADR-034 ile kaldırıldı.) Base UI
   yalnız davranış katmanıdır; görünüm tamamen `tokens.css`. `Select`'i `Drawer`/`Dialog` içine koyma.
+
+### ADR-034 — Base UI ve Radix birlikte kullanılabilir (ADR-033'teki Radix yasağı kalkar)
+
+- **Bağlam:** ADR-029 kit motorunu esnek bırakıyordu (Base UI veya Radix); ADR-033 mevcut bileşenleri
+  Base UI'a taşırken `no-radix` testiyle Radix'i tamamen yasakladı. İki karar çelişiyordu.
+- **Karar:** ADR-029 geçerli: `src/core/ui` içinde Base UI (`@base-ui/react`) **ve** Radix
+  (`radix-ui` / `@radix-ui/*`) birlikte kullanılabilir; seçim parça bazında, TEAM.md "UI kit envanteri"
+  "Motor" sütununa yazılır. Varsayılan Base UI (mevcut parçalar onda kalır); Radix'te daha iyi bir
+  primitif varsa o parça için Radix seçilebilir. İç içe açılan katmanlar mümkünse aynı motordan.
+- **Sonuç:** `no-radix.test.ts` kaldırıldı; yerine `headless-ui-boundary.test.ts` (U-12) iki kütüphanenin
+  de yalnız `src/core/ui` içinde import edildiğini kontrol ediyor (ESLint de zorluyor). Radix şu an kurulu
+  değil; ilk ihtiyaç duyan kendi PR'ında kurar ve SETUP_CHECK § 5'e ekler. Sahip: Mühendis 1.
+
+### ADR-035 — Hatırlatma takvimi üç katmanlı (günlük/haftalık/aylık), NASA/CSA pratiğine dayalı
+
+- **Bağlam:** Faz 0 takvimi (`CORE_ROUTINE`) örnek bir şablondu, kaynaksızdı; sıklıklar (ör. şeker
+  "haftalık", simülasyonda "3 günde bir") birbiriyle de tutarsızdı.
+- **Karar:** Takvim üç katman: **günlük** (uyku, sabah tansiyon/nabız/SpO₂/ısı, egzersiz haftada 6 gün,
+  dozimetre, akşam ruh hali), **haftalık** (açlık şekeri, haftalık sağlık özeti), **aylık** (tam muayene,
+  uyku/ekip anketi). `ReminderTemplate` geriye uyumlu genişledi: `repeat`'e `'monthly'`, opsiyonel
+  `restEveryNDays`, `anchorDay` (haftalık = 7, aylık = 30 görev günü) ve `sourceIds`. Gün kuralı saf
+  `isScheduledOn(template, missionDay)` (`@core/utils`). Dayanaklar `sources.config.ts`/`SOURCES.md`'ye
+  eklendi; tablo ve gerekçe `docs/ROUTINE_SCHEDULE.md`. Sahip: Mühendis 1.
+- **Sonuç:** Saatler (`timeOfDayMET`), ortama göre farklar ve görevin zaman penceresi ayrı kararlar.
+  Simülasyon takvimle hizalandı (aynı `isScheduledOn`): 30 gün × 4 kişi 1.484 → 1.452 ölçüm. ADR-016'nın
+  şeker sıklığı ve egzersiz kısmının yerine geçer. Bayatlık için `REPEAT_INTERVAL_MS.monthly` = 30 gün.
