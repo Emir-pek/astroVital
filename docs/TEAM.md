@@ -26,6 +26,27 @@
 | `.claude/**`, `.mcp.json`          | Yalnız araç sahibi değiştirir (ADR-027)                                                                                                                        |
 | `package.json`                     | Yeni bağımlılık eklemeden önce kanalda sor (bundle boyutu, offline); aynı commit'te `docs/SETUP_CHECK.md` § 5'i güncelle                                       |
 
+## UI kit envanteri (`src/core/ui` — açık model, ADR-029)
+
+- **Tasarım sahibi:** _TBD_ (görünüm onayı)
+- **Mimari onay:** Mühendis 1
+
+| Parça           | Kim yazıyor | Motor | Durum |
+| --------------- | ----------- | ----- | ----- |
+| Button          | Faz 0       | kendi | hazır |
+| Card            | Faz 0       | kendi | hazır |
+| Modal           | Faz 0       | kendi | hazır |
+| StatusBadge     | Faz 0       | kendi | hazır |
+| Toast           | Faz 0       | kendi | hazır |
+| EmptyState      | Faz 0       | kendi | hazır |
+| Select          |             | —     | boşta |
+| Tabs            |             | —     | boşta |
+| Slider          |             | —     | boşta |
+| ProgressBar     |             | —     | boşta |
+| Tooltip/Popover |             | —     | boşta |
+
+Başlamadan önce adını ve motorunu (kendi / Base UI / Radix) yaz ve push et; aynı parçayı iki kişi yazmasın. İç içe açılan katmanlar (modal/popover/tooltip/menü) mümkünse aynı motordan (ADR-029).
+
 ## Git akışı (GitHub: `https://github.com/Emir-pek/astroVital`)
 
 - Branch'ler `main`'den: `feat/core-routine`, `feat/intake`, `feat/assessment`, `feat/visualization`.

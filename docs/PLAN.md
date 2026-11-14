@@ -77,7 +77,7 @@ değişmez** (değişecekse CONTRACTS.md protokolü).
 
 ## Faz 4 (44–48 sa) — Teslim
 
-- Demo videosu (≤3 dk) ve slaytlar, proje açıklaması (Space Apps sayfası).
+- Resmî demo: ≤30 sn video (İngilizce altyazılı) veya ≤7 slayt; bkz. DEMO_SCRIPT.md. Proje açıklaması (Space Apps sayfası).
 - `npm run verify` → `npm run build` → `dist/` son kontrol (offline, farklı klasörden açma).
 - DEMO_SCRIPT.md provası #2 (zamanlı).
 
