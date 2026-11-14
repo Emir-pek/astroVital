@@ -46,7 +46,8 @@ bash scripts/setup.sh
 npm run dev
 ```
 
-Open http://localhost:5173 — demo data loads automatically on first start. No local install at all?
+Open http://localhost:5173 — demo data loads automatically on first start. **New to the team?** Follow
+[Team onboarding](#team-onboarding-step-by-step) — every step has a check. No local install at all?
 Open the repo in **GitHub Codespaces**; the dev container runs the same setup.
 
 Manual alternative: `npm ci && npm run dev`. Something missing or out of date? `npm run doctor`, then
@@ -67,6 +68,127 @@ checks + the dependency registry that must be updated whenever a package is adde
 | `npm run doctor`                                            | Check tools, dependencies, git hooks and Claude plugins                |
 | `npm run docs:check`                                        | Check that your changes have a `CHANGELOG.md` entry                    |
 | `npm run claude:setup`                                      | (Re)install the team's Claude Code plugins                             |
+
+## Team onboarding (step by step)
+
+Every team member does this **once**. Each step ends with a **Verify** line — don't move on until it
+matches. Commands run in the repo folder (Windows: PowerShell or Command Prompt; macOS/Linux:
+terminal). Stuck? Run `npm run doctor` and paste the output in the team channel.
+
+### 1. Install the tools
+
+| Tool                        | Version                    | Windows                                  | macOS / Linux                          |
+| --------------------------- | -------------------------- | ---------------------------------------- | -------------------------------------- |
+| Git                         | ≥ 2.40                     | `winget install Git.Git`                 | `xcode-select --install` / apt         |
+| Node.js                     | ≥ 22 (Node 24 LTS tested)  | `winget install OpenJS.NodeJS.LTS`       | https://nodejs.org or `nvm install 24` |
+| Claude Code                 | latest, own Claude account | https://code.claude.com/docs/en/overview | same                                   |
+| GitHub Desktop _(optional)_ | latest                     | https://desktop.github.com               | same                                   |
+
+**Verify:** open a **new** terminal and run `git --version`, `node -v`, `npm -v`, `claude --version` —
+each prints a version (node `v22` or higher).
+
+### 2. Get access and clone
+
+1. Accept the GitHub collaborator invitation for `Emir-pek/astroVital` (check your e-mail).
+2. Clone the repo:
+   - **GitHub Desktop:** File → Clone repository → GitHub.com → `astroVital` → Clone.
+   - **Terminal:** `git clone https://github.com/Emir-pek/astroVital.git && cd astroVital`
+3. Switch to **your** branch (see [Team & workflow](#team--workflow)): GitHub Desktop → Current branch →
+   `feat/<your-area>`, or `git switch feat/<your-area>`.
+
+**Verify:** `git branch --show-current` prints your branch, and `CHANGELOG.md`, `.mcp.json` and
+`scripts/setup.ps1` exist in the folder (`dir /a` on Windows, `ls -a` elsewhere).
+
+### 3. Run the setup script
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\setup.ps1   # Windows
+```
+
+```bash
+bash scripts/setup.sh                                         # macOS / Linux / Git Bash
+```
+
+GitHub Desktop users: Repository → **Open in Command Prompt** opens a terminal in the right folder.
+
+**Verify:** the script ends with `Setup finished.` and the check block shows ✔ for Node.js, npm,
+git, `node_modules`, `npm ls`, `Git hook'ları (.githooks)` and all five `plugin …` lines. A `•` line
+for `typescript-language-server` is optional (install with
+`npm i -g typescript-language-server typescript`). A `DeprecationWarning` line is harmless.
+
+### 4. Check the project builds
+
+```bash
+npm run verify
+```
+
+**Verify:** `Tests  87 passed` (or more), then `✓ built`. The yellow "chunks are larger than 500 kB"
+message is a known, accepted warning (ADR-021).
+
+### 5. Run the app
+
+```bash
+npm run dev
+```
+
+**Verify:** http://localhost:5173 shows four crew cards, the MET clock at the top and the yellow
+"Prototype — not a medical device" banner. Stop with `Ctrl+C`.
+
+### 6. Open Claude Code in the repo and trust it
+
+In the repo folder run `claude` (or open the folder in the Claude desktop app's **Code** tab or the
+VS Code extension — **not** the regular chat). When asked _"Do you trust the files in this folder?"_
+answer **Yes**. Project plugins, MCP servers and hooks only load in trusted folders.
+
+**Verify — MCP servers:** exit Claude (`/exit`) and run `claude mcp list`:
+
+```text
+playwright: npx @playwright/mcp@latest - ✔ Connected
+context7: https://mcp.context7.com/mcp (HTTP) - ✔ Connected
+github: https://api.githubcopilot.com/mcp/ (HTTP) - ✗ Failed to connect   ← expected without a token
+```
+
+`github` is optional: create a fine-grained token (see `.env.example`), then
+`setx GITHUB_PERSONAL_ACCESS_TOKEN "<token>"` (Windows) or `export …` in your shell profile, open a
+new terminal and run `claude mcp list` again.
+
+**Verify — plugins:** in Claude run `/plugin` → **Installed**. Under **Project** you see
+`claude-md-management`, `commit-commands`, `frontend-design`, `pr-review-toolkit`, `typescript-lsp`
+(✔) plus `context7` and `playwright`.
+
+**Verify — skills:** type `/` — `/document-change`, `/space-apps-submission` and
+`/commit-commands:commit` are listed.
+
+**Verify — hooks:** ask Claude _"What did the team change recently?"_ — it answers from the latest
+`CHANGELOG.md` entries (loaded by the SessionStart hook).
+
+### 7. Try the documentation guard once
+
+Make any small change under `src/`, then `git add -A && git commit -m "test"`.
+
+**Verify:** the commit is **rejected** with `✖ docs-check: kod/config değişti ama CHANGELOG.md
+güncellenmedi`. Undo the test change (GitHub Desktop: Discard changes, or `git restore --staged . &&
+git restore .`).
+
+### 8. Daily workflow
+
+1. Start: `git pull` on your branch — new teammates' `CHANGELOG.md` entries are printed; if it says
+   "re-run setup", run step 3 again.
+2. Bring in `main`: `git fetch origin && git merge origin/main`.
+3. Work (with Claude Code or by hand).
+4. Document: add a `CHANGELOG.md` entry, or ask Claude _"bu değişikliği dokümante et"_.
+5. `npm run verify` → commit (Conventional Commits) → `git push origin feat/<your-area>`.
+6. Open a **pull request** to `main`. It merges when CI (`verify` + `docs`) is green and one teammate
+   approves. Direct pushes to `main` are blocked.
+
+### Onboarding checklist
+
+```text
+[ ] 1 tools installed (git, node ≥22, claude)      [ ] 5 app runs on :5173
+[ ] 2 cloned, on my feat/* branch                   [ ] 6 trusted; playwright + context7 connected;
+[ ] 3 setup.ps1 / setup.sh → all ✔                        5 plugins + skills visible
+[ ] 4 npm run verify → tests pass, ✓ built          [ ] 7 docs guard rejected an undocumented commit
+```
 
 ## Architecture at a glance
 

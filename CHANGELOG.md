@@ -20,16 +20,14 @@ Yalnız `docs/` değişiklikleri kayıt gerektirmez.
 
 <!-- NEW ENTRIES BELOW -->
 
-### 2026-11-14 14:22 — Muhammed Bektaş (feat/core-routine) — UI kit için Base UI (headless) eklendi
+### 2026-11-14 15:00 — Emir (docs/team-onboarding) — README'ye adım adım ekip kurulumu
 
-- **Ne:** UI kit'in davranış katmanı (konumlandırma, klavye, odak, erişilebilirlik) için `@base-ui/react@^1.9.0`
-  kuruldu; görünüm tamamen bizim (Tailwind + `tokens.css`). Henüz yeni bileşen yok. ESLint artık
-  `@base-ui/react` (alt yolları dahil) importunu `src/core/ui/**` dışında hata olarak işaretliyor.
-- **Neden:** Kendi tasarımımızda modern arayüz; native `<select>` açılınca stillenemiyor, popover/tooltip
-  davranışını elle yazmak 48 saatte riskli (ADR-029).
-- **Dosyalar:** `package.json`, `package-lock.json`, `eslint.config.js`, `docs/DECISIONS.md`,
-  `docs/ARCHITECTURE.md`, `docs/SETUP_CHECK.md`, `src/core/CLAUDE.md`, `CLAUDE.md`, `CHANGELOG.md`
-- **Ekip ne yapmalı:** Kendi branch'inde `git merge origin/main` sonrası `npm ci`. Genel bir arayüz parçası gerekiyorsa src/core/ui'a kendin ekle; önce docs/TEAM.md 'UI kit envanteri'ne adını yaz. @base-ui/react'i yalnız src/core/ui içinde kullan (lint zorlar).
+- **Ne:** README'ye "Team onboarding (step by step)" bölümü: araç kurulumu → klonlama → setup → verify →
+  uygulamayı çalıştırma → Claude Code trust + MCP/plugin/skill/hook doğrulama → dokümantasyon
+  kontrolü denemesi → günlük akış; her adımda beklenen çıktı ve sonda kontrol listesi.
+- **Neden:** Her ekip üyesinin kurulumunu kendi başına yapıp doğru çalıştığından emin olabilmesi.
+- **Dosyalar:** `README.md`, `docs/TEAM.md`
+- **Ekip ne yapmalı:** README › Team onboarding'i baştan sona uygula ve kontrol listesini tamamla.
 
 ### 2026-11-14 13:30 — Emir (main) — Ekip altyapısı: tek komut kurulum, dokümantasyon zorunluluğu, ortak Claude araçları
 
