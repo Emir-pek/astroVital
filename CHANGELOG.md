@@ -20,6 +20,16 @@ Yalnız `docs/` değişiklikleri kayıt gerektirmez.
 
 <!-- NEW ENTRIES BELOW -->
 
+### 2026-11-14 15:25 — Emir (chore/changelog-union) — CHANGELOG çakışmaları yerel merge'te otomatik çözülür
+
+- **Ne:** `.gitattributes`'a `CHANGELOG.md merge=union` eklendi: kendi branch'inde `git merge origin/main`
+  yaptığında iki taraftaki CHANGELOG kayıtları otomatik birleşir, çakışma çıkmaz.
+- **Neden:** Paralel PR'lar kaydı hep aynı yere (en üst) eklediği için her seferinde çakışıyordu (PR #2).
+- **Dosyalar:** `.gitattributes`, `docs/TEAM.md`, `CHANGELOG.md`
+- **Ekip ne yapmalı:** Hiçbir şey. Bu kuralı içeren main'i branch'ine aldığın **ilk** merge'te bir kez daha
+  çakışma çıkabilir (iki kaydı da tut); sonrakiler otomatik. GitHub web arayüzündeki "Resolve conflicts" bu
+  kuralı kullanmaz — merge'ü yerelde yap.
+
 ### 2026-11-14 15:00 — Emir (docs/team-onboarding) — README'ye adım adım ekip kurulumu
 
 - **Ne:** README'ye "Team onboarding (step by step)" bölümü: araç kurulumu → klonlama → setup → verify →
