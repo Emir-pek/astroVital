@@ -11,6 +11,8 @@
 
 \* `src/core` altındadır → içerik sahibi o mühendis, ama merge'ü Mühendis 1 onaylar.
 
+**Yeni katılan:** önce README › _Team onboarding (step by step)_ bölümünü uygula (her adımda doğrulama var).
+
 **Araç sahibi (Claude skill/plugin/MCP/hook, kurulum script'leri):** Emir — `docs/CLAUDE_SETUP.md`.
 
 ## Ortak dosyalar (çatışma noktaları)
