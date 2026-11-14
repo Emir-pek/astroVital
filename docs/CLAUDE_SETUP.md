@@ -7,13 +7,13 @@
 Claude Code ekip ayarlarını **bu repodan** okur. Klonla + kurulumu çalıştır = dört kişide aynı skill,
 plugin, MCP sunucusu, hook ve kurallar.
 
-| Katman            | Repodaki dosya                             | Yerel Claude Code (terminal, masaüstü Code sekmesi, VS Code) | Bulut oturumları (claude.ai/code, Projects thread'leri) |
-| ----------------- | ------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------- |
-| Kurallar          | `CLAUDE.md` + modül `CLAUDE.md`'leri       | ✔                                                            | ✔ (yalnız kök `CLAUDE.md`)                              |
-| Skill'ler         | `.claude/skills/*/SKILL.md`                | ✔ canlı, yeniden başlatma yok                                | ✖ → skill'i claude.ai hesabında aç                      |
-| Plugin'ler        | `.claude/settings.json` → `enabledPlugins` | ✔ `npm run claude:setup` sonrası                             | ✖ → Project settings → Plugins                          |
-| MCP sunucuları    | `.mcp.json`                                | ✔ ilk açılışta onay sonrası                                  | ✖ → claude.ai connector'ları                            |
-| Hook'lar, izinler | `.claude/settings.json`                    | ✔                                                            | ✖                                                       |
+| Katman            | Repodaki dosya                                                                      | Yerel Claude Code (terminal, masaüstü Code sekmesi, VS Code) | Bulut oturumları (claude.ai/code, Projects thread'leri) |
+| ----------------- | ----------------------------------------------------------------------------------- | ------------------------------------------------------------ | ------------------------------------------------------- |
+| Kurallar          | `CLAUDE.md` + modül `CLAUDE.md`'leri + `.claude/rules/` (ör. `ai-collaboration.md`) | ✔                                                            | ✔ (kök `CLAUDE.md` + `.claude/rules/`)                  |
+| Skill'ler         | `.claude/skills/*/SKILL.md`                                                         | ✔ canlı, yeniden başlatma yok                                | ✖ → skill'i claude.ai hesabında aç                      |
+| Plugin'ler        | `.claude/settings.json` → `enabledPlugins`                                          | ✔ `npm run claude:setup` sonrası                             | ✖ → Project settings → Plugins                          |
+| MCP sunucuları    | `.mcp.json`                                                                         | ✔ ilk açılışta onay sonrası                                  | ✖ → claude.ai connector'ları                            |
+| Hook'lar, izinler | `.claude/settings.json`                                                             | ✔                                                            | ✖                                                       |
 
 **Bu repo üzerinde yerel Claude Code kullan.** Kişisel ayarlar `.claude/settings.local.json`'a (git'e girmez).
 

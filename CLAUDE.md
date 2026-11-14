@@ -47,6 +47,16 @@ Kurulum tek komut: `powershell -ExecutionPolicy Bypass -File scripts\setup.ps1` 
 - Paylaşılan veri dosyaları: tek modülün kullandığı veri (ör. gömülü uzay ajansı verisi) o modülün klasöründe durur; birden fazla modül veya `core/simulation` kullanacaksa `src/core/config/`'a konur (içerik sahibi veriyi getiren mühendis, merge onayı Mühendis 1). Neden: modüller core'dan okuyabilir, core hiçbir modülden okuyamaz (ESLint).
 - Arayüz parçası gerekiyorsa önce @core/ui'a bak. Yoksa ve genel bir parçaysa veya 2+ modülde kullanılacaksa kendin src/core/ui'a ekle: önce docs/TEAM.md 'UI kit envanteri'ne adını ve motorunu (kendi/Base UI/Radix) yaz; kurallara uy (Base UI/Radix yalnız kitte, t() yok, renkler token'dan, test zorunlu). Tek modüle özgü parça (ör. BodyMap) o modülde kalır. Kit PR'larında mimari onay Mühendis 1, görünüm onayı tasarım sahibi.
 
+## İletişim ve yapay zekâ
+
+- Ekiple nasıl konuşacağın: `.claude/rules/ai-collaboration.md` (otomatik yüklenir) — önce anla, gerekirse
+  soru sor, övme, Ne → Neden → Nasıl, önemli kararlarda trade-off.
+- Challenge özeti, çalışma ilkeleri, ek kaynaklar: `docs/PROJECT_BRIEF.md`. Uyarı metinleri
+  _Ne oldu → Neden önemli → Şimdi ne yap → Ne zaman haber ver_ sırasıyla.
+- **Yapay zekâ kullanımı beyanı:** `AI.md` (jüri için, İngilizce). AI yeni bir şekilde kullanıldığında
+  (yeni araç, AI üretimi görsel/video/ses, uygulamaya AI eklenmesi) aynı PR'da güncelle. AI üretimi görsel
+  ve videoya görünür "AI-generated" filigranı; NASA logosu/tasarım öğesi kullanma.
+
 ## Kod stili
 
 - Fonksiyonel React bileşenleri + hook'lar; sınıf yok.
@@ -111,5 +121,6 @@ Kurulum tek komut: `powershell -ExecutionPolicy Bypass -File scripts\setup.ps1` 
 - Tehlikeler: `docs/HAZARDS.md` · Kaynaklar: `docs/SOURCES.md` ↔ `src/core/config/sources.config.ts`
 - Plan: `docs/PLAN.md` · Ekip: `docs/TEAM.md` · Demo: `docs/DEMO_SCRIPT.md`
 - Kurulum kontrolü + bağımlılık kaydı: `docs/SETUP_CHECK.md`
-- Değişiklik günlüğü: `CHANGELOG.md` · Ortak Claude kurulumu: `docs/CLAUDE_SETUP.md`
+- Değişiklik günlüğü (YAPILANLAR): `CHANGELOG.md` · Ortak Claude kurulumu: `docs/CLAUDE_SETUP.md`
+- Projeyi gündelik dille anlatan rehber: `docs/ADIMLAR.md` · Challenge özeti: `docs/PROJECT_BRIEF.md` · AI beyanı: `AI.md`
 - Her modülün kendi `CLAUDE.md`'si modüle özel kuralları içerir.
