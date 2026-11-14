@@ -123,7 +123,7 @@ Merge into `main` at least twice a day after `npm run verify`. Commits follow
 [Conventional Commits](https://www.conventionalcommits.org/) (`feat(intake): …`, `fix(assessment): …`).
 Changes under `src/core` need Engineer 1's approval. Push your own `feat/*` branch freely; push to
 `main` only with a green `npm run verify`; never force-push. Repository:
-`https://github.com/Emir-pek/NasaHackatonAstroVital` (details: [docs/TEAM.md](docs/TEAM.md)).
+`https://github.com/Emir-pek/astroVital` (details: [docs/TEAM.md](docs/TEAM.md)).
 
 ## Science
 

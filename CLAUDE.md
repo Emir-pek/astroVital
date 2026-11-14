@@ -79,7 +79,7 @@ npm run docs:contracts  # src/core/types → docs/CONTRACTS.md senkronu
 - Conventional Commits: `feat(intake): ...`, `fix(assessment): ...`, `docs(thresholds): ...`.
 - Günde en az 2 kez `main`'e merge; `src/core` değişiklikleri yalnız Mühendis 1 onayıyla.
 - Aynı makinede paralel çalışma: `git worktree` (README + `docs/TEAM.md`).
-- Repo: `https://github.com/Emir-pek/NasaHackatonAstroVital` (`origin`). Kullanıcı isterse kendi
+- Repo: `https://github.com/Emir-pek/astroVital` (`origin`). Kullanıcı isterse kendi
   `feat/*` branch'ini push et; `main`'e push yalnız `npm run verify` yeşilken. ⛔ **Force push yok**,
   başkasının branch'ine push yok, remote ekleme/değiştirme yok (ADR-026).
 

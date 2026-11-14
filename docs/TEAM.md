@@ -20,7 +20,7 @@
 | `src/core/config/*.config.ts`      | İçerik sahibi yukarıdaki tabloya göre; yapısal değişiklik = sözleşme değişikliği                                          |
 | `package.json`                     | Yeni bağımlılık eklemeden önce kanalda sor (bundle boyutu, offline); aynı commit'te `docs/SETUP_CHECK.md` § 5'i güncelle  |
 
-## Git akışı (GitHub: `https://github.com/Emir-pek/NasaHackatonAstroVital`)
+## Git akışı (GitHub: `https://github.com/Emir-pek/astroVital`)
 
 - Branch'ler `main`'den: `feat/core-routine`, `feat/intake`, `feat/assessment`, `feat/visualization`.
 - **Conventional Commits:** `feat(intake): add BP pair entry`, `fix(assessment): widen formula sign`,
@@ -56,8 +56,8 @@ git worktree remove ../astrovital-intake   # iş bitince
 ## Farklı bilgisayarlar (GitHub üzerinden — ADR-026)
 
 ```bash
-git clone https://github.com/Emir-pek/NasaHackatonAstroVital.git
-cd NasaHackatonAstroVital
+git clone https://github.com/Emir-pek/astroVital.git
+cd astroVital
 git switch feat/intake          # kendi branch'in (uzak branch'ten otomatik takip eder)
 npm ci                          # sonra docs/SETUP_CHECK.md kontrol listesi
 npm run dev

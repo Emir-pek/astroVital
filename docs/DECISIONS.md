@@ -170,9 +170,9 @@ Node 24 LTS, npm.
 ### ADR-026 — GitHub'a push serbest; repo yeni adreste
 
 - **Bağlam:** Proje sahibi push'u onayladı (Faz 0 scaffold + 4 branch push edildi). GitHub, repo
-  adının `NasaHackatonTask3` → `NasaHackatonAstroVital` olarak değiştiğini bildirdi (eski adres
+  adının `NasaHackatonTask3` → `astroVital` olarak değiştiğini bildirdi (eski adresler
   yönlendiriyor).
-- **Karar:** `origin` = `https://github.com/Emir-pek/NasaHackatonAstroVital.git`. Herkes kendi
+- **Karar:** `origin` = `https://github.com/Emir-pek/astroVital.git`. Herkes kendi
   `feat/*` branch'ine serbestçe push eder; `main`'e push yalnız `npm run verify` yeşilken; force push
   yasak. Farklı bilgisayarlar arası senkronizasyon GitHub üzerinden (TEAM.md).
 - **Sonuç:** ADR-001'deki "push yok" ve ADR-025'teki `git bundle` önerisi geçersiz.
