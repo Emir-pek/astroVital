@@ -436,19 +436,18 @@ Node 24 LTS, npm.
   `workflow_dispatch`) `npm ci && npm run build` → `dist/` Pages artifact'ı olarak yüklenir → yayınlanır.
   Mevcut `ci.yml`'e (lint/typecheck/test/build + CHANGELOG kontrolü) dokunulmadı; iki iş akışı bağımsız
   çalışır. Site: `https://emir-pek.github.io/astroVital/`.
-  **Güncelleme (15 Kasım, teslim günü):** hesap genelinde faturalama kilidi (Actions/Codespaces/
-  Packages için `$0.00/$0.00 — Usage blocked`) yüzünden `deploy-pages.yml` hiç tetiklenmedi (ne push'ta
-  ne elle). Kilit açılana kadar geçici olarak klasik "Deploy from a branch" kullanıldı: derlenmiş
-  `dist/` çıktısı `gh-pages` branch'ine commit'lendi (+ `.nojekyll`), Pages ayarı `build_type: legacy`,
-  `source: gh-pages`'e çevrildi (`gh api PUT .../pages`). Site doğrulandı: ana sayfa ve her asset
-  (JS/CSS/font) 200 dönüyor. **Kilit açılınca yapılacak:** `gh api PUT repos/Emir-pek/astroVital/pages
-  -f build_type=workflow` ile Pages'i tekrar "GitHub Actions" kaynağına çevir; o andan sonra `main`'e
-  her push otomatik yayınlar ve `gh-pages` branch'i elle güncellenmeyi bırakır (silinebilir).
-- **Sonuç:** Faturalama düzelene kadar site elle (bu PR'daki gibi bir sonraki `npm run build` + commit
-  ile) güncellenmeli; düzelince `main`'e her merge siteyi otomatik günceller. Ziyaretçinin girdiği
-  ölçüm verisi yalnız kendi tarayıcısında kalır (localStorage); GitHub, Pages'i servis ederken ziyaretçi
-  IP'sini kendi güvenlik/analiz amaçlarıyla loglar (GitHub'ın kendi gizlilik politikası, bizim
-  uygulamamızın değil). README'ye canlı link eklendi.
+  **Not (15 Kasım):** 13:38–13:51 UTC arasında GitHub Actions hiç run başlatmadı; faturalama kilidi
+  sanılıp birkaç dakika klasik "Deploy from a branch" (`gh-pages` branch'i) ile yayınlandı. Teşhis
+  yanlıştı: Actions kendiliğinden düzeldi, billing sayfasındaki "Usage blocked / $0" yalnız harcama
+  limitinin $0 olduğunu gösteriyor ve public repoda Actions ücretsiz olduğu için etkisiz. Aynı gün
+  Pages kaynağı tekrar "GitHub Actions"a alındı (`build_type: workflow`), elle tetiklenen yayın
+  başarılı oldu ve site doğrulandı; `gh-pages` branch'i kaldırıldı.
+- **Sonuç:** `main`'e her merge siteyi birkaç dakika içinde otomatik günceller (Actions sekmesinde
+  "Deploy to GitHub Pages", repo sayfasında her merge için bir `github-pages` deployment satırı);
+  ekip ayrıca bir şey yapmaz. Ziyaretçinin girdiği ölçüm verisi yalnız kendi tarayıcısında kalır
+  (localStorage); GitHub, Pages'i servis ederken ziyaretçi IP'sini kendi güvenlik amaçlarıyla loglar
+  (GitHub'ın politikası, bizim uygulamamızın değil). README'ye canlı link eklendi.
+
 ### ADR-039 — Anomali tespiti çevrimdışı bir Python aracı olarak `tools/anomaly-detection/` altında
 
 - **Bağlam:** Veri seti + anomali tespiti işi (Emre) Python'da yazıldı: gerçek bir açık giyilebilir veri
