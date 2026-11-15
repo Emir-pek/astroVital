@@ -190,7 +190,7 @@ interface SlotInput {
  * PURE: identical options ⇒ identical output (no Date.now, no Math.random).
  * Measurements later than `end` are not produced.
  *
- * Data = schedule (ADR-035 frequency, ADR-039 times, ADR-040 content): a metric is produced on a
+ * Data = schedule (ADR-035 frequency, ADR-045 times, ADR-040 content): a metric is produced on a
  * mission day only if the active environment's schedule has a reminder for it that falls on that day,
  * at that reminder's time (± a few minutes of entry noise).
  */

@@ -1,11 +1,11 @@
 # ROUTINE_SCHEDULE — Hatırlatma takvimi (günlük / haftalık / aylık)
 
-**Sahip:** Mühendis 1 · **Kararlar:** ADR-035 (yapı), ADR-039 (saatler), ADR-040 (veri = takvim) · **Kod:** `CORE_ROUTINE` in
+**Sahip:** Mühendis 1 · **Kararlar:** ADR-035 (yapı), ADR-045 (saatler), ADR-040 (veri = takvim) · **Kod:** `CORE_ROUTINE` in
 `src/core/config/environments.config.ts`, gün kuralı `isScheduledOn()` in `src/core/utils/routineSchedule.ts`
 · **Kaynaklar:** `docs/SOURCES.md` § Hatırlatma takvimi kaynakları.
 
 Faz 0 takvimi örnek bir şablondu ve kaynağı yoktu. Bu takvim NASA/CSA'nın ISS'teki pratiğine dayanır ve
-üç katmandan oluşur; saatler ISS gün iskeletine göre (ADR-039). Gün sayımı görev gününe göredir: görev
+üç katmandan oluşur; saatler ISS gün iskeletine göre (ADR-045). Gün sayımı görev gününe göredir: görev
 başlangıcı = 1. gün (Mars'ta gösterim "Sol", hesap UTC — ADR-030). Saatler UTC (ISS'in resmî saati GMT/UTC).
 
 ## Gün iskeleti
@@ -83,7 +83,7 @@ değişmedi (ortam farkları ayrı karar).
 - **Açlık şekeri haftalık:** ISS'in rutin listesinde yok. Challenge kan şekerini açıkça gösterge olarak
   saydığı için takip ediyoruz; günlük parmak ucu ölçümü yerine (sarf malzemesi ve yük) haftalık.
 
-## Simülasyon uyumu: veri = takvim (ADR-016 → ADR-035, ADR-039, ADR-040)
+## Simülasyon uyumu: veri = takvim (ADR-016 → ADR-035, ADR-045, ADR-040)
 
 Demo verisi takvimin kendisinden üretilir (`generator.ts`): bir metrik, aktif ortamın takviminde o gün
 düşen bir hatırlatması varsa ve o hatırlatmanın saatinde (± birkaç dakika giriş gürültüsü) üretilir.

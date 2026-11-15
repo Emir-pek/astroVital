@@ -108,7 +108,7 @@ describe('generateHistory', () => {
     }
   });
 
-  describe('slot times come from the environment schedule (ADR-039)', () => {
+  describe('slot times come from the environment schedule (ADR-045)', () => {
     const minuteOfDay = (iso: string) => {
       const d = new Date(iso);
       return d.getUTCHours() * 60 + d.getUTCMinutes();

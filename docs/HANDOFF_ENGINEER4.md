@@ -159,8 +159,8 @@ penceresine bir dinlenme günü ekle (ör. `restEveryNDays` varsa pencere + 24 s
 
 ## 7. ADR numaraları
 
-Çakışma düzeltmesi: Mühendis 1'in "Takvim saatleri ISS gün iskeletine göre" kararı **ADR-039**, "Demo verisi
-takvime birebir" kararı **ADR-040** oldu. Senin ADR-036 (Durum ekranı) ve ADR-037 (Kutu sistemi) değişmedi.
+Çakışma düzeltmesi: Mühendis 1'in "Takvim saatleri ISS gün iskeletine göre" kararı **ADR-045**, "Demo verisi
+takvime birebir" kararı **ADR-040** oldu (039 anomali tespitine verildi, PR #14). Senin ADR-036 (Durum ekranı) ve ADR-037 (Kutu sistemi) değişmedi.
 Bu görevin yeni ADR'leri: 041 (hatırlatma durumları), 042 (oyunlaştırma), 043 (pet), 044 (P2 işleri).
 
 ## 8. P2 (yapıldı, arayüz bekliyor)

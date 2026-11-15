@@ -20,6 +20,19 @@ Yalnız `docs/` değişiklikleri kayıt gerektirmez.
 
 <!-- NEW ENTRIES BELOW -->
 
+### 2026-11-15 16:52 — Muhammed Bektaş (feat/core-routine) — ADR-039 çakışması: takvim saatleri kararı ADR-045 oldu
+
+- **Ne:** main'den gelen anomali tespiti kararı (PR #14) ADR-039 numarasını aldı; Mühendis 1'in "Takvim
+  saatleri ISS gün iskeletine göre" kararı (önce ADR-036, sonra ADR-039) **ADR-045**'e taşındı. Anomali
+  ADR-039'u ve ona verilen referanslar (`CLAUDE.md`, ARCHITECTURE, SETUP_CHECK, `.gitignore`) değişmedi.
+  Takvim saatlerine verilen referanslar güncellendi. Ayrıca birleştirmede `boxSystem.test.ts` listesine geri
+  giren, zaten taşınmış üç assessment dosyası listeden çıkarıldı (ayrı commit).
+- **Neden:** Tekil ADR numarası; referanslar belirsiz kalmasın.
+- **Dosyalar:** `docs/DECISIONS.md`, `docs/ROUTINE_SCHEDULE.md`, `docs/HANDOFF_ENGINEER4.md`,
+  `docs/modules/core-routine.md`, `docs/SOURCES.md`, `src/core/config/sources.config.ts` (yorum),
+  `src/core/simulation/generator.ts` (yorum), `src/core/simulation/__tests__/generator.test.ts` (başlık), `CHANGELOG.md`
+- **Ekip ne yapmalı:** Takvim saatleri kararı için ADR-045 kullanın. ADR-039 = anomali tespiti. Sıradaki boş numara 046.
+
 ### 2026-11-15 16:30 — Muhammed Bektaş (feat/core-routine) — Mühendis 4'e devir notları (HANDOFF_ENGINEER4)
 
 - **Ne:** Yeni `docs/HANDOFF_ENGINEER4.md`: bugünkü mantık işlerinin (hatırlatmalar, bildirim, kaçırılan
@@ -328,7 +341,7 @@ text-muted` → `text-label text-text-2`. `LearnPanel.tsx` :29/:50/:65 `text-lg`
 - **Ne:** Hatırlatma saatleri ISS gününe göre güncellendi (UTC): uyku kaydı 06:15; sabah tansiyon/nabız/SpO₂/ısı ve
   açlık şekeri 06:30; egzersiz 17:30; dozimetre ve ISS akşam nabzı 19:30; ruh hali 21:00 (değişmedi). Demo verisi artık
   ölçüm saatlerini takvimden okuyor (tek kaynak); ölçüm sayısı değişmedi. 3 yeni kaynak (ESA x2, ikincil ClickOrlando).
-- **Neden:** Saatler Faz 0 örneğiydi ve demo verisiyle ayrışmıştı (egzersiz 15:00 vs 17:00) — ADR-039.
+- **Neden:** Saatler Faz 0 örneğiydi ve demo verisiyle ayrışmıştı (egzersiz 15:00 vs 17:00) — ADR-045.
 - **Dosyalar:** `src/core/config/environments.config.ts`, `src/core/simulation/generator.ts`,
   `src/core/config/sources.config.ts`, `src/core/simulation/__tests__/generator.test.ts`, `docs/ROUTINE_SCHEDULE.md`,
   `docs/SOURCES.md`, `docs/DECISIONS.md`, `docs/modules/core-routine.md`, `CHANGELOG.md`

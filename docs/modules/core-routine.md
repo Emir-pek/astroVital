@@ -56,7 +56,7 @@ app → hepsi.
 ### P1 (Faz 2)
 
 - [x] Takvim yapısı: günlük/haftalık/aylık, NASA/CSA kaynaklı (ADR-035, `docs/ROUTINE_SCHEDULE.md`)
-- [x] Takvim saatleri: ISS gün iskeleti, simülasyon saatleri takvimden (ADR-039)
+- [x] Takvim saatleri: ISS gün iskeleti, simülasyon saatleri takvimden (ADR-045)
 - [ ] Ortama göre takvim farkları (ayrı karar; rover'ın veri = takvim uyumu ve `twice_daily` ikinci saati dahil — ADR-041 geçici +12 sa)
 - [ ] Mürettebat ekleme/çıkarma (sonra kapsamı, ADR-038)
 - [x] `useReminders`: aktif ortamın `reminderSchedule`'ını bugünün UTC görev gününe açar; 5 durum
