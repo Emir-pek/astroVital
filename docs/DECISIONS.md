@@ -431,7 +431,6 @@ Node 24 LTS, npm.
 - **Sonuç:** "Python/venv kullanılmaz" kuralı uygulama için geçerli kalır; tek istisna bu klasördür.
   Uyarı seviyelerinin (`BİLGİ/DİKKAT/UYARI`) uygulamanın `Status`'üne (ADR-031) eşlenmesi ve ekranlara
   bağlanması ayrı iş (assessment/visualization ile). Port (a) daha sonra ayrı bir kararla yapılabilir.
-
 ### ADR-040 — Yayın: GitHub Pages
 
 - **Bağlam:** Teslim için projenin herkese açık, hesap/şifre istemeyen bir linkle erişilebilir olması
