@@ -20,6 +20,19 @@ Yalnız `docs/` değişiklikleri kayıt gerektirmez.
 
 <!-- NEW ENTRIES BELOW -->
 
+### 2026-11-15 16:37 — Emir Efe Pekcan (chore/github-pages) — Proje GitHub Pages'te herkese açık yayında
+
+- **Ne:** Yeni iş akışı `.github/workflows/deploy-pages.yml`: `main`'e her push'ta (ve elle
+  `workflow_dispatch` ile) uygulamayı derler ve GitHub Pages'e yayınlar. Pages ayarı "Source: GitHub
+  Actions" olarak açıldı (`gh api POST .../pages -f build_type=workflow`). Canlı link README'nin en
+  üstüne eklendi: **https://emir-pek.github.io/astroVital/**. `base: './'` ve hash router (ADR-007)
+  zaten uygundu, değiştirilmedi. ADR-039 (`docs/DECISIONS.md`) kararı kayda geçirdi.
+- **Neden:** Teslim için jürinin hesap/şifre olmadan tıklayıp açabileceği herkese açık bir link
+  şartı vardı (`docs/PROJECT_BRIEF.md`).
+- **Dosyalar:** `.github/workflows/deploy-pages.yml` (yeni), `README.md`, `docs/DECISIONS.md` (ADR-039).
+- **Ekip ne yapmalı:** Hiçbir şey. `main`'e her merge siteyi birkaç dakika içinde otomatik günceller;
+  canlı link README'de. Mevcut `ci.yml`'e dokunulmadı, ayrı ve bağımsız çalışıyor.
+
 ### 2026-11-15 16:25 — Emir Efe Pekcan (feat/assessment) — Değerlendirme motoru gerçek kurallarla çalışıyor (Faz 0 stub kaldırıldı)
 
 - **Ne:** `assessMeasurement`/`assessCrew` artık her zaman "normal" dönen Faz 0 stub'ı değil, gerçek

@@ -412,3 +412,19 @@ Node 24 LTS, npm.
 - **Sonuç:** `ScenarioId`'ye `'mixed_mission'` eklendi (eklemeli). Durumlar varsayılan seed'de (2026)
   testle kilitli; başka seed'lerde gürültü nedeniyle tek bir değer bant kenarını aşabilir. Motor bugün stub;
   `advisory` üretimi Mühendis 3'te (ADR-031). Eski tarayıcı verisi: Ayarlar → Sıfırla → Demo verisini yükle.
+
+### ADR-039 — Yayın: GitHub Pages
+
+- **Bağlam:** Teslim için projenin herkese açık, hesap/şifre istemeyen bir linkle erişilebilir olması
+  gerekiyor (NASA Space Apps 2026 teslim kuralları). Uygulama tamamen statik ve sunucusuz: backend yok,
+  offline-first, tüm veri tarayıcıda simüle (`docs/PROJECT_BRIEF.md`). `base: './'` ve hash router
+  (ADR-007) zaten göreli/sunucu-rewrite'ı olmayan bir barındırma için hazır.
+- **Karar:** GitHub Pages, "Source: GitHub Actions" (ücretsiz plan yalnız public repoda çalışır; repo
+  zaten public). Yeni iş akışı `.github/workflows/deploy-pages.yml`: `main`'e her push'ta (ve elle
+  `workflow_dispatch`) `npm ci && npm run build` → `dist/` Pages artifact'ı olarak yüklenir → yayınlanır.
+  Mevcut `ci.yml`'e (lint/typecheck/test/build + CHANGELOG kontrolü) dokunulmadı; iki iş akışı bağımsız
+  çalışır. Site: `https://emir-pek.github.io/astroVital/`.
+- **Sonuç:** Her PR main'e alındığında site birkaç dakika içinde otomatik güncellenir — ekip ayrıca bir
+  şey yapmaz. Ziyaretçinin girdiği ölçüm verisi yalnız kendi tarayıcısında kalır (localStorage); GitHub,
+  Pages'i servis ederken ziyaretçi IP'sini kendi güvenlik/analiz amaçlarıyla loglar (GitHub'ın kendi
+  gizlilik politikası, bizim uygulamamızın değil). README'ye canlı link eklendi.
