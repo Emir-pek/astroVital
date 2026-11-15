@@ -79,7 +79,7 @@ const templateFor = (
 };
 
 /**
- * "Data = schedule" (ADR-037) applies to environments whose schedule contains the whole shared
+ * "Data = schedule" (ADR-048) applies to environments whose schedule contains the whole shared
  * CORE_ROUTINE. Others (today: rover, own schedule — environment differences are a separate decision)
  * keep the legacy ADR-016 behaviour for slots their schedule does not cover.
  */
@@ -190,7 +190,7 @@ interface SlotInput {
  * PURE: identical options ⇒ identical output (no Date.now, no Math.random).
  * Measurements later than `end` are not produced.
  *
- * Data = schedule (ADR-035 frequency, ADR-036 times, ADR-037 content): a metric is produced on a
+ * Data = schedule (ADR-035 frequency, ADR-047 times, ADR-048 content): a metric is produced on a
  * mission day only if the active environment's schedule has a reminder for it that falls on that day,
  * at that reminder's time (± a few minutes of entry noise).
  */
@@ -217,14 +217,20 @@ export const generateHistory = ({
       crewIndex: input.crewIndex,
       environment,
     };
+    // Story-driven adherence (ADR-048): a scenario may skip or delay a slot on fixed days. Values are
+    // still sampled so the PRNG stream — and every other value — stays identical.
+    const adherence = def.adherence?.(input.slot, ctx);
+    const ts = input.ts + (adherence?.delayMin ?? 0) * MS_PER_MINUTE;
+    const keep = !adherence?.skip && ts <= endMs;
     for (const { metric, circadian = 0 } of input.metrics) {
       const value = sampleValue(rng, def, input.member, metric, environment, ctx, circadian);
+      if (!keep) continue;
       out.push({
         id: `sim-${seed}-${input.member.id}-d${input.dayIndex}-${input.slot}-${metric}`,
         crewId: input.member.id,
         metric,
         value,
-        timestamp: new Date(input.ts).toISOString(),
+        timestamp: new Date(ts).toISOString(),
         source: 'simulated',
         environment: environment.id,
         ...(input.groupId ? { groupId: input.groupId } : {}),

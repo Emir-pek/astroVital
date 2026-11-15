@@ -1,3 +1,5 @@
+> Mühendis 1'den devir notları: docs/HANDOFF_ENGINEER4.md (son güncelleme: 2026-11-15)
+
 # Mühendis 4 — Görselleştirme & Dashboard
 
 **Branch:** `feat/visualization` · **Sahip:** Mühendis 4 (_TBD_)

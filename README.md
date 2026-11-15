@@ -1,5 +1,10 @@
 # AstroVital 🛰️🫀
 
+**Live demo:** https://emir-pek.github.io/astroVital/
+
+Runs fully in the browser with simulated crew data; prototype decision-support tool, not a
+medical device. Each visitor's data stays in their own browser.
+
 **Crew health, in plain language.** A visual self-monitoring tool for astronauts on long-duration
 missions — built for the **NASA Space Apps Challenge 2026 · Health Monitoring Software**.
 
@@ -26,7 +31,8 @@ missions — built for the **NASA Space Apps Challenge 2026 · Health Monitoring
 
 ## Quick start
 
-Requires Node.js ≥ 22 (tested with Node 24 LTS), npm and git. No Python/venv needed.
+Requires Node.js ≥ 22 (tested with Node 24 LTS), npm and git. No Python/venv needed for the app
+(only the optional offline tool in `tools/anomaly-detection/` uses Python — see its README).
 
 **One command** (installs dependencies, git hooks, the team's Claude Code plugins, then checks everything):
 

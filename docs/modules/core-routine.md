@@ -34,7 +34,7 @@ app → hepsi.
 
 - [x] Uygulama kabuğu, yönlendirme (hash router), layout (Sidebar, TopBar, feragat)
 - [x] Store + persist, seçiciler, simülasyon üreticisi + 6 senaryo, `loadDemoData`/`resetAll`
-- [x] Demo verisi takvime birebir (veri = takvim, ADR-037)
+- [x] Demo verisi takvime birebir (veri = takvim, ADR-048)
 - [x] Varsayılan senaryo "karma görev": dört astronot, dört durum seviyesi (ADR-038, `docs/DEMO_CREW_STORIES.md`)
 - [x] i18n altyapısı (EN/TR) + anahtar eşitlik testi
 - [x] MET saati (`MetClock`)
@@ -43,12 +43,12 @@ app → hepsi.
   Devredildi: visualization (ADR-032). Not: `Select`/`Menu`/`Segmented`/`Sheet`/`RedAlertDialog` hazır;
   `Tabs`/`Slider`/`ProgressBar`/`Tooltip` envanterde boşta (TEAM.md "UI kit envanteri").
 - ~~Ortam seçici: TopBar rozetinden hızlı geçiş (popover), ortam değişince toast~~ → Görünüm devredildi: visualization (ADR-032)
-  - [ ] Mantık: ortam değişince store güncellenir, toast tetiklenir, hatırlatma takvimi ve eşikler yeni
-        ortama göre yeniden hesaplanır (görünüm: visualization)
+  - [x] Mantık: ortam değişince store güncellenir, toast tetiklenir, hatırlatma takvimi ve eşikler yeni
+        ortama göre yeniden hesaplanır — `EnvironmentChangeNotice` (app/providers); hatırlatmalar `activeEnvironment`'tan türer (testli)
 - ~~Senaryo seçince `recommendedEnvironment`'ı öner (tek tıkla ortamı da değiştir)~~ → Görünüm devredildi: visualization (ADR-032)
-  - [ ] Mantık: senaryo seçilince `recommendedEnvironment` önerisi ve tek aksiyonla hem senaryo hem ortamı
-        uygulayan store aksiyonu (görünüm: visualization)
-- [ ] Sözleşme uyumu: ADR-031 dört seviyeli `Status` sonrası `CONTRACTS.md` (`npm run docs:contracts`),
+  - [x] Mantık: senaryo seçilince `recommendedEnvironment` önerisi ve tek aksiyonla hem senaryo hem ortamı
+        uygulayan store aksiyonu — `applyScenario(id, { withRecommendedEnvironment })`; Ayarlar'a bağlama: visualization
+- [x] Sözleşme uyumu: ADR-031 dört seviyeli `Status` sonrası `CONTRACTS.md` (`npm run docs:contracts`),
       `thresholds.config`, i18n `status.*` ve simülasyon/store kodunda eski green/yellow/red kalıntısı
       olmadığını kontrol et
 - [ ] Sözleşme bakımı: diğer mühendislerin ekleme isteklerini değerlendir, `npm run docs:contracts`
@@ -56,27 +56,34 @@ app → hepsi.
 ### P1 (Faz 2)
 
 - [x] Takvim yapısı: günlük/haftalık/aylık, NASA/CSA kaynaklı (ADR-035, `docs/ROUTINE_SCHEDULE.md`)
-- [x] Takvim saatleri: ISS gün iskeleti, simülasyon saatleri takvimden (ADR-036)
-- [ ] Ortama göre takvim farkları (ayrı karar; rover'ın veri = takvim uyumu dahil)
+- [x] Takvim saatleri: ISS gün iskeleti, simülasyon saatleri takvimden (ADR-047)
+- [ ] Ortama göre takvim farkları (ayrı karar; rover'ın veri = takvim uyumu ve `twice_daily` ikinci saati dahil — ADR-049 geçici +12 sa)
 - [ ] Mürettebat ekleme/çıkarma (sonra kapsamı, ADR-038)
-- [ ] `useReminders`: aktif ortamın `reminderSchedule`'ını bugünün MET gününe aç; `metric`'i olan
-      görevler için o zaman penceresinde ölçüm varsa `done`, süresi geçtiyse `missed` (görünüm: visualization)
-- [ ] Bildirim: uygulama içi toast + izin verildiyse `Notification` API (Settings'te açma anahtarı) (görünüm: visualization)
-- [ ] Kaçırılan ölçüm takibi (Dashboard'da rozet) (görünüm: visualization)
-- [ ] Oyunlaştırma: modül-yerel persist store (`astrovital:routine`), XP, seviye, seri (streak),
-      rozetler, ekip skoru, günlük görevler (egzersiz, hidrasyon, uyku hijyeni, ekip sohbeti, öğren);
-      astronot pet fikri — kuralları Mühendis 1, görünümü visualization; karar bekliyor (görünüm: visualization)
-- [ ] **Kural:** XP yalnız **uyum** için (ölçüm yapıldı, görev tamamlandı) — değerin "iyi" olması
-      ödüllendirilmez. Bunu `MissionBoard`'da kullanıcıya da açıkla. (görünüm: visualization)
-- [ ] Uçtan uca entegrasyon testi `src/app/__tests__/e2e-flow.test.tsx` (görünüm: visualization)
+- [x] `useReminders`: aktif ortamın `reminderSchedule`'ını bugünün UTC görev gününe açar; 5 durum
+      (`late` dahil), kişi bazlı + seçili astronot, elle tamamlanan görevler (ADR-049). `ReminderCenter`
+      çalışır-sade; görünüm visualization'da (`docs/HANDOFF_ENGINEER4.md`)
+- [x] Bildirim mantığı: `ReminderNotifier` (app/providers'ta mount) yalnız seçili astronot için due/missed
+      başına bir kez toast + açıksa ve izin varsa `Notification`; `useNotificationSettings` /
+      `requestNotificationPermission` hazır. Ayarlar anahtarının bağlanması: visualization
+- [x] Kaçırılan ölçüm sayısı: `useMissedCount(crewId?)`. Rozetin yeri ve bağlanması: visualization
+- [x] Oyunlaştırma mantığı (ADR-050): türetilmiş XP, seviye, seri, 5 rozet, ekip skoru, 4 günlük sağlık
+      görevi; `useGamification(crewId?)`. `MissionBoard` çalışır-sade (görünüm: visualization)
+- [x] Astronot pet mantığı (ADR-051): `useCompanion(crewId?)`, 5 basamaklı öncelik, yalnız seçili
+      astronot, teşhis dili yok. Görsel durumlar: visualization
+- [x] **Kural:** XP yalnız **uyum** için — değerden bağımsızlık testle kilitli; `MissionBoard`'da açıklama
+      metni görünür (görünüm: visualization)
+- [ ] Uçtan uca entegrasyon testi `src/app/__tests__/e2e-flow.test.tsx` — Mühendis 2 (ölçüm girişi) ve Mühendis 3 (gerçek motor) bekleniyor
 
 ### P2 (Faz 3)
 
-- [ ] JSON/CSV dışa/içe aktarma (Zod ile doğrula, `source: 'import'`)
+- [x] JSON dışa/içe aktarma (Zod; geri yükleme, `source` korunur — ADR-052): `exportData()` / `importData(json)`;
+      butonlar: visualization. CSV yapılmadı
 - [ ] Demo modu (otomatik akış: senaryo yükle → sayfaları gez)
-- [ ] Sayfa bazlı code splitting (`React.lazy`) — ADR-021
-- [ ] Store `version`/`migrate`; 180 gün için boyut kontrolü (ADR-016)
-- [ ] Demo verisi otomatik yüklemeyi Settings'ten kapatma (ADR-009)
+- [x] Sayfa bazlı code splitting (`React.lazy`) — ADR-021, ADR-052 (ana parça 965 → 562 kB)
+- [x] Store `version`/`migrate` (v2, ADR-052)
+- [ ] 180 gün için boyut kontrolü (ADR-016)
+- [x] Demo verisi otomatik yüklemeyi kapatma: `settings.autoLoadDemo` + store v2/migrate (ADR-009, ADR-052);
+      Ayarlar anahtarı: visualization
 - [ ] README son hali, build/preview kontrolü
 
 ## Kabul kriterleri

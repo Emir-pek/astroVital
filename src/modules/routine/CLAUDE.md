@@ -13,8 +13,10 @@ sağlığı destekleyen görevlerde oyunlaştırma (XP, seri, rozet, ekip skoru)
 
 ## Public API (`index.ts` — tek giriş noktası)
 
-`ReminderCenter`, `MissionBoard`, `MetClock`, `useReminders`, `useGamification`,
-`levelForXp`, `levelProgress`, `XP_PER_LEVEL` (+ tipler `ReminderInstance`, `RemindersApi`, `GamificationApi`).
+Güncel liste: `index.ts` ve `docs/CONTRACTS.md` § routine. Özet: `ReminderCenter`, `MissionBoard`,
+`MetClock`, `useReminders(crewId?)`, `useMissedCount`, `useGamification(crewId?)`, saf motor
+(`expandReminders`, `expandRange`), `useRoutineStore`, `levelForXp`/`levelProgress`/`XP_PER_LEVEL`.
+Görünüm visualization'da (ADR-032); devir notları `docs/HANDOFF_ENGINEER4.md`.
 
 ## Bağımlılık
 
@@ -26,7 +28,9 @@ sağlığı destekleyen görevlerde oyunlaştırma (XP, seri, rozet, ekip skoru)
 - Takvim `activeEnvironment.reminderSchedule` + `settings.missionStart` (MET) üzerinden; saf
   açılım fonksiyonu `services/` altında ve testli.
 - Durum (XP, rozet, tamamlanan görevler) modülün kendi persist store'unda: `astrovital:routine`.
-- Notification API yalnız kullanıcı izin verdiyse (`settings.notificationsEnabled`).
+- Hatırlatma durumları ADR-049 (pencere sabitleri `services/reminderConfig.ts`); kişi görünümü
+  varsayılan olarak seçili astronot (`selectedCrewId`), ekip görünümünde yalnız görev durumu.
+- Notification API yalnız kullanıcı açtıysa (routine store `notificationsEnabled`) ve izin verildiyse.
 
 ## Dokunulmaması gerekenler
 

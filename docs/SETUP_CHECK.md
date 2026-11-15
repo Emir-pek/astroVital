@@ -22,8 +22,10 @@
 | 1.3 | `git --version`    | `2.40` veya üstü. Test edilen: **2.53.0**                             | https://git-scm.com                                                                   |
 | 1.4 | `claude --version` | İsteğe bağlı (önerilir): Claude Code CLI, son sürüm                   | https://code.claude.com/docs/en/overview — kurulum script'i plugin'leri bununla kurar |
 | 1.5 | `gh --version`     | İsteğe bağlı: GitHub CLI (PR/merge/branch işleri için)                | `winget install GitHub.cli`, sonra `gh auth login`                                    |
+| 1.6 | `python --version` | İsteğe bağlı, **yalnız** `tools/anomaly-detection` için: `3.10`+. Test edilen: **3.13.1** | https://python.org, sonra `python -m pip install -r tools/anomaly-detection/requirements.txt` (numpy, pandas) |
 
-Python / venv **gerekmez** (saf Node projesi; izolasyonu `node_modules` + `package-lock.json` sağlar).
+Uygulama için Python / venv **gerekmez** (saf Node projesi; izolasyonu `node_modules` + `package-lock.json`
+sağlar). Python yalnız çevrimdışı `tools/anomaly-detection` aracı için gerekir (1.6, ADR-039).
 
 ## 2. Bağımlılıklar
 

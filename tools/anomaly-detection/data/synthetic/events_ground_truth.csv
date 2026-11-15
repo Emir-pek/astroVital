@@ -1,0 +1,3 @@
+crew_id,type,scope,start_met_min,end_met_min,mission_day,peak_mmhg,sleep_min
+ALL,co2_high,cabin,10380,10740,8,6.0,
+CM2,sleep_restriction,individual,9828,10098,7,,270.0

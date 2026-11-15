@@ -1,0 +1,26 @@
+{
+  "events": [
+    {
+      "type": "co2_high",
+      "crew_id": "ALL",
+      "detected": true,
+      "latency_min": 38,
+      "n_alerts": 2,
+      "cabin_alert_lists_priority": true
+    },
+    {
+      "type": "sleep_restriction",
+      "crew_id": "CM2",
+      "detected": true,
+      "latency_min": 0,
+      "n_alerts": 1,
+      "cabin_alert_lists_priority": null
+    }
+  ],
+  "false_alarms": [],
+  "summary": {
+    "events_detected": "2/2",
+    "false_alarms": 0,
+    "scored_person_nights": 24
+  }
+}

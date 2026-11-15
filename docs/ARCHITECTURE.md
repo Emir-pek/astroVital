@@ -19,6 +19,10 @@ src/
 └── test/               ortak test altyapısı (@test/*, yalnız __tests__ içinden)
 ```
 
+`src/` dışında, uygulamaya **dahil olmayan** çevrimdışı bir araç da var: `tools/anomaly-detection/`
+(Python; MMASH tabanlı sentetik mürettebat verisi + kişiye özel baseline anomali dedektörü, ADR-039).
+Bundle'a ve CI'a girmez; uygulama yalnız çıktısını (`results/alerts.csv`) kullanabilir.
+
 ## 2. Modül bağımlılık grafiği (döngü yasak)
 
 ```mermaid
@@ -110,7 +114,7 @@ flowchart LR
 ```
 
 **Örnek senaryo (Faz 2 hedefi):** Astronot nabzını 128 bpm girer → `useAddMeasurement` ölçümü
-store'a yazar → `useCrewHealth` yeniden hesaplar → motor bandı `red / crew_medical_officer`
+store'a yazar → `useCrewHealth` yeniden hesaplar → motor bandı `warning / crew_medical_officer`
 bulur → kalp bölgesi kırmızı ve hızlı atmaya başlar → `AlertCenter`'da uyarı + "yeniden ölç"
 
 - "CMO'ya bildir" önerisi → `useReminders` sabah nabız görevini "yapıldı" işaretler → +XP.

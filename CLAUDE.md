@@ -83,7 +83,9 @@ Kurulum tek komut: `powershell -ExecutionPolicy Bypass -File scripts\setup.ps1` 
   ekleyen/tarih). Yeni bir sistem aracı gerekiyorsa § 1'e ekle. Prosedür: § 6.
   `src/test/setup-check.test.ts` tablo eksikse `npm test`'i kırmızı yapar — testi gevşetme, tabloyu düzelt.
 - Bağımlılık eklemeden önce kullanıcıya/ekibe sor (bundle boyutu, offline çalışma).
-- Python/venv kullanılmaz; izolasyon `node_modules` + `package-lock.json` ile sağlanır.
+- Uygulamada Python/venv kullanılmaz; izolasyon `node_modules` + `package-lock.json` ile sağlanır.
+  **Tek istisna:** `tools/anomaly-detection/` çevrimdışı Python aracı (ADR-039) — bundle'a ve CI'a girmez,
+  uygulama onu çalışma anında çağırmaz; kendi kuralları o klasörün `CLAUDE.md`'sinde.
 
 ## Dokümantasyon (ZORUNLU)
 
@@ -124,3 +126,5 @@ Kurulum tek komut: `powershell -ExecutionPolicy Bypass -File scripts\setup.ps1` 
 - Değişiklik günlüğü (YAPILANLAR): `CHANGELOG.md` · Ortak Claude kurulumu: `docs/CLAUDE_SETUP.md`
 - Projeyi gündelik dille anlatan rehber: `docs/ADIMLAR.md` · Challenge özeti: `docs/PROJECT_BRIEF.md` · AI beyanı: `AI.md`
 - Her modülün kendi `CLAUDE.md`'si modüle özel kuralları içerir.
+- Çevrimdışı anomali tespiti aracı (Python, MMASH tabanlı sentetik veri + kişiye özel baseline dedektörü):
+  `tools/anomaly-detection/` (README + CLAUDE.md), karar ADR-039.

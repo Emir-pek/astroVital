@@ -34,5 +34,11 @@ coverage
 # Personal Claude Code notes
 CLAUDE.local.md
 
+# Python tool (tools/anomaly-detection) — raw MMASH data is downloaded, never committed (ADR-039)
+tools/anomaly-detection/data/raw/
+__pycache__/
+*.py[cod]
+.venv/
+
 # Playwright MCP logs/snapshots (local browser checks)
 .playwright-mcp/
