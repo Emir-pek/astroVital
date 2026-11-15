@@ -5,6 +5,7 @@ import type {
   Assessment,
   AssessmentContext,
   CrewHealthSummary,
+  Escalation,
   Measurement,
   RegionHealth,
 } from '@core/types';
@@ -27,11 +28,22 @@ export function buildRegions(assessments: Assessment[]): RegionHealth[] {
 }
 
 /**
+ * docs/THRESHOLDS.md § Eskalasyon kuralı 3, first clause: "aynı bölgede ≥2 sarı →
+ * crew_medical_officer". A region-level aggregate floor — it does not change any individual
+ * Assessment, only how high the crew's overall escalation is allowed to rest.
+ */
+function regionEscalationFloor(regions: RegionHealth[]): Escalation {
+  const anyRegionHasTwoCautions = regions.some(
+    (r) => r.assessments.filter((a) => a.status === 'caution').length >= 2,
+  );
+  return anyRegionHasTwoCautions ? 'crew_medical_officer' : 'self_care';
+}
+
+/**
  * Evaluates a crew member's LATEST value of every metric and aggregates:
  *   region status = worst assessment in region; overall = worst region;
- *   escalation = highest escalation of any assessment.
- * Aggregation is final; only assessMeasurement is a stub in Phase 0.
- * TODO(Engineer 3): region rule "≥2 caution in one region → crew_medical_officer".
+ *   escalation = highest escalation of any assessment, raised to at least
+ *   `crew_medical_officer` if any one region has ≥2 caution-status assessments.
  */
 export function assessCrew(
   crewId: string,
@@ -41,10 +53,14 @@ export function assessCrew(
   const latest = getLatestByMetric(measurements, crewId);
   const assessments = Object.values(latest).map((m) => assessMeasurement(m, ctx));
   const regions = buildRegions(assessments);
+  const escalation = highestEscalation([
+    ...assessments.map((a) => a.escalation),
+    regionEscalationFloor(regions),
+  ]);
   return {
     crewId,
     overall: worstStatus(regions.map((r) => r.status)),
-    escalation: highestEscalation(assessments.map((a) => a.escalation)),
+    escalation,
     regions,
     assessments,
     generatedAt: ctx.now.toISOString(),
