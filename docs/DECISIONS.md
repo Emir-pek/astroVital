@@ -538,6 +538,9 @@ Node 24 LTS, npm.
   astronot; başka astronotun bilgisi asla girmez (testli). Sahip: Mühendis 1.
 - **Sonuç:** Değerlendirme motoru bugün stub (hep nominal) olduğu için alert durumu motor gerçek olunca
   çalışır; Mühendis 3'ün `useCrewHealth` sözleşmesine dayanır. Görsel (4 mood'un görünüşü) Emir'de.
+- **Güncelleme (15.11.2026 akşam):** Arayüz `CompanionDock` (sol menünün altı, `Popover` balon) Mühendis 1
+  tarafından tasarım belgesine göre yazıldı; yüz yerine vizör ışıkları (§2 "sevimli değil"), hareket yalnız sakin
+  hallerde ve azaltılmış harekette yok. Görünüm onayı Emir'de (`docs/HANDOFF_ENGINEER4.md` §4).
 
 ### ADR-052 — P2 mantık işleri: demo otomatik yükleme ayarı, veri dışa/içe aktarma, sayfa bazlı yükleme
 

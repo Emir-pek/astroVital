@@ -20,6 +20,20 @@ Yalnız `docs/` değişiklikleri kayıt gerektirmez.
 
 <!-- NEW ENTRIES BELOW -->
 
+### 2026-11-15 19:40 — Muhammed Bektaş (feat/core-routine) — Devir notu: eklenen arayüz, Emir'den beklenenler
+
+- **Ne:** `docs/HANDOFF_ENGINEER4.md`'ye §0 eklendi: Mühendis 1'in eklediği arayüz parçaları (pet,
+  yeniden çizilen rutin panelleri, `MissedCountBadge`, `RoutineSettingsPanel`, kit `ProgressBar`/`Popover`),
+  Emir'in dosyalarına eklenen satırlar (`Sidebar.tsx` mount, `core/ui/index.ts` export) ve "Emir'den
+  beklenen" listesi. Pet bölümü yer, katman, karakter, ruh hali ve hareket kurallarıyla güncellendi;
+  ADR-051'e arayüz notu eklendi.
+- **Neden:** Görünümün sahibi visualization (ADR-032); bağlama ve onay işi tek yerde.
+- **Dosyalar:** `docs/HANDOFF_ENGINEER4.md`, `docs/DECISIONS.md` (ADR-051 notu), `CHANGELOG.md`
+- **Ekip ne yapmalı:** Emir: pet ve rutin ayarları eklendi — `docs/HANDOFF_ENGINEER4.md` "Emir'den beklenen"
+  listesine bak; dokunduğum dosyalar: `src/app/layout/Sidebar.tsx` (import + `<CompanionDock />`),
+  `src/core/ui/index.ts` (2 export). Mühendis 3: DEMO_CREW_STORIES beklenen tablo motorla karşılaştırıldı —
+  fark listesi 18:15 kaydında (tek fark Lucas: kişisel baseline kuralı yok).
+
 ### 2026-11-15 19:25 — Muhammed Bektaş (feat/core-routine) — RoutineSettingsPanel: bildirim, demo, senaryo ortamı, yedek
 
 - **Ne:** Kendi başına çalışan bir ayarlar bloğu (üç kart): tarayıcı bildirimleri (açınca izin ister;
