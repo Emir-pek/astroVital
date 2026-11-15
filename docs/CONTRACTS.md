@@ -100,7 +100,7 @@ TREND_RANGES: readonly TrendRange[]           // TrendRange = '24h' | '7d' | '30
 ```
 
 `BodyMap` = 3D astronot (`three`, geç yüklenen ayrı parça; WebGL yoksa SVG figür) + iki yanında 10 görünür
-bölge etiketi (≥ 104 px) ve kılavuz çizgileri (ADR-036, ADR-038); kapsayıcısını doldurur (`size-full`).
+bölge etiketi (≥ 104 px) ve kılavuz çizgileri (ADR-036, ADR-053); kapsayıcısını doldurur (`size-full`).
 Sürükle = döndür, iki parmak = yakınlaş, figüre dokunma = bölge seç (`onRegionSelect`), figür dışı = `onBackgroundTap`.
 `RegionSheet` panel dışına dokununca kapanır (`Sheet` `dismissOnOutsideTap`; `[data-sheet-keep]` hariç). `VitalsPanel` = kompakt değer rayı,
 nominal olmayanlar üstte.
@@ -576,7 +576,9 @@ export type ScenarioId =
   | 'solar_particle_event'
   | 'isolation_stress'
   | 'fever_dehydration'
-  | 'orthostatic_return';
+  | 'orthostatic_return'
+  /** Default demo: each crew member has a small health story; all four status levels at once. */
+  | 'mixed_mission';
 
 export interface GenerateHistoryOptions {
   /** PRNG seed — same seed + same options ⇒ identical output. */

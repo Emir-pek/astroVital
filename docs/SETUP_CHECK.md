@@ -112,7 +112,7 @@ Yeni satır eklerken: paket, aralık, tür, amaç, kimin eklediği / tarih.
 | `@base-ui/react`                         | `^1.9.0`   | runtime | Erişilebilir UI primitifleri (AlertDialog, Drawer, RadioGroup, Select, Menu) | UI Plan 1 / 2026-11-14 |
 | `@fontsource/atkinson-hyperlegible-next` | `^5.3.0`   | runtime | Metin fontu (yerel, offline)                                                 | UI Plan 1 / 2026-11-14 |
 | `@fontsource/jetbrains-mono`             | `^5.3.0`   | runtime | Sayı fontu (yerel, offline)                                                  | UI Plan 1 / 2026-11-14 |
-| `three`                                  | `^0.187.0` | runtime | 3D vücut haritası (döndürme, yakınlaşma, şeffaf organ — ADR-038; ayrı parça) | Emir / 2026-11-15      |
+| `three`                                  | `^0.187.0` | runtime | 3D vücut haritası (döndürme, yakınlaşma, şeffaf organ — ADR-053; ayrı parça) | Emir / 2026-11-15      |
 | `@types/three`                           | `^0.187.0` | dev     | three tipleri                                                                | Emir / 2026-11-15      |
 
 <!-- DEPS:END -->

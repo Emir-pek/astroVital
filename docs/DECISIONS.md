@@ -111,6 +111,8 @@ Node 24 LTS, npm.
 ### ADR-016 — Simülasyon ölçüm sıklığı
 
 > **Kısmen yerine geçti: ADR-035** (şeker sıklığı haftalık, egzersizde 7. gün dinlenme).
+> **Kısmen yerine geçti: ADR-036** (ölçüm saatleri).
+> **Kısmen yerine geçti: ADR-037** (akşam vitali kuralı, ölçüm içeriği = takvim).
 
 - **Karar:** Her gün: uyanışta uyku, 07:30 vital (KB, nabız, SpO₂, solunum, ısı — aynı `groupId`),
   17:00 egzersiz, 20:30 dozimetre, 21:00 ruh hali; günlerin ~%50'sinde 19:00 akşam vitali;
@@ -366,8 +368,52 @@ Node 24 LTS, npm.
   kaydırmasız (`main` üst boşluğu 4 → 0 px). Ölçüm/Rutin/Değerlendirme içleri sahiplerince taşınacak
   (CHANGELOG 15.11.2026). ADR-036 karar 3'teki "panel sayfayı karartmaz, dışarı dokunmak kapatır" ifadesinin
   yerine geçer. Sahip: visualization ekibi (tasarım), Mühendis 1 (kit mimari onayı).
+### ADR-036 — Takvim saatleri ISS gün iskeletine göre; simülasyon saatleri takvimden okunur
 
-### ADR-038 — 3D vücut haritası (`three`), dışarı dokunuşla kapanan bölge paneli, LED kutular, dilden bağımsız yerleşim
+- **Bağlam:** ADR-035 takvimin yapısını kaynaklara bağladı ama saatler Faz 0 örneğiydi. Simülasyon
+  ölçüm saatlerini kendi içinde sabit yazıyordu; takvimle ayrışmıştı (ör. egzersiz takvimde 15:00,
+  demo verisinde 17:00).
+- **Karar:** Saatler ISS gün iskeletine göre (UTC): 06:00 uyanış → 06:00–07:00 uyku sonrası blok → mesai →
+  19:30–21:30 uyku öncesi blok → 21:30 uyku. Uyku kaydı 06:15; sabah vitalleri (KB, nabız, SpO₂, ısı) ve
+  açlık şekeri 06:30; egzersiz 17:30 (günün toplamı); dozimetre ve ISS akşam nabzı 19:30; ruh hali ve aylık
+  anket 21:00; haftalık özet ve aylık muayene 10:00 (1. gün muayenesi = kişisel başlangıç). Simülasyon her
+  slotun saatini aktif ortamın takviminden, metrik eşleşmesiyle okur; takvimde karşılığı olmayan slotlar
+  ADR-016 saatinde kalır. Dayanak: `esa-outpost42-daily-schedule`, `esa-pesquet-blog-presleep`,
+  `clickorlando-2020-day-in-space` (ikincil), `nasa-std-3001-v1-medops`. Sahip: Mühendis 1.
+- **Sonuç:** Takvim ve demo verisi tek kaynaktan; ölçüm sayısı değişmez (30 gün × 4 kişi ISS: 1.452).
+  Rover ve diğer ortam-özel saatler değişmedi. Takvimle eşleşmeyen simülasyon ölçümleri (akşam vitali,
+  rover'daki eksik maddeler) `docs/ROUTINE_SCHEDULE.md` § Açık konular'da; hizalama ayrı karar.
+  ADR-016'nın ölçüm saatleri kısmının yerine geçer.
+
+### ADR-037 — Demo verisi takvime birebir uyar (veri = takvim)
+
+- **Bağlam:** ADR-035/036 sonrası sıklık ve saat takvimden geliyordu ama simülasyon takvimde olmayan
+  ölçümler de üretiyordu: günlerin ~%50'sinde akşam KB + nabız + ısı (ADR-016) ve takvimde maddesi olmayan
+  solunum hızı. Ekranda "görev listesinde olmayan ölçüm" görünüyordu.
+- **Karar:** Üretici yalnız aktif ortamın takviminde o gün düşen hatırlatmalar için, o hatırlatmanın
+  saatinde ölçüm üretir. Takvime `morning-resp` (solunum, günlük 06:30, `csa-bio-monitor`) eklendi;
+  diastolik `morning-bp` ile gelir. ISS'te akşam yalnız `evening-hr` (her gün 19:30); transit/Ay/Mars'ta
+  akşam vitali yok. Takvimi `CORE_ROUTINE`'i içermeyen ortamlar (bugün rover) takvimde olmayan metrikler
+  için ADR-016 davranışında kalır; ortam farkları ayrı karar. Sahip: Mühendis 1.
+- **Sonuç:** 30 gün × 4 kişi ISS 1.452 → 1.324 ölçüm. Bayatlık: ISS'te artık her metrik takvimli
+  (solunum 48 sa yerine günlük × 1.5). ADR-016'nın akşam vitali kuralının yerine geçer (rover hariç).
+
+### ADR-038 — Varsayılan demo senaryosu: karma görev (dört durum seviyesi); mürettebat 4 kişi sabit
+
+- **Bağlam:** Varsayılan senaryo `nominal`'di; jüri tek ekranda uyarı sistemini göremiyordu. Ayrıca crew
+  baseline'ları bant kenarındaydı (uyku 6.9–7.6, egzersiz 125–140, solunum 13, şeker 96): varsayılan
+  seed'de nominal senaryoda bile dört kişinin dördü caution çıkıyordu.
+- **Karar:** Yeni senaryo `mixed_mission` (varsayılan, ISS): Mira nominal, Kenji warning (öncü işaretler +
+  ateş/sıvı kaybı), Selin caution (izolasyon kaynaklı uyku/ruh hali trendi), Lucas advisory (kişisel
+  baseline'dan +9 mmHg sapma, egzersiz uyumu düşük). Etki büyüklükleri mevcut eşik bantlarına göre seçildi;
+  eşik dosyası değişmedi. Baseline'lar nominal bantların içine, gürültüye pay bırakacak şekilde çekildi
+  (ayrıntı: `docs/DEMO_CREW_STORIES.md`). Mürettebat 4 kişi sabit (Evolvable Mars Campaign 4, DRA 5.0 6:
+  `nasa-nesc-mars-crew-size`); ekleme/çıkarma arayüzü "sonra" kapsamı. Diğer 6 senaryo aynen duruyor.
+- **Sonuç:** `ScenarioId`'ye `'mixed_mission'` eklendi (eklemeli). Durumlar varsayılan seed'de (2026)
+  testle kilitli; başka seed'lerde gürültü nedeniyle tek bir değer bant kenarını aşabilir. Motor bugün stub;
+  `advisory` üretimi Mühendis 3'te (ADR-031). Eski tarayıcı verisi: Ayarlar → Sıfırla → Demo verisini yükle.
+
+### ADR-053 — 3D vücut haritası (`three`), dışarı dokunuşla kapanan bölge paneli, LED kutular, dilden bağımsız yerleşim
 
 - **Bağlam (15.11.2026):** Kullanıcı ¾ duruşlu SVG figürü beğenmedi: figürün önden bakmasını, parmakla 360°
   çevrilmesini, bölgeye dokununca yakınlaşıp organın şeffaf görünmesini istedi. Ayrıca bölge panelinin tablette

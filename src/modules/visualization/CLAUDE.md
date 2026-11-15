@@ -30,7 +30,7 @@ bölge detay paneli, zaman serisi grafikleri (Recharts), vital kartları, müret
 - Hareket (ADR-036): nefes **yalnız tüm vücut halesinde** (nominalken 4,5 sn); iç bölgeler nefes almaz,
   nominal/eski/veri yok iç bölge figürde hiçbir şey çizmez; advisory/caution/warning sabit, siluete
   kırpılmış işaret. Yanıp sönme yalnız kırmızı uyarı ikonunda. Renkler token'lardan (`STATUS_COLOR_VAR`, `--av-suit-*`).
-- 3D figür (ADR-038, `components/figure3d/`): `three` yalnız `AstronautStage` ve onun import ettikleri içinde
+- 3D figür (ADR-053, `components/figure3d/`): `three` yalnız `AstronautStage` ve onun import ettikleri içinde
   (geç yüklenen ayrı parça); WebGL yoksa veya bağlam kaybolursa SVG figür. Mantık saf ve testli: `orbit.ts`,
   `gesture.ts` (dokunma < 10 px, pinch asla dokunma sayılmaz), `pick.ts`, `anatomy.ts`. Çizim isteğe bağlı
   (boştayken kare yok). Figürde renk yalnız sağlık durumu; seçimde giysi şeffaf, organ durum renginde.

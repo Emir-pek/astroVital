@@ -314,6 +314,10 @@
     "orthostatic_return": {
       "label": "Return to gravity",
       "description": "After landing, blood pressure drops when standing and heart rate rises."
+    },
+    "mixed_mission": {
+      "label": "Mixed mission",
+      "description": "Default demo: four crew members, four stories — one healthy, one with an early fever, one with slowly worsening sleep and mood, one drifting from personal baseline."
     }
   },
   "thresholds": {
@@ -351,7 +355,8 @@
       "weeklySurgeonReport": "Send weekly report to flight surgeons",
       "weeklyHealthSummary": "Weekly health summary for the flight surgeon",
       "monthlyHealthExam": "Monthly full check-up: all measurements",
-      "monthlySleepTeamSurvey": "Monthly sleep and team survey"
+      "monthlySleepTeamSurvey": "Monthly sleep and team survey",
+      "respRate": "Breathing rate at rest"
     },
     "reminders": {
       "title": "Today's routine",

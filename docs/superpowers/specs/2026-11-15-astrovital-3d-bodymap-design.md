@@ -1,6 +1,6 @@
 # AstroVital — 3D vücut haritası, LED kutular, dil değişiminde sabit yerleşim (tasarım)
 
-**Tarih:** 2026-11-15 · **Sahip:** Emir (Mühendis 4, visualization) · **Karar:** ADR-038 · **Durum:** onaylandı (Emir, "A'yı seçiyorum başla")
+**Tarih:** 2026-11-15 · **Sahip:** Emir (Mühendis 4, visualization) · **Karar:** ADR-053 · **Durum:** onaylandı (Emir, "A'yı seçiyorum başla")
 
 ## 1. Niyet
 

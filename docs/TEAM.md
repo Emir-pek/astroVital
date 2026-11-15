@@ -49,7 +49,7 @@
 | RedAlertDialog          | Emir        | Base UI     | hazır                                                                                                                                                 |
 | Sheet                   | Emir        | Base UI     | hazır (`width`, `bounds`; `backdrop`: dim = modal / clear = modal değil, dışarı dokunuşla kapanır — `dismissOnOutsideTap`, `[data-sheet-keep]` hariç) |
 | Segmented               | Emir        | Base UI     | hazır (`fill`: eşit genişlikli seçenekler; kalın yazı genişliği önceden ayrılır)                                                                      |
-| LED / hareket sınıfları | Emir        | kendi (CSS) | hazır — `card-surface` LED kenarı (`<html data-led>`), `.av-live-dot`, `.av-glass-bar`, `.av-enter` (tokens.css, ADR-038)                             |
+| LED / hareket sınıfları | Emir        | kendi (CSS) | hazır — `card-surface` LED kenarı (`<html data-led>`), `.av-live-dot`, `.av-glass-bar`, `.av-enter` (tokens.css, ADR-053)                             |
 | Menu                    | Emir        | Base UI     | hazır                                                                                                                                                 |
 | Select                  | Emir        | Base UI     | hazır                                                                                                                                                 |
 | Tabs                    |             | —           | boşta                                                                                                                                                 |

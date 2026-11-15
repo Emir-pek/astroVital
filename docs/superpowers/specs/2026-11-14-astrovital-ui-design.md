@@ -221,7 +221,7 @@ Sıra her zaman aynı (rakipten alınan iyi pratik: önce eylem):
 
 ## 8. Astronot figürü
 
-> **15.11.2026 güncellemesi (ADR-038):** Durum ekranındaki figür artık 3D (`three`), önden bakar ve 360° döner;
+> **15.11.2026 güncellemesi (ADR-053):** Durum ekranındaki figür artık 3D (`three`), önden bakar ve 360° döner;
 > ayrıntı `2026-11-15-astrovital-3d-bodymap-design.md`. Aşağıdaki SVG tarifi yalnız WebGL olmayan cihazlardaki yedek figür içindir.
 
 - **Teknik:** Kod içinde elle yazılmış SVG React bileşenleri (`<AstronautFigure />`), Framer Motion ile animasyon. Dışarıdan resim/3D yok.
