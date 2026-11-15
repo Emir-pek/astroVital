@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 import { getLatestByMetric, STORE_KEY, useHealthStore } from '@core/store';
+import { SCENARIOS } from '@core/simulation';
 
 const NOW = new Date('2026-11-14T22:00:00Z');
 
@@ -49,6 +50,20 @@ describe('useHealthStore', () => {
     add({ ...base, value: 70, timestamp: '2026-11-14T07:00:00Z' });
     const latest = getLatestByMetric(useHealthStore.getState().measurements, 'crew-1');
     expect(latest.heartRate?.value).toBe(80);
+  });
+
+  it('applyScenario loads the scenario and optionally its recommended environment', () => {
+    const s = useHealthStore.getState();
+    s.setActiveEnvironment('iss');
+    s.applyScenario('solar_particle_event', { withRecommendedEnvironment: false, now: NOW });
+    expect(useHealthStore.getState().settings.scenario).toBe('solar_particle_event');
+    expect(useHealthStore.getState().activeEnvironment).toBe('iss');
+    expect(useHealthStore.getState().measurements.length).toBeGreaterThan(0);
+
+    s.applyScenario('solar_particle_event', { withRecommendedEnvironment: true, now: NOW });
+    expect(useHealthStore.getState().activeEnvironment).toBe(
+      SCENARIOS.solar_particle_event.recommendedEnvironment,
+    );
   });
 
   it('resetAll keeps language preference', () => {

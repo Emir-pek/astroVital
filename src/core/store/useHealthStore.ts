@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 import { ENVIRONMENTS } from '@core/config/environments.config';
-import { DEMO_CREW, DEMO_DEFAULTS, generateHistory } from '@core/simulation';
+import { DEMO_CREW, DEMO_DEFAULTS, generateHistory, SCENARIOS } from '@core/simulation';
 import type {
   CrewMember,
   EnvironmentId,
@@ -56,6 +56,15 @@ export interface HealthState {
   updateSettings: (patch: Partial<AppSettings>) => void;
   /** Replaces crew + measurements with a deterministic simulated history. */
   loadDemoData: (options?: LoadDemoOptions) => void;
+  /**
+   * Loads the demo history of a scenario. With `withRecommendedEnvironment` the scenario's
+   * recommended environment (SCENARIOS[id].recommendedEnvironment) is applied too; otherwise the
+   * active environment stays. Same seed and history length as the current settings.
+   */
+  applyScenario: (
+    scenarioId: ScenarioId,
+    options: { withRecommendedEnvironment: boolean; now?: Date },
+  ) => void;
   /** Clears all data (crew is restored to the demo crew, no measurements). */
   resetAll: () => void;
 }
@@ -145,6 +154,15 @@ export const useHealthStore = create<HealthState>()(
           demoLoadedAt: now.toISOString(),
         }));
       },
+
+      applyScenario: (scenarioId, { withRecommendedEnvironment, now }) =>
+        get().loadDemoData({
+          scenario: scenarioId,
+          ...(withRecommendedEnvironment
+            ? { environment: SCENARIOS[scenarioId].recommendedEnvironment }
+            : {}),
+          ...(now ? { now } : {}),
+        }),
 
       resetAll: () =>
         set((s) => ({

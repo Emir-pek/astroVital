@@ -43,11 +43,11 @@ app → hepsi.
   Devredildi: visualization (ADR-032). Not: `Select`/`Menu`/`Segmented`/`Sheet`/`RedAlertDialog` hazır;
   `Tabs`/`Slider`/`ProgressBar`/`Tooltip` envanterde boşta (TEAM.md "UI kit envanteri").
 - ~~Ortam seçici: TopBar rozetinden hızlı geçiş (popover), ortam değişince toast~~ → Görünüm devredildi: visualization (ADR-032)
-  - [ ] Mantık: ortam değişince store güncellenir, toast tetiklenir, hatırlatma takvimi ve eşikler yeni
-        ortama göre yeniden hesaplanır (görünüm: visualization)
+  - [x] Mantık: ortam değişince store güncellenir, toast tetiklenir, hatırlatma takvimi ve eşikler yeni
+        ortama göre yeniden hesaplanır — `EnvironmentChangeNotice` (app/providers); hatırlatmalar `activeEnvironment`'tan türer (testli)
 - ~~Senaryo seçince `recommendedEnvironment`'ı öner (tek tıkla ortamı da değiştir)~~ → Görünüm devredildi: visualization (ADR-032)
-  - [ ] Mantık: senaryo seçilince `recommendedEnvironment` önerisi ve tek aksiyonla hem senaryo hem ortamı
-        uygulayan store aksiyonu (görünüm: visualization)
+  - [x] Mantık: senaryo seçilince `recommendedEnvironment` önerisi ve tek aksiyonla hem senaryo hem ortamı
+        uygulayan store aksiyonu — `applyScenario(id, { withRecommendedEnvironment })`; Ayarlar'a bağlama: visualization
 - [x] Sözleşme uyumu: ADR-031 dört seviyeli `Status` sonrası `CONTRACTS.md` (`npm run docs:contracts`),
       `thresholds.config`, i18n `status.*` ve simülasyon/store kodunda eski green/yellow/red kalıntısı
       olmadığını kontrol et

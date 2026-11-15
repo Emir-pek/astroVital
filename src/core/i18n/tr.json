@@ -434,7 +434,8 @@
       "openRoutine": "Rutini aç",
       "openMeasure": "Şimdi ölç",
       "disclaimer": "Ben bir prototip yardımcıyım, tıbbi cihaz değilim. Teşhis koymam."
-    }
+    },
+    "envChanged": "Ortam: {{env}}. Hatırlatma takvimi ve eşikler güncellendi."
   },
   "assessment": {
     "stub": {

@@ -434,7 +434,8 @@
       "openRoutine": "Open routine",
       "openMeasure": "Measure now",
       "disclaimer": "I am a prototype helper, not a medical device. I never diagnose."
-    }
+    },
+    "envChanged": "Environment: {{env}}. Reminder schedule and thresholds are updated."
   },
   "assessment": {
     "stub": {

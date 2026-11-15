@@ -71,3 +71,7 @@ export {
   type DailyMissionCompletion,
   type RoutineState,
 } from './store/useRoutineStore';
+export {
+  EnvironmentChangeNotice,
+  useEnvironmentChangeNotice,
+} from './hooks/useEnvironmentChangeNotice';

@@ -20,6 +20,20 @@ Yalnız `docs/` değişiklikleri kayıt gerektirmez.
 
 <!-- NEW ENTRIES BELOW -->
 
+### 2026-11-15 15:20 — Muhammed Bektaş (feat/core-routine) — Ortam değişim bildirimi ve applyScenario
+
+- **Ne:** Ortam değişince tek bir toast çıkar ("Ortam: Mars üssü. Hatırlatma takvimi ve eşikler
+  güncellendi."); bileşen görünmez, `app/providers`'ta mount edildi. Yeni store aksiyonu
+  `applyScenario(scenarioId, { withRecommendedEnvironment })`: senaryonun demo verisini yükler, istenirse
+  senaryonun önerdiği ortamı da uygular. Store şeması değişmedi (persist version aynı).
+- **Neden:** core-routine P0 mantık maddeleri; Ayarlar'ın görünümü visualization'da (ADR-032).
+- **Dosyalar:** `src/modules/routine/hooks/useEnvironmentChangeNotice.ts` (yeni), `src/modules/routine/index.ts`,
+  `src/app/providers/AppProviders.tsx`, `src/core/store/useHealthStore.ts`, testler (`environmentNotice.test.tsx`,
+  `store.test.ts`), `src/core/i18n/en.json`, `src/core/i18n/tr.json` (`routine.envChanged`), `docs/CONTRACTS.md`,
+  `docs/modules/core-routine.md`, `CHANGELOG.md`
+- **Ekip ne yapmalı:** Emir: Ayarlar'daki senaryo seçimine "önerilen ortamı da uygula" seçeneğini
+  `applyScenario` ile bağla. `SettingsPage`'e dokunulmadı.
+
 ### 2026-11-15 15:00 — Muhammed Bektaş (feat/core-routine) — Astronot pet: yalnız mantık (useCompanion)
 
 - **Ne:** `useCompanion(crewId?)` petin ruh halini (neşeli / nötr / endişeli / uyarı), mesaj anahtarını
