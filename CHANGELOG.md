@@ -20,6 +20,15 @@ Yalnız `docs/` değişiklikleri kayıt gerektirmez.
 
 <!-- NEW ENTRIES BELOW -->
 
+### 2026-11-15 17:40 — Muhammed Bektaş (feat/core-routine) — Seviye eşiği 700 XP (kusursuz bir hafta ≈ 1 seviye)
+
+- **Ne:** `XP_PER_LEVEL` 100 → 700. Kusursuz bir ISS haftası (~10 ölçüm görevi/gün × 10 XP) yaklaşık bir
+  seviye eder. Önceden demo mürettebatı 30. günde seviye 30'du.
+- **Neden:** Seviye her gün atlıyordu; ilerleme anlamsızdı (ADR-050 notu).
+- **Dosyalar:** `src/modules/routine/services/levels.ts`, `src/modules/routine/__tests__/routine.test.tsx`,
+  `docs/DECISIONS.md` (ADR-050), `CHANGELOG.md`
+- **Ekip ne yapmalı:** Seviye sayısını sabit varsayan ekran/test varsa güncelle (demo 30. günde artık ≈ seviye 5).
+
 ### 2026-11-15 17:30 — Muhammed Bektaş (feat/core-routine) — core-routine ADR'leri 047–052; PR #16 birleştirmesinde düşen bölümler geri eklendi
 
 - **Ne:** PR #16'nın main ile GitHub'da birleştirilmesinde (`1271079`) `docs/DECISIONS.md`'den ADR-041–044

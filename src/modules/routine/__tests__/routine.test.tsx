@@ -5,12 +5,12 @@ import { renderWithProviders } from '@test/renderWithProviders';
 import { levelForXp, levelProgress, MetClock } from '../index';
 
 describe('levels', () => {
-  it('level 1 at 0 XP, +1 level per 100 XP', () => {
+  it('level 1 at 0 XP, +1 level per 700 XP (≈ one flawless week)', () => {
     expect(levelForXp(0)).toBe(1);
-    expect(levelForXp(99)).toBe(1);
-    expect(levelForXp(100)).toBe(2);
+    expect(levelForXp(699)).toBe(1);
+    expect(levelForXp(700)).toBe(2);
     expect(levelForXp(-5)).toBe(1);
-    expect(levelProgress(150)).toBeCloseTo(0.5);
+    expect(levelProgress(1050)).toBeCloseTo(0.5);
   });
 });
 

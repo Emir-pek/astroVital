@@ -502,7 +502,7 @@ Node 24 LTS, npm.
   işaretlerinden **türetilir** (`src/modules/routine/services/gamification.ts`, saf). Puanlar: `done` = 10,
   `late` = 5, `missed` = 0; elle tamamlanan görev ölçümle aynı (10/5); günlük sağlık görevleri (su, ışıkları
   zamanında kapat, ekip sohbeti, öğren) elle işaretlenir, kişi + gün başına bir kez, 5 XP. Seviye:
-  `levels.ts` (100 XP/seviye). **Seri:** metrikli tüm planlı görevlerin `done`/`late` olduğu ardışık görev
+  `levels.ts` (700 XP/seviye ≈ kusursuz bir ISS haftası; önce 100 — demo 30. günde seviye 30 oluyordu). **Seri:** metrikli tüm planlı görevlerin `done`/`late` olduğu ardışık görev
   günleri; bugün açık görev varken seri bozulmaz ve sayılmaz; dinlenme günü listeden egzersizi çıkarır,
   seriyi bozmaz; metriksiz görevler seriye girmez. **Rozetler:** `streak-7`, `streak-30` (en uzun seriye
   göre, kazanılınca kalır), `exercise-week` (bir görev haftasında 6 planlı egzersizin 6'sı),
