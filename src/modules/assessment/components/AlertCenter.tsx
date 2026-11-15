@@ -3,7 +3,7 @@ import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { METRICS } from '@core/config/metrics.config';
 import { useCrew } from '@core/store';
-import { Card, EmptyState, StatusBadge } from '@core/ui';
+import { Card, EmptyState, StatusBadge, Tile } from '@core/ui';
 import { ESCALATION_ORDER, STATUS_ORDER } from '@core/utils/status';
 import { useAllCrewHealth } from '../hooks/useCrewHealth';
 
@@ -50,16 +50,17 @@ export function AlertCenter({ compact = false, limit }: AlertCenterProps) {
             const name = crew.find((c) => c.id === a.crewId)?.name ?? a.crewId;
             const metric = t(METRICS[a.metric].labelKey);
             return (
-              <li
+              <Tile
+                as="li"
                 key={`${a.crewId}-${a.metric}`}
-                className="flex flex-wrap items-center justify-between gap-2 rounded-lg bg-surface-2 p-3"
+                className="flex flex-wrap items-center justify-between gap-2"
               >
                 <div>
                   <p className="font-medium">
                     {name} — {metric}
                   </p>
                   {!compact && (
-                    <p className="text-sm text-muted">
+                    <p className="text-label text-text-2">
                       {t(a.summaryKey, { metric, ...a.messageParams })}
                     </p>
                   )}
@@ -67,10 +68,12 @@ export function AlertCenter({ compact = false, limit }: AlertCenterProps) {
                 <div className="flex items-center gap-2">
                   <StatusBadge size="sm" status={a.status} label={t(`status.${a.status}`)} />
                   {!compact && (
-                    <span className="text-xs text-muted">{t(`escalation.${a.escalation}`)}</span>
+                    <span className="text-label text-text-2">
+                      {t(`escalation.${a.escalation}`)}
+                    </span>
                   )}
                 </div>
-              </li>
+              </Tile>
             );
           })}
         </ul>

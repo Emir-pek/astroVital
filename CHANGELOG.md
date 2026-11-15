@@ -20,6 +20,40 @@ Yalnız `docs/` değişiklikleri kayıt gerektirmez.
 
 <!-- NEW ENTRIES BELOW -->
 
+### 2026-11-15 16:25 — Emir Efe Pekcan (feat/assessment) — Değerlendirme motoru gerçek kurallarla çalışıyor (Faz 0 stub kaldırıldı)
+
+- **Ne:** `assessMeasurement`/`assessCrew` artık her zaman "normal" dönen Faz 0 stub'ı değil, gerçek
+  kural motoru. Bildirilen hata düzeltildi: **38.5 °C ateşi olan biri artık "normal" değil, ISS'te
+  "kırmızı/CMO'ya haber ver" çıkıyor** (eşik bandı + ortam kaydırması hiç uygulanmıyordu). Eklenenler:
+  `engine/bands.ts` (ortam düzeltmeli bant arama), `engine/radiation.ts` (kümülatif radyasyon +
+  SPE kuralı: günlük doz > 5× ortam beklentisi → kırmızı/flight_surgeon/sığınak), `engine/trend.ts`
+  (pencereyi ikiye bölüp ortalama kıyaslayan trend — tek günlük gürültünün sonucu tek başına
+  çevirmesini önler; "3 ölçüm üst üste kötüleşme → CMO"), `engine/sustained.ts` (ardışık gün
+  kuralları — aradaki eksik gün zinciri bozar), `engine/escalation.ts` (Mars/otonom: yalnız
+  flight_surgeon seviyesi emergency'ye yükselir, CMO seviyesi zaten gemide olduğu için yükselmez),
+  `engine/recommendations.ts` (öneri kütüphanesi: dinlenme/hidrasyon/egzersiz/beslenme/radyasyon
+  sığınağı/psikolojik destek/CMO-flight surgeon iletişimi, kırmızıda zorunlu "yeniden ölç").
+  `assessCrew`'e "aynı bölgede ≥2 sarı → CMO" kuralı eklendi. `docs/DEMO_CREW_STORIES.md`'deki
+  `mixed_mission` tablosu artık motorla kilitli: crew-1 nominal, crew-2 (Kenji) warning/CMO, crew-3
+  (Selin) caution/self_care; crew-4 (Lucas) için beklenen `advisory` henüz üretilmiyor (ADR-031,
+  kişisel baseline kuralı P1/sonraki iş — bug değil, bilinen kapsam dışı). Ayrıca `AlertCenter`,
+  `LearnPanel`, `RecommendationList` kutu sistemine taşındı (Emir'in 11-15 02:15 kaydındaki "Ekip ne
+  yapmalı" listesinden çıkarıldı — `boxSystem.test.ts`'teki `PENDING_MIGRATION` güncellendi).
+- **Neden:** Motor Faz 0'da kasıtlı olarak her şeyi "normal" döndürüyordu (görselleştirme/rutin
+  ekiplerinin beklemeden ilerleyebilmesi için); bu artık gerçek değerlendirmeyi engelliyordu —
+  jüri demosunda hiçbir uyarı/renk görünmüyordu. `docs/modules/assessment.md` P0 listesi bu işi
+  tanımlıyordu.
+- **Dosyalar:** `src/modules/assessment/engine/{bands,radiation,trend,sustained,escalation,
+recommendations,assessMeasurement,assessCrew}.ts`, `src/modules/assessment/engine/__tests__/*`
+  (yeni; `__tests__/engine.stub.test.ts` silindi), `src/modules/assessment/components/
+{AlertCenter,LearnPanel,RecommendationList}.tsx`, `src/core/ui/__tests__/boxSystem.test.ts`,
+  `src/core/i18n/{en,tr}.json` (`assessment.explanation.*`, `assessment.radiation.spe`,
+  `assessment.recommendations.*` yeni anahtarlar), `docs/modules/assessment.md`, `docs/TEAM.md`.
+- **Ekip ne yapmalı:** `npm install` (bu oturumda `@base-ui/react` ve diğer bazı paketler
+  `node_modules`'ta eksikti — `feat/visualization` merge'ünden sonra kurulmamıştı, bağımlılık
+  değişmedi, yalnız yerel kurulum eksikti). Motor artık gerçek sonuç ürettiği için **visualization
+  ve routine ekranlarında artık gerçek sarı/kırmızı durumlar görünecek** — demo öncesi bir göz atın.
+
 ### 2026-11-15 02:15 — Emir (feat/visualization) — Tek kutu sistemi (Panel/Tile/Pill); bölge paneli üst barı örtmüyor; başlık satırı kırılmıyor
 
 - **Ne:** Uygulamadaki bütün kutular artık üç rolden biri: **Panel** (üst düzey kap — gradient, 24 px köşe, 24 px
@@ -119,6 +153,7 @@ text-muted` → `text-label text-text-2`. `LearnPanel.tsx` :29/:50/:65 `text-lg`
 - **Ekip ne yapmalı:** `git merge origin/main` (bağımlılık değişmedi). Yeni sayfa yazan: kabuk artık bir ekran boyu,
   sayfan `main` içinde kayar; `PageHeader` sağında durum hattı var. Kit'te yeni `VitalRow`, `StatusLine`. Değerlendirme
   motoru (Mühendis 3): figür ve ray `advisory/caution/warning` durumlarını hazır gösteriyor.
+
 ### 2026-11-14 22:00 — Muhammed Bektaş (feat/core-routine) — Karma görev demo senaryosu; demo verisi takvime birebir
 
 - **Ne:** Yeni varsayılan senaryo **karma görev** (`mixed_mission`): Mira nominal, Kenji warning (önce nabız/uyku öncü
@@ -144,6 +179,7 @@ text-muted` → `text-label text-text-2`. `LearnPanel.tsx` :29/:50/:65 `text-lg`
   `src/core/config/sources.config.ts`, `src/core/simulation/__tests__/generator.test.ts`, `docs/ROUTINE_SCHEDULE.md`,
   `docs/SOURCES.md`, `docs/DECISIONS.md`, `docs/modules/core-routine.md`, `CHANGELOG.md`
 - **Ekip ne yapmalı:** Merge sonrası demo verisinde ölçüm saatleri değişir (sabah vitalleri 06:30, egzersiz 17:30, dozimetre 19:30). Saat varsayan testin/ekranın varsa kontrol et.
+
 ### 2026-11-14 21:30 — Emir (main) — Dört feat/* branch'i main'e fast-forward edildi; skill/kural erişimi netleştirildi
 
 - **Ne:** `feat/assessment`, `feat/core-routine`, `feat/intake`, `feat/visualization` branch'leri main'in ucuna
