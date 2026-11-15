@@ -217,14 +217,20 @@ export const generateHistory = ({
       crewIndex: input.crewIndex,
       environment,
     };
+    // Story-driven adherence (ADR-048): a scenario may skip or delay a slot on fixed days. Values are
+    // still sampled so the PRNG stream — and every other value — stays identical.
+    const adherence = def.adherence?.(input.slot, ctx);
+    const ts = input.ts + (adherence?.delayMin ?? 0) * MS_PER_MINUTE;
+    const keep = !adherence?.skip && ts <= endMs;
     for (const { metric, circadian = 0 } of input.metrics) {
       const value = sampleValue(rng, def, input.member, metric, environment, ctx, circadian);
+      if (!keep) continue;
       out.push({
         id: `sim-${seed}-${input.member.id}-d${input.dayIndex}-${input.slot}-${metric}`,
         crewId: input.member.id,
         metric,
         value,
-        timestamp: new Date(input.ts).toISOString(),
+        timestamp: new Date(ts).toISOString(),
         source: 'simulated',
         environment: environment.id,
         ...(input.groupId ? { groupId: input.groupId } : {}),

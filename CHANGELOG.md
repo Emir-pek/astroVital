@@ -20,6 +20,21 @@ Yalnız `docs/` değişiklikleri kayıt gerektirmez.
 
 <!-- NEW ENTRIES BELOW -->
 
+### 2026-11-15 18:00 — Muhammed Bektaş (feat/core-routine) — Karma görevde bilinçli kaçırma/gecikme (uyum hikâyeleri)
+
+- **Ne:** Demo verisinde artık uyum farkı var. Mira kusursuz. Kenji hastalığın son 2 gününde egzersiz ve
+  akşam ruh hali girmiyor, 29. günün sabah vitallerini geç giriyor. Selin son 10 günde 3 akşam ruh halini
+  atlıyor. Lucas son 7 günde 2 egzersizi atlıyor. Dört kişinin XP'si ve serisi artık farklı (ör. 30. gün
+  sonunda seri 30 / 0 / 2 / 3). Diğer bütün ölçüm değerleri aynı kaldı (atlanan slot da rastgele sayı
+  tüketir), motorun dört durumu değişmedi.
+- **Neden:** Oyunlaştırma ve pet demoda ayrışmıyordu (herkes aynı XP/seri). ADR-048 güncellendi.
+- **Dosyalar:** `src/core/simulation/{scenarios,generator,index}.ts` (`adherence`, `SlotAdherence`, `MIXED`),
+  `src/core/simulation/__tests__/generator.test.ts`, `src/modules/routine/__tests__/demoAdherence.test.ts` (yeni),
+  `docs/DECISIONS.md` (ADR-048), `docs/DEMO_CREW_STORIES.md` (Uyum satırları + tablo), `CHANGELOG.md`
+- **Ekip ne yapmalı:** Demo'da Kenji/Selin/Lucas için geçmiş günlerde "kaçırıldı" ve "geç yapıldı" görünür;
+  bu kasıtlı. Tarayıcıda eski demo verisi varsa Ayarlar → Sıfırla → Demo verisini yükle. "Her takvim
+  görevi her gün yanıtlanır" varsayan bir testin varsa `nominal` senaryo kullan.
+
 ### 2026-11-15 17:40 — Muhammed Bektaş (feat/core-routine) — Seviye eşiği 700 XP (kusursuz bir hafta ≈ 1 seviye)
 
 - **Ne:** `XP_PER_LEVEL` 100 → 700. Kusursuz bir ISS haftası (~10 ölçüm görevi/gün × 10 XP) yaklaşık bir

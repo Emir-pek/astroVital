@@ -22,6 +22,17 @@ export interface ScenarioDefinition {
   /** Environment that best showcases the scenario (Settings may auto-select it). */
   recommendedEnvironment: EnvironmentId;
   effect(metric: MetricId, ctx: ScenarioContext): ScenarioEffect;
+  /**
+   * Optional story-driven adherence (ADR-048): skip a data-entry slot or enter it late on a given
+   * day. Slots: 'wake', 'am', 'glu', 'pm', 'ex', 'dose', 'mood'. Must be deterministic (fixed days).
+   */
+  adherence?(slot: string, ctx: ScenarioContext): SlotAdherence | undefined;
+}
+
+/** A missed (`skip`) or late (`delayMin` after the scheduled time) data entry. */
+export interface SlotAdherence {
+  skip?: boolean;
+  delayMin?: number;
 }
 
 const NONE: ScenarioEffect = {};
@@ -243,6 +254,30 @@ export const SCENARIOS: Record<ScenarioId, ScenarioDefinition> = {
           return NONE;
       }
     },
+    // Adherence stories (DEMO_CREW_STORIES.md "Uyum"): days are fixed offsets from the last day.
+    adherence: (slot, ctx) => {
+      const offset = ctx.days - 1 - ctx.dayIndex; // 0 = last day (today)
+      switch (ctx.crewIndex) {
+        case 1: // Kenji: too ill to log exercise and evening mood; one morning block entered late
+          if ((slot === 'ex' || slot === 'mood') && offset < MIXED.kenjiSkipLastDays)
+            return { skip: true };
+          if (slot === 'am' && offset === MIXED.kenjiLateMorningOffset)
+            return { delayMin: MIXED.kenjiLateMorningDelayMin };
+          return undefined;
+        case 2: // Selin: fewer mood self-reports
+          return slot === 'mood' &&
+            (MIXED.selinSkipMoodOffsets as readonly number[]).includes(offset)
+            ? { skip: true }
+            : undefined;
+        case 3: // Lucas: skipped exercise sessions
+          return slot === 'ex' &&
+            (MIXED.lucasSkipExerciseOffsets as readonly number[]).includes(offset)
+            ? { skip: true }
+            : undefined;
+        default: // Mira: flawless
+          return undefined;
+      }
+    },
   }),
 };
 
@@ -265,4 +300,18 @@ export const MIXED = {
   /** Offsets from the last day (0 = last day) with low exercise (≈ 70–90 min). */
   lucasLowExerciseOffsets: [6, 5, 4, 3],
   lucasLowExerciseMul: 0.6,
+  // ── Adherence (offsets from the last day; avoid exercise rest days 7, 14, 21, 28 of 30) ──
+  /** Kenji: no exercise / evening mood on the last N days (ill). */
+  kenjiSkipLastDays: 2,
+  /** Kenji: the morning vitals block of this day is entered after the grace window (late). */
+  kenjiLateMorningOffset: 1,
+  kenjiLateMorningDelayMin: 150,
+  /** Selin: 3 evening mood reports missing in the last 10 days. */
+  selinSkipMoodOffsets: [8, 5, 2],
+  /**
+   * Lucas: 2 exercise sessions missing in the last 7 days (days 25 and 27 of 30, both planned low days).
+   * The last session before today (offset 1) stays recorded and normal, so his latest exercise value
+   * — and his status — do not change during the day.
+   */
+  lucasSkipExerciseOffsets: [5, 3],
 } as const;

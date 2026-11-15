@@ -404,6 +404,12 @@ Node 24 LTS, npm.
   için ADR-016 davranışında kalır; ortam farkları ayrı karar. Sahip: Mühendis 1.
 - **Sonuç:** 30 gün × 4 kişi ISS 1.452 → 1.324 ölçüm. Bayatlık: ISS'te artık her metrik takvimli
   (solunum 48 sa yerine günlük × 1.5). ADR-016'nın akşam vitali kuralının yerine geçer (rover hariç).
+- **Güncelleme (15.11.2026 akşam):** Veri takvimi izler; senaryolar hikâyeye uygun **bilinçli
+  kaçırma/gecikme** içerebilir (`ScenarioDefinition.adherence(slot, ctx)` → `{ skip }` veya
+  `{ delayMin }`). Günler sabittir (son günden uzaklık), `Math.random` yok. Atlanan slotun değerleri de
+  örneklenir, yalnız çıktıya yazılmaz: PRNG akışı ve diğer bütün değerler aynı kalır. Bugün yalnız
+  `mixed_mission` kullanıyor (Kenji, Selin, Lucas; Mira kusursuz — `docs/DEMO_CREW_STORIES.md` "Uyum").
+  Takvimde olmayan ölçüm hâlâ üretilmez; geç girilen ölçüm takvim saatinden sonra, aynı gün içindedir.
 
 ### ADR-038 — Varsayılan demo senaryosu: karma görev (dört durum seviyesi); mürettebat 4 kişi sabit
 

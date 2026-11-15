@@ -2,7 +2,7 @@
 
 **Sahip:** Mühendis 1 · **Karar:** ADR-038 (senaryo), ADR-048 (veri = takvim) · **Kod:**
 `mixed_mission` in `src/core/simulation/scenarios.ts` (sabitler: `MIXED`), mürettebat
-`src/core/simulation/crew.ts` · **Test:** `src/core/simulation/__tests__/generator.test.ts`
+`src/core/simulation/crew.ts` · **Test:** `src/core/simulation/__tests__/generator.test.ts`, `src/modules/routine/__tests__/demoAdherence.test.ts`
 
 ## Amaç
 
@@ -31,6 +31,22 @@ Gün numaraları görev günüdür (1 = görev başlangıcı, 30 = bugün). Eşi
 | crew-3 Selin Aydın  | **caution**     | Son hafta uyku ortalaması 6–7 sa bandında, ruh hali 3 (3–4 bandı), egzersiz 60–120 dk bandında                        | `self_care`            | Hayır, motor stub (Mühendis 3)                              |
 | crew-4 Lucas Moreau | **advisory**    | Sistolik kişisel baseline'ın ~+9 üstünde (113 → ~122) ama nominal bantta; son 7 günün 4'ünde egzersiz hedefin altında | `self_care`            | **Hayır**, motor `advisory` üretmiyor (ADR-031, Mühendis 3) |
 
+## Uyum tablosu (oyunlaştırma ve pet)
+
+Veri takvimi izler, ama hikâyeye uygun bilinçli kaçırma/gecikme vardır (ADR-048 güncellemesi). XP değerden
+bağımsızdır (ADR-050); farklar yalnız uyumdan gelir. Değerler varsayılan seed'de, 30. gün 23:30 UTC
+(günün tüm görevleri kapanmış), `XP_PER_LEVEL` = 700:
+
+| Astronot | Uyum                                                        | XP    | Seviye | Seri (bugün / en uzun) | Pet (23:30) |
+| -------- | ----------------------------------------------------------- | ----- | ------ | ---------------------- | ----------- |
+| Mira     | Kusursuz                                                    | 3.010 | 5      | 30 / 30                | `cheerful`  |
+| Kenji    | 29–30. gün egzersiz + akşam ruh hali yok; 29. gün sabah geç | 2.945 | 5      | 0 / 28                 | `alert`     |
+| Selin    | 22., 25., 28. gün akşam ruh hali yok                        | 2.980 | 5      | 2 / 21                 | `neutral`   |
+| Lucas    | 25. ve 27. gün egzersiz yok                                 | 2.990 | 5      | 3 / 24                 | `neutral`   |
+
+Ekip skoru (son 7 gün): %97. Gün içinde (ör. 12:00) Mira'nın serisi 29'dur, bugünün görevleri kapanınca 30
+olur. Testler: `src/modules/routine/__tests__/demoAdherence.test.ts`.
+
 ## crew-1 · Mira Okafor (Komutan) → NOMINAL
 
 - **Kim:** Komutan, 44, K. Baseline: KB 114/74, nabız 61, şeker 86, ısı 36.7, uyku 7.9 sa, ruh hali 4.5,
@@ -40,6 +56,9 @@ Gün numaraları görev günüdür (1 = görev başlangıcı, 30 = bugün). Eşi
 - **Bu durum hangi verilerden çıkarılır?** Her metriğin son değeri kendi nominal bandında (ör. uyku 7–9,
   sistolik 90–130, egzersiz ≥ 120); hiçbir sustained/trend kuralı tetiklenmez.
 - **İlgili tehlike:** Yok; diğer üçüyle kıyas noktası.
+- **Uyum:** Kusursuz; hiçbir ölçümü kaçırmaz, geç girmez. Seri görev boyunca kesintisiz (30. gün sonunda
+  30 gün). Beklenen pet: `neutral` (günün ipucu ya da "şimdi X zamanı"); gün kapanınca seri 30 kilometre
+  taşında `cheerful`.
 
 ## crew-2 · Kenji Arata (Uçuş Mühendisi) → WARNING
 
@@ -60,6 +79,9 @@ Gün numaraları görev günüdür (1 = görev başlangıcı, 30 = bugün). Eşi
   - `heartRate` 7 günlük trend +%15 kuralı → caution (destekleyici).
 - **İlgili tehlike:** Kapalı/düşmanca ortam (`environment`): kapalı alanda enfeksiyon yayılımı, bağışıklık
   değişimi.
+- **Uyum:** Hastalığın son 2 gününde (29–30) egzersiz ve akşam ruh hali kaydı **yok**; 29. günün sabah
+  vital bloğunu 150 dk geç girer (`late`). Seri 29. günde kırılır (bugün 0, en uzun 28). Beklenen pet:
+  her saatte `alert` (motor warning; "durumunu aç, CMO'ya haber ver").
 
 ## crew-3 · Selin Aydın (Mürettebat Tıp Sorumlusu) → CAUTION
 
@@ -78,6 +100,9 @@ Gün numaraları görev günüdür (1 = görev başlangıcı, 30 = bugün). Eşi
     inseydi Selin warning olurdu ve dört seviye ayrışmazdı. Durum bu yüzden tek bir sustained kuraldan değil,
     üç metriğin birlikte caution bandına inmesinden gelir.
 - **İlgili tehlike:** İzolasyon ve kapalı alan (`isolation`): uyku ve ruh hali yavaşça bozulur.
+- **Uyum:** Son 10 günde 3 akşam ruh hali kaydı **yok** (22., 25., 28. gün): izolasyonda öz-bildirim
+  azalır. Seri 28. günde kırılır (bugün 1–2, en uzun 21). Beklenen pet: `neutral`; kaçırma bugüne
+  düşmediği için `concerned` değil.
 
 ## crew-4 · Lucas Moreau (Görev Uzmanı) → ADVISORY
 
@@ -87,14 +112,17 @@ Gün numaraları görev günüdür (1 = görev başlangıcı, 30 = bugün). Eşi
   - Gün 1–20: normal.
   - **Gün 21–30:** sistolik baseline'ın +9 mmHg üstüne oturur (113 → ~122). Popülasyon için hâlâ normal
     (nominal bant 90–130), ama **bu kişi için** belirgin bir kayma.
-  - **Gün 24–27:** egzersiz hedefin altında (~%60, ~80–90 dk); 28. gün dinlenme; 29–30 normal. Son 7
-    günün 4'ünde egzersiz < 120 dk.
+  - **Gün 24–27:** egzersiz hedefin altında (~%60, ~80–90 dk); 25. ve 27. gün hiç girilmez; 28. gün
+    dinlenme; 29–30 normal. Son 7 günün 2'sinde egzersiz < 120 dk, 2'sinde kayıt yok.
 - **Bu durum hangi verilerden çıkarılır?** Hiçbir değer eşik bandını aşmıyor; advisory, **kişisel
   baseline'a göre sapma** (son 10 gün ortalaması − ilk 20 gün ortalaması ≈ +9) ve egzersiz uyumunun
   düşmesinden çıkar. Sistolik 7 günlük +%10 trend kuralı tetiklenmez (kayma yavaş ve küçük).
   Motor bugün `advisory` üretmiyor (ADR-031); veri beklenen durumu sağlar, kural Mühendis 3'te.
 - **İlgili tehlike:** Yerçekimi alanı (`gravity`): mikro-g'de kardiyovasküler uyum ve egzersiz
   karşı-önleminin (countermeasure) aksaması.
+- **Uyum:** Son 7 günde 2 egzersiz kaydı **yok** (25. ve 27. gün; ikisi de planlı düşük günlerdi →
+  kayıtlı düşük gün 2). 29. günün egzersizi kayıtlı ve normal: bugün 17:30'dan önce son egzersiz değeri
+  düşük görünmez, durum gün içinde kaymaz. Seri 27. günde kırılır (bugün 2–3, en uzun 24). Beklenen pet: `neutral`.
 
 ## Mühendis 3 için
 
