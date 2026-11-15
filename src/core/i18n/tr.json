@@ -360,7 +360,16 @@
     },
     "reminders": {
       "title": "Bugünkü rutin",
-      "empty": "Henüz planlanmış hatırlatma yok."
+      "empty": "Henüz planlanmış hatırlatma yok.",
+      "at": "{{time}} UTC",
+      "markDone": "Yapıldı olarak işaretle",
+      "status": {
+        "upcoming": "Sırada",
+        "due": "Şimdi yap",
+        "done": "Yapıldı",
+        "late": "Geç yapıldı",
+        "missed": "Kaçırıldı"
+      }
     },
     "missions": {
       "title": "Görevler",

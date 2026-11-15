@@ -110,12 +110,20 @@ nominal olmayanlar üstte.
 <ReminderCenter scope?: 'today' | 'all' />
 <MissionBoard />
 <MetClock />                                   // gerçek
-useReminders(): { reminders: ReminderInstance[]; due: ReminderInstance[]; missed: ReminderInstance[] }
+useReminders(crewId?): {                       // ADR-041; crewId yoksa seçili astronot
+  crewId; reminders; byCrew: Record<crewId, ReminderInstance[]>; due; late; missed; missedCount;
+  completeTask(crewId, templateId): boolean }  // yalnız metriksiz + açık (due/missed) görev
+useMissedCount(crewId?): number
+ReminderInstance = { id: `${crewId}:${templateId}:${missionDay}:${occurrence}`, crewId, template,
+  missionDay, occurrence, dueAt, status: 'upcoming'|'due'|'done'|'late'|'missed', completedAt?, completedBy? }
+expandReminders({ schedule, missionStart, now, measurements, crew, completions }): ReminderInstance[]  // saf
+expandRange(input, fromDay, toDay); EARLY_WINDOW_MIN = 60; DUE_GRACE_MIN = 120
+useRoutineStore ('astrovital:routine'): completions, notifiedIds, dailyMissionCompletions, notificationsEnabled
 useGamification(): { xp; level; streakDays; badges; missions: Mission[]; teamScore; completeMission(id) }
 levelForXp(xp: number): number; levelProgress(xp: number): number; XP_PER_LEVEL
 ```
 
-Faz 0: listeler boş.
+`ReminderCenter` çalışır-sade (görünüm visualization'da, `docs/HANDOFF_ENGINEER4.md`).
 
 ## `@core` public yüzeyi (tüm modüller kullanabilir)
 

@@ -98,6 +98,27 @@ Takvimde olmayan hiçbir ölçüm üretilmez.
 - Ölçüm sayısı (30 gün × 4 kişi, ISS): **1.324** (nominal ve karma görev aynı; önce 1.452).
   Fark: akşam KB + ısı + yarım günlük nabız kalktı, her gün akşam nabzı geldi.
 
+## Durum kuralları (ADR-041)
+
+Her görev örneğinin durumu `now`'a göre hesaplanır (`src/modules/routine/services/reminderEngine.ts`,
+sabitler `reminderConfig.ts`). Saat = takvimdeki `timeOfDayMET` (UTC görev günü).
+
+| Durum      | Koşul                                           | Ekranda                         |
+| ---------- | ----------------------------------------------- | ------------------------------- |
+| `upcoming` | şimdi < saat − 60 dk                            | Sırada                          |
+| `due`      | saat − 60 dk ≤ şimdi ≤ saat + 120 dk, kayıt yok | Şimdi yap (bildirim bir kez)    |
+| `done`     | kayıt [saat − 60 dk, saat + 120 dk] içinde      | Yapıldı                         |
+| `late`     | kayıt (saat + 120 dk, gün sonu] içinde          | Geç yapıldı (ikon + metin ayrı) |
+| `missed`   | şimdi > saat + 120 dk, kayıt yok                | Kaçırıldı (bildirim bir kez)    |
+
+- **Eşleşme:** aynı astronot + aynı metrik. Bir ölçüm yalnız bir görevi karşılar: penceresi ölçümü
+  kapsayan, henüz karşılanmamış görevlerden saati en yakın olanı. Örnek (ISS): 19:00'daki nabız akşam
+  nabzını (19:30) karşılar, sabah nabzını (06:30) değil.
+- **Metriksiz görevler** (haftalık özet, aylık muayene ve anket, ekip sohbeti) elle işaretlenir; aynı
+  pencere kuralları geçerli, yalnız görev açıkken (`due`/`missed`) işaretlenebilir.
+- **`twice_daily`** (bugün yalnız rover): ikinci örnek ilkinden 12 sa sonra — geçici, ortam farkları kararında kesinleşecek.
+- **Gün sınırı:** UTC görev günü, Mars dahil (ekranda Sol yazar, hesap UTC). Gece yarısından sonraki kayıt ertesi güne sayılır.
+
 ## Açık konular
 
 - **Rover (ortam farkları kararı bekliyor):** rover kendi takvimini kullanıyor ve `CORE_ROUTINE`'i
@@ -107,6 +128,7 @@ Takvimde olmayan hiçbir ölçüm üretilmez.
   ~%50'sinde 19:00. Rover'ın `twice_daily` ikinci ölçümü (20:00) simüle edilmiyor.
 - **Ortam farkları:** Ortama göre takvim farkları ayrı karar. Mars'ta `weekly-report` ile
   `weekly-health-summary` aynı işi tarif ediyor; ortam kararında birleştirilmeli.
-- **Zaman penceresi:** Bir görevin ne zaman "yapıldı/kaçırıldı" sayılacağı (`useReminders`) ayrı karar.
-  Bayatlık (`isStale`) şimdilik sıklık × 1.5 kuralını kullanıyor: egzersizin dinlenme gününden sonraki
-  gün değer "eski" görünebilir; zaman penceresi kararında ele alınacak.
+- **Zaman penceresi:** karar verildi (ADR-041, § Durum kuralları).
+- **Bayatlık:** `isStale` sıklık × 1.5 kuralını kullanıyor; egzersizin dinlenme gününden sonraki gün değer
+  "eski" görünebilir (`restEveryNDays` dikkate alınmıyor). `staleness.ts` visualization'da; öneri
+  `docs/HANDOFF_ENGINEER4.md`'de.

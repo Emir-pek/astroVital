@@ -360,7 +360,16 @@
     },
     "reminders": {
       "title": "Today's routine",
-      "empty": "No reminders scheduled yet."
+      "empty": "No reminders scheduled yet.",
+      "at": "{{time}} UTC",
+      "markDone": "Mark as done",
+      "status": {
+        "upcoming": "Upcoming",
+        "due": "Due now",
+        "done": "Done",
+        "late": "Done late",
+        "missed": "Missed"
+      }
     },
     "missions": {
       "title": "Missions",

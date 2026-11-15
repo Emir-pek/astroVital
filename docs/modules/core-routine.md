@@ -59,8 +59,9 @@ app → hepsi.
 - [x] Takvim saatleri: ISS gün iskeleti, simülasyon saatleri takvimden (ADR-039)
 - [ ] Ortama göre takvim farkları (ayrı karar; rover'ın veri = takvim uyumu dahil)
 - [ ] Mürettebat ekleme/çıkarma (sonra kapsamı, ADR-038)
-- [ ] `useReminders`: aktif ortamın `reminderSchedule`'ını bugünün MET gününe aç; `metric`'i olan
-      görevler için o zaman penceresinde ölçüm varsa `done`, süresi geçtiyse `missed` (görünüm: visualization)
+- [x] `useReminders`: aktif ortamın `reminderSchedule`'ını bugünün UTC görev gününe açar; 5 durum
+      (`late` dahil), kişi bazlı + seçili astronot, elle tamamlanan görevler (ADR-041). `ReminderCenter`
+      çalışır-sade; görünüm visualization'da (`docs/HANDOFF_ENGINEER4.md`)
 - [ ] Bildirim: uygulama içi toast + izin verildiyse `Notification` API (Settings'te açma anahtarı) (görünüm: visualization)
 - [ ] Kaçırılan ölçüm takibi (Dashboard'da rozet) (görünüm: visualization)
 - [ ] Oyunlaştırma: modül-yerel persist store (`astrovital:routine`), XP, seviye, seri (streak),

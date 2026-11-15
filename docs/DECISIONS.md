@@ -417,3 +417,25 @@ Node 24 LTS, npm.
 - **Sonuç:** `ScenarioId`'ye `'mixed_mission'` eklendi (eklemeli). Durumlar varsayılan seed'de (2026)
   testle kilitli; başka seed'lerde gürültü nedeniyle tek bir değer bant kenarını aşabilir. Motor bugün stub;
   `advisory` üretimi Mühendis 3'te (ADR-031). Eski tarayıcı verisi: Ayarlar → Sıfırla → Demo verisini yükle.
+
+### ADR-041 — Hatırlatma durum kuralları: pencere, 'late', kişi bazlı, seçili astronot
+
+- **Bağlam:** `useReminders` stub'dı; bir görevin ne zaman "yapıldı/kaçırıldı" sayılacağı ADR-035'te ayrı
+  karar olarak bırakılmıştı. ISS'te aynı metrik günde iki kez ölçülüyor (sabah ve akşam nabzı); ekip
+  ekranında da başkasının tıbbi değeri görünmemeli (ADR-032).
+- **Karar:** Saf motor `expandReminders` (`src/modules/routine/services/reminderEngine.ts`). Sabitler tek
+  yerde (`reminderConfig.ts`): `EARLY_WINDOW_MIN = 60`, `DUE_GRACE_MIN = 120`. Beş durum:
+  `upcoming` (şimdi < saat − 60 dk) · `due` (pencere açık, kayıt yok, saat + 120 dk'ya kadar) · `done`
+  (kayıt [saat − 60, saat + 120] içinde) · `late` (kayıt saat + 120'den sonra ama gün bitmeden) ·
+  `missed` (saat + 120 geçti, kayıt yok). Gün = UTC görev günü (ADR-030; Mars'ta yalnız etiket "Sol").
+  Eşleşme kişi + metrik ile; bir ölçüm yalnız **bir** örneği karşılar: penceresi ölçümü kapsayan,
+  henüz karşılanmamış örneklerden saati en yakın olan (sabah/akşam nabzı karışmaz). Metriği olmayan
+  görevler (haftalık özet, aylık muayene/anket, ekip sohbeti) elle işaretlenir (`completeTask`, aynı
+  pencere kuralları; ancak görev açıkken — `due`/`missed` — kabul edilir). Örnek kimliği
+  `${crewId}:${templateId}:${missionDay}:${occurrence}`. `twice_daily` ikinci örnek = ilk + 12 sa
+  (**geçici**; ortam farkları kararında kesinleşecek). Kişi görünümü varsayılan olarak seçili astronotu
+  (`selectedCrewId`) izler; `byCrew` tüm mürettebatın yalnız görev durumunu verir. Tamamlanma kayıtları
+  modülün kendi store'unda (`astrovital:routine`, ADR-005). Sahip: Mühendis 1.
+- **Sonuç:** Pencere tablosu `docs/ROUTINE_SCHEDULE.md` § Durum kuralları. Gün sınırını aşan pencere
+  yok (en geç görev 21:00 + 120 dk = 23:00). Gece yarısından sonra girilen ölçüm ertesi güne sayılır;
+  önceki gün `missed` kalır. Bayatlık (`isStale`) bu karardan bağımsız.

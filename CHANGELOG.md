@@ -20,6 +20,24 @@ Yalnız `docs/` değişiklikleri kayıt gerektirmez.
 
 <!-- NEW ENTRIES BELOW -->
 
+### 2026-11-15 13:40 — Muhammed Bektaş (feat/core-routine) — Hatırlatma durum motoru (kişi bazlı, 'late' durumu)
+
+- **Ne:** `useReminders` artık gerçek: aktif ortamın takvimini bugünün UTC görev gününe açar, her görev
+  için 5 durum verir: sırada / şimdi yap / yapıldı / **geç yapıldı (yeni)** / kaçırıldı. Pencere: saatten
+  60 dk önce açılır, 120 dk sonra kapanır. Bir ölçüm tek görevi karşılar (sabah ve akşam nabzı karışmaz).
+  Metriksiz görevler (haftalık özet, aylık muayene) elle işaretlenir. `useReminders(crewId?)` varsayılan
+  olarak seçili astronotu izler; `byCrew` tüm ekibin yalnız görev durumunu verir. Yeni modül store'u
+  `astrovital:routine`. `ReminderCenter` çalışır-sade bir liste.
+- **Neden:** ADR-035'te ayrı bırakılan zaman penceresi kararı (ADR-041).
+- **Dosyalar:** `src/modules/routine/services/{reminderConfig,reminderEngine}.ts` (yeni),
+  `src/modules/routine/store/useRoutineStore.ts` (yeni), `src/modules/routine/hooks/useReminders.ts`,
+  `src/modules/routine/components/ReminderCenter.tsx`, `src/modules/routine/index.ts`,
+  `src/modules/routine/CLAUDE.md`, testler (`reminderEngine.test.ts`, `useReminders.test.tsx`),
+  `src/core/i18n/en.json`, `src/core/i18n/tr.json` (`routine.reminders.*`), `docs/DECISIONS.md` (ADR-041),
+  `docs/ROUTINE_SCHEDULE.md` (§ Durum kuralları), `docs/CONTRACTS.md`, `docs/modules/core-routine.md`, `CHANGELOG.md`
+- **Ekip ne yapmalı:** Emir: `ReminderCenter` çalışır-sade, restyle sende ('late', 'done'dan ikon + metinle
+  ayrışmalı). Ayrıntı: `docs/HANDOFF_ENGINEER4.md` (bu görevin sonunda eklenecek).
+
 ### 2026-11-15 13:05 — Muhammed Bektaş (feat/core-routine) — Sözleşme uyumu: eski green/yellow/red kalıntıları (ADR-031)
 
 - **Ne:** Repo genelinde eski `Status` adları tarandı. Tip, store, simülasyon, i18n `status.*` ve
