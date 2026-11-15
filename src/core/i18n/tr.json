@@ -369,7 +369,17 @@
         "done": "Yapıldı",
         "late": "Geç yapıldı",
         "missed": "Kaçırıldı"
-      }
+      },
+      "progressLabel": "Bugün yapılan görevler",
+      "crewProgressLabel": "{{name}} — bugün yapılan görevler",
+      "progress": "{{done}} / {{total}} yapıldı · {{missed}} kaçırıldı",
+      "utcNote": "Saatler görev saatidir (UTC).",
+      "viewLabel": "Kimin görevleri",
+      "viewMe": "Ben",
+      "viewCrew": "Ekip",
+      "you": "(sen)",
+      "missedCount_one": "{{count}} kaçırıldı",
+      "missedCount_other": "{{count}} kaçırıldı"
     },
     "missions": {
       "title": "Görevler",
@@ -385,7 +395,13 @@
       "noBadges": "Henüz rozet yok",
       "dailyTitle": "Bugünkü sağlık görevleri",
       "tick": "Yapıldı olarak işaretle",
-      "ticked": "Bugün yapıldı"
+      "ticked": "Bugün yapıldı",
+      "xpTotal": "{{xp}} XP",
+      "levelProgressLabel": "Seviye {{level}} ilerlemesi",
+      "levelProgress": "{{xp}} / {{max}} XP",
+      "longest": "En uzun: {{count}} gün",
+      "teamScoreHint": "Ekip görevleri, son 7 gün",
+      "notYet": "Henüz kazanılmadı"
     },
     "notify": {
       "title": "AstroVital hatırlatması",

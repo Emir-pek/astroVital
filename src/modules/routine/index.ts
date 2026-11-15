@@ -3,11 +3,9 @@
  * Owner: Engineer 1. Contract: docs/CONTRACTS.md § routine.
  * Allowed deps: @core/*, @modules/assessment.
  */
-export {
-  ReminderCenter,
-  REMINDER_STATUS_ICON,
-  type ReminderCenterProps,
-} from './components/ReminderCenter';
+export { ReminderCenter, type ReminderCenterProps } from './components/ReminderCenter';
+export { REMINDER_STATUS_ICON } from './components/reminderStatusIcon';
+export { MissedCountBadge } from './components/MissedCountBadge';
 export { ReminderNotifier } from './components/ReminderNotifier';
 export {
   useNotificationSettings,

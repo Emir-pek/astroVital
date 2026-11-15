@@ -20,6 +20,21 @@ Yalnız `docs/` değişiklikleri kayıt gerektirmez.
 
 <!-- NEW ENTRIES BELOW -->
 
+### 2026-11-15 19:05 — Muhammed Bektaş (feat/core-routine) — Rutin ekranı: hatırlatma ve görev panelleri tasarım diline geçti
+
+- **Ne:** `ReminderCenter` artık "Ben / Ekip" seçicili. Ben: günün ilerleme çubuğu ("6 / 10 yapıldı · 0
+  kaçırıldı"), önce yapılacak olanlar; her satırda saat (mono), görev ve durum pill'i (ikon + metin; "Geç
+  yapıldı" kendi ikonu ve kelimesiyle). Metriksiz görevlerde "Yapıldı olarak işaretle" düğmesi var. Ekip: dört
+  kişi, yalnız görev ilerlemesi (tıbbi değer ve durum yok). `MissionBoard`: kural cümlesi, seviye + XP çubuğu
+  (`ProgressBar`), seri (en uzun dahil), ekip skoru, günlük görevler, 5 rozet arması (kazanılmayan soluk ve
+  "Henüz kazanılmadı"). Yeni `MissedCountBadge` ("N kaçırıldı"; henüz yerleştirilmedi).
+- **Neden:** Çalışır-sade sürümler Rutin sayfasında görünüyordu; tasarım belgesi §7.7–7.8 ve kutu sistemi (ADR-037).
+- **Dosyalar:** `src/modules/routine/components/{ReminderCenter,MissionBoard,MissedCountBadge}.tsx`,
+  `src/modules/routine/components/reminderStatusIcon.ts` (yeni), `src/modules/routine/index.ts`,
+  test `routineUi.test.tsx`, `src/core/i18n/{en,tr}.json` (`routine.reminders.*`, `routine.missions.*`), `CHANGELOG.md`
+- **Ekip ne yapmalı:** Emir: `RoutinePage` değişmedi, paneller otomatik yeni görünümde. `MissedCountBadge`'i
+  Rutin menü öğesinin yanına sen yerleştir (`docs/HANDOFF_ENGINEER4.md` "Emir'den beklenen").
+
 ### 2026-11-15 18:45 — Muhammed Bektaş (feat/core-routine) — Astronot pet arayüzü (CompanionDock) + kit: ProgressBar, Popover
 
 - **Ne:** Sol menünün altında pet görünüyor: elle çizilmiş, özgün bir yardımcı kask (figürle aynı palet ve

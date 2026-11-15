@@ -369,7 +369,17 @@
         "done": "Done",
         "late": "Done late",
         "missed": "Missed"
-      }
+      },
+      "progressLabel": "Today's tasks done",
+      "crewProgressLabel": "Today's tasks done by {{name}}",
+      "progress": "{{done}} / {{total}} done · {{missed}} missed",
+      "utcNote": "Times are mission time (UTC).",
+      "viewLabel": "Whose tasks",
+      "viewMe": "Me",
+      "viewCrew": "Crew",
+      "you": "(you)",
+      "missedCount_one": "{{count}} missed",
+      "missedCount_other": "{{count}} missed"
     },
     "missions": {
       "title": "Missions",
@@ -385,7 +395,13 @@
       "noBadges": "No badges yet",
       "dailyTitle": "Today's health missions",
       "tick": "Mark done",
-      "ticked": "Done today"
+      "ticked": "Done today",
+      "xpTotal": "{{xp}} XP",
+      "levelProgressLabel": "Progress to level {{level}}",
+      "levelProgress": "{{xp}} / {{max}} XP",
+      "longest": "Longest: {{count}} days",
+      "teamScoreHint": "Crew tasks done, last 7 days",
+      "notYet": "Not earned yet"
     },
     "notify": {
       "title": "AstroVital reminder",
