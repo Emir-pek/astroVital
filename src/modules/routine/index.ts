@@ -85,3 +85,4 @@ export { exportData, importData } from './store/dataTransferActions';
 export { CompanionDock } from './components/companion/CompanionDock';
 export { CompanionAvatar, type CompanionAvatarProps } from './components/companion/CompanionAvatar';
 export { MOOD_COLOR_VAR, MOOD_STYLE } from './components/companion/moodStyle';
+export { RoutineSettingsPanel } from './components/RoutineSettingsPanel';

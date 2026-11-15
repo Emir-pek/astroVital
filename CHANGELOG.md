@@ -20,6 +20,18 @@ Yalnız `docs/` değişiklikleri kayıt gerektirmez.
 
 <!-- NEW ENTRIES BELOW -->
 
+### 2026-11-15 19:25 — Muhammed Bektaş (feat/core-routine) — RoutineSettingsPanel: bildirim, demo, senaryo ortamı, yedek
+
+- **Ne:** Kendi başına çalışan bir ayarlar bloğu (üç kart): tarayıcı bildirimleri (açınca izin ister;
+  reddedildiyse nedenini söyler), "açılışta demo verisini yükle", senaryoyu önerilen ortamla ya da mevcut
+  ortamda yükle, veriyi dosyaya dışa aktar / dosyadan içe aktar (içe aktarma onay penceresi ister; bozuk
+  dosyada hiçbir şey değişmez ve nedeni söylenir). Ayarlar sayfasına henüz bağlanmadı.
+- **Neden:** P2 ve bildirim mantığı hazırdı ama arayüzde yeri yoktu; `SettingsPage` Emir'in dosyası.
+- **Dosyalar:** `src/modules/routine/components/RoutineSettingsPanel.tsx` (yeni), `src/modules/routine/index.ts`,
+  test `routineSettings.test.tsx`, `src/core/i18n/{en,tr}.json` (`routine.settings.*`), `CHANGELOG.md`
+- **Ekip ne yapmalı:** Emir: `SettingsPage`'e `import { RoutineSettingsPanel } from '@modules/routine';` ve
+  uygun yere `<RoutineSettingsPanel />` ekle. Kendi "Demo verisini yükle" düğmenle çakışırsa birleştir.
+
 ### 2026-11-15 19:05 — Muhammed Bektaş (feat/core-routine) — Rutin ekranı: hatırlatma ve görev panelleri tasarım diline geçti
 
 - **Ne:** `ReminderCenter` artık "Ben / Ekip" seçicili. Ben: günün ilerleme çubuğu ("6 / 10 yapıldı · 0

@@ -459,7 +459,38 @@
       },
       "hide": "Hide"
     },
-    "envChanged": "Environment: {{env}}. Reminder schedule and thresholds are updated."
+    "envChanged": "Environment: {{env}}. Reminder schedule and thresholds are updated.",
+    "settings": {
+      "notificationsTitle": "Reminders",
+      "notifications": "Browser notifications",
+      "notificationsHint": "In-app messages are always on. Turning this on asks the browser for permission.",
+      "permissionDenied": "The browser blocked notifications. Allow them in the browser settings, then try again.",
+      "permissionUnsupported": "This browser cannot show notifications. In-app messages still work.",
+      "on": "On",
+      "off": "Off",
+      "demoTitle": "Demo data",
+      "autoLoad": "Load demo data on start",
+      "autoLoadHint": "When off, an empty device stays empty until you load data.",
+      "recommendedEnv": "Scenario \"{{scenario}}\" is best shown in: {{env}}",
+      "recommendedEnvLabel": "Environment for the scenario",
+      "applyEnv": "Use recommended",
+      "keepEnv": "Keep current",
+      "loadScenario": "Load scenario ({{env}})",
+      "scenarioLoaded": "Scenario loaded.",
+      "backupTitle": "Backup",
+      "backupHint": "Save all data to a file or restore it from one. Nothing leaves this device.",
+      "export": "Export data",
+      "import": "Import data",
+      "importConfirmTitle": "Replace all data?",
+      "importConfirmText": "Importing \"{{file}}\" replaces every measurement, the crew, the settings and the routine progress on this device.",
+      "importConfirm": "Replace data",
+      "importDone": "Data restored from the file.",
+      "importError": {
+        "invalidJson": "This file is not valid JSON. Nothing was changed.",
+        "invalidFormat": "This is not an AstroVital backup ({{detail}}). Nothing was changed.",
+        "unknownCrew": "The file has measurements of an unknown crew member. Nothing was changed."
+      }
+    }
   },
   "assessment": {
     "stub": {
