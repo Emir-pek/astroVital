@@ -19,18 +19,18 @@ export function EmergencyPage() {
     <>
       <PageHeader title={t('pages.emergency.title')} subtitle={t('pages.emergency.subtitle')} />
       {env.medicalCapability === 'autonomous' && (
-        <p className="mb-6 rounded-card bg-raised p-4 text-body font-semibold text-text">
-          {t('pages.emergency.autonomous')}
-        </p>
+        <Card className="mb-section border-2 border-caution">
+          <p className="text-body font-semibold text-text">{t('pages.emergency.autonomous')}</p>
+        </Card>
       )}
-      <ol className="flex flex-col gap-4">
+      <ol className="flex flex-col gap-section">
         {CHAIN.map((step, index) => (
           <li key={step}>
             <Card>
               <div className="flex items-start gap-6">
                 <span
                   aria-hidden="true"
-                  className="flex size-14 shrink-0 items-center justify-center rounded-full bg-raised font-mono text-headline text-text"
+                  className="flex size-14 shrink-0 items-center justify-center rounded-pill bg-raised font-mono text-headline text-text"
                 >
                   {index + 1}
                 </span>

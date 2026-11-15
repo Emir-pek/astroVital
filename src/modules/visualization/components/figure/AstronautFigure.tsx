@@ -4,44 +4,46 @@ import type { BodyRegionId } from '@core/types';
 import { STATUS_COLOR_VAR, type DisplayStatus } from '@core/ui';
 import {
   FIGURE_BOX,
-  FIGURE_OFFSET_Y,
   HALO_OUTLINE,
   INNER_ORDER,
   REGION_SHAPES,
   SILHOUETTE,
   type InnerRegionId,
 } from './geometry';
-import { STAGE } from './hitAreas';
-import { renderShape, safeId, stop, suit } from './renderShape';
+import { FIGURE_VIEWBOX_ATTR } from './layout';
+import { renderShape, safeId, stop } from './renderShape';
 import { SuitArt } from './SuitArt';
 
 /*
- * Hand-drawn astronaut (spec §8), built as four stacked SVG layers on the same 584 × 520 stage:
+ * Hand-drawn astronaut (spec §8, ADR-036), three stacked SVG layers that share one viewBox and
+ * scale with their box:
  *
- *   1. halo      — the whole_body region, behind the suit (only its outer rim shows);
- *   2. suit      — the static illustration (SuitArt); its blur filters render once;
- *   3. steady    — region glows that do not move (advisory/caution/warning/stale/none);
- *   4. breathing — nominal region glows; the whole layer fades 0.85 ↔ 1 over 4.5 s.
+ *   1. halo  — the whole_body region, behind the suit: a thin contour a few px outside the
+ *              silhouette, with a dark gap. The only thing that breathes (opacity 0.85 ↔ 1 over
+ *              4.5 s) and only while nominal;
+ *   2. suit  — the static matte-white illustration (SuitArt); its blur filters render once;
+ *   3. marks — inner regions. A nominal, stale or empty region draws nothing: the labels beside
+ *              the figure carry every status. Advisory/caution/warning regions get a status fill
+ *              (vessels: filled tracts along the limbs) clipped to the silhouette plus a dark
+ *              keyline (navy on the white suit ≈ 13:1, so the area reads at ≥ 3:1 even where the
+ *              status colour itself does not).
  *
- * Breathing is a layer-level opacity animation (compositor-only, no repaint of the SVG content)
- * instead of animating every glow inside one SVG. Inner glows are radial gradients and stacked
- * strokes — no filters — so nothing animated is ever re-blurred. The halo uses one static blur
- * and, when nominal, breathes the same way at the layer level.
+ * Selection is shown by the label and its accent leader line (BodyMap); here it only dims the
+ * marks of the other regions.
  */
 
-/** Breathing period for nominal regions; mirrors --av-breath (4.5 s) in tokens.css. */
+/** Breathing period of the nominal halo; mirrors --av-breath (4.5 s) in tokens.css. */
 const BREATH_SECONDS = 4.5;
 
-type LitStatus = Exclude<DisplayStatus, 'stale' | 'none'>;
-const LIT: readonly LitStatus[] = ['nominal', 'advisory', 'caution', 'warning'];
+type AlertStatus = 'advisory' | 'caution' | 'warning';
+const isAlert = (s: DisplayStatus): s is AlertStatus =>
+  s === 'advisory' || s === 'caution' || s === 'warning';
 
-/** Glow strength per status: nominal is a faint hint, problems glow clearly (and steadily). */
-const GLOW_OPACITY: Record<LitStatus, number> = {
-  nominal: 0.36,
-  advisory: 0.85,
-  caution: 0.95,
-  warning: 0.95,
-};
+/** Opacity of the marks of regions that are not selected while another one is. */
+const DIMMED = 0.3;
+const ALERTS: readonly AlertStatus[] = ['advisory', 'caution', 'warning'];
+/** Dark keyline around status marks: the page background tone. */
+const KEYLINE = 'var(--av-bg)';
 
 const BREATH = {
   animate: { opacity: [0.85, 1] },
@@ -53,24 +55,19 @@ const BREATH = {
   },
 };
 
-const isLit = (s: DisplayStatus): s is LitStatus => s !== 'stale' && s !== 'none';
-
 interface LayerProps {
   breathing: boolean;
   children: ReactNode;
 }
 
-/** One full-stage SVG layer; a breathing layer animates its own opacity (compositor-friendly). */
+/** One full-size SVG layer; a breathing layer animates its own opacity (compositor-friendly). */
 function Layer({ breathing, children }: LayerProps) {
   const common = {
-    viewBox: `0 0 ${STAGE.width} ${STAGE.height}`,
-    width: STAGE.width,
-    height: STAGE.height,
+    viewBox: FIGURE_VIEWBOX_ATTR,
     'aria-hidden': true,
     focusable: false,
-    className: 'pointer-events-none absolute inset-0',
+    className: 'pointer-events-none absolute inset-0 size-full',
   } as const;
-  const content = <g transform={`translate(0 ${FIGURE_OFFSET_Y})`}>{children}</g>;
   return breathing ? (
     <motion.svg
       {...common}
@@ -80,175 +77,85 @@ function Layer({ breathing, children }: LayerProps) {
       animate={BREATH.animate}
       transition={BREATH.transition}
     >
-      {content}
+      {children}
     </motion.svg>
   ) : (
-    <svg {...common}>{content}</svg>
+    <svg {...common}>{children}</svg>
   );
-}
-
-/** Outline for a region: dashed grey when there is no data, accent when selected. */
-function contour(
-  shapes: ReactNode[],
-  status: DisplayStatus,
-  selected: boolean,
-  widthScale = 1,
-): ReactNode {
-  if (selected) {
-    return (
-      <g fill="none" strokeLinecap="round" strokeLinejoin="round">
-        {/* A faint dark underlay keeps the lavender outline legible on the white suit. */}
-        <g stroke={suit('deep')} strokeOpacity={0.35} strokeWidth={5 * widthScale}>
-          {shapes}
-        </g>
-        <g
-          stroke="var(--av-accent)"
-          strokeWidth={3 * widthScale}
-          strokeDasharray={status === 'none' ? '6 6' : undefined}
-        >
-          {shapes}
-        </g>
-      </g>
-    );
-  }
-  if (status === 'none') {
-    return (
-      <g fill="none" strokeLinecap="round">
-        <g stroke={suit('deep')} strokeOpacity={0.3} strokeWidth={3 * widthScale}>
-          {shapes}
-        </g>
-        <g stroke={STATUS_COLOR_VAR.none} strokeWidth={1.6 * widthScale} strokeDasharray="6 6">
-          {shapes}
-        </g>
-      </g>
-    );
-  }
-  return null;
 }
 
 interface InnerRegionProps {
   id: InnerRegionId;
   status: DisplayStatus;
-  selected: boolean;
+  dimmed: boolean;
   uid: string;
 }
 
-/** A light patch (or vessel line) showing through the suit fabric, clipped to the suit. */
-function InnerRegion({ id, status, selected, uid }: InnerRegionProps) {
+/** Status mark of one inner region, clipped to the suit. Nothing at all unless it is an alert. */
+function InnerRegion({ id, status, dimmed, uid }: InnerRegionProps) {
   const spec = REGION_SHAPES[id];
-  const outline = spec.shapes.map((s, i) => renderShape(s, `o${i}`));
-
-  let glow: ReactNode = null;
-  if (isLit(status)) {
-    const color = STATUS_COLOR_VAR[status];
-    glow =
-      spec.paint === 'patch' ? (
-        <g opacity={GLOW_OPACITY[status]}>
-          {spec.shapes.map((s, i) =>
-            renderShape(s, `g${i}`, { fill: `url(#${uid}-glow-${status})` }),
-          )}
+  let mark: ReactNode = null;
+  if (isAlert(status)) {
+    // Filled area + dark keyline. Vessels are filled tracts too, so no mark ever looks like a
+    // leader line.
+    mark = (
+      <>
+        <g fill={`url(#${uid}-fill-${status})`}>
+          {spec.shapes.map((s, i) => renderShape(s, `f${i}`))}
         </g>
-      ) : (
-        // Luminous vessel: a wide faint bloom, a mid stroke and a bright thin core.
-        <g fill="none" stroke={color} strokeLinecap="round" opacity={GLOW_OPACITY[status]}>
-          {spec.shapes.map((s, i) =>
-            renderShape(s, `b${i}`, { strokeWidth: 8, strokeOpacity: 0.16 }),
-          )}
-          {spec.shapes.map((s, i) =>
-            renderShape(s, `m${i}`, { strokeWidth: 4, strokeOpacity: 0.32 }),
-          )}
-          {spec.shapes.map((s, i) => renderShape(s, `c${i}`, { strokeWidth: 1.6 }))}
+        <g fill="none" stroke={KEYLINE} strokeWidth={1.3} strokeOpacity={0.85}>
+          {spec.shapes.map((s, i) => renderShape(s, `k${i}`))}
         </g>
-      );
-  } else if (status === 'stale') {
-    // Old data never looks like a health state: flat grey, low opacity, no glow.
-    glow = (
-      <g opacity={0.75}>
-        {spec.paint === 'patch'
-          ? spec.shapes.map((s, i) => renderShape(s, `s${i}`, { fill: `url(#${uid}-stale)` }))
-          : spec.shapes.map((s, i) =>
-              renderShape(s, `s${i}`, {
-                fill: 'none',
-                stroke: STATUS_COLOR_VAR.stale,
-                strokeWidth: 1.6,
-                strokeLinecap: 'round',
-              }),
-            )}
-      </g>
+      </>
     );
   }
-
   return (
-    <g data-region={id} data-status={status}>
-      {glow && <g clipPath={`url(#${uid}-suit)`}>{glow}</g>}
-      {contour(outline, status, selected)}
+    <g data-region={id} data-status={status} opacity={dimmed ? DIMMED : undefined}>
+      {mark && <g clipPath={`url(#${uid}-suit)`}>{mark}</g>}
     </g>
-  );
-}
-
-/** Gradients + suit clip shared by the glow layers (each layer carries its own copy). */
-function GlowDefs({ uid, statuses }: { uid: string; statuses: readonly LitStatus[] }) {
-  return (
-    <defs>
-      {statuses.map((s) => (
-        <radialGradient key={s} id={`${uid}-glow-${s}`}>
-          {stop(0, STATUS_COLOR_VAR[s], 1)}
-          {stop(0.35, STATUS_COLOR_VAR[s], 0.78)}
-          {stop(0.7, STATUS_COLOR_VAR[s], 0.26)}
-          {stop(1, STATUS_COLOR_VAR[s], 0)}
-        </radialGradient>
-      ))}
-      <radialGradient id={`${uid}-stale`}>
-        {stop(0, STATUS_COLOR_VAR.stale, 0.9)}
-        {stop(0.7, STATUS_COLOR_VAR.stale, 0.75)}
-        {stop(1, STATUS_COLOR_VAR.stale, 0)}
-      </radialGradient>
-      <clipPath id={`${uid}-suit`}>
-        {SILHOUETTE.map((d) => (
-          <path key={d} d={d} />
-        ))}
-      </clipPath>
-    </defs>
   );
 }
 
 interface HaloProps {
   status: DisplayStatus;
-  selected: boolean;
-  uid: string;
+  dimmed: boolean;
+  filter: string;
 }
 
 /**
- * whole_body: a thin halo hugging the silhouette. Drawn behind the suit, so only the outer half
- * of every stroke shows — widths are doubled accordingly.
+ * whole_body: a thin contour line that follows the silhouette a few px outside it, separated from
+ * the suit by a dark gap (drawn behind the suit, so only the outer part of every stroke shows), with
+ * a faint glow. Mint while nominal, a clear steady status colour otherwise; stale or missing data
+ * draws nothing (old data never looks like a health state).
  */
-function Halo({ status, selected, uid }: HaloProps) {
+function Halo({ status, dimmed, filter }: HaloProps) {
+  const lit = status === 'nominal' || isAlert(status);
+  const nominal = status === 'nominal';
   const outline = HALO_OUTLINE.map((d) => <path key={d} d={d} />);
-  let glow: ReactNode = null;
-  if (isLit(status)) {
-    glow = (
-      <g
-        filter={`url(#${uid}-halo)`}
-        fill="none"
-        stroke={STATUS_COLOR_VAR[status]}
-        strokeWidth={status === 'nominal' ? 5 : 8}
-        strokeLinejoin="round"
-        opacity={status === 'nominal' ? 0.42 : GLOW_OPACITY[status]}
-      >
-        {outline}
-      </g>
-    );
-  } else if (status === 'stale') {
-    glow = (
-      <g fill="none" stroke={STATUS_COLOR_VAR.stale} strokeWidth={3} opacity={0.5}>
-        {outline}
-      </g>
-    );
-  }
   return (
-    <g data-region="whole_body" data-status={status}>
-      {glow}
-      {contour(outline, status, selected, 2)}
+    <g data-region="whole_body" data-status={status} opacity={dimmed ? DIMMED : undefined}>
+      {lit && (
+        <g fill="none" strokeLinejoin="round">
+          <g
+            filter={`url(#${filter})`}
+            stroke={STATUS_COLOR_VAR[status]}
+            strokeWidth={nominal ? 14 : 20}
+            opacity={nominal ? 0.14 : 0.4}
+          >
+            {outline}
+          </g>
+          <g
+            stroke={STATUS_COLOR_VAR[status]}
+            strokeWidth={nominal ? 8 : 12}
+            opacity={nominal ? 0.5 : 1}
+          >
+            {outline}
+          </g>
+          <g stroke="var(--av-bg)" strokeWidth={nominal ? 5.6 : 6}>
+            {outline}
+          </g>
+        </g>
+      )}
     </g>
   );
 }
@@ -261,22 +168,12 @@ export interface AstronautFigureProps {
 export function AstronautFigure({ regions, selected }: AstronautFigureProps) {
   const reduceMotion = useReducedMotion() ?? false;
   const uid = `av${safeId(useId())}`;
-  const breathes = (s: DisplayStatus) => s === 'nominal' && !reduceMotion;
-
-  const inner = (id: InnerRegionId) => (
-    <InnerRegion key={id} id={id} status={regions[id]} selected={selected === id} uid={uid} />
-  );
-  const breathingIds = INNER_ORDER.filter((id) => breathes(regions[id]));
-  const steadyIds = INNER_ORDER.filter((id) => !breathes(regions[id]));
   const haloStatus = regions.whole_body;
+  const dimmed = (id: BodyRegionId) => selected !== null && selected !== id;
 
   return (
-    <div
-      className="relative"
-      style={{ width: STAGE.width, height: STAGE.height }}
-      aria-hidden="true"
-    >
-      <Layer breathing={breathes(haloStatus)}>
+    <div className="relative size-full" aria-hidden="true">
+      <Layer breathing={haloStatus === 'nominal' && !reduceMotion}>
         <defs>
           <filter
             id={`${uid}-halo`}
@@ -287,33 +184,34 @@ export function AstronautFigure({ regions, selected }: AstronautFigureProps) {
             height={FIGURE_BOX.height}
             colorInterpolationFilters="sRGB"
           >
-            <feGaussianBlur stdDeviation="3" />
+            <feGaussianBlur stdDeviation="4" />
           </filter>
         </defs>
-        <Halo status={haloStatus} selected={selected === 'whole_body'} uid={uid} />
+        <Halo status={haloStatus} dimmed={dimmed('whole_body')} filter={`${uid}-halo`} />
       </Layer>
 
       <SuitArt uid={`${uid}-suit-art`} />
 
       <Layer breathing={false}>
-        <GlowDefs uid={uid} statuses={LIT} />
-        {steadyIds.map(inner)}
-      </Layer>
-
-      {breathingIds.length > 0 && (
-        <Layer breathing>
-          <GlowDefs uid={`${uid}b`} statuses={['nominal']} />
-          {breathingIds.map((id) => (
-            <InnerRegion
-              key={id}
-              id={id}
-              status={regions[id]}
-              selected={selected === id}
-              uid={`${uid}b`}
-            />
+        <defs>
+          <clipPath id={`${uid}-suit`}>
+            {SILHOUETTE.map((d) => (
+              <path key={d} d={d} />
+            ))}
+          </clipPath>
+          {/* Status fill: strong in the middle, lighter towards the keyline (no flat sticker). */}
+          {ALERTS.map((a) => (
+            <radialGradient key={a} id={`${uid}-fill-${a}`}>
+              {stop(0, STATUS_COLOR_VAR[a], 0.92)}
+              {stop(0.62, STATUS_COLOR_VAR[a], 0.7)}
+              {stop(1, STATUS_COLOR_VAR[a], 0.38)}
+            </radialGradient>
           ))}
-        </Layer>
-      )}
+        </defs>
+        {INNER_ORDER.map((id) => (
+          <InnerRegion key={id} id={id} status={regions[id]} dimmed={dimmed(id)} uid={uid} />
+        ))}
+      </Layer>
     </div>
   );
 }

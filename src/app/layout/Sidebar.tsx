@@ -29,7 +29,7 @@ const ITEMS: NavItem[] = [
 export function Sidebar() {
   const { t } = useTranslation();
   return (
-    <aside className="sticky top-0 flex h-screen w-[132px] shrink-0 flex-col gap-touch-gap bg-surface p-3">
+    <aside className="flex min-h-0 w-[132px] shrink-0 flex-col gap-touch-gap overflow-y-auto bg-surface p-3">
       <p className="px-1 pt-2 text-center text-label font-bold text-text">{t('app.name')}</p>
       <nav aria-label={t('nav.label')} className="flex flex-col gap-touch-gap">
         {ITEMS.map(({ to, labelKey, icon: Icon, end }) => (

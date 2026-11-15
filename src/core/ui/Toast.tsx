@@ -1,6 +1,7 @@
 import { clsx } from 'clsx';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useCallback, useMemo, useRef, useState, type ReactNode } from 'react';
+import { BOX } from './box';
 import { ToastContext, type ToastApi, type ToastInput } from './toastContext';
 
 interface ActiveToast extends Required<Omit<ToastInput, 'durationMs'>> {
@@ -8,11 +9,11 @@ interface ActiveToast extends Required<Omit<ToastInput, 'durationMs'>> {
 }
 
 const TONE: Record<ActiveToast['tone'], string> = {
-  info: 'border-accent/50',
-  nominal: 'border-nominal/60',
-  advisory: 'border-advisory/60',
-  caution: 'border-caution/60',
-  warning: 'border-warning/70',
+  info: 'border-line',
+  nominal: 'border-nominal',
+  advisory: 'border-advisory',
+  caution: 'border-caution',
+  warning: 'border-warning',
 };
 
 export function ToastProvider({ children }: { children: ReactNode }) {
@@ -33,7 +34,8 @@ export function ToastProvider({ children }: { children: ReactNode }) {
       <div
         role="status"
         aria-live="polite"
-        className="pointer-events-none fixed right-4 bottom-4 z-50 flex w-80 flex-col gap-2"
+        // Above the always-visible disclaimer row, aligned with the page's right gutter.
+        className="pointer-events-none fixed right-panel bottom-16 z-50 flex w-96 flex-col gap-touch-gap"
       >
         <AnimatePresence>
           {toasts.map((toast) => (
@@ -43,7 +45,8 @@ export function ToastProvider({ children }: { children: ReactNode }) {
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: 40 }}
               className={clsx(
-                'pointer-events-auto rounded-lg border-l-4 bg-surface-2 p-3 text-sm shadow-xl',
+                BOX.panel,
+                'pointer-events-auto border-2 text-body text-text',
                 TONE[toast.tone],
               )}
             >

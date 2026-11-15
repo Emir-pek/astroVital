@@ -20,6 +20,106 @@ Yalnız `docs/` değişiklikleri kayıt gerektirmez.
 
 <!-- NEW ENTRIES BELOW -->
 
+### 2026-11-15 02:15 — Emir (feat/visualization) — Tek kutu sistemi (Panel/Tile/Pill); bölge paneli üst barı örtmüyor; başlık satırı kırılmıyor
+
+- **Ne:** Uygulamadaki bütün kutular artık üç rolden biri: **Panel** (üst düzey kap — gradient, 24 px köşe, 24 px
+  iç boşluk, yumuşak gölge: `Card`, uyarı şeridi, değer rayı, Modal, Toast, açılır menüler, yan panel),
+  **Tile/Satır** (panel içi kutu veya liste öğesi — `raised`, 20 px köşe, 16 px boşluk, gölgesiz: yeni `Tile`,
+  `EmptyState`, `PlaceholderNotice`, ekip kişileri, güncel değerler, Ayarlar seçenekleri) ve **Pill** (rozet,
+  durum hattı). Yeni token'lar `--av-radius-panel/tile/pill`, `--av-pad-panel/tile`, `--av-gap-section` →
+  `rounded-panel/tile/pill`, `p-panel/p-tile`, `gap-section`; tarifler `BOX` (`src/core/ui/box.ts`).
+  Modal: Panel + 104 px kapat düğmesi + 16/18 px metin (eski: gölgesiz, `border-border`, ≈ 28 px kapat).
+  Toast: Panel + durum renginde kenar, feragat satırının üstünde. Ayarlar baştan: ortam/senaryo seçimi
+  eldiven boyu tile'lar, dil/birim/gün sayısı `Segmented`, tohum alanı 104 px; 12–14 px yazı ve 44 px
+  `select`'ler kalmadı. Durum ekranında bölge paneli artık sağ sütunun yerine oturan yüzen bir panel
+  (1180×820: üst kenar 183 px — üst bar 128'de biter —, alt kenar 767 px — feragat 779'da başlar); üst bar
+  ve **Acil** her zaman görünür ve dokunulabilir. Panel modal değil: başka etiket paneli o bölgeye geçirir,
+  aynı etiket kapatır. Geçmiş/Ölçüm'de durum hattı artık alt başlığın altına kırılmıyor (`PageHeader` iki
+  satırlık ızgara: başlık + durum hattı / alt başlık + eylemler). Satır uyarı şeridi ≈ 128 → ≈ 156 px.
+- **Neden:** Kutular iki köşe sisteminden (24/20 px ve 8/6 px), dört farklı boşluktan ve karışık
+  yüzeylerden oluşuyordu; Ölçüm/Rutin/Ayarlar başka bir ürün gibi görünüyordu. Bölge paneli üst barı yarıya
+  kadar örtüyordu ve şeffaf olduğu hâlde modaldi (Acil'e ilk dokunuş yalnız paneli kapatıyordu). ADR-037.
+- **Dosyalar:** `src/core/ui/tokens.css`, `src/index.css`, `src/core/ui/{box.ts,Tile.tsx,Card.tsx,ValueCard.tsx,Modal.tsx,Toast.tsx,EmptyState.tsx,PlaceholderNotice.tsx,StatusBadge.tsx,StatusLine.tsx,AlertStrip.tsx,RedAlertDialog.tsx,Sheet.tsx,VitalRow.tsx,index.ts}`,
+  `src/core/ui/__tests__/{boxSystem.test.ts,boxes.test.tsx,Sheet.test.tsx}`,
+  `src/app/layout/{AppShell,CrewPicker,EnvironmentPicker}.tsx`, `src/app/pages/{PageHeader,StatusPage,SettingsPage,EmergencyPage,MeasurePage,RoutinePage}.tsx`,
+  `src/app/pages/sheetPlacement.ts`, `src/app/__tests__/pageLayout.test.tsx`,
+  `src/modules/visualization/components/{VitalsPanel,RegionSheet,RegionDetailPanel,CrewOverview,AlertLayer}.tsx`,
+  `src/app/CLAUDE.md`, `src/modules/visualization/CLAUDE.md`, `docs/superpowers/specs/2026-11-14-astrovital-ui-design.md` (§5.2, §6, §7.1, §9),
+  `docs/DECISIONS.md` (ADR-037), `docs/TEAM.md` (UI kit envanteri: Tile, BOX, Sheet), `docs/CONTRACTS.md` (RegionSheet).
+- **Ekip ne yapmalı:** Yeni kutu yazarken `Card` / `Tile` / `BOX.*` kullanın; `rounded-lg`, `rounded-full`,
+  `rounded-card`, `text-xs/sm/lg/xl`, `shadow-xl`, `text-muted`, `bg-surface-2`, `border-border` artık
+  `boxSystem.test.ts`'i kırmızı yapar. Kit geriye uyumlu (prop'lar değişmedi; `EmptyState` ve
+  `PlaceholderNotice` artık tile, metinleri 16 px). **Henüz taşınmamış dosyalar** (testte `PENDING_MIGRATION`;
+  taşıyınca listeden silin):
+  **Müh. 2 (intake):** `MeasurementForm.tsx` :65/:81/:99 etiketler `text-sm` → `text-label`; :72 ve :91
+  `min-h-12 rounded-lg border border-border bg-surface-2 px-3` (48 px hedef; :91 ayrıca `text-lg`), :106
+  `min-h-10 …` (40 px hedef) → `min-h-touch rounded-button border-2 border-line bg-raised px-4 text-body`;
+  :94 `text-sm text-crit` → `text-label text-warning`; :113 `text-sm text-ok` → `text-label text-nominal`;
+  :64 form `gap-3` → `gap-touch-gap`. `QuickLogPanel.tsx` :29 `text-sm text-muted` (14 px) → `text-label
+text-text-2`. `MoodPicker.tsx` :46/:58 — 5 × 104 px + 4 × 16 px = 584 px, 1180'de Hızlı kayıt panelinin
+  içi 440 px: düğmeler panelden taşıyor ve aralarında boşluk görünmüyor (bu adımdan önce de vardı).
+  **Müh. 1 (routine):** `MetClock.tsx` :28 `text-muted` → `text-text-2` (üst barda, her sayfada).
+  `MissionBoard.tsx` :15/:19/:25 `rounded-lg bg-surface-2 p-3` → `Tile`; :16/:20/:26 `text-xs text-muted`
+  (12 px) → `text-label text-text-2`; :17/:21/:27 `text-xl` → `text-headline`; :14 `gap-3` → `gap-touch-gap`.
+  **Müh. 3 (assessment):** `RecommendationList.tsx` :18 `rounded-lg border border-border bg-surface-2 p-3`
+  → `Tile` (Durum'daki bölge panelinde görünür), :23 `text-sm text-muted` → `text-body text-text-2`.
+  `AlertCenter.tsx` :55 `rounded-lg bg-surface-2 p-3` → `Tile`; :62 `text-sm text-muted`, :70 `text-xs
+text-muted` → `text-label text-text-2`. `LearnPanel.tsx` :29/:50/:65 `text-lg` → `text-headline`;
+  :37/:41 `text-sm`, :40/:42/:57/:71 `text-sm text-muted`, :72 `text-sm` → `text-label`/`text-body` +
+  `text-text-2`.
+
+### 2026-11-14 23:30 — Emir (feat/visualization) — Durum ekranı: uyarı rayın üstünde, dar bölge paneli, astronot yeniden çizildi
+
+- **Ne:** Uyarı varken Durum ekranı artık kaymıyor (1180×820'de sayfa içi kayma 136 → 0 px): şerit Durum
+  sayfasında üst satır yerine sağ sütunda, değer rayının üstünde dikey kart (`AlertPanel`; kenarı en ağır
+  uyarının renginde, düğmeler ≥ 104 px); ray kalan yükseklikte kendi içinde kayar. Diğer sayfalarda şerit eskisi
+  gibi üst satırda. Bölge paneli yalnız sağ sütunu örter (1180'de 404 px) ve sayfayı karartmaz: figür, 10 etiket
+  ve basılan etiket panel açıkken görünür. Kan bölgesi uyarıda kollar/bacaklar boyunca dolgulu şerit (eskiden
+  ince kırmızı çizgiler kılavuz çizgilerine benziyordu). Astronot yeniden çizildi: gerçek ¾ duruş (sırt çantası
+  solda, ağırlık bir bacakta, diğer ayak önde, kollar farklı, omuzlarda hafif eğim), her parçanın konturunu
+  izleyen sol üst ışık + sağda soğuk kenar ışığı, tek zemin gölgesi, kask oranı düzeltildi (≈ 7,3 kask boyu),
+  ölçülü EVA detayı (hortum, panel dikişleri, diz takviyesi, bilek halkaları, bot tabanı). Tüm vücut halesi
+  bulanık leke yerine siluetin dışında ince kontur. Figür 1180'de ≈ 258 × 584 px.
+- **Neden:** Ekranın en önemli olduğu an (uyarı) alt etiketleri ve değerleri ekran dışına itiyordu; seçilen
+  sağ etiket panelin altında kalıyordu; figür donuk, ayna simetrik bir manken gibi okunuyordu (ADR-036 güncellendi).
+- **Dosyalar:** `src/core/ui/{AlertStrip,Sheet,index}.ts(x)` (`AlertStrip.layout`, `Sheet.width/backdrop`),
+  `src/core/ui/tokens.css` (`--av-suit-rim`), `src/core/ui/__tests__/{alerts,Sheet}.test.tsx`,
+  `src/modules/visualization/components/{AlertLayer,RegionSheet}.tsx`, `components/figure/{SuitArt,geometry,layout,AstronautFigure}.ts(x)`,
+  `src/modules/visualization/index.ts` (`AlertPanel`), `__tests__/{AlertLayer.test.tsx,figureGeometry.test.ts (yeni)}`,
+  `src/app/layout/AppShell.tsx`, `src/app/pages/StatusPage.tsx`, `docs/DECISIONS.md` (ADR-036), UI spec §6/§7.1/§8,
+  `docs/CONTRACTS.md`, `docs/TEAM.md`, `src/app/CLAUDE.md`, `src/modules/visualization/CLAUDE.md`, `AI.md`, `CHANGELOG.md`
+- **Ekip ne yapmalı:** hiçbir şey (bağımlılık değişmedi). Kit kullanan: `Sheet`'e `width`/`backdrop`, `AlertStrip`'e
+  `layout` eklendi (varsayılanlar eskisiyle aynı). Figüre dokunan: çizim değişirse `REGION_ANCHORS`/`REGION_SHAPES`
+  birlikte güncellenir, `figureGeometry.test.ts` yeşil kalmalı.
+
+### 2026-11-14 22:30 — Emir (feat/visualization) — Durum ekranı tek ekrana sığdı: figürün yanında bölge etiketleri, kompakt değer rayı
+
+- **Ne:** Durum ekranı 1180×820'de kaydırmasız (önce ≈ 3,25 ekran boyu). Üst çubuk EN/TR'de tek satır (248 → 128 px;
+  ortam seçicide kısa ad, yeni `topbar.envShort.*` anahtarları). Feragat tam genişlikte sabit alt satır, her sayfada
+  kaydırmadan görünür; sayfa alanı kendi içinde kayar. Sorun yokken uyarı şeridi yerine başlık satırında tek satırlık
+  durum hattı (`AlertSummary` / yeni kit parçası `StatusLine`); uyarı varsa şerit tek satırlık kart (≈ 128 px).
+  Sol ≈ %60 figür (≈ 560 px boy, viewBox ile ölçeklenir), iki yanında 10 görünür bölge etiketi (152×104, aralık 16 px,
+  renk + ikon + metin) ve organa giden kılavuz çizgileri — bölge çipleri ve görünmez tıklama alanları kaldırıldı.
+  Figürde nominal bölge hiçbir şey çizmez; advisory/caution/warning siluete kırpılmış dolgu + koyu kontur + çizgide
+  durum simgesi. Nefes yalnız tüm vücut halesinde (reduced-motion'da kapalı). Seçimde diğerleri soluklaşır, seçili
+  çizgi accent. Sağ ≈ %38 değer rayı (yeni kit parçası `VitalRow`, 6 × ≈ 90 px), nominal olmayanlar üstte; mini yay
+  gösterge (96×44) yalnız değerin bandını renklendirir (`ArcGauge`'a opsiyonel `status`, `gaugeSegments`/`segmentIndexAt`).
+- **Neden:** Durum ekranı denetimi: çok kaydırma, iki satırlık üst çubuk, küçük figür, görünmeyen dokunma hedefleri,
+  her bölgenin parlaması yüzünden uyarının kaybolması (ADR-036).
+- **Dosyalar:** `src/app/layout/{AppShell,TopBar,Sidebar,Disclaimer,EnvironmentPicker}.tsx`,
+  `src/app/pages/{PageHeader,StatusPage}.tsx`, `src/core/ui/{ArcGauge,arcMath,AlertStrip,ValueCard,index}.ts(x)`,
+  `src/core/ui/StatusLine.tsx` (yeni), `src/core/ui/VitalRow.tsx` (yeni), `src/core/i18n/{en,tr}.json`,
+  `src/modules/visualization/components/{BodyMap,AlertLayer,VitalsPanel}.tsx`,
+  `src/modules/visualization/components/RegionLabel.tsx` (yeni), `components/figure/{AstronautFigure,SuitArt,geometry}.ts(x)`,
+  `components/figure/layout.ts` (yeni), `hooks/useElementSize.ts` (yeni), `services/vitalCards.ts`, `index.ts`;
+  silindi: `components/RegionChips.tsx`, `components/figure/hitAreas.ts`; testler (`bodyMapLayout.test.ts` yeni,
+  `hitAreas.test.ts` silindi, `VitalRow.test.tsx` yeni); `docs/DECISIONS.md` (ADR-036), UI spec §5.4/§5.5/§6/§7.1/§7.6/§8/§9,
+  UI test planı F-06, `docs/CONTRACTS.md`, `docs/TEAM.md` (UI kit envanteri), `src/app/CLAUDE.md`,
+  `src/modules/visualization/CLAUDE.md`, `CHANGELOG.md`
+- **Ekip ne yapmalı:** `git merge origin/main` (bağımlılık değişmedi). Yeni sayfa yazan: kabuk artık bir ekran boyu,
+  sayfan `main` içinde kayar; `PageHeader` sağında durum hattı var. Kit'te yeni `VitalRow`, `StatusLine`. Değerlendirme
+  motoru (Mühendis 3): figür ve ray `advisory/caution/warning` durumlarını hazır gösteriyor.
+
 ### 2026-11-14 21:00 — Emir (docs/ai-brief-adimlar) — AI beyanı, iletişim kuralları, ADIMLAR ve proje özeti repoya eklendi
 
 - **Ne:** `AI.md` (jüri için İngilizce yapay zekâ kullanım beyanı — Space Apps kuralı: AI'nin nerede/nasıl

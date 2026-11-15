@@ -7,7 +7,12 @@ export { BodyMap, type BodyMapProps } from './components/BodyMap';
 export { RegionSheet, type RegionSheetProps } from './components/RegionSheet';
 export { RegionDetailPanel, type RegionDetailPanelProps } from './components/RegionDetailPanel';
 export { VitalsPanel, type VitalsPanelProps } from './components/VitalsPanel';
-export { AlertLayer, type AlertLayerProps } from './components/AlertLayer';
+export {
+  AlertLayer,
+  AlertPanel,
+  AlertSummary,
+  type AlertLayerProps,
+} from './components/AlertLayer';
 export { MetricTrendChart, type MetricTrendChartProps } from './components/MetricTrendChart';
 export { CrewOverview } from './components/CrewOverview';
 export { filterByRange, TREND_RANGES, type TrendRange } from './services/timeRange';

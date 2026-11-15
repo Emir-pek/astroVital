@@ -16,7 +16,7 @@ export function StatusBadge({ status, label, size = 'md', className }: StatusBad
     <span
       data-status={status}
       className={clsx(
-        'inline-flex items-center gap-2 rounded-full bg-raised font-medium',
+        'inline-flex items-center gap-2 rounded-pill bg-raised font-medium',
         size === 'sm' ? 'px-3 py-1 text-label' : 'px-4 py-1.5 text-body',
         tone,
         className,

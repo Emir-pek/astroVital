@@ -23,6 +23,13 @@
     "simulated": "Simüle veri",
     "emergency": "Acil",
     "environmentValue": "Ortam: {{env}}",
+    "envShort": {
+      "iss": "ISS",
+      "spacecraft": "Uzay aracı",
+      "rover": "Rover",
+      "lunar_base": "Ay üssü",
+      "mars_base": "Mars üssü"
+    },
     "demoSettings": "Demo ayarları",
     "crewPickerValue": "Giriş yapan astronot: {{name}}",
     "languageValue": "Dil: {{code}}"

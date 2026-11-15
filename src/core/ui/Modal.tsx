@@ -1,6 +1,8 @@
+import { clsx } from 'clsx';
 import { AnimatePresence, motion } from 'framer-motion';
 import { X } from 'lucide-react';
 import { useEffect, useId, type ReactNode } from 'react';
+import { BOX } from './box';
 
 export interface ModalProps {
   open: boolean;
@@ -30,7 +32,7 @@ export function Modal({ open, onClose, title, closeLabel, children, footer }: Mo
     <AnimatePresence>
       {open && (
         <motion.div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-panel"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -40,27 +42,29 @@ export function Modal({ open, onClose, title, closeLabel, children, footer }: Mo
             role="dialog"
             aria-modal="true"
             aria-labelledby={titleId}
-            className="w-full max-w-md rounded-card border border-border bg-surface p-5"
+            className={clsx(BOX.panel, 'w-full max-w-xl')}
             initial={{ scale: 0.95, y: 10 }}
             animate={{ scale: 1, y: 0 }}
             exit={{ scale: 0.95, y: 10 }}
             onClick={(e) => e.stopPropagation()}
           >
-            <header className="mb-3 flex items-start justify-between gap-4">
-              <h2 id={titleId} className="text-lg font-semibold">
+            <header className="mb-4 flex items-center justify-between gap-touch-gap">
+              <h2 id={titleId} className="text-headline font-semibold text-text">
                 {title}
               </h2>
               <button
                 type="button"
                 aria-label={closeLabel}
                 onClick={onClose}
-                className="rounded p-1 text-muted hover:text-text"
+                className="inline-flex size-touch shrink-0 items-center justify-center rounded-button bg-raised text-text"
               >
-                <X aria-hidden="true" className="size-5" />
+                <X aria-hidden="true" className="size-8" />
               </button>
             </header>
-            <div className="text-sm text-muted">{children}</div>
-            {footer && <footer className="mt-5 flex justify-end gap-2">{footer}</footer>}
+            <div className="text-body text-text-2">{children}</div>
+            {footer && (
+              <footer className="mt-6 flex flex-wrap justify-end gap-touch-gap">{footer}</footer>
+            )}
           </motion.div>
         </motion.div>
       )}

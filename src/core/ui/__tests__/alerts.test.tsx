@@ -172,4 +172,34 @@ describe('AlertStrip', () => {
     );
     for (const b of screen.getAllByRole('button')) expect(b).toHaveClass('min-h-touch');
   });
+
+  it('stacked layout keeps every action and takes the edge colour of the first alert', async () => {
+    const onWhatToDo = vi.fn();
+    renderWithProviders(
+      <AlertStrip
+        {...stripProps({
+          layout: 'stacked',
+          onWhatToDo,
+          items: [
+            { id: 'w', status: 'warning', title: 'W', detail: 'dw' },
+            { id: 'c', status: 'caution', title: 'C' },
+          ],
+        })}
+      />,
+    );
+    const strip = screen.getByRole('region', { name: 'Alerts' });
+    expect(strip).toHaveAttribute('data-layout', 'stacked');
+    expect(strip).toHaveClass('border-2', 'border-warning');
+    for (const b of within(strip).getAllByRole('button')) expect(b).toHaveClass('min-h-touch');
+    await userEvent.setup().click(screen.getByRole('button', { name: 'What to do?' }));
+    expect(onWhatToDo).toHaveBeenCalledWith('w');
+    expect(screen.getByRole('button', { name: '2 more' })).toBeInTheDocument();
+  });
+
+  it('row layout is the default', () => {
+    renderWithProviders(
+      <AlertStrip {...stripProps({ items: [{ id: 'c', status: 'caution', title: 'C' }] })} />,
+    );
+    expect(screen.getByRole('region', { name: 'Alerts' })).toHaveAttribute('data-layout', 'row');
+  });
 });

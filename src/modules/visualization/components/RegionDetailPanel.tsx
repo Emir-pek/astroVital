@@ -3,7 +3,7 @@ import { BODY_REGIONS } from '@core/config/bodyRegions.config';
 import { METRICS } from '@core/config/metrics.config';
 import { useLatestByMetric } from '@core/store';
 import type { BodyRegionId } from '@core/types';
-import { StatusBadge } from '@core/ui';
+import { StatusBadge, Tile } from '@core/ui';
 import { formatNumber, formatRelative } from '@core/utils';
 import { RecommendationList, useCrewHealth } from '@modules/assessment';
 
@@ -54,7 +54,11 @@ export function RegionDetailPanel({ crewId, region }: RegionDetailPanelProps) {
             {assessments.map((a) => {
               const metric = METRICS[a.metric];
               return (
-                <li key={a.metric} className="flex flex-wrap items-center justify-between gap-3">
+                <Tile
+                  as="li"
+                  key={a.metric}
+                  className="flex flex-wrap items-center justify-between gap-3"
+                >
                   <span className="text-body text-text">{t(metric.labelKey)}</span>
                   <span className="flex items-center gap-3">
                     <span className="font-mono text-headline text-text">
@@ -63,7 +67,7 @@ export function RegionDetailPanel({ crewId, region }: RegionDetailPanelProps) {
                     </span>
                     <StatusBadge size="sm" status={a.status} label={t(`status.${a.status}`)} />
                   </span>
-                </li>
+                </Tile>
               );
             })}
           </ul>

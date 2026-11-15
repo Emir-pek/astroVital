@@ -1,11 +1,12 @@
 import { Check, ChevronDown, Settings, UserRound } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { Menu } from '@core/ui';
+import { clsx } from 'clsx';
+import { BOX, Menu } from '@core/ui';
 import { useNavigate } from 'react-router';
 import { useCrew, useHealthStore } from '@core/store';
 
 const ITEM =
-  'flex min-h-touch min-w-[280px] cursor-pointer items-center justify-between gap-4 rounded-button px-4 text-body text-text outline-none data-highlighted:bg-surface';
+  'flex min-h-touch min-w-[280px] cursor-pointer items-center justify-between gap-4 rounded-button px-4 text-body text-text outline-none data-highlighted:bg-raised';
 
 /**
  * "Who is signed in" selector. Only the data of the selected astronaut is ever shown;
@@ -32,11 +33,11 @@ export function CrewPicker() {
       </Menu.Trigger>
       <Menu.Portal>
         <Menu.Positioner sideOffset={8} align="end" className="z-40">
-          <Menu.Popup className="flex flex-col gap-2 rounded-card bg-raised p-2 shadow-soft outline-none">
+          <Menu.Popup className={clsx(BOX.panel, 'flex flex-col gap-touch-gap outline-none')}>
             <Menu.RadioGroup
               value={selectedId}
               onValueChange={(next) => setSelectedCrew(String(next))}
-              className="flex flex-col gap-2"
+              className="flex flex-col gap-touch-gap"
             >
               {crew.map((member) => (
                 <Menu.RadioItem key={member.id} value={member.id} className={ITEM}>

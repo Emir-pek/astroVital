@@ -117,3 +117,18 @@ export function buildVitalCards(input: CardInput): VitalCardModel[] {
     .filter((c) => c.status !== 'nominal' && c.status !== 'none');
   return [...primary, ...extras];
 }
+
+/** Rail order: what needs attention first; the primary order is kept within each status. */
+const SEVERITY: Record<DisplayStatus, number> = {
+  warning: 5,
+  caution: 4,
+  advisory: 3,
+  stale: 2,
+  none: 1,
+  nominal: 0,
+};
+
+/** Non-nominal cards first (warning → caution → advisory → stale → no data), stable otherwise. */
+export function sortBySeverity(cards: readonly VitalCardModel[]): VitalCardModel[] {
+  return [...cards].sort((a, b) => SEVERITY[b.status] - SEVERITY[a.status]);
+}

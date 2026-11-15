@@ -1,24 +1,75 @@
 import { clsx } from 'clsx';
 import { Database, RotateCcw } from 'lucide-react';
-import { useState } from 'react';
+import { useId, useState, type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ENVIRONMENT_IDS, ENVIRONMENTS } from '@core/config/environments.config';
 import { SUPPORTED_LANGUAGES } from '@core/i18n';
 import { SCENARIO_IDS, SCENARIOS } from '@core/simulation';
 import { useHealthStore, type Language } from '@core/store';
 import type { ScenarioId } from '@core/types';
-import { Button, Card, Modal, useToast } from '@core/ui';
+import { BOX, Button, Card, Modal, Segmented, useToast } from '@core/ui';
 import type { GlucoseUnit, TemperatureUnit } from '@core/utils/units';
 import { PageHeader } from './PageHeader';
 
 const HISTORY_OPTIONS = [30, 60, 90, 180] as const;
 
-const selectClass = 'min-h-11 rounded-lg border border-border bg-surface-2 px-3';
+/**
+ * Glove-sized single choice as a row of tiles (radio semantics). The active tile has an accent
+ * edge; the description of the active option is shown once, below the tiles.
+ */
+function ChoiceTiles<T extends string>({
+  label,
+  value,
+  options,
+  onChange,
+  columns,
+}: {
+  label: string;
+  value: T;
+  options: { value: T; label: string }[];
+  onChange: (value: T) => void;
+  columns: string;
+}) {
+  return (
+    <div role="radiogroup" aria-label={label} className={clsx('grid gap-touch-gap', columns)}>
+      {options.map((o) => {
+        const active = o.value === value;
+        return (
+          <button
+            key={o.value}
+            type="button"
+            role="radio"
+            aria-checked={active}
+            onClick={() => onChange(o.value)}
+            className={clsx(
+              BOX.tile,
+              'min-h-touch border-4 text-left text-body text-text transition',
+              active ? 'border-accent font-semibold' : 'border-transparent',
+            )}
+          >
+            {o.label}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
+/** A visible label above a control group. */
+function Field({ label, children }: { label: string; children: ReactNode }) {
+  return (
+    <div className="flex flex-col gap-2">
+      <span className="text-label text-text-2">{label}</span>
+      {children}
+    </div>
+  );
+}
 
 /** `/settings` — environment, language, units, simulation scenario, reset data. */
 export function SettingsPage() {
   const { t } = useTranslation();
   const toast = useToast();
+  const seedId = useId();
   const activeEnvironment = useHealthStore((s) => s.activeEnvironment);
   const setActiveEnvironment = useHealthStore((s) => s.setActiveEnvironment);
   const settings = useHealthStore((s) => s.settings);
@@ -45,149 +96,124 @@ export function SettingsPage() {
   return (
     <>
       <PageHeader title={t('pages.settings.title')} subtitle={t('pages.settings.subtitle')} />
-      <div className="grid gap-4 lg:grid-cols-2">
-        <Card title={t('settings.environment')} className="lg:col-span-2">
-          <div
-            role="radiogroup"
-            aria-label={t('settings.environment')}
-            className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5"
-          >
-            {ENVIRONMENT_IDS.map((id) => {
-              const env = ENVIRONMENTS[id];
-              const active = id === activeEnvironment;
-              return (
-                <button
-                  key={id}
-                  type="button"
-                  role="radio"
-                  aria-checked={active}
-                  onClick={() => setActiveEnvironment(id)}
-                  className={clsx(
-                    'rounded-lg border p-3 text-left transition',
-                    active
-                      ? 'border-accent bg-accent/10'
-                      : 'border-border bg-surface-2 hover:border-accent/60',
-                  )}
-                >
-                  <span className="block font-medium">{t(env.labelKey)}</span>
-                  <span className="mt-1 block text-xs text-muted">{t(env.descriptionKey)}</span>
-                </button>
-              );
-            })}
-          </div>
+      <div className="flex flex-col gap-section">
+        <Card title={t('settings.environment')}>
+          <ChoiceTiles
+            label={t('settings.environment')}
+            value={activeEnvironment}
+            options={ENVIRONMENT_IDS.map((id) => ({
+              value: id,
+              label: t(ENVIRONMENTS[id].labelKey),
+            }))}
+            onChange={setActiveEnvironment}
+            columns="grid-cols-5"
+          />
+          <p className="mt-4 text-body text-text-2">
+            {t(ENVIRONMENTS[activeEnvironment].descriptionKey)}
+          </p>
         </Card>
 
         <Card title={t('settings.language')}>
-          <select
-            aria-label={t('settings.language')}
+          <Segmented
+            label={t('settings.language')}
             value={settings.language}
-            onChange={(e) => updateSettings({ language: e.target.value as Language })}
-            className={selectClass}
-          >
-            {SUPPORTED_LANGUAGES.map((lng) => (
-              <option key={lng} value={lng}>
-                {lng === 'en' ? 'English' : 'Türkçe'}
-              </option>
-            ))}
-          </select>
+            options={SUPPORTED_LANGUAGES.map((lng) => ({
+              value: lng,
+              label: lng === 'en' ? 'English' : 'Türkçe',
+            }))}
+            onChange={(language: Language) => updateSettings({ language })}
+          />
         </Card>
 
         <Card title={t('settings.units')}>
-          <div className="flex flex-wrap gap-4 text-sm">
-            <label className="flex items-center gap-2">
-              {t('settings.temperature')}
-              <select
+          <div className="flex flex-wrap gap-section">
+            <Field label={t('settings.temperature')}>
+              <Segmented
+                label={t('settings.temperature')}
                 value={settings.units.temperature}
-                onChange={(e) =>
-                  updateSettings({
-                    units: { ...settings.units, temperature: e.target.value as TemperatureUnit },
-                  })
+                options={[
+                  { value: 'C', label: '°C' },
+                  { value: 'F', label: '°F' },
+                ]}
+                onChange={(temperature: TemperatureUnit) =>
+                  updateSettings({ units: { ...settings.units, temperature } })
                 }
-                className={selectClass}
-              >
-                <option value="C">°C</option>
-                <option value="F">°F</option>
-              </select>
-            </label>
-            <label className="flex items-center gap-2">
-              {t('settings.glucose')}
-              <select
+              />
+            </Field>
+            <Field label={t('settings.glucose')}>
+              <Segmented
+                label={t('settings.glucose')}
                 value={settings.units.glucose}
-                onChange={(e) =>
-                  updateSettings({
-                    units: { ...settings.units, glucose: e.target.value as GlucoseUnit },
-                  })
+                options={[
+                  { value: 'mg/dL', label: 'mg/dL' },
+                  { value: 'mmol/L', label: 'mmol/L' },
+                ]}
+                onChange={(glucose: GlucoseUnit) =>
+                  updateSettings({ units: { ...settings.units, glucose } })
                 }
-                className={selectClass}
-              >
-                <option value="mg/dL">mg/dL</option>
-                <option value="mmol/L">mmol/L</option>
-              </select>
-            </label>
+              />
+            </Field>
           </div>
         </Card>
 
-        <Card title={t('settings.simulation')} className="lg:col-span-2">
-          <div className="flex flex-wrap items-end gap-4 text-sm">
-            <label className="flex flex-col gap-1">
-              {t('settings.scenario')}
-              <select
+        <Card title={t('settings.simulation')}>
+          <div className="flex flex-col gap-section">
+            <Field label={t('settings.scenario')}>
+              <ChoiceTiles
+                label={t('settings.scenario')}
                 value={settings.scenario}
-                onChange={(e) => updateSettings({ scenario: e.target.value as ScenarioId })}
-                className={selectClass}
-              >
-                {SCENARIO_IDS.map((id) => (
-                  <option key={id} value={id}>
-                    {t(SCENARIOS[id].labelKey)}
-                  </option>
-                ))}
-              </select>
-            </label>
-            <label className="flex flex-col gap-1">
-              {t('settings.seed')}
-              <input
-                type="number"
-                value={settings.seed}
-                onChange={(e) => updateSettings({ seed: Number(e.target.value) || 0 })}
-                className={clsx(selectClass, 'w-32 font-mono')}
+                options={SCENARIO_IDS.map((id) => ({
+                  value: id,
+                  label: t(SCENARIOS[id].labelKey),
+                }))}
+                onChange={(scenario: ScenarioId) => updateSettings({ scenario })}
+                columns="grid-cols-3"
               />
-            </label>
-            <label className="flex flex-col gap-1">
-              {t('settings.days')}
-              <select
-                value={settings.historyDays}
-                onChange={(e) => updateSettings({ historyDays: Number(e.target.value) })}
-                className={selectClass}
+              <p className="text-body text-text-2">
+                {t(SCENARIOS[settings.scenario].descriptionKey)}
+              </p>
+            </Field>
+            <div className="flex flex-wrap items-end gap-section">
+              <div className="flex flex-col gap-2">
+                <label htmlFor={seedId} className="text-label text-text-2">
+                  {t('settings.seed')}
+                </label>
+                <input
+                  id={seedId}
+                  type="number"
+                  value={settings.seed}
+                  onChange={(e) => updateSettings({ seed: Number(e.target.value) || 0 })}
+                  className="min-h-touch w-40 rounded-button border-2 border-line bg-raised px-4 font-mono text-body text-text"
+                />
+              </div>
+              <Field label={t('settings.days')}>
+                <Segmented
+                  label={t('settings.days')}
+                  value={String(settings.historyDays)}
+                  options={HISTORY_OPTIONS.map((d) => ({ value: String(d), label: String(d) }))}
+                  onChange={(days) => updateSettings({ historyDays: Number(days) })}
+                />
+              </Field>
+            </div>
+            <div className="flex flex-wrap items-center gap-touch-gap">
+              <Button
+                icon={<Database aria-hidden="true" className="size-6" />}
+                onClick={onLoadDemo}
               >
-                {HISTORY_OPTIONS.map((d) => (
-                  <option key={d} value={d}>
-                    {d}
-                  </option>
-                ))}
-              </select>
-            </label>
-            <Button
-              size="lg"
-              icon={<Database aria-hidden="true" className="size-4" />}
-              onClick={onLoadDemo}
-            >
-              {t('settings.loadDemo')}
-            </Button>
-            <Button
-              size="lg"
-              variant="danger"
-              icon={<RotateCcw aria-hidden="true" className="size-4" />}
-              onClick={() => setConfirmReset(true)}
-            >
-              {t('settings.reset')}
-            </Button>
+                {t('settings.loadDemo')}
+              </Button>
+              <Button
+                variant="secondary"
+                icon={<RotateCcw aria-hidden="true" className="size-6 text-warning" />}
+                onClick={() => setConfirmReset(true)}
+              >
+                {t('settings.reset')}
+              </Button>
+              <p className="text-label text-text-2">
+                {t('settings.measurementsStored', { count: measurementCount })}
+              </p>
+            </div>
           </div>
-          <p className="mt-3 text-sm text-muted">
-            {t(SCENARIOS[settings.scenario].descriptionKey)}
-          </p>
-          <p className="mt-1 text-xs text-muted">
-            {t('settings.measurementsStored', { count: measurementCount })}
-          </p>
         </Card>
       </div>
 

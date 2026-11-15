@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it } from 'vitest';
 import type { Assessment, MetricId, Status } from '@core/types';
 import { renderWithProviders } from '@test/renderWithProviders';
-import { AlertLayerView } from '../components/AlertLayer';
+import { AlertLayerView, AlertPanelView, AlertSummaryView } from '../components/AlertLayer';
 import { useAlertAckStore } from '../store/useAlertAckStore';
 
 const now = new Date('2026-11-14T12:00:00Z');
@@ -27,15 +27,20 @@ const assessment = (
   measurementId: [crewId, metric].join('-'),
 });
 
-const renderLayer = (assessments: Assessment[], crewId = 'crew-1') =>
-  renderWithProviders(
-    <AlertLayerView
-      crewId={crewId}
-      assessments={assessments}
-      lastMeasuredAt="2026-11-14T10:00:00Z"
-      now={now}
-    />,
+/** The shell mounts the layer; every page header mounts the summary. Render both, like the app. */
+const renderLayer = (
+  assessments: Assessment[],
+  crewId = 'crew-1',
+  lastMeasuredAt: string | null = '2026-11-14T10:00:00Z',
+) => {
+  const props = { crewId, assessments, lastMeasuredAt, now };
+  return renderWithProviders(
+    <>
+      <AlertSummaryView {...props} />
+      <AlertLayerView {...props} />
+    </>,
   );
+};
 
 describe('<AlertLayerView/>', () => {
   beforeEach(() => useAlertAckStore.getState().reset());
@@ -83,5 +88,65 @@ describe('<AlertLayerView/>', () => {
   it('F-05: shows the all-nominal line with the age of the last measurement', () => {
     renderLayer([assessment('heartRate', 'nominal', 62)]);
     expect(screen.getByText(/All indicators nominal . last measurement/)).toBeInTheDocument();
+    // Exactly one "Alerts" region: the one-line summary, no empty strip row.
+    expect(screen.getAllByRole('region', { name: 'Alerts' })).toHaveLength(1);
+  });
+
+  it('says there is no data yet instead of "all nominal" before the first measurement', () => {
+    renderLayer([], 'crew-1', null);
+    expect(screen.getByText(/No measurements yet/)).toBeInTheDocument();
+    expect(screen.queryByText(/All indicators nominal/)).not.toBeInTheDocument();
+  });
+
+  it('hides the summary line while the strip has an alert to act on', () => {
+    renderLayer([assessment('heartRate', 'caution', 105)]);
+    expect(screen.queryByText(/All indicators nominal/)).not.toBeInTheDocument();
+    const strip = screen.getByRole('region', { name: 'Alerts' });
+    expect(strip.querySelector('[data-status="caution"]')).not.toBeNull();
+  });
+
+  it('Status page: without the shell row the strip moves to the stacked panel', () => {
+    const props = {
+      crewId: 'crew-1',
+      assessments: [assessment('heartRate', 'caution', 105)],
+      lastMeasuredAt: '2026-11-14T10:00:00Z',
+      now,
+    };
+    renderWithProviders(
+      <>
+        <AlertLayerView {...props} strip={false} />
+        <AlertPanelView {...props} />
+      </>,
+    );
+    const strips = screen.getAllByRole('region', { name: 'Alerts' });
+    expect(strips).toHaveLength(1);
+    expect(strips[0]).toHaveAttribute('data-layout', 'stacked');
+    expect(strips[0]!.querySelector('[data-status="caution"]')).not.toBeNull();
+  });
+
+  it('the stacked panel renders nothing while there is nothing to act on', () => {
+    renderWithProviders(
+      <AlertPanelView
+        crewId="crew-1"
+        assessments={[assessment('heartRate', 'nominal', 62)]}
+        lastMeasuredAt="2026-11-14T10:00:00Z"
+        now={now}
+      />,
+    );
+    expect(screen.queryByRole('region', { name: 'Alerts' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button')).not.toBeInTheDocument();
+  });
+
+  it('the red alert still blocks the screen when the shell row is off', () => {
+    renderWithProviders(
+      <AlertLayerView
+        crewId="crew-1"
+        assessments={[assessment('bodyTemp', 'warning', 39.4)]}
+        lastMeasuredAt="2026-11-14T10:00:00Z"
+        now={now}
+        strip={false}
+      />,
+    );
+    expect(screen.getByRole('alertdialog')).toBeInTheDocument();
   });
 });

@@ -14,13 +14,14 @@ This file is that disclosure. It is kept up to date by the team (see "Maintainin
 
 ## Where AI was used
 
-| Area                   | How AI helped                                                                                      | Human control                                                                     |
-| ---------------------- | -------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
-| Code                   | Scaffolding, React/TypeScript components, tests, refactors, lint/type fixes                        | PR review + 1 approval; CI (`lint`, `typecheck`, tests, build) must be green      |
-| Research               | Finding NASA/CSA/ESA sources, summarising the NASA HRP hazards and risks, drafting the source list | Thresholds use only cited sources (`docs/SOURCES.md`); unverified ones are marked |
-| Documentation          | Drafting README, setup guides, architecture notes, decision records, changelog entries             | Reviewed and edited by the team                                                   |
-| Team tooling           | Setup scripts, CI workflow, git hooks, shared Claude configuration                                 | Owned by the tooling owner; changes go through PRs                                |
-| Demo material (if any) | Script and subtitle drafts                                                                         | Final wording by the team; AI images/video watermarked (see below)                |
+| Area                   | How AI helped                                                                                                                                                                                                   | Human control                                                                                              |
+| ---------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| Code                   | Scaffolding, React/TypeScript components, tests, refactors, lint/type fixes                                                                                                                                     | PR review + 1 approval; CI (`lint`, `typecheck`, tests, build) must be green                               |
+| Astronaut illustration | Claude wrote the SVG drawing code of the Status-screen astronaut (pose, shading, suit detail) as React components. No image-generation model, no raster images, no external assets, no agency logos or insignia | Reviewed by eye in the browser against the UI design spec (§8); anchors and region shapes covered by tests |
+| Research               | Finding NASA/CSA/ESA sources, summarising the NASA HRP hazards and risks, drafting the source list                                                                                                              | Thresholds use only cited sources (`docs/SOURCES.md`); unverified ones are marked                          |
+| Documentation          | Drafting README, setup guides, architecture notes, decision records, changelog entries                                                                                                                          | Reviewed and edited by the team                                                                            |
+| Team tooling           | Setup scripts, CI workflow, git hooks, shared Claude configuration                                                                                                                                              | Owned by the tooling owner; changes go through PRs                                                         |
+| Demo material (if any) | Script and subtitle drafts                                                                                                                                                                                      | Final wording by the team; AI images/video watermarked (see below)                                         |
 
 ## How AI was used
 
@@ -38,6 +39,8 @@ This file is that disclosure. It is kept up to date by the team (see "Maintainin
 ## Content-specific rules we follow
 
 - **Images and videos:** any AI-generated image or video carries a visible "AI-generated" watermark.
+  The in-app astronaut figure is vector code written with AI assistance (see the table), not output of
+  an image model; it is disclosed here and in the commit metadata.
 - **Audio:** AI-generated audio is acknowledged in descriptive text and metadata.
 - **Code and data:** acknowledged in descriptive text (this file) and metadata (commit trailers).
 - **NASA branding:** AI-generated content does not use, contain or modify NASA logos or design elements.

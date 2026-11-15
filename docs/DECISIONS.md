@@ -289,3 +289,80 @@ Node 24 LTS, npm.
 - **Sonuç:** Saatler (`timeOfDayMET`), ortama göre farklar ve görevin zaman penceresi ayrı kararlar.
   Simülasyon takvimle hizalandı (aynı `isScheduledOn`): 30 gün × 4 kişi 1.484 → 1.452 ölçüm. ADR-016'nın
   şeker sıklığı ve egzersiz kısmının yerine geçer. Bayatlık için `REPEAT_INTERVAL_MS.monthly` = 30 gün.
+
+### ADR-036 — Durum ekranı tek ekran: figürün yanında etiketler, sessiz nominal, tek renkli mini gösterge
+
+- **Bağlam:** Durum ekranı denetimi (14.11.2026): 1180×820'de sayfa ≈ 3,25 ekran boyu kayıyordu; üst
+  çubuk iki satıra kırılıp 248 px oluyordu; figür ekranın ≈ %11'iydi; bölgeler görünmez ızgara kutularıyla
+  (hit area) ve figürün altındaki çiplerle seçiliyordu (hangi kutunun hangi organ olduğu görünmüyordu);
+  her nominal bölge ayrı ayrı nefes alıp parlıyordu (uyarı olan bölge kalabalıkta kayboluyordu);
+  ArcGauge'un renkli bantları, değer hangi bantta olursa olsun ekranı "kırmızı/sarı dolu" gösteriyordu.
+- **Karar:**
+  1. **Tek ekran düzeni:** üst çubuk tek satır (ortam seçicide kısa ad `topbar.envShort.*`), feragat
+     tam genişlikte sabit alt satır, sayfa kendi içinde kayar. Her şey normalken uyarı şeridi yerine
+     PageHeader satırında tek satırlık durum hattı (`StatusLine` / `AlertSummary`); uyarı varsa şerit
+     üst çubuğun altında kendi satırında — **Durum sayfası hariç:** orada şerit sağ sütunda, değer
+     rayının üstünde dikey kart (`AlertPanel`, `AlertStrip layout="stacked"`, kenarı en ağır uyarının
+     renginde); ray kalan yükseklikte kendi içinde kayar. Böylece ekranın en önemli olduğu anda (uyarı
+     varken) figür ve 10 etiket kaydırmadan görünür. Durum sayfasında alt başlık yok.
+  2. **Bölge etiketleri figürün yanında (çip yerine):** 10 görünür etiket, her yanda 5 (152×104 px,
+     aralık ≥ 16 px), koyu yüzey + renk + ikon + metin; etiketten organa ince bir kılavuz çizgi. Görünmez
+     hit area'lar kaldırıldı — dokunulacak şey görünen şeydir. Yerleşim saf fonksiyon
+     (`computeBodyMapLayout`), testli (çakışma yok, çizgiler kesişmez, ≥ 104 px).
+  3. **Nominal sessiz:** figürde nominal/eski/veri yok bölgeler hiçbir şey çizmez; yalnız
+     advisory/caution/warning bölgeleri siluete kırpılmış durum dolgusu + koyu kontur (≥ 3:1) ve kılavuz
+     çizgide küçük bir durum simgesi alır. Nefes yalnız tüm vücut halesinde (nominalken, 4,5 sn) ve
+     `prefers-reduced-motion`'da kapalı. Seçim: diğerleri soluklaşır, seçilen kılavuz çizgisi accent
+     rengi; çerçeve halkası yok. Damarlar (kan) çizgi değil, kollar/bacaklar boyunca dolgulu, sivrilen
+     şeritlerdir (≥ 6 px) — kılavuz çizgileriyle karışmaz. Hale bulanık leke değil, siluetin dışında koyu
+     bir boşlukla ayrılmış ince kontur. Bölge paneli Durum ekranında yalnız sağ sütunu örter (`Sheet`
+     `width` + `backdrop="clear"`), figür ve etiketler panel açıkken görünür kalır.
+  4. **Mini yay gösterge:** 96×44, nötr iz; yalnız değerin bulunduğu bant durum rengiyle boyanır.
+     Değerler sağda kompakt bir rayda (`VitalRow`, 6 satır × ≈ 88–90 px), nominal olmayanlar en üstte.
+  5. **Figür yeniden çizildi (14.11.2026, ikinci adım):** eski çizim donuk, ayna simetrik bir mankendi
+     (tek yatay gradient, kask fazla büyük, üç zemin gölgesi). Yeni çizim gerçek ¾ duruş (sırt çantası
+     solda görünür, ağırlık bir bacakta, diğer ayak önde, kollar farklı), her parçanın kendi konturunu
+     izleyen tek yönlü ışık (sol üst) + sağda soğuk kenar ışığı, tek zemin gölgesi, ≈ 7,3 kask boyu ve
+     ölçülü EVA detayı; hâlâ mat beyaz, ciddi, sevimli değil. viewBox `182 8 226 512`; çapalar yeni
+     anatomiye taşındı (testli: `figureGeometry.test.ts`).
+- **Sonuç:** 1180×820'de nominal **ve uyarı varken** dikey kaydırma yok; bölge paneli açıkken de 10
+  etiket görünür. 1366×768'de sayfa içinde ≈ 48–52 px kayma var (en alttaki iki etiket feragat satırının
+  arkasında kısmen kalır). Figür 1180'de ≈ 258 × 584 px. `RegionChips`,
+  `hitAreas` silindi; yeni kit parçaları `VitalRow`, `StatusLine`; ArcGauge'a opsiyonel `status` prop'u;
+  `AlertStrip`'e `layout`, `Sheet`'e `width` ve `backdrop`; visualization'a `AlertPanel`; yeni token
+  `--av-suit-rim`.
+  Spec §5.4/§5.5/§6/§7.1/§8/§9 güncellendi. Spec §5.5'teki "her nominal bölge nefes alır" kuralının
+  yerine geçer. Sahip: visualization ekibi.
+
+### ADR-037 — Kutu sistemi: Panel / Tile / Pill, token'lı ve testle korunur; Durum'da bölge paneli modal değil
+
+- **Bağlam:** Kutu denetimi (15.11.2026): iki köşe sistemi yan yanaydı (kit 24/20/999 px, eski kod
+  `rounded-lg`/`rounded-md` 8/6 px); aynı roldeki kutular farklı boşluk kullanıyordu (`Card` 24, `ValueCard`
+  16, `Modal` 20, satırlar 12/16 px); `card-surface` yalnız iki bileşendeydi, `Modal` gölgesizdi ve yasak
+  `border-border` kullanıyordu, `Toast` `shadow-xl` + `bg-surface-2`; Ayarlar'da 12–14 px yazı ve ≈ 44 px
+  hedefler vardı. Ölçüm/Rutin/Ayarlar başka bir ürün gibi görünüyordu. Ayrıca Durum ekranındaki bölge paneli
+  tam pencere yüksekliğindeydi ve üst barı (Acil düğmesinin yarısı, dil ve astronot seçicileri) örtüyordu;
+  şeffaf arka plan yine de modal bir katmandı (Acil'e ilk dokunuş yalnız paneli kapatıyordu).
+- **Karar:**
+  1. **Üç rol:** Panel (üst düzey kap: `card-surface`, 24 px köşe, 24 px boşluk, `shadow-soft`), Tile/Satır
+     (panel içi kutu veya liste öğesi: `raised`, 20 px köşe, 16 px boşluk, gölgesiz), Pill (rozet/çip/durum
+     hattı: tam yuvarlak). Token'lar `tokens.css`'te (`--av-radius-panel/tile/pill`, `--av-pad-panel/tile`,
+     `--av-gap-section`), Tailwind'e `rounded-panel/tile/pill`, `p-panel/p-tile`, `gap-section` olarak bağlı.
+     `--av-radius-card` / `rounded-card` eski takma ad.
+  2. **İfade biçimi:** bileşenler (`Card` = Panel, yeni `Tile`) + bileşenin saramadığı yerler için tek kaynak
+     tarifler (`BOX`, `src/core/ui/box.ts`; Base UI popup'ları, tile görünümlü `<button>`). Rol başka bir
+     köşe/boşluk/gölge sınıfıyla karıştırılmaz.
+  3. **Koruma:** `boxSystem.test.ts` tüm `src`'yi tarar; stok yarıçap, `rounded-card`, stok yazı boyu, stok
+     gölge ve eski renk takma adı bulursa kırmızıdır. Diğer modüllerin henüz taşınmamış dosyaları
+     `PENDING_MIGRATION` listesinde; liste yalnız küçülür (temizlenen dosya listede kalırsa test kırmızı).
+  4. **Bölge paneli (Durum):** `Sheet`'e `bounds` (üst/alt/sağ mesafe) eklendi; Durum sayfası paneli sağ
+     sütunun kutusuna oturtur (üst barın ve sayfa başlığının altında, feragatın üstünde). `backdrop="clear"`
+     artık **modal değildir** (arka plan katmanı yok, odak hapsedilmez, dışarı dokunuş kapatmaz): sayfa
+     görünür **ve** kullanılabilir — başka etiket paneli geçirir, aynı etiket kapatır, Acil doğrudan çalışır.
+     `dim` (varsayılan) modal kalır; diğer çağıranlar için varsayılanlar değişmedi.
+- **Sonuç:** 1180×820'de tüm rotalarda (EN/TR) kabuk, kit ve visualization alanlarında en küçük yazı 16 px,
+  en küçük hedef 104 px; bölge paneli üst kenarı 183 px (üst bar 128 px'de biter), alt kenarı 767 px
+  (feragat 779 px'de başlar). Satır uyarı şeridi ≈ 128 → ≈ 156 px oldu (panel boşluğu); Durum sayfası yine
+  kaydırmasız (`main` üst boşluğu 4 → 0 px). Ölçüm/Rutin/Değerlendirme içleri sahiplerince taşınacak
+  (CHANGELOG 15.11.2026). ADR-036 karar 3'teki "panel sayfayı karartmaz, dışarı dokunmak kapatır" ifadesinin
+  yerine geçer. Sahip: visualization ekibi (tasarım), Mühendis 1 (kit mimari onayı).

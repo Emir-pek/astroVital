@@ -23,6 +23,13 @@
     "simulated": "Simulated data",
     "emergency": "Emergency",
     "environmentValue": "Environment: {{env}}",
+    "envShort": {
+      "iss": "ISS",
+      "spacecraft": "Spacecraft",
+      "rover": "Rover",
+      "lunar_base": "Lunar base",
+      "mars_base": "Mars base"
+    },
     "demoSettings": "Demo settings",
     "crewPickerValue": "Signed-in astronaut: {{name}}",
     "languageValue": "Language: {{code}}"
