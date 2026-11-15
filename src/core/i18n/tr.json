@@ -379,6 +379,13 @@
       "streak": "{{count}} günlük seri",
       "teamScore": "Ekip skoru",
       "badges": "Rozetler"
+    },
+    "notify": {
+      "title": "AstroVital hatırlatması",
+      "dueOne": "Zamanı geldi: {{task}}.",
+      "dueMany": "Şu an {{count}} görevin zamanı geldi. Görmek için Rutin'i aç.",
+      "missedOne": "Kaçırıldı: {{task}}. Fırsat bulunca yap ve kaydet.",
+      "missedMany": "Bugün {{count}} görev kaçırıldı. Telafi için Rutin'i aç."
     }
   },
   "assessment": {

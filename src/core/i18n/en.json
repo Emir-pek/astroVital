@@ -379,6 +379,13 @@
       "streak": "{{count}}-day streak",
       "teamScore": "Team score",
       "badges": "Badges"
+    },
+    "notify": {
+      "title": "AstroVital reminder",
+      "dueOne": "Time for: {{task}}.",
+      "dueMany": "{{count}} tasks are due now. Open Routine to see them.",
+      "missedOne": "Missed: {{task}}. Do it when you can and record it.",
+      "missedMany": "{{count}} tasks were missed today. Open Routine to catch up."
     }
   },
   "assessment": {

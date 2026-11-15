@@ -20,6 +20,23 @@ Yalnız `docs/` değişiklikleri kayıt gerektirmez.
 
 <!-- NEW ENTRIES BELOW -->
 
+### 2026-11-15 14:00 — Muhammed Bektaş (feat/core-routine) — Hatırlatma bildirimleri ve kaçırılan sayısı (mantık)
+
+- **Ne:** Seçili astronotun bir görevi "şimdi yap" veya "kaçırıldı" olduğunda bir kez uygulama içi toast
+  çıkar. Aynı anda birden çok görev açılırsa ("6 görevin zamanı geldi") tek mesaja toplanır. Kullanıcı
+  açtıysa ve tarayıcı izin verdiyse tarayıcı bildirimi de gelir (varsayılan kapalı). Başka astronotun
+  görevi bildirilmez. Bildirilenler kişi bazında saklanır: sayfa yenilenince ya da astronot değişip geri
+  gelince tekrar bildirilmez. `useMissedCount()` (rozet için), `useNotificationSettings()` ve
+  `requestNotificationPermission()` hazır, görünümleri yok.
+- **Neden:** P1 bildirim ve kaçırılan ölçüm görevleri (ADR-041); arayüz visualization'da (ADR-032).
+- **Dosyalar:** `src/modules/routine/components/ReminderNotifier.tsx`, `src/modules/routine/services/notifications.ts`,
+  `src/modules/routine/hooks/useNotificationSettings.ts` (yeni), `src/modules/routine/index.ts`,
+  `src/app/providers/AppProviders.tsx` (görünmez mount), test `ReminderNotifier.test.tsx`,
+  `src/core/i18n/en.json`, `src/core/i18n/tr.json` (`routine.notify.*`), `docs/CONTRACTS.md`,
+  `docs/modules/core-routine.md`, `CHANGELOG.md`
+- **Ekip ne yapmalı:** Emir: Ayarlar'a bildirim anahtarını (`useNotificationSettings().setEnabled`, tıklamada
+  çağrılmalı) ve kaçırılan rozetini (`useMissedCount`) bağla. Ekran değişmedi.
+
 ### 2026-11-15 13:40 — Muhammed Bektaş (feat/core-routine) — Hatırlatma durum motoru (kişi bazlı, 'late' durumu)
 
 - **Ne:** `useReminders` artık gerçek: aktif ortamın takvimini bugünün UTC görev gününe açar, her görev

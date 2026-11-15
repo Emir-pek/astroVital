@@ -62,8 +62,10 @@ app → hepsi.
 - [x] `useReminders`: aktif ortamın `reminderSchedule`'ını bugünün UTC görev gününe açar; 5 durum
       (`late` dahil), kişi bazlı + seçili astronot, elle tamamlanan görevler (ADR-041). `ReminderCenter`
       çalışır-sade; görünüm visualization'da (`docs/HANDOFF_ENGINEER4.md`)
-- [ ] Bildirim: uygulama içi toast + izin verildiyse `Notification` API (Settings'te açma anahtarı) (görünüm: visualization)
-- [ ] Kaçırılan ölçüm takibi (Dashboard'da rozet) (görünüm: visualization)
+- [x] Bildirim mantığı: `ReminderNotifier` (app/providers'ta mount) yalnız seçili astronot için due/missed
+      başına bir kez toast + açıksa ve izin varsa `Notification`; `useNotificationSettings` /
+      `requestNotificationPermission` hazır. Ayarlar anahtarının bağlanması: visualization
+- [x] Kaçırılan ölçüm sayısı: `useMissedCount(crewId?)`. Rozetin yeri ve bağlanması: visualization
 - [ ] Oyunlaştırma: modül-yerel persist store (`astrovital:routine`), XP, seviye, seri (streak),
       rozetler, ekip skoru, günlük görevler (egzersiz, hidrasyon, uyku hijyeni, ekip sohbeti, öğren);
       astronot pet fikri — kuralları Mühendis 1, görünümü visualization; karar bekliyor (görünüm: visualization)

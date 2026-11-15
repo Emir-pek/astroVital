@@ -113,7 +113,10 @@ nominal olmayanlar üstte.
 useReminders(crewId?): {                       // ADR-041; crewId yoksa seçili astronot
   crewId; reminders; byCrew: Record<crewId, ReminderInstance[]>; due; late; missed; missedCount;
   completeTask(crewId, templateId): boolean }  // yalnız metriksiz + açık (due/missed) görev
-useMissedCount(crewId?): number
+useMissedCount(crewId?): number                // kaçırılan rozeti (varsayılan seçili astronot)
+<ReminderNotifier />                           // null render; app/providers'ta tek kez; yalnız seçili astronot
+useNotificationSettings(): { enabled; permission; setEnabled(next): Promise<boolean> }  // Ayarlar anahtarı
+requestNotificationPermission(): Promise<NotificationPermission | 'unsupported'>; notificationPermission()
 ReminderInstance = { id: `${crewId}:${templateId}:${missionDay}:${occurrence}`, crewId, template,
   missionDay, occurrence, dueAt, status: 'upcoming'|'due'|'done'|'late'|'missed', completedAt?, completedBy? }
 expandReminders({ schedule, missionStart, now, measurements, crew, completions }): ReminderInstance[]  // saf

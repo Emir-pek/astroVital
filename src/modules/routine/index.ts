@@ -8,6 +8,16 @@ export {
   REMINDER_STATUS_ICON,
   type ReminderCenterProps,
 } from './components/ReminderCenter';
+export { ReminderNotifier } from './components/ReminderNotifier';
+export {
+  useNotificationSettings,
+  type NotificationSettingsApi,
+} from './hooks/useNotificationSettings';
+export {
+  notificationPermission,
+  requestNotificationPermission,
+  type NotificationPermissionState,
+} from './services/notifications';
 export { MissionBoard } from './components/MissionBoard';
 export { MetClock } from './components/MetClock';
 export {
