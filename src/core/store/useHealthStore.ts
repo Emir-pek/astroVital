@@ -25,8 +25,16 @@ export interface AppSettings {
   historyDays: number;
   /** ISO timestamp of mission day 1, 00:00 — drives the MET clock. */
   missionStart: string;
-  /** User opted in to browser notifications (routine reminders). */
+  /**
+   * @deprecated Not read anywhere. The browser-notification switch lives in the routine module's
+   * own store (`useNotificationSettings`, ADR-041). Kept so persisted data stays valid.
+   */
   notificationsEnabled: boolean;
+  /**
+   * Load demo data automatically on app start when the device has no data (ADR-009, ADR-044).
+   * Default true (the jury never sees an empty app); a real crew turns it off in Settings.
+   */
+  autoLoadDemo: boolean;
 }
 
 export interface LoadDemoOptions {
@@ -82,6 +90,7 @@ export const DEFAULT_SETTINGS: AppSettings = {
   historyDays: DEMO_DEFAULTS.days,
   missionStart: defaultMissionStart(),
   notificationsEnabled: false,
+  autoLoadDemo: true,
 };
 
 const withId = (m: NewMeasurement): Measurement => ({ ...m, id: m.id ?? createId('m') });
@@ -96,6 +105,22 @@ const initialData = () => ({
 });
 
 export const STORE_KEY = 'astrovital:health';
+
+/** Persisted schema version. 1 → 2: `settings.autoLoadDemo` (default true). */
+export const STORE_VERSION = 2;
+
+/**
+ * Upgrades persisted state from an older version. PURE. Unknown shapes are returned as-is
+ * (zustand then merges them over the defaults).
+ */
+export const migrateHealthState = (persisted: unknown, version: number): unknown => {
+  if (typeof persisted !== 'object' || persisted === null) return persisted;
+  const state = persisted as { settings?: Partial<AppSettings> };
+  if (version < 2) {
+    return { ...state, settings: { ...DEFAULT_SETTINGS, ...state.settings, autoLoadDemo: true } };
+  }
+  return state;
+};
 
 /**
  * Global shared domain state (persisted to localStorage — offline-first).
@@ -167,14 +192,20 @@ export const useHealthStore = create<HealthState>()(
       resetAll: () =>
         set((s) => ({
           ...initialData(),
-          // Keep user preferences (language, units) across a data reset.
-          settings: { ...DEFAULT_SETTINGS, language: s.settings.language, units: s.settings.units },
+          // Keep user preferences (language, units, auto-load) across a data reset.
+          settings: {
+            ...DEFAULT_SETTINGS,
+            language: s.settings.language,
+            units: s.settings.units,
+            autoLoadDemo: s.settings.autoLoadDemo,
+          },
         })),
     }),
     {
       name: STORE_KEY,
-      version: 1,
+      version: STORE_VERSION,
       storage: createJSONStorage(() => localStorage),
+      migrate: migrateHealthState,
       partialize: (s) => ({
         measurements: s.measurements,
         crew: s.crew,

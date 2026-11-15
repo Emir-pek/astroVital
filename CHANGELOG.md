@@ -20,6 +20,18 @@ Yalnız `docs/` değişiklikleri kayıt gerektirmez.
 
 <!-- NEW ENTRIES BELOW -->
 
+### 2026-11-15 15:40 — Muhammed Bektaş (feat/core-routine) — Ayar: demo verisini otomatik yükle (autoLoadDemo)
+
+- **Ne:** Yeni ayar `settings.autoLoadDemo` (varsayılan açık). Kapalıyken boş cihazda demo verisi
+  kendiliğinden yüklenmez. "Tüm veriyi sıfırla" bu tercihi korur. Kayıtlı veri şeması v1 → v2; eski
+  tarayıcı verisi otomatik taşınır (ayar açık gelir), elle bir şey yapmak gerekmez.
+- **Neden:** ADR-009'daki "gerçek kullanımda kapatılabilmeli" notu (ADR-044).
+- **Dosyalar:** `src/core/store/useHealthStore.ts`, `src/app/providers/DemoDataBootstrap.tsx`,
+  test `src/app/__tests__/demoBootstrap.test.tsx`, `docs/DECISIONS.md` (ADR-009 notu, ADR-044),
+  `docs/modules/core-routine.md`, `CHANGELOG.md`
+- **Ekip ne yapmalı:** Emir: Ayarlar'a anahtar (`updateSettings({ autoLoadDemo })`). Store kullanan testlerde
+  `settings` nesnesini birebir karşılaştıran varsa yeni alanı ekle.
+
 ### 2026-11-15 15:20 — Muhammed Bektaş (feat/core-routine) — Ortam değişim bildirimi ve applyScenario
 
 - **Ne:** Ortam değişince tek bir toast çıkar ("Ortam: Mars üssü. Hatırlatma takvimi ve eşikler

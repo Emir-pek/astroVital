@@ -67,6 +67,8 @@ Node 24 LTS, npm.
 
 ### ADR-009 — İlk açılışta demo verisi otomatik yüklenir
 
+> **Güncellendi: ADR-044** — davranış `settings.autoLoadDemo` ile kapatılabilir (varsayılan açık).
+
 - **Karar:** `DemoDataBootstrap`, uygulama **açılışında bir kez**, cihazda hiç veri yoksa
   (`measurements.length === 0 && demoLoadedAt === null`) `loadDemoData()` çağırır. Oturum
   içindeki "Tüm veriyi sıfırla" korunur; sonraki açılışta demo yeniden yüklenir.
@@ -476,3 +478,13 @@ Node 24 LTS, npm.
   astronot; başka astronotun bilgisi asla girmez (testli). Sahip: Mühendis 1.
 - **Sonuç:** Değerlendirme motoru bugün stub (hep nominal) olduğu için alert durumu motor gerçek olunca
   çalışır; Mühendis 3'ün `useCrewHealth` sözleşmesine dayanır. Görsel (4 mood'un görünüşü) Emir'de.
+
+### ADR-044 — P2 mantık işleri: demo otomatik yükleme ayarı, veri dışa/içe aktarma, sayfa bazlı yükleme
+
+- **Bağlam:** ADR-009 demo verisinin her boş açılışta yüklenmesini "gerçek kullanımda kapatılabilir
+  olmalı" notuyla bırakmıştı; dışa/içe aktarma ve code splitting (ADR-021) P2 listesindeydi.
+- **Karar (1) — `autoLoadDemo`:** `AppSettings.autoLoadDemo` (varsayılan `true`). `DemoDataBootstrap` yalnız
+  açıkken ve cihazda veri yokken yükler. "Tüm veriyi sıfırla" bu tercihi korur (dil ve birim gibi). Store
+  şeması `version` 1 → 2; saf `migrateHealthState` eski kayda `autoLoadDemo: true` ekler. Kullanılmayan
+  `settings.notificationsEnabled` kayıt uyumluluğu için duruyor, `@deprecated` (anahtar routine store'da, ADR-041).
+  Sahip: Mühendis 1; Ayarlar anahtarının görünümü visualization.

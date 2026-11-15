@@ -80,7 +80,8 @@ app → hepsi.
 - [ ] Demo modu (otomatik akış: senaryo yükle → sayfaları gez)
 - [ ] Sayfa bazlı code splitting (`React.lazy`) — ADR-021
 - [ ] Store `version`/`migrate`; 180 gün için boyut kontrolü (ADR-016)
-- [ ] Demo verisi otomatik yüklemeyi Settings'ten kapatma (ADR-009)
+- [x] Demo verisi otomatik yüklemeyi kapatma: `settings.autoLoadDemo` + store v2/migrate (ADR-009, ADR-044);
+      Ayarlar anahtarı: visualization
 - [ ] README son hali, build/preview kontrolü
 
 ## Kabul kriterleri
