@@ -421,6 +421,19 @@
         "name": "Crew player",
         "description": "Chatted with a crewmate on 5 days."
       }
+    },
+    "companion": {
+      "alert": "One of your readings needs attention now. Open your status, follow the steps there and tell your Crew Medical Officer.",
+      "missedOne": "You missed: {{subject}}. No stress — do it when you can and record it.",
+      "missedMany": "{{count}} tasks slipped today. No stress — catch up when you can.",
+      "due": "Now is a good time for: {{subject}}.",
+      "badge": "New badge: {{subject}}. Nice routine!",
+      "streak": "{{count}} days in a row on routine. Keep it up!",
+      "tip": "Tip: {{subject}}",
+      "openStatus": "Open my status",
+      "openRoutine": "Open routine",
+      "openMeasure": "Measure now",
+      "disclaimer": "I am a prototype helper, not a medical device. I never diagnose."
     }
   },
   "assessment": {

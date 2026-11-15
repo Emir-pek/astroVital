@@ -421,6 +421,19 @@
         "name": "Takım oyuncusu",
         "description": "5 gün ekip arkadaşınla sohbet ettin."
       }
+    },
+    "companion": {
+      "alert": "Ölçümlerinden biri şimdi ilgi istiyor. Durum ekranını aç, oradaki adımları izle ve Mürettebat Sağlık Sorumlusu'na haber ver.",
+      "missedOne": "Kaçırdın: {{subject}}. Dert etme — fırsat bulunca yap ve kaydet.",
+      "missedMany": "Bugün {{count}} görev kaçtı. Dert etme — fırsat bulunca telafi et.",
+      "due": "Şimdi tam zamanı: {{subject}}.",
+      "badge": "Yeni rozet: {{subject}}. Rutinin harika!",
+      "streak": "Üst üste {{count}} gün rutindesin. Böyle devam!",
+      "tip": "İpucu: {{subject}}",
+      "openStatus": "Durumumu aç",
+      "openRoutine": "Rutini aç",
+      "openMeasure": "Şimdi ölç",
+      "disclaimer": "Ben bir prototip yardımcıyım, tıbbi cihaz değilim. Teşhis koymam."
     }
   },
   "assessment": {

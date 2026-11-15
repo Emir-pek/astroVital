@@ -20,6 +20,21 @@ Yalnız `docs/` değişiklikleri kayıt gerektirmez.
 
 <!-- NEW ENTRIES BELOW -->
 
+### 2026-11-15 15:00 — Muhammed Bektaş (feat/core-routine) — Astronot pet: yalnız mantık (useCompanion)
+
+- **Ne:** `useCompanion(crewId?)` petin ruh halini (neşeli / nötr / endişeli / uyarı), mesaj anahtarını
+  ve varsa bir yönlendirme butonunu verir. Öncelik: uyarı durumu → kaçırılan görev → şu an yapılacak görev →
+  rozet/seri kutlaması → günün ipucu. Pet yalnız seçili astronotun kendi durumunu konuşur, teşhis koymaz,
+  değer söylemez. Görünüm yok.
+- **Neden:** Ekip fikri; kurallar Mühendis 1'de, görsel Emir'de (ADR-032, ADR-043).
+- **Dosyalar:** `src/modules/routine/services/companion.ts`, `src/modules/routine/hooks/useCompanion.ts` (yeni),
+  `src/modules/routine/hooks/useGamification.ts` (`newBadgesToday`, `today`), `src/modules/routine/services/gamification.ts`
+  (`BADGE_I18N`), `src/modules/routine/components/MissionBoard.tsx`, `src/modules/routine/index.ts`,
+  test `companion.test.tsx`, `src/core/i18n/en.json`, `src/core/i18n/tr.json` (`routine.companion.*`),
+  `docs/DECISIONS.md` (ADR-043), `docs/CONTRACTS.md`, `docs/modules/core-routine.md`, `CHANGELOG.md`
+- **Ekip ne yapmalı:** Emir: petin 4 ruh hali için görsel ve buton. Mühendis 3: pet uyarı durumunu
+  `useCrewHealth().overall === 'warning'`'ten alıyor; bu sözleşmeyi değiştirirsen haber ver.
+
 ### 2026-11-15 14:30 — Muhammed Bektaş (feat/core-routine) — Oyunlaştırma: XP, seri, rozet, ekip skoru (uyuma ödül)
 
 - **Ne:** `useGamification(crewId?)` artık gerçek. XP hatırlatma geçmişinden türetiliyor: zamanında yapılan

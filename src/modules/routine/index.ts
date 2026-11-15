@@ -19,7 +19,19 @@ export {
   type NotificationPermissionState,
 } from './services/notifications';
 export { MissionBoard, type MissionBoardProps } from './components/MissionBoard';
+export { useCompanion } from './hooks/useCompanion';
 export {
+  COMPANION_TIP_KEYS,
+  decideCompanion,
+  formatCompanionMessage,
+  tipKeyFor,
+  type CompanionAction,
+  type CompanionInput,
+  type CompanionMood,
+  type CompanionState,
+} from './services/companion';
+export {
+  BADGE_I18N,
   BADGE_IDS,
   DAILY_MISSIONS,
   DAILY_MISSION_XP,

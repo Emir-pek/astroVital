@@ -27,6 +27,10 @@ export interface GamificationApi {
   streakDays: number;
   longestStreak: number;
   badges: BadgeId[];
+  /** Badges first earned today (for a celebration). */
+  newBadgesToday: BadgeId[];
+  /** UTC mission day the numbers refer to. */
+  today: number;
   /** Today's daily health missions (completedAt set when ticked). */
   missions: Mission[];
   /** 0–100, adherence of the whole crew over the last 7 mission days. Always the whole crew. */
@@ -67,13 +71,20 @@ export function useGamification(crewId?: string): GamificationApi {
     const mine = targetId ? (groupByCrew(history)[targetId] ?? []) : [];
     const ticks = allTicks.filter((t) => t.crewId === targetId);
     const xp = computeXp(mine, ticks);
+    const badges = computeBadges(mine, ticks, today);
+    const before = computeBadges(
+      mine.filter((r) => r.missionDay < today),
+      ticks.filter((t) => t.missionDay < today),
+      today - 1,
+    );
     return {
       xp,
       level: levelForXp(xp),
       levelProgress: levelProgress(xp),
       streakDays: currentStreak(mine, today),
       longestStreak: longestStreak(mine, today),
-      badges: computeBadges(mine, ticks, today),
+      badges,
+      newBadgesToday: badges.filter((b) => !before.includes(b)),
       missions: dailyMissionsFor(ticks, today),
     };
   }, [history, allTicks, targetId, today]);
@@ -93,5 +104,5 @@ export function useGamification(crewId?: string): GamificationApi {
     [targetId, today, completeDailyMission],
   );
 
-  return { crewId: targetId, ...personal, teamScore, completeMission };
+  return { crewId: targetId, today, ...personal, teamScore, completeMission };
 }

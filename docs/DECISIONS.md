@@ -459,3 +459,20 @@ Node 24 LTS, npm.
 - **Sonuç:** Demo mürettebatı geçmiş XP ve seriyle başlar (demo verisi takvime birebir olduğu için
   geçmiş ölçümlerin hepsi `done`; metriksiz görevler elle işaretlenmediğinden XP getirmez). Ekran
   `MissionBoard` çalışır-sade; "XP uyuma verilir" açıklaması görünür kalmalı (görünüm visualization'da).
+
+### ADR-043 — Astronot pet (yardımcı): yalnız mantık, sabit öncelik, kişiye kapalı
+
+- **Bağlam:** Ekip "astronot pet" fikrini istedi; kuralları Mühendis 1'de, görünümü visualization'da
+  (ADR-032). Pet bir sağlık uygulamasında konuştuğu için dil ve gizlilik kuralı gerekiyor.
+- **Karar:** Saf `decideCompanion` + `useCompanion(crewId?)` (`src/modules/routine`). Çıktı:
+  `{ mood: 'cheerful'|'neutral'|'concerned'|'alert', messageKey, params?, subjectKey?, action?: { route, labelKey } }`.
+  Öncelik: (1) `useCrewHealth().overall === 'warning'` → alert, "Durum ekranını aç, adımları izle, CMO'ya
+  haber ver"; (2) kaçırılan görev → concerned, nazik hatırlatma; (3) şu an açık görev → neutral, "şimdi
+  X zamanı" (ölçümse `/measure`); (4) bugün kazanılan rozet veya seri kilometre taşı (7, 14, 30, 60, 90 gün)
+  → cheerful; (5) aksi halde neutral, günün ipucu: Learn içeriğindeki tehlike karşı önlemleri
+  (`hazards.*.countermeasures`), kişi ve güne göre deterministik (FNV hash, `Math.random` yok).
+  **Dil:** kısa, sade, teşhis yok; değer yazmaz; "prototip, tıbbi cihaz değil" metni (`routine.companion.disclaimer`).
+  **Gizlilik:** girdi yalnız o kişinin kendi özeti, görevleri ve ilerlemesi; varsayılan kişi seçili
+  astronot; başka astronotun bilgisi asla girmez (testli). Sahip: Mühendis 1.
+- **Sonuç:** Değerlendirme motoru bugün stub (hep nominal) olduğu için alert durumu motor gerçek olunca
+  çalışır; Mühendis 3'ün `useCrewHealth` sözleşmesine dayanır. Görsel (4 mood'un görünüşü) Emir'de.

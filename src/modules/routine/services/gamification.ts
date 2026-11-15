@@ -38,7 +38,7 @@ export const DAILY_MISSION_IDS = DAILY_MISSIONS.map((m) => m.id);
 export type BadgeId =
   'streak-7' | 'streak-30' | 'exercise-week' | 'monthly-exam-done' | 'crew-player';
 
-/** All badges in display order; i18n `routine.badges.<id>.name` / `.description`. */
+/** All badges in display order. */
 export const BADGE_IDS: readonly BadgeId[] = [
   'streak-7',
   'streak-30',
@@ -46,6 +46,15 @@ export const BADGE_IDS: readonly BadgeId[] = [
   'monthly-exam-done',
   'crew-player',
 ];
+
+/** i18n segment of each badge: `routine.badges.<segment>.name` / `.description`. */
+export const BADGE_I18N: Record<BadgeId, string> = {
+  'streak-7': 'streak7',
+  'streak-30': 'streak30',
+  'exercise-week': 'exerciseWeek',
+  'monthly-exam-done': 'monthlyExamDone',
+  'crew-player': 'crewPlayer',
+};
 
 /** Planned exercise sessions per 7-day mission week (ADR-035: 6 days a week). */
 export const EXERCISE_SESSIONS_PER_WEEK = 6;

@@ -68,6 +68,8 @@ app → hepsi.
 - [x] Kaçırılan ölçüm sayısı: `useMissedCount(crewId?)`. Rozetin yeri ve bağlanması: visualization
 - [x] Oyunlaştırma mantığı (ADR-042): türetilmiş XP, seviye, seri, 5 rozet, ekip skoru, 4 günlük sağlık
       görevi; `useGamification(crewId?)`. `MissionBoard` çalışır-sade (görünüm: visualization)
+- [x] Astronot pet mantığı (ADR-043): `useCompanion(crewId?)`, 5 basamaklı öncelik, yalnız seçili
+      astronot, teşhis dili yok. Görsel durumlar: visualization
 - [x] **Kural:** XP yalnız **uyum** için — değerden bağımsızlık testle kilitli; `MissionBoard`'da açıklama
       metni görünür (görünüm: visualization)
 - [ ] Uçtan uca entegrasyon testi `src/app/__tests__/e2e-flow.test.tsx` (görünüm: visualization)

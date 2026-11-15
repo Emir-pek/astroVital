@@ -2,16 +2,7 @@ import { Award, CircleCheck, Info } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { Button, Card, Tile } from '@core/ui';
 import { useGamification } from '../hooks/useGamification';
-import type { BADGE_IDS } from '../services/gamification';
-
-/** i18n segment per badge id (keys cannot contain the badge id's dashes nicely). */
-const BADGE_KEY: Record<(typeof BADGE_IDS)[number], string> = {
-  'streak-7': 'streak7',
-  'streak-30': 'streak30',
-  'exercise-week': 'exerciseWeek',
-  'monthly-exam-done': 'monthlyExamDone',
-  'crew-player': 'crewPlayer',
-};
+import { BADGE_I18N as BADGE_KEY } from '../services/gamification';
 
 export interface MissionBoardProps {
   /** Crew member to show; default = the signed-in astronaut. */

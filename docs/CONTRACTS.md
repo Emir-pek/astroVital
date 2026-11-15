@@ -128,6 +128,8 @@ useGamification(crewId?): { crewId; xp; level; levelProgress; streakDays; longes
 <MissionBoard crewId? />                       // çalışır-sade; "XP uyuma verilir" metni görünür kalmalı
 BadgeId = 'streak-7'|'streak-30'|'exercise-week'|'monthly-exam-done'|'crew-player'
 computeXp / currentStreak / longestStreak / computeBadges / computeTeamScore   // saf
+useCompanion(crewId?): { mood: 'cheerful'|'neutral'|'concerned'|'alert'; messageKey; params?;  // ADR-043
+  subjectKey?; action?: { route; labelKey } }  // yalnız o kişinin verisi; formatCompanionMessage(t, c)
 levelForXp(xp: number): number; levelProgress(xp: number): number; XP_PER_LEVEL
 ```
 
