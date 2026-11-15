@@ -1,11 +1,11 @@
 # ROUTINE_SCHEDULE — Hatırlatma takvimi (günlük / haftalık / aylık)
 
-**Sahip:** Mühendis 1 · **Kararlar:** ADR-035 (yapı), ADR-036 (saatler), ADR-037 (veri = takvim) · **Kod:** `CORE_ROUTINE` in
+**Sahip:** Mühendis 1 · **Kararlar:** ADR-035 (yapı), ADR-039 (saatler), ADR-040 (veri = takvim) · **Kod:** `CORE_ROUTINE` in
 `src/core/config/environments.config.ts`, gün kuralı `isScheduledOn()` in `src/core/utils/routineSchedule.ts`
 · **Kaynaklar:** `docs/SOURCES.md` § Hatırlatma takvimi kaynakları.
 
 Faz 0 takvimi örnek bir şablondu ve kaynağı yoktu. Bu takvim NASA/CSA'nın ISS'teki pratiğine dayanır ve
-üç katmandan oluşur; saatler ISS gün iskeletine göre (ADR-036). Gün sayımı görev gününe göredir: görev
+üç katmandan oluşur; saatler ISS gün iskeletine göre (ADR-039). Gün sayımı görev gününe göredir: görev
 başlangıcı = 1. gün (Mars'ta gösterim "Sol", hesap UTC — ADR-030). Saatler UTC (ISS'in resmî saati GMT/UTC).
 
 ## Gün iskeleti
@@ -29,7 +29,7 @@ her gün aynı saatlere bağlı.
 | Günlük   | `morning-bp`                | `systolicBP`      | 06:30      | her gün                                   | `csa-bio-monitor` + sabah bloğu¹                                                               | Diastolik aynı ölçümde; bilinçli sapma (aşağıda)       |
 | Günlük   | `morning-hr`                | `heartRate`       | 06:30      | her gün                                   | `csa-bio-monitor` + sabah bloğu¹                                                               | İstirahat nabzı                                        |
 | Günlük   | `morning-spo2`              | `spo2`            | 06:30      | her gün                                   | `csa-bio-monitor` + sabah bloğu¹                                                               | Sabah vital bloğu                                      |
-| Günlük   | `morning-resp`              | `respRate`        | 06:30      | her gün                                   | `csa-bio-monitor` + sabah bloğu¹                                                               | Sabah vital bloğu (ADR-037)                            |
+| Günlük   | `morning-resp`              | `respRate`        | 06:30      | her gün                                   | `csa-bio-monitor` + sabah bloğu¹                                                               | Sabah vital bloğu (ADR-040)                            |
 | Günlük   | `morning-temp`              | `bodyTemp`        | 06:30      | her gün                                   | `csa-bio-monitor` + sabah bloğu¹                                                               | Sabah vital bloğu                                      |
 | Günlük   | `exercise`                  | `exerciseMinutes` | 17:30      | haftada 6 gün (`restEveryNDays: 7`)       | `ntrs-2011-iss-exercise-conditioning`, `ntrs-2009-iss-exrx`, `nasa-std-3001-v1-medops`         | 7., 14., 21. … gün dinlenme; günün toplamı             |
 | Günlük   | `dosimeter`                 | `radiationDose`   | 19:30      | her gün                                   | `pmc-2024-iss-radiation-crew-dosimetry` + akşam bloğu²                                         | Kişisel dozimetre                                      |
@@ -83,7 +83,7 @@ değişmedi (ortam farkları ayrı karar).
 - **Açlık şekeri haftalık:** ISS'in rutin listesinde yok. Challenge kan şekerini açıkça gösterge olarak
   saydığı için takip ediyoruz; günlük parmak ucu ölçümü yerine (sarf malzemesi ve yük) haftalık.
 
-## Simülasyon uyumu: veri = takvim (ADR-016 → ADR-035, ADR-036, ADR-037)
+## Simülasyon uyumu: veri = takvim (ADR-016 → ADR-035, ADR-039, ADR-040)
 
 Demo verisi takvimin kendisinden üretilir (`generator.ts`): bir metrik, aktif ortamın takviminde o gün
 düşen bir hatırlatması varsa ve o hatırlatmanın saatinde (± birkaç dakika giriş gürültüsü) üretilir.

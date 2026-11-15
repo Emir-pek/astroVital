@@ -20,6 +20,20 @@ Yalnız `docs/` değişiklikleri kayıt gerektirmez.
 
 <!-- NEW ENTRIES BELOW -->
 
+### 2026-11-15 12:53 — Muhammed Bektaş (feat/core-routine) — Çakışan ADR-036/037 (core-routine) yeniden numaralandı
+
+- **Ne:** `docs/DECISIONS.md`'de iki kez geçen ADR-036 ve ADR-037'nin core-routine olanları taşındı:
+  "Takvim saatleri ISS gün iskeletine göre" → **ADR-039**, "Demo verisi takvime birebir" → **ADR-040**.
+  Visualization'ın ADR-036 (Durum ekranı) ve ADR-037 (Kutu sistemi) aynen kaldı. Bu iki karara verilen
+  referanslar (ADR-016 notu, ROUTINE_SCHEDULE, DEMO_CREW_STORIES, core-routine.md, SOURCES.md,
+  sources.config.ts yorumu, simülasyon kod/test yorumları, bu dosyadaki kendi kayıtlarım) güncellendi.
+- **Neden:** PR #13 ile feat/core-routine aynı numaraları paralel kullanmıştı; tekil numara olmadan referanslar belirsiz.
+- **Dosyalar:** `docs/DECISIONS.md`, `docs/ROUTINE_SCHEDULE.md`, `docs/DEMO_CREW_STORIES.md`,
+  `docs/modules/core-routine.md`, `docs/SOURCES.md`, `src/core/config/sources.config.ts`,
+  `src/core/simulation/generator.ts`, `src/core/simulation/__tests__/generator.test.ts`,
+  `src/core/utils/__tests__/staleness.test.ts`, `CHANGELOG.md`
+- **Ekip ne yapmalı:** Takvim saatleri için ADR-039, veri = takvim için ADR-040 kullanın. Yeni ADR'ler 041'den başlar.
+
 ### 2026-11-15 02:15 — Emir (feat/visualization) — Tek kutu sistemi (Panel/Tile/Pill); bölge paneli üst barı örtmüyor; başlık satırı kırılmıyor
 
 - **Ne:** Uygulamadaki bütün kutular artık üç rolden biri: **Panel** (üst düzey kap — gradient, 24 px köşe, 24 px
@@ -126,7 +140,7 @@ text-muted` → `text-label text-text-2`. `LearnPanel.tsx` :29/:50/:65 `text-lg`
   üstünde, egzersiz aksıyor). Demo verisi artık yalnız takvimdeki ölçümleri üretiyor: ISS'te akşam yalnız nabız (19:30),
   diğer ortamlarda akşam vitali yok; takvime sabah solunum hızı eklendi. Mürettebat baseline'ları nominal bantların içine
   çekildi (önceden nominal senaryoda bile herkes caution çıkıyordu). Rover değişmedi.
-- **Neden:** Jüri dört durum seviyesini tek ekranda görsün; ekranda takvimde olmayan ölçüm görünmesin (ADR-037, ADR-038).
+- **Neden:** Jüri dört durum seviyesini tek ekranda görsün; ekranda takvimde olmayan ölçüm görünmesin (ADR-040, ADR-038).
 - **Dosyalar:** `src/core/types/simulation.ts`, `src/core/simulation/{generator,scenarios,crew,index}.ts`,
   `src/core/config/environments.config.ts`, `src/core/config/sources.config.ts`, `src/core/store/useHealthStore.ts`,
   `src/core/i18n/en.json`, `src/core/i18n/tr.json`, testler (`generator.test.ts`, `staleness.test.ts`),
@@ -139,7 +153,7 @@ text-muted` → `text-label text-text-2`. `LearnPanel.tsx` :29/:50/:65 `text-lg`
 - **Ne:** Hatırlatma saatleri ISS gününe göre güncellendi (UTC): uyku kaydı 06:15; sabah tansiyon/nabız/SpO₂/ısı ve
   açlık şekeri 06:30; egzersiz 17:30; dozimetre ve ISS akşam nabzı 19:30; ruh hali 21:00 (değişmedi). Demo verisi artık
   ölçüm saatlerini takvimden okuyor (tek kaynak); ölçüm sayısı değişmedi. 3 yeni kaynak (ESA x2, ikincil ClickOrlando).
-- **Neden:** Saatler Faz 0 örneğiydi ve demo verisiyle ayrışmıştı (egzersiz 15:00 vs 17:00) — ADR-036.
+- **Neden:** Saatler Faz 0 örneğiydi ve demo verisiyle ayrışmıştı (egzersiz 15:00 vs 17:00) — ADR-039.
 - **Dosyalar:** `src/core/config/environments.config.ts`, `src/core/simulation/generator.ts`,
   `src/core/config/sources.config.ts`, `src/core/simulation/__tests__/generator.test.ts`, `docs/ROUTINE_SCHEDULE.md`,
   `docs/SOURCES.md`, `docs/DECISIONS.md`, `docs/modules/core-routine.md`, `CHANGELOG.md`

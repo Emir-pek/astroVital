@@ -79,7 +79,7 @@ const templateFor = (
 };
 
 /**
- * "Data = schedule" (ADR-037) applies to environments whose schedule contains the whole shared
+ * "Data = schedule" (ADR-040) applies to environments whose schedule contains the whole shared
  * CORE_ROUTINE. Others (today: rover, own schedule — environment differences are a separate decision)
  * keep the legacy ADR-016 behaviour for slots their schedule does not cover.
  */
@@ -190,7 +190,7 @@ interface SlotInput {
  * PURE: identical options ⇒ identical output (no Date.now, no Math.random).
  * Measurements later than `end` are not produced.
  *
- * Data = schedule (ADR-035 frequency, ADR-036 times, ADR-037 content): a metric is produced on a
+ * Data = schedule (ADR-035 frequency, ADR-039 times, ADR-040 content): a metric is produced on a
  * mission day only if the active environment's schedule has a reminder for it that falls on that day,
  * at that reminder's time (± a few minutes of entry noise).
  */

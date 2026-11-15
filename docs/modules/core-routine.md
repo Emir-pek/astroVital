@@ -34,7 +34,7 @@ app → hepsi.
 
 - [x] Uygulama kabuğu, yönlendirme (hash router), layout (Sidebar, TopBar, feragat)
 - [x] Store + persist, seçiciler, simülasyon üreticisi + 6 senaryo, `loadDemoData`/`resetAll`
-- [x] Demo verisi takvime birebir (veri = takvim, ADR-037)
+- [x] Demo verisi takvime birebir (veri = takvim, ADR-040)
 - [x] Varsayılan senaryo "karma görev": dört astronot, dört durum seviyesi (ADR-038, `docs/DEMO_CREW_STORIES.md`)
 - [x] i18n altyapısı (EN/TR) + anahtar eşitlik testi
 - [x] MET saati (`MetClock`)
@@ -56,7 +56,7 @@ app → hepsi.
 ### P1 (Faz 2)
 
 - [x] Takvim yapısı: günlük/haftalık/aylık, NASA/CSA kaynaklı (ADR-035, `docs/ROUTINE_SCHEDULE.md`)
-- [x] Takvim saatleri: ISS gün iskeleti, simülasyon saatleri takvimden (ADR-036)
+- [x] Takvim saatleri: ISS gün iskeleti, simülasyon saatleri takvimden (ADR-039)
 - [ ] Ortama göre takvim farkları (ayrı karar; rover'ın veri = takvim uyumu dahil)
 - [ ] Mürettebat ekleme/çıkarma (sonra kapsamı, ADR-038)
 - [ ] `useReminders`: aktif ortamın `reminderSchedule`'ını bugünün MET gününe aç; `metric`'i olan
