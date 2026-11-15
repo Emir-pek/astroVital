@@ -19,9 +19,15 @@
   --color-on-warning-fill: var(--av-on-warning-fill);
   --font-sans: var(--av-font-sans);
   --font-mono: var(--av-font-mono);
-  --radius-card: var(--av-radius-card);
+  /* Box roles (tokens.css): rounded-panel/tile/pill, p-panel/p-tile, gap-section. */
+  --radius-panel: var(--av-radius-panel);
+  --radius-tile: var(--av-radius-tile);
+  --radius-pill: var(--av-radius-pill);
   --radius-button: var(--av-radius-button);
   --shadow-soft: var(--av-shadow-soft);
+  --spacing-panel: var(--av-pad-panel);
+  --spacing-tile: var(--av-pad-tile);
+  --spacing-section: var(--av-gap-section);
   --spacing-touch: var(--av-touch-min);
   --spacing-touch-gap: var(--av-touch-gap);
   --text-body: 18px;
@@ -30,7 +36,8 @@
   --text-title: 28px;
   --text-headline: 24px;
 
-  /* LEGACY — do not use in new code (removed in Plan 3) */
+  /* LEGACY — do not use in new code (removed in Plan 3); boxSystem.test.ts keeps them out */
+  --radius-card: var(--av-radius-card);
   --color-surface-2: var(--av-raised);
   --color-border: var(--av-line);
   --color-muted: var(--av-text-2);

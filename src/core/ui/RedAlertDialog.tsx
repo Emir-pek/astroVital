@@ -59,7 +59,7 @@ export function RedAlertDialog({
       <AlertDialog.Portal>
         <AlertDialog.Popup
           initialFocus={firstActionRef}
-          className="fixed inset-0 z-50 flex flex-col gap-touch-gap overflow-y-auto bg-warning-fill p-6 text-on-warning-fill"
+          className="fixed inset-0 z-50 flex flex-col gap-touch-gap overflow-y-auto bg-warning-fill p-panel text-on-warning-fill"
         >
           <div className="flex flex-wrap items-center justify-between gap-touch-gap">
             <AlertDialog.Title className="text-headline font-semibold">{heading}</AlertDialog.Title>
@@ -72,7 +72,7 @@ export function RedAlertDialog({
             {items.map((item, index) => (
               <li
                 key={item.id}
-                className="flex flex-col gap-3 rounded-card border-2 border-current p-4"
+                className="flex flex-col gap-3 rounded-panel border-2 border-current p-panel"
               >
                 <div className="flex flex-wrap items-center gap-4">
                   <OctagonAlert

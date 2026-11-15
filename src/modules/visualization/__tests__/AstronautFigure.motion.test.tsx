@@ -31,63 +31,76 @@ const group = (container: HTMLElement, id: BodyRegionId) => {
 const breathes = (container: HTMLElement, id: BodyRegionId) =>
   group(container, id).closest('[data-breathing="true"]') !== null;
 
-describe('<AstronautFigure/> motion rules (spec §5.5, §8)', () => {
+describe('<AstronautFigure/> motion rules (spec §5.5, §8, ADR-036)', () => {
   afterEach(() => {
     motionPref.reduce = false;
   });
 
-  it('breathes nominal regions, including the whole-body halo', () => {
+  it('breathes only the nominal whole-body halo, never an inner region', () => {
     const { container } = render(<AstronautFigure regions={regions()} selected={null} />);
-    for (const id of BODY_REGION_IDS) expect(breathes(container, id)).toBe(true);
+    expect(breathes(container, 'whole_body')).toBe(true);
+    for (const id of BODY_REGION_IDS.filter((r) => r !== 'whole_body')) {
+      expect(breathes(container, id)).toBe(false);
+    }
+    expect(container.querySelectorAll('[data-breathing="true"]')).toHaveLength(1);
   });
 
-  it('keeps caution, warning and advisory regions steady', () => {
+  it('keeps an alerting halo steady', () => {
     const { container } = render(
-      <AstronautFigure
-        regions={regions({
-          lungs: 'caution',
-          heart: 'warning',
-          kidneys: 'advisory',
-          whole_body: 'warning',
-        })}
-        selected={null}
-      />,
+      <AstronautFigure regions={regions({ whole_body: 'warning' })} selected={null} />,
     );
-    expect(breathes(container, 'lungs')).toBe(false);
-    expect(breathes(container, 'heart')).toBe(false);
-    expect(breathes(container, 'kidneys')).toBe(false);
     expect(breathes(container, 'whole_body')).toBe(false);
-    // Nominal neighbours still breathe.
-    expect(breathes(container, 'brain')).toBe(true);
+    expect(container.querySelector('[data-breathing="true"]')).toBeNull();
   });
 
   it('disables breathing entirely when the user prefers reduced motion', () => {
     motionPref.reduce = true;
     const { container } = render(<AstronautFigure regions={regions()} selected={null} />);
     expect(container.querySelector('[data-breathing="true"]')).toBeNull();
-    // Regions are still drawn, just without motion.
-    expect(group(container, 'heart')).toHaveAttribute('data-status', 'nominal');
+    // The halo is still drawn, just without motion.
+    expect(group(container, 'whole_body').childElementCount).toBe(1);
   });
 
-  it('draws stale regions without any glow filter', () => {
+  it('leaves nominal inner regions blank and marks advisory, caution and warning', () => {
     const { container } = render(
       <AstronautFigure
-        regions={regions({ kidneys: 'stale', blood: 'stale', whole_body: 'stale' })}
+        regions={regions({ lungs: 'caution', heart: 'warning', kidneys: 'advisory' })}
+        selected={null}
+      />,
+    );
+    expect(group(container, 'brain').childElementCount).toBe(0);
+    for (const [id, status] of [
+      ['lungs', 'caution'],
+      ['heart', 'warning'],
+      ['kidneys', 'advisory'],
+    ] as const) {
+      const g = group(container, id);
+      expect(g).toHaveAttribute('data-status', status);
+      expect(g.querySelector(`[fill*="-fill-${status})"]`)).not.toBeNull();
+    }
+  });
+
+  it('draws stale and empty regions without any mark or glow filter', () => {
+    const { container } = render(
+      <AstronautFigure
+        regions={regions({ kidneys: 'stale', blood: 'none', whole_body: 'stale' })}
         selected={null}
       />,
     );
     for (const id of ['kidneys', 'blood', 'whole_body'] as const) {
       const g = group(container, id);
-      expect(g).toHaveAttribute('data-status', 'stale');
-      expect(g.hasAttribute('filter')).toBe(false);
+      expect(g.childElementCount).toBe(0);
       expect(g.querySelector('[filter]')).toBeNull();
       expect(breathes(container, id)).toBe(false);
     }
   });
 
-  it('outlines the selected region in the accent colour', () => {
-    const { container } = render(<AstronautFigure regions={regions()} selected="heart" />);
-    expect(group(container, 'heart').querySelector('[stroke="var(--av-accent)"]')).not.toBeNull();
-    expect(group(container, 'lungs').querySelector('[stroke="var(--av-accent)"]')).toBeNull();
+  it('dims the other regions when one is selected, without outlining the selected one', () => {
+    const { container } = render(
+      <AstronautFigure regions={regions({ lungs: 'caution' })} selected="heart" />,
+    );
+    expect(group(container, 'heart')).not.toHaveAttribute('opacity');
+    expect(group(container, 'lungs')).toHaveAttribute('opacity', '0.3');
+    expect(container.querySelector('[stroke="var(--av-accent)"]')).toBeNull();
   });
 });

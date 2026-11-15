@@ -35,7 +35,7 @@ Hash router kullanılır (`/#/measure`). Bileşenler bu yollara link verebilir:
 
 | Yol | Sayfa | Bileşenler |
 |---|---|---|
-| `/` | Durum | `BodyMap`, `VitalsPanel`, `RegionSheet` |
+| `/` | Durum | `BodyMap`, `AlertPanel`, `VitalsPanel`, `RegionSheet` |
 | `/measure` | Ölçüm | `QuickLogPanel`, `MeasurementForm` (Plan 2'de yeniden yapılacak) |
 | `/history` | Geçmiş | `Segmented` (aralık), `MetricTrendChart` |
 | `/team` | Ekip | `CrewOverview` (tıbbi değer/durum yok) |
@@ -87,17 +87,21 @@ validateValue(metric: MetricId, value: number): 'errorNumber' | 'errorRange' | n
 
 ```ts
 <BodyMap crewId: string selectedRegion: BodyRegionId | null onRegionSelect: (r: BodyRegionId) => void />
-<RegionSheet crewId: string region: BodyRegionId | null onClose: () => void />
+<RegionSheet crewId: string region: BodyRegionId | null onClose: () => void width?: number bounds?: SheetBounds />  // Durum'da sağ sütunun kutusu: üst bar ve feragat örtülmez; modal değil
 <RegionDetailPanel crewId: string region: BodyRegionId />
 <VitalsPanel crewId: string />
-<AlertLayer crewId: string />                  // uyarı şeridi + kırmızı tam ekran uyarı
+<AlertLayer crewId: string strip?: boolean />  // kırmızı tam ekran uyarı + şerit satırı (strip=false: Durum sayfası)
+<AlertPanel crewId: string />                  // Durum sayfası: şerit, değer rayının üstünde dikey kart; uyarı yoksa null
+<AlertSummary crewId: string />                // sorun yokken tek satırlık durum hattı (PageHeader'da); uyarı varken null
 <MetricTrendChart crewId: string metric: MetricId range: TrendRange />
 <CrewOverview />                               // isim + rol; tıbbi durum YOK
 filterByRange(series: Measurement[], range: TrendRange, now: Date): Measurement[]
 TREND_RANGES: readonly TrendRange[]           // TrendRange = '24h' | '7d' | '30d' | 'all'
 ```
 
-`BodyMap` = elle çizilmiş SVG astronot figürü + 104 px tıklama alanları + bölge çipleri.
+`BodyMap` = elle çizilmiş SVG astronot figürü + iki yanında 10 görünür bölge etiketi (≥ 104 px) ve
+kılavuz çizgileri (ADR-036); kapsayıcısını doldurur (`size-full`). `VitalsPanel` = kompakt değer rayı,
+nominal olmayanlar üstte.
 `MetricTrendChart` hâlâ yer tutucu (Plan 2).
 
 ### `@modules/routine` (Mühendis 1) — bağımlılık: `@core/*`, `@modules/assessment`

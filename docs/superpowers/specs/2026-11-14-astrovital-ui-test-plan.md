@@ -63,7 +63,7 @@ Bir bileşen ya da ekran, gerçek kullanıcı etkileşimiyle (`userEvent`) test 
 | F-03 | Yanıp sönme | Açılışta yanıp söner → "Durdur" → durur → yeni uyarı gelince yeniden başlar | Mevcut testte var ✓ |
 | F-04 | Odak (B8) | Pencere açılınca odak ilk "Ne yapmalıyım?" butonunda; Tab ile dışarı çıkılamaz | — |
 | F-05 | Uyarı şeridi | sarı uyarıda "Ertele" → şeritten kalkar; boşsa "Tüm göstergeler normal · son ölçüm X önce" | — |
-| F-06 | Öğren paneli | Bölge çipine dokun → panel açılır → sıra: Ne yapmalıyım → değer → neden → nedir → kaynak | Başlık sırası birebir |
+| F-06 | Öğren paneli | Figürün yanındaki bölge etiketine dokun → panel açılır → sıra: Ne yapmalıyım → değer → neden → nedir → kaynak | Başlık sırası birebir |
 | F-07 | Ölçüm girişi | Büyük tuş takımıyla 38.4 gir → kaydet → onay | Değer depoya yazılır, imleç/odak kaybolmaz |
 | F-08 | Geçersiz giriş | Fiziksel olarak imkânsız değer (ör. nabız 900) | Hata mesajı yanında, kayıt yapılmaz |
 | F-09 | Dil değişimi | EN → TR | Görünen tüm metin TR; düzen taşmıyor (en uzun TR metinleriyle) |

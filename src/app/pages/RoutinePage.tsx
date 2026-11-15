@@ -8,7 +8,7 @@ export function RoutinePage() {
   return (
     <>
       <PageHeader title={t('pages.routine.title')} subtitle={t('pages.routine.subtitle')} />
-      <div className="grid grid-cols-2 gap-6">
+      <div className="grid grid-cols-2 gap-section">
         <ReminderCenter scope="today" />
         <MissionBoard />
       </div>

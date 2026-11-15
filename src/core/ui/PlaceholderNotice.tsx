@@ -1,13 +1,16 @@
+import { clsx } from 'clsx';
 import { Construction } from 'lucide-react';
+import { BOX } from './box';
 
 /**
- * Small banner shown inside Phase-0 stub components so the team (and jury, if a stub
- * slips through) can see what is unfinished. Text must already be translated.
+ * Banner shown inside Phase-0 stub components so the team (and jury, if a stub slips through)
+ * can see what is unfinished. A Tile (box.ts) with the caution colour. Text must already be
+ * translated.
  */
 export function PlaceholderNotice({ text }: { text: string }) {
   return (
-    <p className="mb-3 flex items-center gap-2 rounded-md bg-warn/10 px-3 py-2 text-xs text-warn">
-      <Construction aria-hidden="true" className="size-4 shrink-0" />
+    <p className={clsx(BOX.tile, 'mb-4 flex items-center gap-3 text-label text-caution')}>
+      <Construction aria-hidden="true" className="size-5 shrink-0" />
       {text}
     </p>
   );

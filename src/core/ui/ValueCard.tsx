@@ -1,6 +1,7 @@
 import { clsx } from 'clsx';
 import { Clock } from 'lucide-react';
 import { ArcGauge, type ArcGaugeProps } from './ArcGauge';
+import { BOX } from './box';
 import { StatusBadge } from './StatusBadge';
 import { STATUS_STYLE, type DisplayStatus } from './statusStyle';
 
@@ -31,10 +32,7 @@ export function ValueCard({
   const stale = status === 'stale';
   const showArrow = direction != null && (status === 'caution' || status === 'warning');
   return (
-    <div
-      data-status={status}
-      className="card-surface flex flex-col gap-3 rounded-card p-4 shadow-soft"
-    >
+    <div data-status={status} className={clsx(BOX.panel, 'flex flex-col gap-3')}>
       <div className="flex items-center justify-between gap-2">
         <span className="text-label text-text-2">{label}</span>
         <StatusBadge status={status} label={statusLabel} size="sm" />
@@ -52,7 +50,7 @@ export function ValueCard({
             </span>
           )}
         </div>
-        {gauge && <ArcGauge {...gauge} />}
+        {gauge && <ArcGauge status={status} {...gauge} />}
       </div>
       <p className="flex items-center gap-2 text-label text-text-2">
         {stale && <Clock aria-hidden="true" className="size-5 shrink-0" />}

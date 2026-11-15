@@ -96,7 +96,16 @@ Kurallar:
 - Ortam teması (ISS / Ay / Mars) sadece arka plan illüstrasyonunu ve zemin tonunu çok hafif değiştirir; durum renklerine dokunmaz.
 
 ### 5.2 Yüzey dili ("yumuşak, hacimli 2D")
-- Köşe yarıçapı: kart 24 px, buton 20 px, çip 999 px.
+- **Kutu sistemi — her kutu üç rolden biridir (ADR-037):**
+
+  | Rol | Ne için | Zemin | Köşe | İç boşluk | Gölge | Kod |
+  |---|---|---|---|---|---|---|
+  | **Panel** | Sayfadaki üst düzey kap: kart, uyarı şeridi, değer rayı, modal, toast, açılır menü, yan panel | `card-surface` (surface + üstte %4 açık gradient) | 24 px `--av-radius-panel` | 24 px `--av-pad-panel` | `--av-shadow-soft` | `Card`, `BOX.panel` / `BOX.panelFlush` |
+  | **Tile / Satır** | Panelin içindeki kutu veya tekrarlanan liste öğesi (ekip kişisi, güncel değer, boş durum, yer tutucu notu, seçenek kutusu) | `raised` | 20 px `--av-radius-tile` | 16 px `--av-pad-tile` | yok | `Tile`, `BOX.tile` |
+  | **Pill** | Rozet, çip, durum hattı | rolün kendi zemini | 999 px `--av-radius-pill` | kendi | yok | `BOX.pill` (`rounded-pill`) |
+
+  Paneller ve sayfa bölümleri arası 24 px (`--av-gap-section`, `gap-section`); dokunma hedefleri arası en az 16 px (`gap-touch-gap`). Kontroller (Button, Segmented, menü öğesi, bölge etiketi) kutu değil, 20 px `rounded-button` köşeli kontroldür. İç içe en fazla iki katman: Panel → Tile; Panel içinde Panel, Tile içinde Tile yok. Divider'lı liste satırları (değer rayı) kutu değildir; paneli `BOX.panelFlush` olur, satırlar `px-panel` taşır.
+- Tailwind sınıfları token'dan: `rounded-panel / rounded-tile / rounded-pill`, `p-panel / p-tile`, `gap-section`. Stok yarıçaplar (`rounded-lg`, `rounded-full` …), eski `rounded-card`, stok yazı boyları (`text-sm` …), stok gölgeler (`shadow-xl` …) ve eski renk takma adları kaynakta yasaktır; `src/core/ui/__tests__/boxSystem.test.ts` zorlar (diğer modüllerin henüz taşınmamış dosyaları test içindeki `PENDING_MIGRATION` listesinde, liste yalnız küçülür).
 - Gölge: yumuşak ve dağınık (`0 12px 32px rgba(0,0,0,.35)`); sert kenar yok.
 - Kartlarda çok hafif dikey gradient (üst %4 daha açık); cam efekti (backdrop-blur) sadece üst barda.
 - Işıma (glow) sadece durum anlatmak için (ör. sorunlu bölge); süs ışıması yok.
@@ -110,54 +119,64 @@ Kurallar:
 - Hedef cihaz: iPad yatay, **1180 × 820 CSS px** (yaklaşık 132 CSS px/inç).
 - 20 mm ≈ **104 CSS px** → tüm dokunulabilir hedefler en az **104 × 104 px** (`--touch-min: 104px`).
 - Hedefler arası en az **16 px** (≈3 mm).
-- Görünen eleman küçükse (ör. figürdeki göz bölgesi) görünmez, genişletilmiş bir tıklama alanı eklenir.
+- Görünmez tıklama alanı kullanılmaz: dokunulacak şey her zaman görünen bir hedeftir. Figürdeki küçük bölgeler (ör. gözler) figürün yanındaki ≥ 104 px'lik bölge etiketleriyle seçilir (§7.1, §8; ADR-036).
 - Laptop demosunda aynı px değerleri kalır (sadece biraz büyük görünür); bu kabul edildi.
 
 ### 5.5 Hareket (Framer Motion)
 - Varsayılan geçiş: 250–400 ms, `easeOut`; sayfa geçişi yumuşak fade + 8 px kayma.
-- Normal bölgeler: 4–5 sn'lik çok hafif "nefes" (opaklık 0.85↔1, ölçek ≤ 1.02).
-- Sarı: sabit sarı ışıma, nefes yok.
-- Kırmızı: tam ekran uyarıda sadece ikon 3 Hz / %50 yanıp söner; figürdeki bölge sabit kırmızı ışır.
+- **Nefes yalnız tüm vücut halesinde:** hale nominalken 4,5 sn'lik çok hafif "nefes" (opaklık 0.85↔1) alır. İç bölgeler hiç nefes almaz; nominal iç bölgeler figürde hiçbir şey çizmez (ADR-036 — tek bir uyarı, ışıyan kalabalıkta kaybolmasın).
+- Sarı (caution) / mavi (advisory): sabit, nefes yok.
+- Kırmızı: tam ekran uyarıda sadece ikon 3 Hz / %50 yanıp söner; figürdeki bölge sabit kırmızı işaretli kalır.
 - Zıplama, sallanma, yay (spring bounce) efekti yok.
-- `prefers-reduced-motion` açıksa nefes ve geçişler kapanır; yanıp sönme yerine sabit kalın çerçeve.
+- `prefers-reduced-motion` açıksa nefes ve geçişler kapanır (hale sabit çizilir); yanıp sönme yerine sabit kalın çerçeve.
 
 ## 6. Bilgi mimarisi ve yerleşim
 
 ```
 ┌──────┬──────────────────────────────────────────────────────────┐
-│ logo │ MET 042:13:07 │ Ortam: ISS ▾ │ SİMÜLE VERİ │ Acil │ EN/TR │ Astronot ▾ │
+│ logo │ MET Gün 30 · 18:51 │ ISS ▾ │ Acil │ EN/TR │ Astronot ▾ │  ← tek satır
+│      │ Simüle veri         │                                     │
 ├──────┼──────────────────────────────────────────────────────────┤
-│ Durum│ [Uyarı şeridi — sadece sorun varken]                     │
-│ Ölçüm│                                                          │
-│ Geçmiş│            (seçili sayfa içeriği)                      │
+│ Durum│ [Uyarı şeridi — sorun varken; Durum'da sağ sütunda]      │
+│ Ölçüm│ Başlık (h1)            [● Tüm göstergeler normal · …]    │
+│ Geçmiş│            (seçili sayfa içeriği — kendi içinde kayar)  │
 │ Ekip │                                                          │
 │ Rutin│                                                          │
-└──────┴──────────────────────────────────────────────────────────┘
+├──────┴──────────────────────────────────────────────────────────┤
+│ Feragat (tam genişlik, sabit alt satır, her sayfada görünür)    │
+└─────────────────────────────────────────────────────────────────┘
 ```
+
+- **Tek ekran (ADR-036):** kabuk görünüm alanı yüksekliğindedir (`h-dvh`); belge kaymaz, yalnız sayfa alanı kendi içinde kayar. Feragat tam genişlikte sabit alt satırdır, kaydırmadan her zaman görünür.
+- Üst bar 1180 px'de EN ve TR'de tek satırdır (≈ 128 px): ortam seçicide kısa ad (`topbar.envShort.*`, ör. "ISS", "Mars üssü"); tam ad erişilebilir adda ve açılan listede.
+- **Sayfa başlığı (`PageHeader`) iki satırlık ızgaradır:** 1. satır başlık (h1) + sağda durum hattı; 2. satır alt başlık + sağda sayfa eylemleri (ör. Geçmiş'te aralık seçici). Eylem yoksa alt başlık tam genişliği kullanır. Böylece 1180 px'de EN ve TR'de durum hattı hiçbir zaman alt başlığın altına kırılmaz. Başlık ile içerik arası 16 px.
 
 - **Sol menü:** sabit, 5 öğe, her biri ≥ 104 px yüksek, ikon + etiket. Seçili öğe `accent`.
 - **Üst bar:** görev saati (MET, mono), ortam seçici, sürekli görünen "Simüle veri" etiketi (jüriye dürüstlük), **Acil** butonu (acil durum protokolüne götürür; Modül 3'ün eskalasyon zincirine bağlanır), dil seçici, aktif astronot seçici.
-- **Öğren paneli** ayrı sayfa değil; figürde/uyarıda bir şeye dokununca sağdan açılan, sağa kaydırarak da kapanan panel (Base UI `Drawer`).
+- **Öğren paneli** ayrı sayfa değil; figürde/uyarıda bir şeye dokununca sağdan açılan, sağa kaydırarak da kapanan panel (Base UI `Drawer`). Varsayılan 480 px, ekranın sağ kenarına yapışık tam yükseklikte ve arkasını karartır (modal). Durum ekranında bölge paneli sağ sütunun kutusuna oturan yüzen bir paneldir: üst barın altında, feragat satırının üstünde; sayfayı karartmaz ve modal değildir (§7.1).
 
 ## 7. Ekranlar
 
 ### 7.1 Durum (ana ekran)
 ```
-┌──────────────────────────────────────────────────────────┐
-│ ⚠ Sarı  Uyku 5.8 sa · 3 gündür düşük      [Ne yapmalı?] │  ← sadece sorun varsa
-├───────────────────────────┬──────────────────────────────┤
-│                           │  Nabız     72  bpm  ●        │
-│     [astronot figürü]     │  Tansiyon 118/76    ●        │
-│                           │  SpO₂      97  %    ●        │
-│                           │  Isı     36.8  °C   ●        │
-│ [Beyin][Kalp][Akciğer]... │  Uyku     5.8  sa ▼ ⚠        │
-│  (bölge çipleri)          │  Ruh hali  4/5      ●        │
-└───────────────────────────┴──────────────────────────────┘
+┌──────────────────────────────────────────────────────────────────┐
+│ Durum                  [● Tüm göstergeler normal · son ölçüm …]  │  ← sorun yoksa
+├─────────────────────────────────────────┬────────────────────────┤
+│ [Beyin  ]──╮               ╭──[Gözler ] │ ⚠ Uyku 5.8 sa · düşük  │  ← sadece sorun
+│ [Bağışık]──┤   astronot    ├──[Kalp   ] │ [Ne yapmalıyım?] [+2]  │    varsa
+│ [Akciğer]──┤    figürü     ├──[Böbrek ] ├────────────────────────┤
+│ [Kemik  ]──┤               ├──[Kas    ] │ Son değerler (kayar)   │
+│ [Tüm v. ]──╯               ╰──[Kan    ] │ Uyku    5.8 sa ⚠  ◠    │
+└─────────────────────────────────────────┴────────────────────────┘
+          ≈ %60                                    ≈ %38
 ```
-- **Uyarı şeridi:** önem sırası kırmızı (onaylanmış) → sarı → mavi. Sorun yoksa yerinde tek satır: "Tüm göstergeler normal · son ölçüm 2 sa önce".
-- **Figür:** ortada (§8).
-- **Bölge çipleri:** figürün altında 10 bölge (beyin, gözler, kalp, akciğer, kan, kemik, kas, bağışıklık, böbrek, tüm vücut), her biri durum ikonu ile. Küçük bölgeler için figüre dokunmanın erişilebilir alternatifi.
-- **Değer kartları:** sağda. Her kart: etiket, değer (mono, 40 px), birim, durum ikonu, eşik dışıysa ▲/▼, son ölçüm zamanı. Kart içinde ince **yay gösterge** ve üzerinde sarı/kırmızı eşik bantları (Open MCT'den alınan fikir).
+- **1180×820'de dikey kaydırma yok — uyarı varken de.** Figür ve 10 etiket her durumda kaydırmadan görünür (ADR-036). 1366×768'de sayfa alanında ≈ 48–52 px kayma kabul edilir (en alttaki iki etiket feragat satırının arkasında kısmen kalır: 584 px'lik etiket sütunu ≈ 540 px'e sığmaz).
+- **Uyarı şeridi:** önem sırası kırmızı (onaylanmış) → sarı → mavi; ikon + başlık + ayrıntı, "Ne yapmalıyım?", "Ertele" (kırmızıda yok) ve "+n daha". Diğer sayfalarda üst barın altında kendi satırında, tek satırlık panel (≈ 156 px: 104 px düğme + panel boşluğu + renkli kenar, `AlertStrip layout="row"`; kenarı en ağır uyarının renginde). **Durum sayfasında** aynı içerik sağ sütunda, değer rayının üstünde dikey kart olarak durur (`AlertPanel`, `AlertStrip layout="stacked"`; kenarı en ağır uyarının renginde; üç düğmeyle ≈ 340 px); ray kalan yükseklikte kendi içinde kayar, nominal olmayan satırlar en üstte olduğu için uyarıdaki değer görünür kalır. Sorun yoksa şerit yoktur; yerine sayfa başlığı satırının sağında tek satırlık durum hattı (`StatusLine`, `AlertSummary`): "Tüm göstergeler normal · son ölçüm 2 sa önce". Durum sayfasında alt başlık yok.
+- **Figür:** sol bölmenin (≈ %60) ortasında, kapsayıcısıyla viewBox üzerinden ölçeklenir (1180×820'de ≈ 258 × 584 px) (§8).
+- **Bölge paneli:** bir etikete dokununca açılan panel tam olarak sağ sütunun (uyarı kartı + değer rayı) yerini alır: aynı genişlik, aynı üst/alt/sağ kenar (`Sheet` `bounds`; 1180'de 378 px genişlik, üst kenar 183 px — üst bar 128 px'de biter —, alt kenar 767 px — feragat 779 px'de başlar; en az 360 px) ve sayfayı karartmaz: figür, 10 etiket ve basılan etiketin accent halkası/kılavuz çizgisi panel açıkken görünür kalır. **Üst bar (Acil düğmesi başta) hiçbir zaman örtülmez.** Panel modal değildir: odak panelde hapsolmaz, sayfanın geri kalanı dokunulabilir kalır — başka bir etikete dokunmak paneli o bölgeye geçirir, aynı etikete tekrar dokunmak kapatır, Acil doğrudan çalışır. Kapatma: kapat düğmesi, Escape, sağa kaydırma veya aynı etiket.
+- **Bölge etiketleri (çiplerin yerine, ADR-036):** figürün iki yanında 10 görünür etiket, her yanda 5 (sol: beyin, bağışıklık, akciğer, kemik, tüm vücut; sağ: gözler, kalp, böbrek, kas, kan). Her etiket 152×104 px, aralık ≥ 16 px, koyu yüzey üzerinde ad + durum (renk + ikon + metin); uyarıdaki etiketin kenarı durum renginde. Etiketten organdaki noktaya ince bir kılavuz çizgi (koyu kılıf + ince çizgi) gider; çizgiler kesişmez. Klavye sırası sol sütun yukarıdan aşağı, sonra sağ sütun.
+- **Değer rayı:** sağda (≈ %38) kompakt liste, 6 satır × ≈ 88–90 px (`VitalRow`): etiket + durum rozeti, büyük değer (mono, 40 px) + birim, eşik dışıysa ▲/▼ ve **mini yay gösterge**. Nominal olmayan satırlar en üstte (warning → caution → advisory → eski → veri yok → nominal). Son ölçüm zamanı yalnız veri eskiyse görünür (saat ikonu ile); aksi halde ekran okuyucuya okunur.
+- **Mini yay gösterge (96×44):** nötr iz; yalnız değerin bulunduğu bant durum rengiyle boyanır (Open MCT eşik bandı fikri, sadeleştirilmiş). Bant dışı değer ◀/▶ ile gösterilir.
 
 ### 7.2 Kırmızı tam ekran uyarı
 - Base UI `AlertDialog`, kapatılamaz (ESC ve dışarı tıklama kapalı).
@@ -189,7 +208,7 @@ Sıra her zaman aynı (rakipten alınan iyi pratik: önce eylem):
 
 ### 7.6 Eski veri görünümü
 - Her göstergenin "en uzun geçerlilik süresi" ortam takviminden gelir (Modül 1).
-- Süre aşılırsa kart %50 opaklık + saat ikonu + "Son ölçüm 14 sa önce · yeniden ölç" ve figürdeki bölge gri/nötr olur. Asla "normal" yeşili gösterilmez.
+- Süre aşılırsa değer ve gösterge %50 opaklık + saat ikonu + "Son ölçüm 14 sa önce · yeniden ölç"; figürde bölge işaretsiz kalır, bölge etiketi "Eski" der. Asla "normal" yeşili gösterilmez.
 
 ### 7.7 Ekip
 - **Tıbbi değer ve tıbbi durum gösterilmez** (NASA'da tıbbi veri kişi ile uçuş doktoru arasında kalır).
@@ -203,12 +222,19 @@ Sıra her zaman aynı (rakipten alınan iyi pratik: önce eylem):
 ## 8. Astronot figürü
 
 - **Teknik:** Kod içinde elle yazılmış SVG React bileşenleri (`<AstronautFigure />`), Framer Motion ile animasyon. Dışarıdan resim/3D yok.
-- **Görünüm:** Gerçek yetişkin oranlarında (≈7.5 baş boyu), ayakta, hafif ¾ duruş; mat beyaz/açık gri skafandr, kaskın vizörü koyu ve yumuşak yansımalı (**yüz/ifade yok**). Hacim yumuşak radial/linear gradientler ve tek bir yumuşak alt gölge ile verilir. Az ama özenli detay.
-- **Sağlık bölgeleri:** Kıyafetin altından görünen yumuşak ışık lekeleri (blur'lu şekiller), anatomik olarak doğru yerlerde:
-  - beyin (kask içi üst), gözler (vizör hizası), kalp (göğüs sol), akciğer (göğüs iki yan), kan (kollar/bacaklar boyunca ince damar çizgileri), kemik (uyluk/kaval), kas (üst kol + uyluk), bağışıklık (boyun + koltuk altı noktaları), böbrek (bel iki yan), tüm vücut (silüeti saran ince hale).
-- **Durum → görünüm:** nominal = çok hafif nane ışıma + nefes; caution = sabit sarı ışıma; warning = sabit kırmızı ışıma; stale = gri, ışıma yok; veri yok = kesik çizgili kontur.
-- **Etkileşim:** Her bölgenin görünmez, ≥ 104 px'lik tıklama alanı var; dokununca Öğren paneli açılır. Seçili bölge `accent` kontur alır.
-- **Performans:** `filter: blur` sınırlı sayıda; animasyonlar sadece `opacity`/`transform`.
+- **Görünüm:** Gerçek yetişkin oranlarında (kask dahil ≈ 7,3 kask boyu — kasklı bir 7,5 baş figürü; büyük kafa yok), ayakta, ¾ duruş; mat beyaz/açık gri skafandr, kaskın vizörü koyu ve yumuşak yansımalı (**yüz/ifade yok**). Az ama özenli detay.
+  - **Duruş (asimetrik):** gövde ve vizör izleyicinin sağına dönük; yaşam destek sırt çantası bu yüzden solda, yakın kolun arkasında ve omzun üstünde görünür. Ağırlık yakın (sol) bacakta; uzak bacak bir adım önde (botu daha aşağıda, burnu sağa dönük). Yakın kol dirsekte hafif bükük sarkar, uzak kol dirsekten bükük, eldiven kalçanın yanında; omuzlarda hafif eğim. Hiçbir parça ayna kopyası değil.
+  - **Işık:** tek anahtar ışık sol üstten. Her parça kendi konturuna göre gölgelenir (parçanın dışı ışığa doğru kaydırılıp bulanıklaştırılır ve parçaya kırpılır → ışıktan dönen kenarda form gölgesi, ışığa bakan kenarda ışık; mesafe parçanın kalınlığıyla orantılı). Öndeki parça arkadakine yumuşak gölge düşürür; sağ dış siluette soğuk ince kenar ışığı (`--av-suit-rim`) gövdeyi gece mavisinden ayırır. Yere tek yumuşak gölge.
+  - **Detay (ölçülü):** göğüs kontrol ünitesi + tek umbilikal hortum ve konnektörü, termal giysi panel dikişleri, diz takviyeleri, omuz/bilek/bel/ayak bileği halkaları, eldiven parmak çizgileri, bot burun dikişi ve koyu taban, kask lambası (mercek ileri bakar), uyluklarda soluk turuncu kimlik şeridi. Ajans logosu/arması yok.
+- **Sağlık bölgeleri:** anatomik olarak doğru yerlerde, siluete kırpılmış işaretler:
+  - beyin (kask içi üst), gözler (vizör hizası), kalp (göğüs sol), akciğer (göğüs iki yan), kan (kollar/bacaklar boyunca dolgulu, sivrilen damar şeritleri — çizgi değil alan), kemik (uyluk/kaval), kas (üst kol + uyluk), bağışıklık (boyun + koltuk altı noktaları), böbrek (bel iki yan), tüm vücut (silüeti saran ince hale).
+- **Durum → görünüm (ADR-036):**
+  - nominal, eski (stale) ve veri yok: figürde **hiçbir şey çizilmez** — durum yanındaki etikette okunur (eski veri asla "normal" görünmez; etiket "Eski"/"Veri yok" der).
+  - advisory / caution / warning: siluete kırpılmış, ortası güçlü kenara doğru açılan durum renginde dolgu + koyu kontur (`--av-bg`, beyaz kıyafet üzerinde ≥ 3:1); damarlar da aynı dolgu + konturla (genişlik ≥ 6 px), böylece hiçbir işaret kılavuz çizgisine benzemez. Kılavuz çizgi durum renginde ve üzerinde küçük bir durum simgesi (organı örtmesin diye noktadan 24 px geride).
+  - tüm vücut halesi: siluetin birkaç px dışında, koyu bir boşlukla ayrılmış ince kontur çizgisi + çok hafif ışıma (bulanık leke değil). Nominalken ince, soluk nane + nefes (§5.5); uyarıda sabit, daha kalın durum rengi; eski/veri yokken çizilmez.
+- **Etkileşim:** Figürün üzerinde görünmez tıklama alanı yok; seçim figürün yanındaki görünür bölge etiketleriyle yapılır (§7.1); dokununca Öğren paneli açılır. Seçili bölgede: etiket `accent` halka alır, kılavuz çizgisi `accent` olur, diğer bölgelerin işaretleri ve çizgileri soluklaşır. Figürde çerçeve halkası yok.
+- **Ölçek:** figür kapsayıcısıyla viewBox (`182 8 226 512`, siluete + haleye kırpılmış) üzerinden ölçeklenir. Yerleşim saf fonksiyonla hesaplanır (`computeBodyMapLayout`); bölge çapaları (`REGION_ANCHORS`) çizimdeki organların üzerindedir (`figureGeometry.test.ts`).
+- **Performans:** `filter: blur` yalnız kıyafet ve halede; animasyonlar sadece `opacity`/`transform`.
 - Her bölge `data-region` ve `data-status` attribute'ları taşır (test ve stil için).
 
 ## 9. Teknik yaklaşım
@@ -230,7 +256,7 @@ Sıra her zaman aynı (rakipten alınan iyi pratik: önce eylem):
 - Hazır kit (Mantine/Chakra): kendi görsel dili baskın; yumuşak 2D dilimizi giydirmek daha pahalı.
 
 **Klasörler**
-- `src/core/ui/` — tasarım sistemi: `tokens.css` (CSS değişkenleri), Tailwind tema genişletmesi, temel bileşenler (Button, Card, StatusBadge, ArcGauge, ValueCard, AlertStrip, RedAlertDialog, Sheet, Segmented, Keypad, Slider). Diğer modüller buradan `index.ts` üzerinden import eder.
+- `src/core/ui/` — tasarım sistemi: `tokens.css` (CSS değişkenleri), Tailwind tema genişletmesi, temel bileşenler (Button, Card (= Panel), Tile, `BOX` tarifleri, StatusBadge, ArcGauge, ValueCard, VitalRow, StatusLine, AlertStrip, RedAlertDialog, Sheet, Segmented, Keypad, Slider). Diğer modüller buradan `index.ts` üzerinden import eder.
 - `src/app/` — kabuk: sol menü, üst bar, yönlendirme, sayfa geçişleri.
 - `src/modules/visualization/` — figür, Durum ekranı, Geçmiş grafikleri, Ekip paneli.
 - `src/modules/intake/` ve `src/modules/routine/` — bu ekranların **görünümü** `src/core/ui` bileşenleriyle yapılır; mantıkları modül sahiplerinde.

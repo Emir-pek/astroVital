@@ -6,6 +6,7 @@ import {
   buildVitalCards,
   gaugeBands,
   outOfRangeDirection,
+  sortBySeverity,
 } from '../services/vitalCards';
 
 const now = new Date('2026-11-14T12:00:00Z');
@@ -111,5 +112,42 @@ describe('gaugeBands', () => {
       now,
     });
     expect(cards.find((c) => c.id === 'radiationDose')?.gauge).toBeNull();
+  });
+});
+
+describe('sortBySeverity', () => {
+  it('moves non-nominal cards to the top and keeps the primary order otherwise', () => {
+    const latest = {
+      heartRate: m('heartRate', 70),
+      systolicBP: m('systolicBP', 118),
+      diastolicBP: m('diastolicBP', 76),
+      spo2: m('spo2', 97),
+      bodyTemp: m('bodyTemp', 36.8, old),
+      sleepHours: m('sleepHours', 5.1),
+    };
+    const assessments = [
+      a('heartRate', 'nominal', 70),
+      a('systolicBP', 'nominal', 118),
+      a('diastolicBP', 'nominal', 76),
+      a('spo2', 'warning', 97),
+      a('bodyTemp', 'nominal', 36.8),
+      a('sleepHours', 'caution', 5.1),
+    ];
+    const cards = sortBySeverity(buildVitalCards({ latest, assessments, env, now }));
+    expect(cards.map((c) => [c.id, c.status])).toEqual([
+      ['spo2', 'warning'],
+      ['sleepHours', 'caution'],
+      ['bodyTemp', 'stale'],
+      ['mood', 'none'],
+      ['heartRate', 'nominal'],
+      ['bloodPressure', 'nominal'],
+    ]);
+  });
+
+  it('does not mutate its input', () => {
+    const cards = buildVitalCards({ latest: {}, assessments: [], env, now });
+    const copy = [...cards];
+    sortBySeverity(cards);
+    expect(cards).toEqual(copy);
   });
 });

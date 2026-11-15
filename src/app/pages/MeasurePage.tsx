@@ -11,7 +11,7 @@ export function MeasurePage() {
     <>
       <PageHeader title={t('pages.measure.title')} subtitle={t('pages.measure.subtitle')} />
       {crewId && (
-        <div className="grid grid-cols-2 gap-6">
+        <div className="grid grid-cols-2 gap-section">
           <QuickLogPanel crewId={crewId} />
           <MeasurementForm crewId={crewId} />
         </div>

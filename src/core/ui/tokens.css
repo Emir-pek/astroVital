@@ -22,8 +22,21 @@
   --av-suit-accent: #e8a66b; /* figure suit details ONLY */
   --av-font-sans: 'Atkinson Hyperlegible Next', system-ui, sans-serif;
   --av-font-mono: 'JetBrains Mono', ui-monospace, monospace;
-  --av-radius-card: 24px;
-  --av-radius-button: 20px;
+  /*
+   * Box system (spec §5.2): every box is one of three roles. Use the kit recipes (BOX in
+   * src/core/ui/box.ts, or Card / Tile), not these values directly.
+   *   Panel — top-level container: surface gradient, 24 px radius, 24 px padding, soft shadow.
+   *   Tile  — box inside a panel / repeated list item: raised, 20 px radius, 16 px padding, flat.
+   *   Pill  — badge, chip, status line: full radius.
+   */
+  --av-radius-panel: 24px;
+  --av-radius-tile: 20px;
+  --av-radius-pill: 999px;
+  --av-pad-panel: 24px;
+  --av-pad-tile: 16px;
+  --av-gap-section: 24px; /* between panels and page sections */
+  --av-radius-button: 20px; /* controls (Button, Segmented, menu items) */
+  --av-radius-card: var(--av-radius-panel); /* LEGACY alias of the panel radius */
   --av-shadow-soft: 0 12px 32px rgba(0, 0, 0, 0.35);
   --av-touch-min: 104px;
   --av-touch-gap: 16px;
@@ -51,6 +64,7 @@
   --av-suit-visor-deep: #05070f;
   --av-suit-lens: #1b2138;
   --av-suit-sheen: #ffffff; /* specular highlights (low opacity) */
+  --av-suit-rim: #dde6ff; /* cool rim light on the right-hand silhouette */
   --av-suit-ground: #03050d; /* contact shadow */
 }
 [data-env='iss'],
@@ -84,7 +98,7 @@
 }
 .av-sheet[data-starting-style],
 .av-sheet[data-ending-style] {
-  transform: translateX(100%);
+  transform: translateX(calc(100% + var(--av-sheet-offset, 0px)));
 }
 .av-sheet[data-swiping] {
   transition: none;

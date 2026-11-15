@@ -7,7 +7,7 @@ import type { DisplayStatus } from '@core/ui';
 import { renderWithProviders } from '@test/renderWithProviders';
 import { BodyMap } from '../index';
 import { BodyMapView, type RegionView } from '../components/BodyMap';
-import { RegionChips } from '../components/RegionChips';
+import { COLUMNS } from '../components/figure/layout';
 
 const LABELS: Record<BodyRegionId, string> = {
   brain: 'Brain',
@@ -36,20 +36,23 @@ const regions: RegionView[] = BODY_REGION_IDS.map((id) => {
 
 const ariaLabelFor = (r: RegionView) => `${r.label}: ${r.statusLabel}`;
 
-describe('<BodyMapView/>', () => {
-  it('renders one glove-sized invisible button per region with data attributes', () => {
-    renderWithProviders(
-      <BodyMapView
-        regions={regions}
-        selectedRegion={null}
-        onRegionSelect={() => {}}
-        ariaLabelFor={ariaLabelFor}
-      />,
-    );
+const renderView = (selectedRegion: BodyRegionId | null = null, onRegionSelect = vi.fn()) =>
+  renderWithProviders(
+    <BodyMapView
+      regions={regions}
+      selectedRegion={selectedRegion}
+      onRegionSelect={onRegionSelect}
+      ariaLabelFor={ariaLabelFor}
+    />,
+  );
+
+describe('<BodyMapView/> region labels', () => {
+  it('renders one visible, glove-sized label per region with data attributes', () => {
+    renderView();
     const buttons = screen.getAllByRole('button');
     expect(buttons).toHaveLength(10);
     for (const b of buttons) {
-      expect(b).toHaveClass('size-touch');
+      expect(b).toHaveClass('min-h-touch', 'min-w-touch');
       expect(b).toHaveAttribute('data-region');
       expect(b).toHaveAttribute('data-status');
     }
@@ -59,31 +62,33 @@ describe('<BodyMapView/>', () => {
     );
   });
 
-  it('labels a region with its name and status', () => {
-    renderWithProviders(
-      <BodyMapView
-        regions={regions}
-        selectedRegion={null}
-        onRegionSelect={() => {}}
-        ariaLabelFor={ariaLabelFor}
-      />,
+  it('shows the region name and its status as colour + icon + text', () => {
+    renderView();
+    const kidneys = screen.getByRole('button', { name: 'Kidneys: Stale' });
+    expect(within(kidneys).getByText('Kidneys')).toBeVisible();
+    const badge = within(kidneys).getByText('Stale').closest('[data-status]');
+    expect(badge).toHaveAttribute('data-status', 'stale');
+    expect(badge?.querySelector('svg')).not.toBeNull();
+  });
+
+  it('marks alert labels with a status-coloured edge, calm labels without', () => {
+    renderView();
+    expect(screen.getByRole('button', { name: 'Bones: Warning' })).toHaveClass('border-warning');
+    expect(screen.getByRole('button', { name: 'Lungs: Caution' })).toHaveClass('border-caution');
+    expect(screen.getByRole('button', { name: 'Heart: Nominal' })).toHaveClass(
+      'border-transparent',
     );
-    expect(screen.getByRole('button', { name: 'Heart: Nominal' })).toHaveAttribute(
-      'data-region',
-      'heart',
-    );
+  });
+
+  it('places labels down the left column, then the right one (keyboard order)', () => {
+    renderView();
+    const order = screen.getAllByRole('button').map((b) => b.getAttribute('data-region'));
+    expect(order).toEqual([...COLUMNS.left, ...COLUMNS.right]);
   });
 
   it('selects a region on tap and marks the selected one pressed', () => {
     const onSelect = vi.fn();
-    renderWithProviders(
-      <BodyMapView
-        regions={regions}
-        selectedRegion="lungs"
-        onRegionSelect={onSelect}
-        ariaLabelFor={ariaLabelFor}
-      />,
-    );
+    renderView('lungs', onSelect);
     fireEvent.click(screen.getByRole('button', { name: 'Heart: Nominal' }));
     expect(onSelect).toHaveBeenCalledWith('heart');
     expect(screen.getByRole('button', { name: 'Lungs: Caution' })).toHaveAttribute(
@@ -95,73 +100,65 @@ describe('<BodyMapView/>', () => {
       'false',
     );
   });
+});
 
-  it('draws a dashed contour for a region without data', () => {
-    const { container } = renderWithProviders(
-      <BodyMapView
-        regions={regions}
-        selectedRegion={null}
-        onRegionSelect={() => {}}
-        ariaLabelFor={ariaLabelFor}
-      />,
-    );
-    const group = container.querySelector('svg g[data-region="eyes"]');
-    expect(group).not.toBeNull();
-    expect(group).toHaveAttribute('data-status', 'none');
-    expect(group?.querySelector('[stroke-dasharray="6 6"]')).not.toBeNull();
-    // Regions with data get no dashed contour.
-    const heart = container.querySelector('svg g[data-region="heart"]');
-    expect(heart).toHaveAttribute('data-status', 'nominal');
-    expect(heart?.querySelector('[stroke-dasharray]')).toBeNull();
-  });
-
+describe('<BodyMapView/> figure and leader lines', () => {
   it('gives every region a figure group carrying its status', () => {
-    const { container } = renderWithProviders(
-      <BodyMapView
-        regions={regions}
-        selectedRegion={null}
-        onRegionSelect={() => {}}
-        ariaLabelFor={ariaLabelFor}
-      />,
-    );
+    const { container } = renderView();
     for (const r of regions) {
       const g = container.querySelector(`svg g[data-region="${r.id}"]`);
       expect(g).toHaveAttribute('data-status', r.status);
     }
   });
-});
 
-describe('<RegionChips/>', () => {
-  it('renders 10 chips with name and calls onRegionSelect on tap', () => {
-    const onSelect = vi.fn();
-    renderWithProviders(
-      <RegionChips regions={regions} selectedRegion="bones" onRegionSelect={onSelect} />,
-    );
-    const buttons = screen.getAllByRole('button');
-    expect(buttons).toHaveLength(10);
-    for (const b of buttons) {
-      expect(b).toHaveClass('min-h-touch', 'min-w-touch');
+  it('draws nothing on the figure for nominal, stale and empty regions', () => {
+    const { container } = renderView();
+    for (const id of ['heart', 'kidneys', 'eyes'] as const) {
+      expect(container.querySelector(`svg g[data-region="${id}"]`)?.childElementCount).toBe(0);
     }
-    const kidneys = screen.getByRole('button', { name: /Kidneys/ });
-    expect(within(kidneys).getByText('Kidneys')).toBeInTheDocument();
-    // Colour is never the only cue: the status is part of the accessible name.
-    expect(kidneys).toHaveAccessibleName(/Stale/);
-    fireEvent.click(kidneys);
-    expect(onSelect).toHaveBeenCalledWith('kidneys');
-    expect(screen.getByRole('button', { name: /Bones/ })).toHaveAttribute('aria-pressed', 'true');
+  });
+
+  it('draws a clipped status mark with a dark keyline for alert regions', () => {
+    const { container } = renderView();
+    const lungs = container.querySelector('svg g[data-region="lungs"]');
+    const clipped = lungs?.querySelector('[clip-path]');
+    expect(clipped).not.toBeNull();
+    expect(clipped?.querySelector('[fill*="-fill-caution)"]')).not.toBeNull();
+    expect(clipped?.querySelector('[stroke="var(--av-bg)"]')).not.toBeNull();
+  });
+
+  it('draws one leader per region; alert leaders end in a status glyph', () => {
+    const { container } = renderView();
+    expect(container.querySelectorAll('[data-leader]')).toHaveLength(10);
+    const glyphs = [...container.querySelectorAll('[data-glyph]')].map((g) =>
+      g.getAttribute('data-glyph'),
+    );
+    expect(glyphs.sort()).toEqual(['caution', 'warning']);
+  });
+
+  it('turns the selected leader to the accent colour and dims the others', () => {
+    const { container } = renderView('heart');
+    const heart = container.querySelector('[data-leader="heart"]');
+    expect(heart?.querySelector('[stroke="var(--av-accent)"]')).not.toBeNull();
+    expect(heart).not.toHaveAttribute('opacity');
+    const lungs = container.querySelector('[data-leader="lungs"]');
+    expect(lungs?.querySelector('[stroke="var(--av-accent)"]')).toBeNull();
+    expect(lungs).toHaveAttribute('opacity', '0.35');
+    // No outline circle on the figure: the selected region's group only dims the others.
+    expect(container.querySelector('svg g[data-region="heart"]')).not.toHaveAttribute('opacity');
+    expect(container.querySelector('svg g[data-region="lungs"]')).toHaveAttribute('opacity');
   });
 });
 
 describe('<BodyMap/> container', () => {
   beforeEach(() => useHealthStore.getState().resetAll());
 
-  it('renders the figure overlay and chips with translated labels', () => {
+  it('renders ten region labels with translated names', () => {
     renderWithProviders(
       <BodyMap crewId="crew-1" selectedRegion={null} onRegionSelect={() => {}} />,
     );
-    // 10 hit areas + 10 chips
-    expect(screen.getAllByRole('button')).toHaveLength(20);
+    expect(screen.getAllByRole('button')).toHaveLength(10);
     // Eyes have no numeric metric yet → "No data".
-    expect(screen.getAllByRole('button', { name: /Eyes.*No data/ }).length).toBeGreaterThan(0);
+    expect(screen.getByRole('button', { name: /Eyes.*No data/ })).toBeInTheDocument();
   });
 });
