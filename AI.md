@@ -21,6 +21,7 @@ This file is that disclosure. It is kept up to date by the team (see "Maintainin
 | Research               | Finding NASA/CSA/ESA sources, summarising the NASA HRP hazards and risks, drafting the source list                                                                                                              | Thresholds use only cited sources (`docs/SOURCES.md`); unverified ones are marked                          |
 | Documentation          | Drafting README, setup guides, architecture notes, decision records, changelog entries                                                                                                                          | Reviewed and edited by the team                                                                            |
 | Team tooling           | Setup scripts, CI workflow, git hooks, shared Claude configuration                                                                                                                                              | Owned by the tooling owner; changes go through PRs                                                         |
+| Anomaly-detection tool | Python code of the offline tool in `tools/anomaly-detection/` (synthetic data generator, personal-baseline detector, evaluation script) and its refactor into modules; analysis of results                 | Outputs checked against fixed-seed reference runs (byte-identical after refactors); thresholds marked PLACEHOLDER until sourced |
 | Demo material (if any) | Script and subtitle drafts                                                                                                                                                                                      | Final wording by the team; AI images/video watermarked (see below)                                         |
 
 ## How AI was used
@@ -31,7 +32,8 @@ This file is that disclosure. It is kept up to date by the team (see "Maintainin
 - **No invented medical numbers.** Every threshold and recommendation links to a source ID
   (`src/core/config/sources.config.ts` ↔ `docs/SOURCES.md`). AI may draft; a person checks the source.
 - **Synthetic data only.** All crew data is simulated (seeded generator); no real health data was
-  given to any AI tool.
+  given to any AI tool. The offline anomaly-detection tool derives its templates from MMASH, a public,
+  anonymised research dataset (PhysioNet, ODbL); it contains no data of any team member or astronaut.
 - **Traceability.** AI-assisted commits carry a `Co-Authored-By: Claude …` trailer in the commit
   message (git metadata), and AI-generated pull requests say so in their description. Every change
   is also summarised in `CHANGELOG.md`.
