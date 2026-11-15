@@ -26,6 +26,8 @@ jobs:
           node-version: 24
           cache: npm
       - run: npm ci
+      # vite.config.ts base: './' + the hash router (ADR-007) mean dist/ needs no extra path
+      # rewriting for the Pages subpath — the build output is served as-is.
       - run: npm run build
       - uses: actions/configure-pages@v6
       - uses: actions/upload-pages-artifact@v5
