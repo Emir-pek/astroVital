@@ -57,7 +57,7 @@ app → hepsi.
 
 - [x] Takvim yapısı: günlük/haftalık/aylık, NASA/CSA kaynaklı (ADR-035, `docs/ROUTINE_SCHEDULE.md`)
 - [x] Takvim saatleri: ISS gün iskeleti, simülasyon saatleri takvimden (ADR-039)
-- [ ] Ortama göre takvim farkları (ayrı karar; rover'ın veri = takvim uyumu dahil)
+- [ ] Ortama göre takvim farkları (ayrı karar; rover'ın veri = takvim uyumu ve `twice_daily` ikinci saati dahil — ADR-041 geçici +12 sa)
 - [ ] Mürettebat ekleme/çıkarma (sonra kapsamı, ADR-038)
 - [x] `useReminders`: aktif ortamın `reminderSchedule`'ını bugünün UTC görev gününe açar; 5 durum
       (`late` dahil), kişi bazlı + seçili astronot, elle tamamlanan görevler (ADR-041). `ReminderCenter`
@@ -72,7 +72,7 @@ app → hepsi.
       astronot, teşhis dili yok. Görsel durumlar: visualization
 - [x] **Kural:** XP yalnız **uyum** için — değerden bağımsızlık testle kilitli; `MissionBoard`'da açıklama
       metni görünür (görünüm: visualization)
-- [ ] Uçtan uca entegrasyon testi `src/app/__tests__/e2e-flow.test.tsx` (görünüm: visualization)
+- [ ] Uçtan uca entegrasyon testi `src/app/__tests__/e2e-flow.test.tsx` — Mühendis 2 (ölçüm girişi) ve Mühendis 3 (gerçek motor) bekleniyor
 
 ### P2 (Faz 3)
 
@@ -80,7 +80,8 @@ app → hepsi.
       butonlar: visualization. CSV yapılmadı
 - [ ] Demo modu (otomatik akış: senaryo yükle → sayfaları gez)
 - [x] Sayfa bazlı code splitting (`React.lazy`) — ADR-021, ADR-044 (ana parça 965 → 562 kB)
-- [ ] Store `version`/`migrate`; 180 gün için boyut kontrolü (ADR-016)
+- [x] Store `version`/`migrate` (v2, ADR-044)
+- [ ] 180 gün için boyut kontrolü (ADR-016)
 - [x] Demo verisi otomatik yüklemeyi kapatma: `settings.autoLoadDemo` + store v2/migrate (ADR-009, ADR-044);
       Ayarlar anahtarı: visualization
 - [ ] README son hali, build/preview kontrolü

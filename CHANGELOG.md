@@ -20,6 +20,19 @@ Yalnız `docs/` değişiklikleri kayıt gerektirmez.
 
 <!-- NEW ENTRIES BELOW -->
 
+### 2026-11-15 16:30 — Muhammed Bektaş (feat/core-routine) — Mühendis 4'e devir notları (HANDOFF_ENGINEER4)
+
+- **Ne:** Yeni `docs/HANDOFF_ENGINEER4.md`: bugünkü mantık işlerinin (hatırlatmalar, bildirim, kaçırılan
+  rozeti, oyunlaştırma, pet, ortam/senaryo, bayatlık önerisi, ADR numaraları, P2) her biri için ne değişti,
+  kullanılacak API, ekran kuralları, isteğe bağlı fikirler ve revize edilecek ekran. `docs/modules/visualization.md`
+  en üstüne tek satır işaretçi eklendi (başka içerik değişmedi).
+- **Neden:** Görünüm visualization'da (ADR-032); bağlama işinin kurallarıyla birlikte tek yerde olması.
+- **Dosyalar:** `docs/HANDOFF_ENGINEER4.md` (yeni), `docs/modules/visualization.md` (1 satır),
+  `docs/modules/core-routine.md`, `CHANGELOG.md`
+- **Ekip ne yapmalı:** Emir: `docs/HANDOFF_ENGINEER4.md`'yi oku. `ReminderCenter` ve `MissionBoard` çalışır-sade,
+  restyle sende. Pet, bildirim anahtarı, kaçırılan rozeti ve `applyScenario` bağlanacak. Benim çakışan iki
+  ADR'im yeniden numaralandı (039, 040). Mühendis 3: `useCompanion` uyarı durumunu `useCrewHealth`'e dayandırıyor.
+
 ### 2026-11-15 16:15 — Muhammed Bektaş (feat/core-routine) — Sayfa bazlı kod bölme (React.lazy)
 
 - **Ne:** Durum dışındaki sayfalar ilk ziyarette ayrı parça olarak yüklenir. Ana JS parçası 965 kB'tan
@@ -133,7 +146,7 @@ Yalnız `docs/` değişiklikleri kayıt gerektirmez.
   `src/core/i18n/en.json`, `src/core/i18n/tr.json` (`routine.reminders.*`), `docs/DECISIONS.md` (ADR-041),
   `docs/ROUTINE_SCHEDULE.md` (§ Durum kuralları), `docs/CONTRACTS.md`, `docs/modules/core-routine.md`, `CHANGELOG.md`
 - **Ekip ne yapmalı:** Emir: `ReminderCenter` çalışır-sade, restyle sende ('late', 'done'dan ikon + metinle
-  ayrışmalı). Ayrıntı: `docs/HANDOFF_ENGINEER4.md` (bu görevin sonunda eklenecek).
+  ayrışmalı). Ayrıntı: `docs/HANDOFF_ENGINEER4.md`.
 
 ### 2026-11-15 13:05 — Muhammed Bektaş (feat/core-routine) — Sözleşme uyumu: eski green/yellow/red kalıntıları (ADR-031)
 
