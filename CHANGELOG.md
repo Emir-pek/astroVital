@@ -20,6 +20,21 @@ Yalnız `docs/` değişiklikleri kayıt gerektirmez.
 
 <!-- NEW ENTRIES BELOW -->
 
+### 2026-11-15 13:08 — Emre Erol (feat/anomaly-detection) — Çevrimdışı anomali tespiti aracı (Python) repoya eklendi
+
+- **Ne:** `tools/anomaly-detection/` altında çevrimdışı bir Python aracı: MMASH (PhysioNet, açık veri) şablonlarından
+  14 günlük, 3 kişilik sentetik görev verisi üretir (uyku, nabız, RMSSD, adım, ışık, kabin CO₂, radyasyon dozu, PVT)
+  ve kişiye özel baseline (kayan medyan + MAD) ile açıklanabilir uyarı çıkarır (`results/alerts.csv`: kim, ne,
+  kişisel normale göre ne kadar, ne yapılmalı; kabin uyarısında Dünya yanıt gecikmesi ve öncelikli mürettebat).
+  Demo verisinde 2/2 olay yakalandı, 0 yanlış alarm. Uygulama davranışı **değişmedi**.
+- **Neden:** Veri seti + anomali tespiti işi Python'da hazırdı; uygulamaya port etmek hackathon gününde büyük iş.
+  Ayrı klasör, uygulamanın "Python yok / offline-first" kuralını bozmadan ekibin çıktıyı kullanmasını sağlar (ADR-039).
+- **Dosyalar:** `tools/anomaly-detection/**` (kod, `README.md`, `CLAUDE.md`, `requirements.txt`, `data/synthetic/`,
+  `results/`, `reports/figures/`), `.gitignore` (ham MMASH + `__pycache__`), `CLAUDE.md`, `README.md`, `AI.md`,
+  `docs/DECISIONS.md` (ADR-039), `docs/SETUP_CHECK.md` (§ 1.6), `docs/TEAM.md`, `docs/ARCHITECTURE.md`
+- **Ekip ne yapmalı:** hiçbir şey (`npm`/CI etkilenmez). Aracı çalıştırmak isteyen: Python 3.10+ ve
+  `tools/anomaly-detection/README.md`. Assessment/visualization: `alerts.csv` entegrasyonu için Emre ile konuşun.
+
 ### 2026-11-15 02:15 — Emir (feat/visualization) — Tek kutu sistemi (Panel/Tile/Pill); bölge paneli üst barı örtmüyor; başlık satırı kırılmıyor
 
 - **Ne:** Uygulamadaki bütün kutular artık üç rolden biri: **Panel** (üst düzey kap — gradient, 24 px köşe, 24 px

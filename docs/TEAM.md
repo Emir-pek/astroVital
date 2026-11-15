@@ -8,6 +8,7 @@
 | **Mühendis 2** — Veri Toplama (Intake)             | _TBD_           | `feat/intake`        | `src/modules/intake/`                                                                                                              | [intake.md](modules/intake.md)               |
 | **Mühendis 3** — Değerlendirme, Risk & Yönlendirme | _TBD_           | `feat/assessment`    | `src/modules/assessment/`, `docs/THRESHOLDS.md`, `docs/HAZARDS.md`, `docs/SOURCES.md`, `src/core/config/thresholds.config.ts`*     | [assessment.md](modules/assessment.md)       |
 | **Mühendis 4** — Görselleştirme & Dashboard        | _TBD_           | `feat/visualization` | `src/modules/visualization/`, `src/core/ui/tokens.css`*                                                                            | [visualization.md](modules/visualization.md) |
+| **Veri seti & Anomali tespiti** (çevrimdışı araç)  | Emre Erol       | `feat/anomaly-detection` | `tools/anomaly-detection/` (Python, ADR-039)                                                                                   | [tools/anomaly-detection/CLAUDE.md](../tools/anomaly-detection/CLAUDE.md) |
 
 \* `src/core` altındadır → içerik sahibi o mühendis, ama merge'ü Mühendis 1 onaylar.
 
