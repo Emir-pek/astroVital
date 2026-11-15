@@ -433,7 +433,15 @@
       "openStatus": "Open my status",
       "openRoutine": "Open routine",
       "openMeasure": "Measure now",
-      "disclaimer": "I am a prototype helper, not a medical device. I never diagnose."
+      "disclaimer": "I am a prototype helper, not a medical device. I never diagnose.",
+      "toggle": "Companion: {{mood}}. Show or hide the message",
+      "mood": {
+        "cheerful": "On track",
+        "neutral": "Ready",
+        "concerned": "Reminder",
+        "alert": "Attention"
+      },
+      "hide": "Hide"
     },
     "envChanged": "Environment: {{env}}. Reminder schedule and thresholds are updated."
   },

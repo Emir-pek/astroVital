@@ -53,8 +53,8 @@
 | Select          | Emir        | Base UI | hazır                                                                              |
 | Tabs            |             | —       | boşta                                                                              |
 | Slider          |             | —       | boşta                                                                              |
-| ProgressBar     |             | —       | boşta                                                                              |
-| Tooltip/Popover |             | —       | boşta                                                                              |
+| ProgressBar     | Mühendis 1  | kendi   | hazır (ince çubuk, nötr iz + `accent` dolgu, yanında mono değer metni; `role=progressbar`) |
+| Popover         | Mühendis 1  | Base UI | hazır (yeniden ihraç; modal değil; `z-30`, Panel tarifi `BOX.panel`) — Tooltip boşta |
 
 Başlamadan önce adını ve motorunu (kendi / Base UI / Radix) yaz ve push et; aynı parçayı iki kişi yazmasın. İç içe açılan katmanlar (modal/popover/tooltip/menü) mümkünse aynı motordan (ADR-029).
 

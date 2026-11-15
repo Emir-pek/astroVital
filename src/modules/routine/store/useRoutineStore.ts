@@ -19,6 +19,8 @@ export interface RoutineState {
   dailyMissionCompletions: DailyMissionCompletion[];
   /** User opted in to browser notifications (in-app toasts are always on). Default false. */
   notificationsEnabled: boolean;
+  /** Companion speech bubble open (true) or collapsed to the avatar (false). Default false. */
+  companionOpen: boolean;
 
   /** Adds a completion unless the same crew/template/day already has one at the same time. */
   addCompletion: (c: TaskCompletion) => void;
@@ -26,6 +28,7 @@ export interface RoutineState {
   completeDailyMission: (c: DailyMissionCompletion) => boolean;
   markNotified: (crewId: string, ids: readonly string[]) => void;
   setNotificationsEnabled: (enabled: boolean) => void;
+  setCompanionOpen: (open: boolean) => void;
   resetRoutine: () => void;
 }
 
@@ -39,7 +42,17 @@ const initial = () => ({
   notifiedIds: {} as Record<string, string[]>,
   dailyMissionCompletions: [] as DailyMissionCompletion[],
   notificationsEnabled: false,
+  companionOpen: false,
 });
+
+/** Persisted schema version. 1 → 2: `companionOpen` (default false). */
+export const ROUTINE_STORE_VERSION = 2;
+
+/** Upgrades persisted routine state. PURE; unknown shapes pass through. */
+export const migrateRoutineState = (persisted: unknown, version: number): unknown => {
+  if (typeof persisted !== 'object' || persisted === null) return persisted;
+  return version < 2 ? { ...persisted, companionOpen: false } : persisted;
+};
 
 /**
  * Module-local persisted state of @modules/routine (ADR-005). Holds only adherence facts
@@ -85,17 +98,21 @@ export const useRoutineStore = create<RoutineState>()(
 
       setNotificationsEnabled: (enabled) => set({ notificationsEnabled: enabled }),
 
+      setCompanionOpen: (open) => set({ companionOpen: open }),
+
       resetRoutine: () => set(initial()),
     }),
     {
       name: ROUTINE_STORE_KEY,
-      version: 1,
+      version: ROUTINE_STORE_VERSION,
       storage: createJSONStorage(() => localStorage),
+      migrate: migrateRoutineState,
       partialize: (s) => ({
         completions: s.completions,
         notifiedIds: s.notifiedIds,
         dailyMissionCompletions: s.dailyMissionCompletions,
         notificationsEnabled: s.notificationsEnabled,
+        companionOpen: s.companionOpen,
       }),
     },
   ),

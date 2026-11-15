@@ -433,7 +433,15 @@
       "openStatus": "Durumumu aç",
       "openRoutine": "Rutini aç",
       "openMeasure": "Şimdi ölç",
-      "disclaimer": "Ben bir prototip yardımcıyım, tıbbi cihaz değilim. Teşhis koymam."
+      "disclaimer": "Ben bir prototip yardımcıyım, tıbbi cihaz değilim. Teşhis koymam.",
+      "toggle": "Yardımcı: {{mood}}. Mesajı göster veya gizle",
+      "mood": {
+        "cheerful": "Yolunda",
+        "neutral": "Hazır",
+        "concerned": "Hatırlatma",
+        "alert": "Dikkat"
+      },
+      "hide": "Gizle"
     },
     "envChanged": "Ortam: {{env}}. Hatırlatma takvimi ve eşikler güncellendi."
   },

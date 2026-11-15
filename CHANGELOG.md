@@ -20,6 +20,25 @@ Yalnız `docs/` değişiklikleri kayıt gerektirmez.
 
 <!-- NEW ENTRIES BELOW -->
 
+### 2026-11-15 18:45 — Muhammed Bektaş (feat/core-routine) — Astronot pet arayüzü (CompanionDock) + kit: ProgressBar, Popover
+
+- **Ne:** Sol menünün altında pet görünüyor: elle çizilmiş, özgün bir yardımcı kask (figürle aynı palet ve
+  ışık; karikatür yüz yok, ifade vizördeki iki ışık çizgisi). Dört ruh hali renk + ikon + metinle ayrışıyor
+  (Yolunda / Hazır / Hatırlatma / Dikkat; Dikkat'te kalın uyarı çerçevesi, yanıp sönme yok). Sakin hallerde
+  hafif nefes ve seyrek göz kırpma var; azaltılmış hareket tercihinde hiç animasyon yok. Avatara dokununca
+  sağa doğru konuşma balonu açılıyor: kısa mesaj, varsa ≥ 104 px yönlendirme düğmesi, "Gizle". Açık/kapalı
+  durumu hatırlanıyor (routine store v2). Kırmızı tam ekran uyarı, yan panel ve toast'lar balonun üstünde
+  kalıyor. Kit'e iki genel parça eklendi: `ProgressBar` (kendi) ve `Popover` (Base UI).
+- **Neden:** Pet mantığı (ADR-051) hazırdı ama arayüzde yeri yoktu; kit envanterinde ikisi de boştaydı.
+- **Dosyalar:** `src/modules/routine/components/companion/{CompanionAvatar,CompanionDock}.tsx`, `moodStyle.ts` (yeni),
+  `src/modules/routine/store/useRoutineStore.ts` (`companionOpen`, v2 + migrate), `src/modules/routine/index.ts`,
+  `src/core/ui/{ProgressBar,Popover}.tsx` (yeni), `src/core/ui/index.ts` (2 export satırı),
+  `src/app/layout/Sidebar.tsx` (**Emir'in dosyası: yalnız import + `<CompanionDock />` mount**), testler
+  (`companionUi.test.tsx`, `ProgressPopover.test.tsx`), `src/core/i18n/{en,tr}.json` (`routine.companion.*`),
+  `docs/TEAM.md` (kit envanteri), `CHANGELOG.md`
+- **Ekip ne yapmalı:** Emir: `Sidebar.tsx`'e ve `core/ui/index.ts`'e yalnız mount/export satırları eklendi;
+  görünüm onayı ve gerekirse yeri sende (`docs/HANDOFF_ENGINEER4.md`). 1366×768'de menü kayabilir (pet akışta).
+
 ### 2026-11-15 18:15 — Muhammed Bektaş (feat/core-routine) — Demo hikâyeleri gerçek motorla doğrulandı
 
 - **Ne:** PR #15'in değerlendirme motoruyla varsayılan demoda (seed 2026, ISS) dört astronot, 30. günün
