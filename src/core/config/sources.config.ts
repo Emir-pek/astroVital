@@ -205,7 +205,7 @@ export const SOURCES = {
     url: 'https://pmc.ncbi.nlm.nih.gov/articles/PMC10919966',
     verified: false,
   },
-  // ── Reminder times / ISS day skeleton (ADR-036) — content read 2026-11-14; Engineer 3 verifies. ──
+  // ── Reminder times / ISS day skeleton (ADR-045) — content read 2026-11-14; Engineer 3 verifies. ──
   'esa-outpost42-daily-schedule': {
     id: 'esa-outpost42-daily-schedule',
     title:

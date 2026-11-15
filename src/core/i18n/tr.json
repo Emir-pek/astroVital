@@ -360,7 +360,16 @@
     },
     "reminders": {
       "title": "Bugünkü rutin",
-      "empty": "Henüz planlanmış hatırlatma yok."
+      "empty": "Henüz planlanmış hatırlatma yok.",
+      "at": "{{time}} UTC",
+      "markDone": "Yapıldı olarak işaretle",
+      "status": {
+        "upcoming": "Sırada",
+        "due": "Şimdi yap",
+        "done": "Yapıldı",
+        "late": "Geç yapıldı",
+        "missed": "Kaçırıldı"
+      }
     },
     "missions": {
       "title": "Görevler",
@@ -369,8 +378,64 @@
       "level": "Seviye {{level}}",
       "streak": "{{count}} günlük seri",
       "teamScore": "Ekip skoru",
-      "badges": "Rozetler"
-    }
+      "badges": "Rozetler",
+      "rule": "XP rutine uymayı ödüllendirir — zamanında ölçmek ve görevi bitirmek — değerin ne kadar iyi olduğunu asla. Dürüstçe girilen kötü bir değer, iyi bir değerle aynı XP'yi kazanır.",
+      "streakLabel": "Seri",
+      "teamScoreValue": "Ekip görevlerinin %{{score}}'i yapıldı (son 7 gün)",
+      "noBadges": "Henüz rozet yok",
+      "dailyTitle": "Bugünkü sağlık görevleri",
+      "tick": "Yapıldı olarak işaretle",
+      "ticked": "Bugün yapıldı"
+    },
+    "notify": {
+      "title": "AstroVital hatırlatması",
+      "dueOne": "Zamanı geldi: {{task}}.",
+      "dueMany": "Şu an {{count}} görevin zamanı geldi. Görmek için Rutin'i aç.",
+      "missedOne": "Kaçırıldı: {{task}}. Fırsat bulunca yap ve kaydet.",
+      "missedMany": "Bugün {{count}} görev kaçırıldı. Telafi için Rutin'i aç."
+    },
+    "daily": {
+      "hydration": "Gün boyu su iç",
+      "sleepHygiene": "Işıkları zamanında kapat",
+      "crewChat": "Bir ekip arkadaşınla sohbet et",
+      "learn": "Bir Öğren kartı oku"
+    },
+    "badges": {
+      "streak7": {
+        "name": "7 günlük seri",
+        "description": "Üst üste 7 gün tüm ölçümler yapıldı."
+      },
+      "streak30": {
+        "name": "30 günlük seri",
+        "description": "Üst üste 30 gün tüm ölçümler yapıldı."
+      },
+      "exerciseWeek": {
+        "name": "Tam egzersiz haftası",
+        "description": "Bir haftadaki 6 planlı egzersizin hepsi yapıldı."
+      },
+      "monthlyExamDone": {
+        "name": "Aylık muayene",
+        "description": "Aylık tam muayeneyi tamamladın."
+      },
+      "crewPlayer": {
+        "name": "Takım oyuncusu",
+        "description": "5 gün ekip arkadaşınla sohbet ettin."
+      }
+    },
+    "companion": {
+      "alert": "Ölçümlerinden biri şimdi ilgi istiyor. Durum ekranını aç, oradaki adımları izle ve Mürettebat Sağlık Sorumlusu'na haber ver.",
+      "missedOne": "Kaçırdın: {{subject}}. Dert etme — fırsat bulunca yap ve kaydet.",
+      "missedMany": "Bugün {{count}} görev kaçtı. Dert etme — fırsat bulunca telafi et.",
+      "due": "Şimdi tam zamanı: {{subject}}.",
+      "badge": "Yeni rozet: {{subject}}. Rutinin harika!",
+      "streak": "Üst üste {{count}} gün rutindesin. Böyle devam!",
+      "tip": "İpucu: {{subject}}",
+      "openStatus": "Durumumu aç",
+      "openRoutine": "Rutini aç",
+      "openMeasure": "Şimdi ölç",
+      "disclaimer": "Ben bir prototip yardımcıyım, tıbbi cihaz değilim. Teşhis koymam."
+    },
+    "envChanged": "Ortam: {{env}}. Hatırlatma takvimi ve eşikler güncellendi."
   },
   "assessment": {
     "stub": {

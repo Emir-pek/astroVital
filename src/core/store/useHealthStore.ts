@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 import { ENVIRONMENTS } from '@core/config/environments.config';
-import { DEMO_CREW, DEMO_DEFAULTS, generateHistory } from '@core/simulation';
+import { DEMO_CREW, DEMO_DEFAULTS, generateHistory, SCENARIOS } from '@core/simulation';
 import type {
   CrewMember,
   EnvironmentId,
@@ -25,8 +25,16 @@ export interface AppSettings {
   historyDays: number;
   /** ISO timestamp of mission day 1, 00:00 — drives the MET clock. */
   missionStart: string;
-  /** User opted in to browser notifications (routine reminders). */
+  /**
+   * @deprecated Not read anywhere. The browser-notification switch lives in the routine module's
+   * own store (`useNotificationSettings`, ADR-041). Kept so persisted data stays valid.
+   */
   notificationsEnabled: boolean;
+  /**
+   * Load demo data automatically on app start when the device has no data (ADR-009, ADR-044).
+   * Default true (the jury never sees an empty app); a real crew turns it off in Settings.
+   */
+  autoLoadDemo: boolean;
 }
 
 export interface LoadDemoOptions {
@@ -56,6 +64,24 @@ export interface HealthState {
   updateSettings: (patch: Partial<AppSettings>) => void;
   /** Replaces crew + measurements with a deterministic simulated history. */
   loadDemoData: (options?: LoadDemoOptions) => void;
+  /**
+   * Loads the demo history of a scenario. With `withRecommendedEnvironment` the scenario's
+   * recommended environment (SCENARIOS[id].recommendedEnvironment) is applied too; otherwise the
+   * active environment stays. Same seed and history length as the current settings.
+   */
+  applyScenario: (
+    scenarioId: ScenarioId,
+    options: { withRecommendedEnvironment: boolean; now?: Date },
+  ) => void;
+  /**
+   * Replaces measurements, crew and settings at once (backup restore, ADR-044). Keeps the selected
+   * crew member if they still exist, else selects the first one.
+   */
+  replaceData: (data: {
+    measurements: Measurement[];
+    crew: CrewMember[];
+    settings: AppSettings;
+  }) => void;
   /** Clears all data (crew is restored to the demo crew, no measurements). */
   resetAll: () => void;
 }
@@ -73,6 +99,7 @@ export const DEFAULT_SETTINGS: AppSettings = {
   historyDays: DEMO_DEFAULTS.days,
   missionStart: defaultMissionStart(),
   notificationsEnabled: false,
+  autoLoadDemo: true,
 };
 
 const withId = (m: NewMeasurement): Measurement => ({ ...m, id: m.id ?? createId('m') });
@@ -87,6 +114,22 @@ const initialData = () => ({
 });
 
 export const STORE_KEY = 'astrovital:health';
+
+/** Persisted schema version. 1 → 2: `settings.autoLoadDemo` (default true). */
+export const STORE_VERSION = 2;
+
+/**
+ * Upgrades persisted state from an older version. PURE. Unknown shapes are returned as-is
+ * (zustand then merges them over the defaults).
+ */
+export const migrateHealthState = (persisted: unknown, version: number): unknown => {
+  if (typeof persisted !== 'object' || persisted === null) return persisted;
+  const state = persisted as { settings?: Partial<AppSettings> };
+  if (version < 2) {
+    return { ...state, settings: { ...DEFAULT_SETTINGS, ...state.settings, autoLoadDemo: true } };
+  }
+  return state;
+};
 
 /**
  * Global shared domain state (persisted to localStorage — offline-first).
@@ -146,17 +189,44 @@ export const useHealthStore = create<HealthState>()(
         }));
       },
 
+      applyScenario: (scenarioId, { withRecommendedEnvironment, now }) =>
+        get().loadDemoData({
+          scenario: scenarioId,
+          ...(withRecommendedEnvironment
+            ? { environment: SCENARIOS[scenarioId].recommendedEnvironment }
+            : {}),
+          ...(now ? { now } : {}),
+        }),
+
+      replaceData: ({ measurements, crew, settings }) =>
+        set((s) => ({
+          measurements,
+          crew,
+          settings,
+          selectedCrewId: crew.some((c) => c.id === s.selectedCrewId)
+            ? s.selectedCrewId
+            : (crew[0]?.id ?? null),
+          // Restored data counts as loaded: the demo bootstrap must not overwrite it.
+          demoLoadedAt: s.demoLoadedAt ?? new Date(0).toISOString(),
+        })),
+
       resetAll: () =>
         set((s) => ({
           ...initialData(),
-          // Keep user preferences (language, units) across a data reset.
-          settings: { ...DEFAULT_SETTINGS, language: s.settings.language, units: s.settings.units },
+          // Keep user preferences (language, units, auto-load) across a data reset.
+          settings: {
+            ...DEFAULT_SETTINGS,
+            language: s.settings.language,
+            units: s.settings.units,
+            autoLoadDemo: s.settings.autoLoadDemo,
+          },
         })),
     }),
     {
       name: STORE_KEY,
-      version: 1,
+      version: STORE_VERSION,
       storage: createJSONStorage(() => localStorage),
+      migrate: migrateHealthState,
       partialize: (s) => ({
         measurements: s.measurements,
         crew: s.crew,

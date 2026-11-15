@@ -174,7 +174,7 @@ text-muted` → `text-label text-text-2`. `LearnPanel.tsx` :29/:50/:65 `text-lg`
   üstünde, egzersiz aksıyor). Demo verisi artık yalnız takvimdeki ölçümleri üretiyor: ISS'te akşam yalnız nabız (19:30),
   diğer ortamlarda akşam vitali yok; takvime sabah solunum hızı eklendi. Mürettebat baseline'ları nominal bantların içine
   çekildi (önceden nominal senaryoda bile herkes caution çıkıyordu). Rover değişmedi.
-- **Neden:** Jüri dört durum seviyesini tek ekranda görsün; ekranda takvimde olmayan ölçüm görünmesin (ADR-037, ADR-038).
+- **Neden:** Jüri dört durum seviyesini tek ekranda görsün; ekranda takvimde olmayan ölçüm görünmesin (ADR-040, ADR-038).
 - **Dosyalar:** `src/core/types/simulation.ts`, `src/core/simulation/{generator,scenarios,crew,index}.ts`,
   `src/core/config/environments.config.ts`, `src/core/config/sources.config.ts`, `src/core/store/useHealthStore.ts`,
   `src/core/i18n/en.json`, `src/core/i18n/tr.json`, testler (`generator.test.ts`, `staleness.test.ts`),
@@ -187,7 +187,7 @@ text-muted` → `text-label text-text-2`. `LearnPanel.tsx` :29/:50/:65 `text-lg`
 - **Ne:** Hatırlatma saatleri ISS gününe göre güncellendi (UTC): uyku kaydı 06:15; sabah tansiyon/nabız/SpO₂/ısı ve
   açlık şekeri 06:30; egzersiz 17:30; dozimetre ve ISS akşam nabzı 19:30; ruh hali 21:00 (değişmedi). Demo verisi artık
   ölçüm saatlerini takvimden okuyor (tek kaynak); ölçüm sayısı değişmedi. 3 yeni kaynak (ESA x2, ikincil ClickOrlando).
-- **Neden:** Saatler Faz 0 örneğiydi ve demo verisiyle ayrışmıştı (egzersiz 15:00 vs 17:00) — ADR-036.
+- **Neden:** Saatler Faz 0 örneğiydi ve demo verisiyle ayrışmıştı (egzersiz 15:00 vs 17:00) — ADR-045.
 - **Dosyalar:** `src/core/config/environments.config.ts`, `src/core/simulation/generator.ts`,
   `src/core/config/sources.config.ts`, `src/core/simulation/__tests__/generator.test.ts`, `docs/ROUTINE_SCHEDULE.md`,
   `docs/SOURCES.md`, `docs/DECISIONS.md`, `docs/modules/core-routine.md`, `CHANGELOG.md`

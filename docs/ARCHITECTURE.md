@@ -114,7 +114,7 @@ flowchart LR
 ```
 
 **Örnek senaryo (Faz 2 hedefi):** Astronot nabzını 128 bpm girer → `useAddMeasurement` ölçümü
-store'a yazar → `useCrewHealth` yeniden hesaplar → motor bandı `red / crew_medical_officer`
+store'a yazar → `useCrewHealth` yeniden hesaplar → motor bandı `warning / crew_medical_officer`
 bulur → kalp bölgesi kırmızı ve hızlı atmaya başlar → `AlertCenter`'da uyarı + "yeniden ölç"
 
 - "CMO'ya bildir" önerisi → `useReminders` sabah nabız görevini "yapıldı" işaretler → +XP.

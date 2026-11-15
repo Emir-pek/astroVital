@@ -67,6 +67,8 @@ Node 24 LTS, npm.
 
 ### ADR-009 — İlk açılışta demo verisi otomatik yüklenir
 
+> **Güncellendi: ADR-044** — davranış `settings.autoLoadDemo` ile kapatılabilir (varsayılan açık).
+
 - **Karar:** `DemoDataBootstrap`, uygulama **açılışında bir kez**, cihazda hiç veri yoksa
   (`measurements.length === 0 && demoLoadedAt === null`) `loadDemoData()` çağırır. Oturum
   içindeki "Tüm veriyi sıfırla" korunur; sonraki açılışta demo yeniden yüklenir.
@@ -111,8 +113,8 @@ Node 24 LTS, npm.
 ### ADR-016 — Simülasyon ölçüm sıklığı
 
 > **Kısmen yerine geçti: ADR-035** (şeker sıklığı haftalık, egzersizde 7. gün dinlenme).
-> **Kısmen yerine geçti: ADR-036** (ölçüm saatleri).
-> **Kısmen yerine geçti: ADR-037** (akşam vitali kuralı, ölçüm içeriği = takvim).
+> **Kısmen yerine geçti: ADR-045** (ölçüm saatleri).
+> **Kısmen yerine geçti: ADR-040** (akşam vitali kuralı, ölçüm içeriği = takvim).
 
 - **Karar:** Her gün: uyanışta uyku, 07:30 vital (KB, nabız, SpO₂, solunum, ısı — aynı `groupId`),
   17:00 egzersiz, 20:30 dozimetre, 21:00 ruh hali; günlerin ~%50'sinde 19:00 akşam vitali;
@@ -368,7 +370,10 @@ Node 24 LTS, npm.
   kaydırmasız (`main` üst boşluğu 4 → 0 px). Ölçüm/Rutin/Değerlendirme içleri sahiplerince taşınacak
   (CHANGELOG 15.11.2026). ADR-036 karar 3'teki "panel sayfayı karartmaz, dışarı dokunmak kapatır" ifadesinin
   yerine geçer. Sahip: visualization ekibi (tasarım), Mühendis 1 (kit mimari onayı).
-### ADR-036 — Takvim saatleri ISS gün iskeletine göre; simülasyon saatleri takvimden okunur
+
+### ADR-045 — Takvim saatleri ISS gün iskeletine göre; simülasyon saatleri takvimden okunur
+
+> Numara notu: ilk yazıldığında ADR-036 idi; PR #13 ile aynı numara iki kez oluştuğu için 15.11.2026'da 039'a, ardından ADR-039 anomali tespitine (PR #14) verildiği için 045'e taşındı.
 
 - **Bağlam:** ADR-035 takvimin yapısını kaynaklara bağladı ama saatler Faz 0 örneğiydi. Simülasyon
   ölçüm saatlerini kendi içinde sabit yazıyordu; takvimle ayrışmıştı (ör. egzersiz takvimde 15:00,
@@ -385,9 +390,11 @@ Node 24 LTS, npm.
   rover'daki eksik maddeler) `docs/ROUTINE_SCHEDULE.md` § Açık konular'da; hizalama ayrı karar.
   ADR-016'nın ölçüm saatleri kısmının yerine geçer.
 
-### ADR-037 — Demo verisi takvime birebir uyar (veri = takvim)
+### ADR-040 — Demo verisi takvime birebir uyar (veri = takvim)
 
-- **Bağlam:** ADR-035/036 sonrası sıklık ve saat takvimden geliyordu ama simülasyon takvimde olmayan
+> Numara notu: ilk yazıldığında ADR-037 idi; PR #13 ile aynı numara iki kez oluştuğu için 15.11.2026'da 040'a taşındı.
+
+- **Bağlam:** ADR-035/045 sonrası sıklık ve saat takvimden geliyordu ama simülasyon takvimde olmayan
   ölçümler de üretiyordu: günlerin ~%50'sinde akşam KB + nabız + ısı (ADR-016) ve takvimde maddesi olmayan
   solunum hızı. Ekranda "görev listesinde olmayan ölçüm" görünüyordu.
 - **Karar:** Üretici yalnız aktif ortamın takviminde o gün düşen hatırlatmalar için, o hatırlatmanın

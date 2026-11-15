@@ -65,7 +65,7 @@ useAllCrewHealth(): CrewHealthSummary[]
 <RecommendationList recommendations: Recommendation[] />
 ```
 
-Faz 0 durumu: `assessMeasurement` **stub** (her şey green/self_care). `assessCrew` toplama mantığı
+Faz 0 durumu: `assessMeasurement` **stub** (her şey nominal/self_care). `assessCrew` toplama mantığı
 (bölge = en kötü değerlendirme, genel = en kötü bölge) gerçektir.
 
 ### `@modules/intake` (Mühendis 2) — bağımlılık: `@core/*`
@@ -110,12 +110,32 @@ nominal olmayanlar üstte.
 <ReminderCenter scope?: 'today' | 'all' />
 <MissionBoard />
 <MetClock />                                   // gerçek
-useReminders(): { reminders: ReminderInstance[]; due: ReminderInstance[]; missed: ReminderInstance[] }
-useGamification(): { xp; level; streakDays; badges; missions: Mission[]; teamScore; completeMission(id) }
+useReminders(crewId?): {                       // ADR-041; crewId yoksa seçili astronot
+  crewId; reminders; byCrew: Record<crewId, ReminderInstance[]>; due; late; missed; missedCount;
+  completeTask(crewId, templateId): boolean }  // yalnız metriksiz + açık (due/missed) görev
+useMissedCount(crewId?): number                // kaçırılan rozeti (varsayılan seçili astronot)
+<ReminderNotifier />                           // null render; app/providers'ta tek kez; yalnız seçili astronot
+exportData(now?): string; importData(json): { ok: true } | { ok: false; error; issues: string[] }  // ADR-044, geri yükleme
+<EnvironmentChangeNotice /> / useEnvironmentChangeNotice()  // app/providers'ta tek kez; ortam değişince toast
+useNotificationSettings(): { enabled; permission; setEnabled(next): Promise<boolean> }  // Ayarlar anahtarı
+requestNotificationPermission(): Promise<NotificationPermission | 'unsupported'>; notificationPermission()
+ReminderInstance = { id: `${crewId}:${templateId}:${missionDay}:${occurrence}`, crewId, template,
+  missionDay, occurrence, dueAt, status: 'upcoming'|'due'|'done'|'late'|'missed', completedAt?, completedBy? }
+expandReminders({ schedule, missionStart, now, measurements, crew, completions }): ReminderInstance[]  // saf
+expandRange(input, fromDay, toDay); EARLY_WINDOW_MIN = 60; DUE_GRACE_MIN = 120
+useRoutineStore ('astrovital:routine'): completions, notifiedIds, dailyMissionCompletions, notificationsEnabled
+useGamification(crewId?): { crewId; xp; level; levelProgress; streakDays; longestStreak;  // ADR-042
+  badges: BadgeId[]; missions: Mission[] /* bugünkü günlük görevler */; teamScore /* hep tüm ekip */;
+  completeMission(id): boolean }               // kişi + gün başına bir kez
+<MissionBoard crewId? />                       // çalışır-sade; "XP uyuma verilir" metni görünür kalmalı
+BadgeId = 'streak-7'|'streak-30'|'exercise-week'|'monthly-exam-done'|'crew-player'
+computeXp / currentStreak / longestStreak / computeBadges / computeTeamScore   // saf
+useCompanion(crewId?): { mood: 'cheerful'|'neutral'|'concerned'|'alert'; messageKey; params?;  // ADR-043
+  subjectKey?; action?: { route; labelKey } }  // yalnız o kişinin verisi; formatCompanionMessage(t, c)
 levelForXp(xp: number): number; levelProgress(xp: number): number; XP_PER_LEVEL
 ```
 
-Faz 0: listeler boş.
+`ReminderCenter` çalışır-sade (görünüm visualization'da, `docs/HANDOFF_ENGINEER4.md`).
 
 ## `@core` public yüzeyi (tüm modüller kullanabilir)
 
@@ -123,7 +143,7 @@ Faz 0: listeler boş.
 |---|---|
 | `@core/types` | Aşağıdaki tüm tipler |
 | `@core/config` (veya alt dosyalar) | `METRICS`, `METRIC_IDS`, `THRESHOLDS`, `CAREER_RADIATION_LIMIT_MSV`, `RADIATION_SPE_DAILY_MULTIPLIER`, `ENVIRONMENTS`, `ENVIRONMENT_IDS`, `HAZARDS`, `HAZARD_IDS`, `BODY_REGIONS`, `BODY_REGION_IDS`, `SOURCES`, `isKnownSource` |
-| `@core/store` | `useHealthStore` (+ `addMeasurement`, `addMeasurements`, `removeMeasurement`, `setActiveEnvironment`, `setSelectedCrew`, `updateSettings`, `loadDemoData`, `resetAll`), saf seçiciler `getCrewMeasurements`, `getMetricSeries`, `getLatestByMetric`, hook'lar `useCrew`, `useCrewMember`, `useCrewMeasurements`, `useMetricSeries`, `useLatestByMetric`, `useActiveEnvironment`, `useSettings` |
+| `@core/store` | `useHealthStore` (+ `addMeasurement`, `addMeasurements`, `removeMeasurement`, `setActiveEnvironment`, `setSelectedCrew`, `updateSettings`, `loadDemoData`, `applyScenario(id, { withRecommendedEnvironment })`, `replaceData`, `resetAll`), `STORE_VERSION` (2), `migrateHealthState`, saf seçiciler `getCrewMeasurements`, `getMetricSeries`, `getLatestByMetric`, hook'lar `useCrew`, `useCrewMember`, `useCrewMeasurements`, `useMetricSeries`, `useLatestByMetric`, `useActiveEnvironment`, `useSettings` |
 | `@core/simulation` | `generateHistory`, `SCENARIOS`, `SCENARIO_IDS`, `DEMO_CREW`, `DEMO_DEFAULTS`, `createRng`, `mulberry32` |
 | `@core/ui` | `Button`, `Card`, `StatusBadge`, `STATUS_STYLE`, `Modal`, `ToastProvider`, `useToast`, `EmptyState`, `PlaceholderNotice` |
 | `@core/hooks` | `useNow(intervalMs = 1000)` — güncel zaman (tek paylaşılan zamanlayıcı); bileşenlerde `new Date()` yerine (ADR-030) |
@@ -359,10 +379,10 @@ export type EnvironmentId = 'spacecraft' | 'iss' | 'rover' | 'lunar_base' | 'mar
 
 /**
  * Adjusts a metric's threshold bands for an environment.
- * For every band boundary `b` (see ThresholdBand), with `c` = centre of the green band:
+ * For every band boundary `b` (see ThresholdBand), with `c` = centre of the nominal band:
  *   b' = b + shift + sign(b - c) * widen
  * - `shift`  moves all boundaries (e.g. +0.3 °C on ISS: core temp runs higher in microgravity).
- * - `widen`  moves boundaries away from (positive) or toward (negative) the green centre.
+ * - `widen`  moves boundaries away from (positive) or toward (negative) the nominal centre.
  * Implemented by the assessment engine (Engineer 3).
  */
 export interface ThresholdModifier {
