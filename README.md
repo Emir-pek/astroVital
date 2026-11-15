@@ -31,7 +31,8 @@ missions — built for the **NASA Space Apps Challenge 2026 · Health Monitoring
 
 ## Quick start
 
-Requires Node.js ≥ 22 (tested with Node 24 LTS), npm and git. No Python/venv needed.
+Requires Node.js ≥ 22 (tested with Node 24 LTS), npm and git. No Python/venv needed for the app
+(only the optional offline tool in `tools/anomaly-detection/` uses Python — see its README).
 
 **One command** (installs dependencies, git hooks, the team's Claude Code plugins, then checks everything):
 
