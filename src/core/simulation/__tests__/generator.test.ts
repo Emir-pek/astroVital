@@ -108,7 +108,7 @@ describe('generateHistory', () => {
     }
   });
 
-  describe('slot times come from the environment schedule (ADR-045)', () => {
+  describe('slot times come from the environment schedule (ADR-047)', () => {
     const minuteOfDay = (iso: string) => {
       const d = new Date(iso);
       return d.getUTCHours() * 60 + d.getUTCMinutes();
@@ -204,7 +204,7 @@ const minuteOfDay = (iso: string) => {
   return d.getUTCHours() * 60 + d.getUTCMinutes();
 };
 
-describe('data = schedule (ADR-040)', () => {
+describe('data = schedule (ADR-048)', () => {
   const env = ENVIRONMENTS.iss;
   const out = generateHistory(opts());
   const alias = (m: MetricId): MetricId => (m === 'diastolicBP' ? 'systolicBP' : m);

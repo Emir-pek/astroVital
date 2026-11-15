@@ -27,11 +27,11 @@ export interface AppSettings {
   missionStart: string;
   /**
    * @deprecated Not read anywhere. The browser-notification switch lives in the routine module's
-   * own store (`useNotificationSettings`, ADR-041). Kept so persisted data stays valid.
+   * own store (`useNotificationSettings`, ADR-049). Kept so persisted data stays valid.
    */
   notificationsEnabled: boolean;
   /**
-   * Load demo data automatically on app start when the device has no data (ADR-009, ADR-044).
+   * Load demo data automatically on app start when the device has no data (ADR-009, ADR-052).
    * Default true (the jury never sees an empty app); a real crew turns it off in Settings.
    */
   autoLoadDemo: boolean;
@@ -74,7 +74,7 @@ export interface HealthState {
     options: { withRecommendedEnvironment: boolean; now?: Date },
   ) => void;
   /**
-   * Replaces measurements, crew and settings at once (backup restore, ADR-044). Keeps the selected
+   * Replaces measurements, crew and settings at once (backup restore, ADR-052). Keeps the selected
    * crew member if they still exist, else selects the first one.
    */
   replaceData: (data: {

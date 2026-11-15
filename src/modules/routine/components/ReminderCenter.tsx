@@ -31,7 +31,7 @@ export const REMINDER_STATUS_ICON: Record<ReminderStatus, LucideIcon> = {
 const hhmm = (iso: string): string => iso.slice(11, 16);
 
 /**
- * Today's routine of one astronaut (ADR-041). WORKING-PLAIN: logic complete, look and layout belong
+ * Today's routine of one astronaut (ADR-049). WORKING-PLAIN: logic complete, look and layout belong
  * to visualization (ADR-032, docs/HANDOFF_ENGINEER4.md).
  */
 export function ReminderCenter({ scope = 'today', crewId }: ReminderCenterProps) {

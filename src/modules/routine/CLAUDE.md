@@ -28,7 +28,7 @@ Görünüm visualization'da (ADR-032); devir notları `docs/HANDOFF_ENGINEER4.md
 - Takvim `activeEnvironment.reminderSchedule` + `settings.missionStart` (MET) üzerinden; saf
   açılım fonksiyonu `services/` altında ve testli.
 - Durum (XP, rozet, tamamlanan görevler) modülün kendi persist store'unda: `astrovital:routine`.
-- Hatırlatma durumları ADR-041 (pencere sabitleri `services/reminderConfig.ts`); kişi görünümü
+- Hatırlatma durumları ADR-049 (pencere sabitleri `services/reminderConfig.ts`); kişi görünümü
   varsayılan olarak seçili astronot (`selectedCrewId`), ekip görünümünde yalnız görev durumu.
 - Notification API yalnız kullanıcı açtıysa (routine store `notificationsEnabled`) ve izin verildiyse.
 

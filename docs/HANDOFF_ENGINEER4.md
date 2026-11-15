@@ -15,7 +15,7 @@ verisini gösterir. Ekip görünümlerinde tıbbi değer yok; yalnız görev dur
 
 ---
 
-## 1. Hatırlatmalar (ADR-041)
+## 1. Hatırlatmalar (ADR-049)
 
 **Ne değişti:** `useReminders` stub'dı, artık gerçek. Görev başına 5 durum var; `late` (geç yapıldı) yeni.
 Pencere: görev saatinden 60 dk önce açılır, 120 dk sonra kapanır (`docs/ROUTINE_SCHEDULE.md` § Durum kuralları).
@@ -76,7 +76,7 @@ Uygulama içi toast her zaman açık (kapatılamaz).
 
 **Revize edilecek:** `SettingsPage` (anahtar), `Sidebar` veya `TopBar` (rozet).
 
-## 3. Oyunlaştırma (ADR-042)
+## 3. Oyunlaştırma (ADR-050)
 
 **Ne değişti:** XP, seviye, seri, 5 rozet, ekip skoru ve 4 günlük sağlık görevi gerçek. XP depolanmıyor,
 geçmişten türetiliyor: zamanında 10, geç 5, kaçırılan 0, günlük görev 5.
@@ -107,7 +107,7 @@ t(`routine.badges.${BADGE_I18N[badge]}.name`); // rozet adı; .description da va
 
 **Revize edilecek:** `MissionBoard` (çalışır-sade → restyle), `RoutinePage`.
 
-## 4. Astronot pet (ADR-043)
+## 4. Astronot pet (ADR-051)
 
 **API:**
 
@@ -159,14 +159,24 @@ penceresine bir dinlenme günü ekle (ör. `restEveryNDays` varsa pencere + 24 s
 
 ## 7. ADR numaraları
 
-Çakışma düzeltmesi: Mühendis 1'in "Takvim saatleri ISS gün iskeletine göre" kararı **ADR-045**, "Demo verisi
-takvime birebir" kararı **ADR-040** oldu (039 anomali tespitine verildi, PR #14). Senin ADR-036 (Durum ekranı) ve ADR-037 (Kutu sistemi) değişmedi.
-Bu görevin yeni ADR'leri: 041 (hatırlatma durumları), 042 (oyunlaştırma), 043 (pet), 044 (P2 işleri).
+Mühendis 1'in ADR'leri main'e eşitlemede tek blokta toplandı (çakışmalar ve PR #16 birleştirmesinde düşen
+bölümler yüzünden):
+
+| Karar                                     | Güncel  | Önceki numaralar |
+| ----------------------------------------- | ------- | ---------------- |
+| Takvim saatleri ISS gün iskeletine göre   | ADR-047 | 036 → 039 → 045  |
+| Demo verisi = takvim                      | ADR-048 | 037 → 040        |
+| Hatırlatma durum kuralları                | ADR-049 | 041              |
+| Oyunlaştırma                              | ADR-050 | 042              |
+| Astronot pet                              | ADR-051 | 043              |
+| P2 (autoLoadDemo, dışa/içe aktarma, lazy) | ADR-052 | 044              |
+
+Senin ADR-036 (Durum ekranı), ADR-037 (Kutu sistemi) ve ADR-046 (GitHub Pages) değişmedi; ADR-039 anomali tespiti.
 
 ## 8. P2 (yapıldı, arayüz bekliyor)
 
 - **Demo verisini otomatik yükle** anahtarı: `updateSettings({ autoLoadDemo: boolean })`, varsayılan açık
-  (ADR-044). Ayarlar'da açıklamayla göster: "Kapalıyken boş cihazda demo yüklenmez."
+  (ADR-052). Ayarlar'da açıklamayla göster: "Kapalıyken boş cihazda demo yüklenmez."
 - **Dışa aktar:** `exportData()` → JSON metni; dosya olarak indir (`Blob` + `a[download]`, ör.
   `astrovital-backup-<tarih>.json`). Ağ isteği yok.
 - **İçe aktar:** dosyayı oku → `importData(text)` →
@@ -175,5 +185,5 @@ Bu görevin yeni ADR'leri: 041 (hatırlatma durumları), 042 (oyunlaştırma), 0
   `issues`'u ayrıntı olarak göster. i18n anahtarları henüz yok (senin önekinle ekle).
 - **Sıfırla:** Ayarlar'daki "Tüm veriyi sıfırla" şu an yalnız core store'u temizliyor. Rutin tamamlamaları
   da gitsin istiyorsan aynı tıklamada `useRoutineStore.getState().resetRoutine()` çağır.
-- **Sayfa bazlı yükleme:** Durum dışındaki sayfalar `React.lazy` ile yükleniyor (ADR-044). Görünümde fark yok;
+- **Sayfa bazlı yükleme:** Durum dışındaki sayfalar `React.lazy` ile yükleniyor (ADR-052). Görünümde fark yok;
   testte sayfa başlığını `findBy…` ile bekle.

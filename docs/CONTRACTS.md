@@ -110,12 +110,12 @@ nominal olmayanlar üstte.
 <ReminderCenter scope?: 'today' | 'all' />
 <MissionBoard />
 <MetClock />                                   // gerçek
-useReminders(crewId?): {                       // ADR-041; crewId yoksa seçili astronot
+useReminders(crewId?): {                       // ADR-049; crewId yoksa seçili astronot
   crewId; reminders; byCrew: Record<crewId, ReminderInstance[]>; due; late; missed; missedCount;
   completeTask(crewId, templateId): boolean }  // yalnız metriksiz + açık (due/missed) görev
 useMissedCount(crewId?): number                // kaçırılan rozeti (varsayılan seçili astronot)
 <ReminderNotifier />                           // null render; app/providers'ta tek kez; yalnız seçili astronot
-exportData(now?): string; importData(json): { ok: true } | { ok: false; error; issues: string[] }  // ADR-044, geri yükleme
+exportData(now?): string; importData(json): { ok: true } | { ok: false; error; issues: string[] }  // ADR-052, geri yükleme
 <EnvironmentChangeNotice /> / useEnvironmentChangeNotice()  // app/providers'ta tek kez; ortam değişince toast
 useNotificationSettings(): { enabled; permission; setEnabled(next): Promise<boolean> }  // Ayarlar anahtarı
 requestNotificationPermission(): Promise<NotificationPermission | 'unsupported'>; notificationPermission()
@@ -124,13 +124,13 @@ ReminderInstance = { id: `${crewId}:${templateId}:${missionDay}:${occurrence}`, 
 expandReminders({ schedule, missionStart, now, measurements, crew, completions }): ReminderInstance[]  // saf
 expandRange(input, fromDay, toDay); EARLY_WINDOW_MIN = 60; DUE_GRACE_MIN = 120
 useRoutineStore ('astrovital:routine'): completions, notifiedIds, dailyMissionCompletions, notificationsEnabled
-useGamification(crewId?): { crewId; xp; level; levelProgress; streakDays; longestStreak;  // ADR-042
+useGamification(crewId?): { crewId; xp; level; levelProgress; streakDays; longestStreak;  // ADR-050
   badges: BadgeId[]; missions: Mission[] /* bugünkü günlük görevler */; teamScore /* hep tüm ekip */;
   completeMission(id): boolean }               // kişi + gün başına bir kez
 <MissionBoard crewId? />                       // çalışır-sade; "XP uyuma verilir" metni görünür kalmalı
 BadgeId = 'streak-7'|'streak-30'|'exercise-week'|'monthly-exam-done'|'crew-player'
 computeXp / currentStreak / longestStreak / computeBadges / computeTeamScore   // saf
-useCompanion(crewId?): { mood: 'cheerful'|'neutral'|'concerned'|'alert'; messageKey; params?;  // ADR-043
+useCompanion(crewId?): { mood: 'cheerful'|'neutral'|'concerned'|'alert'; messageKey; params?;  // ADR-051
   subjectKey?; action?: { route; labelKey } }  // yalnız o kişinin verisi; formatCompanionMessage(t, c)
 levelForXp(xp: number): number; levelProgress(xp: number): number; XP_PER_LEVEL
 ```

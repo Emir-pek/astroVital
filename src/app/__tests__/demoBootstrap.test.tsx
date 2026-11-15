@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, it } from 'vitest';
 import { migrateHealthState, STORE_VERSION, useHealthStore } from '@core/store';
 import { DemoDataBootstrap } from '../providers/DemoDataBootstrap';
 
-describe('<DemoDataBootstrap/> (ADR-009, ADR-044)', () => {
+describe('<DemoDataBootstrap/> (ADR-009, ADR-052)', () => {
   beforeEach(() => useHealthStore.getState().resetAll());
 
   it('loads demo data on an empty device when autoLoadDemo is on (default)', () => {

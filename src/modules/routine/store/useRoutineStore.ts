@@ -43,7 +43,7 @@ const initial = () => ({
 
 /**
  * Module-local persisted state of @modules/routine (ADR-005). Holds only adherence facts
- * (what was done, when) — never health values. XP and streaks are DERIVED, not stored (ADR-042).
+ * (what was done, when) — never health values. XP and streaks are DERIVED, not stored (ADR-050).
  */
 export const useRoutineStore = create<RoutineState>()(
   persist(

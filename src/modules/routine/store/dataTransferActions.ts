@@ -3,7 +3,7 @@ import { buildExportJson, parseImportJson, type ImportResult } from '../services
 import { useRoutineStore } from './useRoutineStore';
 
 /**
- * Store wiring of backup export / import (ADR-044). No UI: the Settings buttons (visualization)
+ * Store wiring of backup export / import (ADR-052). No UI: the Settings buttons (visualization)
  * call these. `exportData` returns the JSON text; saving it as a file is the caller's job.
  */
 export function exportData(now: Date = new Date()): string {

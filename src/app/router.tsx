@@ -4,7 +4,7 @@ import { AppShell } from './layout/AppShell';
 import { StatusPage } from './pages/StatusPage';
 
 /**
- * Page-level code splitting (ADR-021, ADR-044): every page except the landing Status page is its own
+ * Page-level code splitting (ADR-021, ADR-052): every page except the landing Status page is its own
  * chunk, fetched from the same static folder on first visit (offline-first: no network beyond the
  * app's own files). Status stays in the main chunk so the first screen never waits.
  */

@@ -2,7 +2,7 @@ import type { Mission } from '@core/types';
 import type { ReminderInstance } from './reminderEngine';
 
 /**
- * Gamification rules (ADR-042). PURE and DERIVED from adherence history — nothing here is a stored
+ * Gamification rules (ADR-050). PURE and DERIVED from adherence history — nothing here is a stored
  * counter, so XP cannot be inflated by clicking twice and the demo crew has history XP too.
  * RULE: rewards ADHERENCE only. No function in this file reads a measurement value — the inputs are
  * reminder instances (status + time) and daily mission ticks.

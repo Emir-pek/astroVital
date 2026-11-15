@@ -40,7 +40,7 @@ export interface GamificationApi {
 }
 
 /**
- * Gamification of one crew member (ADR-042). XP, streak and badges are DERIVED from the reminder
+ * Gamification of one crew member (ADR-050). XP, streak and badges are DERIVED from the reminder
  * history (+ daily mission ticks) — never from a measurement value.
  */
 export function useGamification(crewId?: string): GamificationApi {

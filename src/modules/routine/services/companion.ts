@@ -5,7 +5,7 @@ import { BADGE_I18N, BADGE_IDS, STREAK_MILESTONES, type BadgeId } from './gamifi
 import type { ReminderInstance } from './reminderEngine';
 
 /**
- * Astronaut companion ("pet") logic (ADR-043). PURE. It only ever talks about ONE crew member — the
+ * Astronaut companion ("pet") logic (ADR-051). PURE. It only ever talks about ONE crew member — the
  * caller passes that person's own summary and reminders; nothing about anyone else goes in.
  * Language: short, plain, no diagnosis; the app is a prototype, not a medical device.
  */

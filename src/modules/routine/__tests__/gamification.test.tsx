@@ -131,7 +131,7 @@ describe('computeTeamScore', () => {
   });
 });
 
-describe('value independence (ADR-042)', () => {
+describe('value independence (ADR-050)', () => {
   it('changing measurement VALUES with the same timestamps changes no XP, streak or badge', () => {
     const end = new Date('2026-11-30T20:00:00.000Z');
     const env = ENVIRONMENTS.iss;

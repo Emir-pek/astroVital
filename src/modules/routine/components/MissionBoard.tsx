@@ -10,7 +10,7 @@ export interface MissionBoardProps {
 }
 
 /**
- * XP, level, streak, badges, daily missions and team score (ADR-042). WORKING-PLAIN: logic complete,
+ * XP, level, streak, badges, daily missions and team score (ADR-050). WORKING-PLAIN: logic complete,
  * look and layout belong to visualization (ADR-032, docs/HANDOFF_ENGINEER4.md). The rule text
  * ("XP rewards adherence, not good values") must stay visible.
  */

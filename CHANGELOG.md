@@ -20,6 +20,24 @@ Yalnız `docs/` değişiklikleri kayıt gerektirmez.
 
 <!-- NEW ENTRIES BELOW -->
 
+### 2026-11-15 17:30 — Muhammed Bektaş (feat/core-routine) — core-routine ADR'leri 047–052; PR #16 birleştirmesinde düşen bölümler geri eklendi
+
+- **Ne:** PR #16'nın main ile GitHub'da birleştirilmesinde (`1271079`) `docs/DECISIONS.md`'den ADR-041–044
+  (hatırlatma durumları, oyunlaştırma, pet, P2) ve CHANGELOG'dan Mühendis 1'in 15.11 tarihli 12 kaydı
+  düşmüştü; ikisi de `503d21b`'den geri eklendi (başka kayıtların sırası ve içeriği değişmedi). Mühendis 1'in
+  altı ADR'i main'deki en yüksek numaradan (ADR-046, GitHub Pages) sonra tek blokta toplandı: takvim saatleri
+  **047** (önce 045), veri = takvim **048** (önce 040), hatırlatma durumları **049**, oyunlaştırma **050**,
+  pet **051**, P2 **052**. Tüm referanslar (dokümanlar, kod yorumları, test başlıkları, bu dosyadaki kayıtlarım;
+  numara değişikliğini anlatan iki eski kayıt hariç) güncellendi. ADR-036/037/039/046 değişmedi.
+- **Neden:** Kod ve dokümanlar başlığı olmayan ADR'lere atıf yapıyordu; numaralar artık tekil ve sıralı.
+- **Dosyalar:** `docs/DECISIONS.md`, `CHANGELOG.md`, `docs/{ROUTINE_SCHEDULE,DEMO_CREW_STORIES,HANDOFF_ENGINEER4,CONTRACTS,SOURCES}.md`,
+  `docs/modules/core-routine.md`, `src/core/config/sources.config.ts`, `src/core/simulation/generator.ts`,
+  `src/core/store/useHealthStore.ts`, `src/app/router.tsx`, `src/app/providers/DemoDataBootstrap.tsx`,
+  `src/modules/routine/**` (yorumlar), testler (yalnız başlık/yorum)
+- **Ekip ne yapmalı:** Mühendis 1'in kararları için 047–052 kullanın; sıradaki boş numara 053. GitHub'ın
+  "Resolve conflicts" ekranı `CHANGELOG.md merge=union` kuralını kullanmaz ve bölüm düşürebilir: çakışmayı
+  yerelde `git merge origin/main` ile çözün (`.gitattributes` notu).
+
 ### 2026-11-15 17:05 — Emir Efe Pekcan (docs/fix-adr-039-duplicate) — Pages şu an `gh-pages` branch'inden elle yayınlanıyor; ADR numarası düzeltildi
 
 - **Ne:** Hesap genelinde faturalama kilidi (`github.com/settings/billing` → Actions/Codespaces/
@@ -37,6 +55,19 @@ Yalnız `docs/` değişiklikleri kayıt gerektirmez.
   -f build_type=workflow` çalıştırılıp otomatik yayına geri dönülür. `docs/DECISIONS.md`'de başka
   numara çakışmaları da var (ADR-039/040/044/045 sırasız) — tam düzeltme ayrı, koordineli bir iş.
 
+### 2026-11-15 16:52 — Muhammed Bektaş (feat/core-routine) — ADR-039 çakışması: takvim saatleri kararı ADR-045 oldu
+
+- **Ne:** main'den gelen anomali tespiti kararı (PR #14) ADR-039 numarasını aldı; Mühendis 1'in "Takvim
+  saatleri ISS gün iskeletine göre" kararı (önce ADR-036, sonra ADR-039) **ADR-045**'e taşındı. Anomali
+  ADR-039'u ve ona verilen referanslar (`CLAUDE.md`, ARCHITECTURE, SETUP_CHECK, `.gitignore`) değişmedi.
+  Takvim saatlerine verilen referanslar güncellendi. Ayrıca birleştirmede `boxSystem.test.ts` listesine geri
+  giren, zaten taşınmış üç assessment dosyası listeden çıkarıldı (ayrı commit).
+- **Neden:** Tekil ADR numarası; referanslar belirsiz kalmasın.
+- **Dosyalar:** `docs/DECISIONS.md`, `docs/ROUTINE_SCHEDULE.md`, `docs/HANDOFF_ENGINEER4.md`,
+  `docs/modules/core-routine.md`, `docs/SOURCES.md`, `src/core/config/sources.config.ts` (yorum),
+  `src/core/simulation/generator.ts` (yorum), `src/core/simulation/__tests__/generator.test.ts` (başlık), `CHANGELOG.md`
+- **Ekip ne yapmalı:** Takvim saatleri kararı için ADR-045 kullanın. ADR-039 = anomali tespiti. Sıradaki boş numara 046.
+
 ### 2026-11-15 16:37 — Emir Efe Pekcan (chore/github-pages) — Proje GitHub Pages'te herkese açık yayında
 
 - **Ne:** Yeni iş akışı `.github/workflows/deploy-pages.yml`: `main`'e her push'ta (ve elle
@@ -49,6 +80,19 @@ Yalnız `docs/` değişiklikleri kayıt gerektirmez.
 - **Dosyalar:** `.github/workflows/deploy-pages.yml` (yeni), `README.md`, `docs/DECISIONS.md` (ADR-039).
 - **Ekip ne yapmalı:** Hiçbir şey. `main`'e her merge siteyi birkaç dakika içinde otomatik günceller;
   canlı link README'de. Mevcut `ci.yml`'e dokunulmadı, ayrı ve bağımsız çalışıyor.
+
+### 2026-11-15 16:30 — Muhammed Bektaş (feat/core-routine) — Mühendis 4'e devir notları (HANDOFF_ENGINEER4)
+
+- **Ne:** Yeni `docs/HANDOFF_ENGINEER4.md`: bugünkü mantık işlerinin (hatırlatmalar, bildirim, kaçırılan
+  rozeti, oyunlaştırma, pet, ortam/senaryo, bayatlık önerisi, ADR numaraları, P2) her biri için ne değişti,
+  kullanılacak API, ekran kuralları, isteğe bağlı fikirler ve revize edilecek ekran. `docs/modules/visualization.md`
+  en üstüne tek satır işaretçi eklendi (başka içerik değişmedi).
+- **Neden:** Görünüm visualization'da (ADR-032); bağlama işinin kurallarıyla birlikte tek yerde olması.
+- **Dosyalar:** `docs/HANDOFF_ENGINEER4.md` (yeni), `docs/modules/visualization.md` (1 satır),
+  `docs/modules/core-routine.md`, `CHANGELOG.md`
+- **Ekip ne yapmalı:** Emir: `docs/HANDOFF_ENGINEER4.md`'yi oku. `ReminderCenter` ve `MissionBoard` çalışır-sade,
+  restyle sende. Pet, bildirim anahtarı, kaçırılan rozeti ve `applyScenario` bağlanacak. Benim çakışan iki
+  ADR'im yeniden numaralandı (039, 040). Mühendis 3: `useCompanion` uyarı durumunu `useCrewHealth`'e dayandırıyor.
 
 ### 2026-11-15 16:25 — Emir Efe Pekcan (feat/assessment) — Değerlendirme motoru gerçek kurallarla çalışıyor (Faz 0 stub kaldırıldı)
 
@@ -83,6 +127,148 @@ recommendations,assessMeasurement,assessCrew}.ts`, `src/modules/assessment/engin
   `node_modules`'ta eksikti — `feat/visualization` merge'ünden sonra kurulmamıştı, bağımlılık
   değişmedi, yalnız yerel kurulum eksikti). Motor artık gerçek sonuç ürettiği için **visualization
   ve routine ekranlarında artık gerçek sarı/kırmızı durumlar görünecek** — demo öncesi bir göz atın.
+
+### 2026-11-15 16:15 — Muhammed Bektaş (feat/core-routine) — Sayfa bazlı kod bölme (React.lazy)
+
+- **Ne:** Durum dışındaki sayfalar ilk ziyarette ayrı parça olarak yüklenir. Ana JS parçası 965 kB'tan
+  562 kB'a indi (gzip 311 → 180 kB). Görünüm ve rotalar değişmedi; parçalar aynı klasörden gelir (offline).
+- **Neden:** ADR-021'deki boyut uyarısı, P2 görevi (ADR-052).
+- **Dosyalar:** `src/app/router.tsx`, `docs/DECISIONS.md` (ADR-052), `docs/modules/core-routine.md`, `CHANGELOG.md`
+- **Ekip ne yapmalı:** Rota testlerinde sayfa başlığını `getBy…` yerine `findBy…` ile bekleyin (sayfa artık
+  bir mikro görev sonra gelir). Mevcut testler zaten `findBy` kullanıyor.
+
+### 2026-11-15 16:00 — Muhammed Bektaş (feat/core-routine) — Veri dışa/içe aktarma (JSON yedek, mantık)
+
+- **Ne:** `exportData()` tüm veriyi (ölçümler, mürettebat, ayarlar, rutin tamamlamaları) JSON metni olarak
+  verir; `importData(json)` dosyayı Zod ile doğrulayıp geri yükler. Geçersiz dosyada hiçbir şey değişmez
+  ve hatanın yeri söylenir ("measurements.0.metric: …"). Ölçümler kendi kaynağını (kamera, klavye,
+  simüle) korur. Yeni core store aksiyonu `replaceData`. Arayüz yok.
+- **Neden:** P2 görevi (ADR-052).
+- **Dosyalar:** `src/modules/routine/services/dataTransfer.ts`, `src/modules/routine/store/dataTransferActions.ts` (yeni),
+  `src/modules/routine/index.ts`, `src/core/store/useHealthStore.ts` (`replaceData`), test `dataTransfer.test.ts`,
+  `docs/DECISIONS.md` (ADR-052), `docs/CONTRACTS.md`, `docs/modules/core-routine.md`, `CHANGELOG.md`
+- **Ekip ne yapmalı:** Emir: Ayarlar'a "Dışa aktar" (metni dosya olarak indir) ve "İçe aktar" (dosyayı oku,
+  sonucu göster) butonları. Ayrıntı: `docs/HANDOFF_ENGINEER4.md`.
+
+### 2026-11-15 15:40 — Muhammed Bektaş (feat/core-routine) — Ayar: demo verisini otomatik yükle (autoLoadDemo)
+
+- **Ne:** Yeni ayar `settings.autoLoadDemo` (varsayılan açık). Kapalıyken boş cihazda demo verisi
+  kendiliğinden yüklenmez. "Tüm veriyi sıfırla" bu tercihi korur. Kayıtlı veri şeması v1 → v2; eski
+  tarayıcı verisi otomatik taşınır (ayar açık gelir), elle bir şey yapmak gerekmez.
+- **Neden:** ADR-009'daki "gerçek kullanımda kapatılabilmeli" notu (ADR-052).
+- **Dosyalar:** `src/core/store/useHealthStore.ts`, `src/app/providers/DemoDataBootstrap.tsx`,
+  test `src/app/__tests__/demoBootstrap.test.tsx`, `docs/DECISIONS.md` (ADR-009 notu, ADR-052),
+  `docs/modules/core-routine.md`, `CHANGELOG.md`
+- **Ekip ne yapmalı:** Emir: Ayarlar'a anahtar (`updateSettings({ autoLoadDemo })`). Store kullanan testlerde
+  `settings` nesnesini birebir karşılaştıran varsa yeni alanı ekle.
+
+### 2026-11-15 15:20 — Muhammed Bektaş (feat/core-routine) — Ortam değişim bildirimi ve applyScenario
+
+- **Ne:** Ortam değişince tek bir toast çıkar ("Ortam: Mars üssü. Hatırlatma takvimi ve eşikler
+  güncellendi."); bileşen görünmez, `app/providers`'ta mount edildi. Yeni store aksiyonu
+  `applyScenario(scenarioId, { withRecommendedEnvironment })`: senaryonun demo verisini yükler, istenirse
+  senaryonun önerdiği ortamı da uygular. Store şeması değişmedi (persist version aynı).
+- **Neden:** core-routine P0 mantık maddeleri; Ayarlar'ın görünümü visualization'da (ADR-032).
+- **Dosyalar:** `src/modules/routine/hooks/useEnvironmentChangeNotice.ts` (yeni), `src/modules/routine/index.ts`,
+  `src/app/providers/AppProviders.tsx`, `src/core/store/useHealthStore.ts`, testler (`environmentNotice.test.tsx`,
+  `store.test.ts`), `src/core/i18n/en.json`, `src/core/i18n/tr.json` (`routine.envChanged`), `docs/CONTRACTS.md`,
+  `docs/modules/core-routine.md`, `CHANGELOG.md`
+- **Ekip ne yapmalı:** Emir: Ayarlar'daki senaryo seçimine "önerilen ortamı da uygula" seçeneğini
+  `applyScenario` ile bağla. `SettingsPage`'e dokunulmadı.
+
+### 2026-11-15 15:00 — Muhammed Bektaş (feat/core-routine) — Astronot pet: yalnız mantık (useCompanion)
+
+- **Ne:** `useCompanion(crewId?)` petin ruh halini (neşeli / nötr / endişeli / uyarı), mesaj anahtarını
+  ve varsa bir yönlendirme butonunu verir. Öncelik: uyarı durumu → kaçırılan görev → şu an yapılacak görev →
+  rozet/seri kutlaması → günün ipucu. Pet yalnız seçili astronotun kendi durumunu konuşur, teşhis koymaz,
+  değer söylemez. Görünüm yok.
+- **Neden:** Ekip fikri; kurallar Mühendis 1'de, görsel Emir'de (ADR-032, ADR-051).
+- **Dosyalar:** `src/modules/routine/services/companion.ts`, `src/modules/routine/hooks/useCompanion.ts` (yeni),
+  `src/modules/routine/hooks/useGamification.ts` (`newBadgesToday`, `today`), `src/modules/routine/services/gamification.ts`
+  (`BADGE_I18N`), `src/modules/routine/components/MissionBoard.tsx`, `src/modules/routine/index.ts`,
+  test `companion.test.tsx`, `src/core/i18n/en.json`, `src/core/i18n/tr.json` (`routine.companion.*`),
+  `docs/DECISIONS.md` (ADR-051), `docs/CONTRACTS.md`, `docs/modules/core-routine.md`, `CHANGELOG.md`
+- **Ekip ne yapmalı:** Emir: petin 4 ruh hali için görsel ve buton. Mühendis 3: pet uyarı durumunu
+  `useCrewHealth().overall === 'warning'`'ten alıyor; bu sözleşmeyi değiştirirsen haber ver.
+
+### 2026-11-15 14:30 — Muhammed Bektaş (feat/core-routine) — Oyunlaştırma: XP, seri, rozet, ekip skoru (uyuma ödül)
+
+- **Ne:** `useGamification(crewId?)` artık gerçek. XP hatırlatma geçmişinden türetiliyor: zamanında yapılan
+  10, geç yapılan 5, kaçırılan 0. Dört günlük sağlık görevi (su, ışıkları zamanında kapat, ekip sohbeti,
+  öğren) 5'er XP verir, kişi ve gün başına bir kez. Bunların yanında seviye, seri (dinlenme günü bozmaz),
+  5 rozet ve son 7 günün ekip uyum skoru var. Demo mürettebatı geçmiş XP ile başlıyor. `MissionBoard`
+  çalışır-sade; "XP uyuma verilir, değere değil" açıklaması görünür.
+- **Neden:** P1 oyunlaştırma; değerden bağımsızlık testle kilitli: değerler değişse de XP/seri/rozet aynı (ADR-050).
+- **Dosyalar:** `src/modules/routine/services/gamification.ts` (yeni), `src/modules/routine/hooks/useGamification.ts`,
+  `src/modules/routine/components/MissionBoard.tsx`, `src/modules/routine/index.ts`, test `gamification.test.tsx`,
+  `src/core/i18n/en.json`, `src/core/i18n/tr.json` (`routine.missions.*`, `routine.daily.*`, `routine.badges.*`),
+  `docs/DECISIONS.md` (ADR-050), `docs/CONTRACTS.md`, `docs/modules/core-routine.md`,
+  `src/core/ui/__tests__/boxSystem.test.ts` (`MissionBoard` artık eski sınıf kullanmıyor → bekleyen
+  taşıma listesinden çıktı), `CHANGELOG.md`
+- **Ekip ne yapmalı:** Emir: `MissionBoard` restyle sende. Arayüzde hiçbir yerde ölçüm değerini ödülle
+  ilişkilendirme; açıklama metni görünür kalsın.
+
+### 2026-11-15 14:00 — Muhammed Bektaş (feat/core-routine) — Hatırlatma bildirimleri ve kaçırılan sayısı (mantık)
+
+- **Ne:** Seçili astronotun bir görevi "şimdi yap" veya "kaçırıldı" olduğunda bir kez uygulama içi toast
+  çıkar. Aynı anda birden çok görev açılırsa ("6 görevin zamanı geldi") tek mesaja toplanır. Kullanıcı
+  açtıysa ve tarayıcı izin verdiyse tarayıcı bildirimi de gelir (varsayılan kapalı). Başka astronotun
+  görevi bildirilmez. Bildirilenler kişi bazında saklanır: sayfa yenilenince ya da astronot değişip geri
+  gelince tekrar bildirilmez. `useMissedCount()` (rozet için), `useNotificationSettings()` ve
+  `requestNotificationPermission()` hazır, görünümleri yok.
+- **Neden:** P1 bildirim ve kaçırılan ölçüm görevleri (ADR-049); arayüz visualization'da (ADR-032).
+- **Dosyalar:** `src/modules/routine/components/ReminderNotifier.tsx`, `src/modules/routine/services/notifications.ts`,
+  `src/modules/routine/hooks/useNotificationSettings.ts` (yeni), `src/modules/routine/index.ts`,
+  `src/app/providers/AppProviders.tsx` (görünmez mount), test `ReminderNotifier.test.tsx`,
+  `src/core/i18n/en.json`, `src/core/i18n/tr.json` (`routine.notify.*`), `docs/CONTRACTS.md`,
+  `docs/modules/core-routine.md`, `CHANGELOG.md`
+- **Ekip ne yapmalı:** Emir: Ayarlar'a bildirim anahtarını (`useNotificationSettings().setEnabled`, tıklamada
+  çağrılmalı) ve kaçırılan rozetini (`useMissedCount`) bağla. Ekran değişmedi.
+
+### 2026-11-15 13:40 — Muhammed Bektaş (feat/core-routine) — Hatırlatma durum motoru (kişi bazlı, 'late' durumu)
+
+- **Ne:** `useReminders` artık gerçek: aktif ortamın takvimini bugünün UTC görev gününe açar, her görev
+  için 5 durum verir: sırada / şimdi yap / yapıldı / **geç yapıldı (yeni)** / kaçırıldı. Pencere: saatten
+  60 dk önce açılır, 120 dk sonra kapanır. Bir ölçüm tek görevi karşılar (sabah ve akşam nabzı karışmaz).
+  Metriksiz görevler (haftalık özet, aylık muayene) elle işaretlenir. `useReminders(crewId?)` varsayılan
+  olarak seçili astronotu izler; `byCrew` tüm ekibin yalnız görev durumunu verir. Yeni modül store'u
+  `astrovital:routine`. `ReminderCenter` çalışır-sade bir liste.
+- **Neden:** ADR-035'te ayrı bırakılan zaman penceresi kararı (ADR-049).
+- **Dosyalar:** `src/modules/routine/services/{reminderConfig,reminderEngine}.ts` (yeni),
+  `src/modules/routine/store/useRoutineStore.ts` (yeni), `src/modules/routine/hooks/useReminders.ts`,
+  `src/modules/routine/components/ReminderCenter.tsx`, `src/modules/routine/index.ts`,
+  `src/modules/routine/CLAUDE.md`, testler (`reminderEngine.test.ts`, `useReminders.test.tsx`),
+  `src/core/i18n/en.json`, `src/core/i18n/tr.json` (`routine.reminders.*`), `docs/DECISIONS.md` (ADR-049),
+  `docs/ROUTINE_SCHEDULE.md` (§ Durum kuralları), `docs/CONTRACTS.md`, `docs/modules/core-routine.md`, `CHANGELOG.md`
+- **Ekip ne yapmalı:** Emir: `ReminderCenter` çalışır-sade, restyle sende ('late', 'done'dan ikon + metinle
+  ayrışmalı). Ayrıntı: `docs/HANDOFF_ENGINEER4.md`.
+
+### 2026-11-15 13:05 — Muhammed Bektaş (feat/core-routine) — Sözleşme uyumu: eski green/yellow/red kalıntıları (ADR-031)
+
+- **Ne:** Repo genelinde eski `Status` adları tarandı. Tip, store, simülasyon, i18n `status.*` ve
+  eşik dosyasında kod düzeyinde kalıntı yok. Mühendis 1 alanındaki yorum/doküman ifadeleri yeni adlara
+  çevrildi (`environment.ts` yorumu "nominal band", rover egzersiz yorumu, ARCHITECTURE örneği
+  `warning / crew_medical_officer`, CONTRACTS Faz 0 notu); `npm run docs:contracts` çalıştırıldı.
+- **Neden:** ADR-031 sonrası sözleşme ve dokümanlarda tek terminoloji.
+- **Dosyalar:** `src/core/types/environment.ts` (yalnız yorum), `src/core/config/environments.config.ts` (yalnız
+  yorum), `docs/ARCHITECTURE.md`, `docs/CONTRACTS.md`, `docs/modules/core-routine.md`, `CHANGELOG.md`
+- **Ekip ne yapmalı:** Kendi dosyalarınızda eski adlar kalmış: Mühendis 3 → `src/modules/assessment/README.md`
+  ("always green"); Emir → `src/modules/visualization/README.md` ve `MetricTrendChart.tsx` TODO yorumu
+  ("green/yellow/red bands" → nominal/advisory/caution/warning). Davranış değişikliği yok.
+
+### 2026-11-15 12:53 — Muhammed Bektaş (feat/core-routine) — Çakışan ADR-036/037 (core-routine) yeniden numaralandı
+
+- **Ne:** `docs/DECISIONS.md`'de iki kez geçen ADR-036 ve ADR-037'nin core-routine olanları taşındı:
+  "Takvim saatleri ISS gün iskeletine göre" → **ADR-039**, "Demo verisi takvime birebir" → **ADR-040**.
+  Visualization'ın ADR-036 (Durum ekranı) ve ADR-037 (Kutu sistemi) aynen kaldı. Bu iki karara verilen
+  referanslar (ADR-016 notu, ROUTINE_SCHEDULE, DEMO_CREW_STORIES, core-routine.md, SOURCES.md,
+  sources.config.ts yorumu, simülasyon kod/test yorumları, bu dosyadaki kendi kayıtlarım) güncellendi.
+- **Neden:** PR #13 ile feat/core-routine aynı numaraları paralel kullanmıştı; tekil numara olmadan referanslar belirsiz.
+- **Dosyalar:** `docs/DECISIONS.md`, `docs/ROUTINE_SCHEDULE.md`, `docs/DEMO_CREW_STORIES.md`,
+  `docs/modules/core-routine.md`, `docs/SOURCES.md`, `src/core/config/sources.config.ts`,
+  `src/core/simulation/generator.ts`, `src/core/simulation/__tests__/generator.test.ts`,
+  `src/core/utils/__tests__/staleness.test.ts`, `CHANGELOG.md`
+- **Ekip ne yapmalı:** Takvim saatleri için ADR-039, veri = takvim için ADR-040 kullanın. Yeni ADR'ler 041'den başlar.
 
 ### 2026-11-15 02:15 — Emir (feat/visualization) — Tek kutu sistemi (Panel/Tile/Pill); bölge paneli üst barı örtmüyor; başlık satırı kırılmıyor
 
@@ -191,7 +377,7 @@ text-muted` → `text-label text-text-2`. `LearnPanel.tsx` :29/:50/:65 `text-lg`
   üstünde, egzersiz aksıyor). Demo verisi artık yalnız takvimdeki ölçümleri üretiyor: ISS'te akşam yalnız nabız (19:30),
   diğer ortamlarda akşam vitali yok; takvime sabah solunum hızı eklendi. Mürettebat baseline'ları nominal bantların içine
   çekildi (önceden nominal senaryoda bile herkes caution çıkıyordu). Rover değişmedi.
-- **Neden:** Jüri dört durum seviyesini tek ekranda görsün; ekranda takvimde olmayan ölçüm görünmesin (ADR-040, ADR-038).
+- **Neden:** Jüri dört durum seviyesini tek ekranda görsün; ekranda takvimde olmayan ölçüm görünmesin (ADR-048, ADR-038).
 - **Dosyalar:** `src/core/types/simulation.ts`, `src/core/simulation/{generator,scenarios,crew,index}.ts`,
   `src/core/config/environments.config.ts`, `src/core/config/sources.config.ts`, `src/core/store/useHealthStore.ts`,
   `src/core/i18n/en.json`, `src/core/i18n/tr.json`, testler (`generator.test.ts`, `staleness.test.ts`),
@@ -204,7 +390,7 @@ text-muted` → `text-label text-text-2`. `LearnPanel.tsx` :29/:50/:65 `text-lg`
 - **Ne:** Hatırlatma saatleri ISS gününe göre güncellendi (UTC): uyku kaydı 06:15; sabah tansiyon/nabız/SpO₂/ısı ve
   açlık şekeri 06:30; egzersiz 17:30; dozimetre ve ISS akşam nabzı 19:30; ruh hali 21:00 (değişmedi). Demo verisi artık
   ölçüm saatlerini takvimden okuyor (tek kaynak); ölçüm sayısı değişmedi. 3 yeni kaynak (ESA x2, ikincil ClickOrlando).
-- **Neden:** Saatler Faz 0 örneğiydi ve demo verisiyle ayrışmıştı (egzersiz 15:00 vs 17:00) — ADR-045.
+- **Neden:** Saatler Faz 0 örneğiydi ve demo verisiyle ayrışmıştı (egzersiz 15:00 vs 17:00) — ADR-047.
 - **Dosyalar:** `src/core/config/environments.config.ts`, `src/core/simulation/generator.ts`,
   `src/core/config/sources.config.ts`, `src/core/simulation/__tests__/generator.test.ts`, `docs/ROUTINE_SCHEDULE.md`,
   `docs/SOURCES.md`, `docs/DECISIONS.md`, `docs/modules/core-routine.md`, `CHANGELOG.md`

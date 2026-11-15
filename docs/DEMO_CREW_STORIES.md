@@ -1,6 +1,6 @@
 # DEMO_CREW_STORIES — Karma görev senaryosu ve mürettebatın hikâyeleri
 
-**Sahip:** Mühendis 1 · **Karar:** ADR-038 (senaryo), ADR-040 (veri = takvim) · **Kod:**
+**Sahip:** Mühendis 1 · **Karar:** ADR-038 (senaryo), ADR-048 (veri = takvim) · **Kod:**
 `mixed_mission` in `src/core/simulation/scenarios.ts` (sabitler: `MIXED`), mürettebat
 `src/core/simulation/crew.ts` · **Test:** `src/core/simulation/__tests__/generator.test.ts`
 
@@ -12,7 +12,7 @@ Bu challenge için gerçek bir veri seti yok; demo verisini biz üretiyoruz. Var
 - **Dört astronot, dört hikâye, dört durum seviyesi aynı anda:** nominal · advisory · caution · warning.
 - Her hikâye gerçek bir uzay tehlikesine (NASA HRP RIDGE) bağlı ve hangi verinin hangi eşiğe takıldığı açık.
 - Veri hatırlatma takvimiyle birebir: ekranda görünen her ölçüm, takvimde o gün o saatte olan bir göreve
-  karşılık gelir (ADR-040, `docs/ROUTINE_SCHEDULE.md`).
+  karşılık gelir (ADR-048, `docs/ROUTINE_SCHEDULE.md`).
 
 Varsayılan parametreler: ISS, 30 gün, seed `2026`. Gürültü (günden güne doğal oynama) gerçekçilik için
 korunuyor; bu yüzden durumlar **varsayılan seed'de** garanti edilir ve testle kilitlidir. Ayarlar'dan seed

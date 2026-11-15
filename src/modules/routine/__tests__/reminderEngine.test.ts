@@ -80,7 +80,7 @@ const statusOf = (list: ReminderInstance[], templateId: string, crewId = A, occ 
     ?.status;
 
 describe('window constants', () => {
-  it('match the ADR-041 rules', () => {
+  it('match the ADR-049 rules', () => {
     expect(EARLY_WINDOW_MIN).toBe(60);
     expect(DUE_GRACE_MIN).toBe(120);
   });

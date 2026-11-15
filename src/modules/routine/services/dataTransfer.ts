@@ -8,7 +8,7 @@ import type { TaskCompletion } from './reminderEngine';
 import type { DailyMissionCompletion } from '../store/useRoutineStore';
 
 /**
- * Backup export / import (ADR-044). PURE: build and parse JSON only — the store wiring is in
+ * Backup export / import (ADR-052). PURE: build and parse JSON only — the store wiring is in
  * `exportData` / `importData` (hooks-free, see index). Import is a RESTORE: it replaces
  * measurements, crew, settings and routine completions. Each measurement keeps its original
  * `source` (keyboard, camera, simulated …) — provenance stays visible after a restore.
