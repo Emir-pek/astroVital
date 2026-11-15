@@ -154,6 +154,18 @@ Yalnız `docs/` değişiklikleri kayıt gerektirmez.
 - **Ekip ne yapmalı:** Mühendis 1'in kararları için 047–052 kullanın; sıradaki boş numara 053. GitHub'ın
   "Resolve conflicts" ekranı `CHANGELOG.md merge=union` kuralını kullanmaz ve bölüm düşürebilir: çakışmayı
   yerelde `git merge origin/main` ile çözün (`.gitattributes` notu).
+### 2026-11-15 17:25 — Emir Efe Pekcan (docs/pages-back-to-actions) — Pages yine otomatik: her merge siteyi günceller
+
+- **Ne:** Pages kaynağı tekrar "GitHub Actions" (`build_type: workflow`); elle tetiklenen
+  "Deploy to GitHub Pages" yayını 38 saniyede başarılı oldu, https://emir-pek.github.io/astroVital/ ve
+  tüm asset'leri 200 dönüyor. Geçici `gh-pages` branch'i silindi. ADR-046'daki "elle yayın gerekiyor"
+  notu düzeltildi. **Bu kaydın altındaki 17:05 kaydı artık geçersiz:** faturalama kilidi teşhisi
+  yanlıştı, Actions 13:51 UTC'den beri normal çalışıyor; kart eklemeye gerek yok.
+- **Neden:** Actions birkaç dakikalık bir kesintiden sonra kendiliğinden düzeldi; yedek yöntem
+  gereksiz kaldı ve main'e yapılan merge'lerin siteye yansımasını engelliyordu.
+- **Dosyalar:** `docs/DECISIONS.md` (ADR-046), Pages repo ayarı, `gh-pages` branch'i (silindi).
+- **Ekip ne yapmalı:** Hiçbir şey. main'e her merge siteyi otomatik günceller. Repo sayfasındaki
+  "Deployments" listesinde her merge bir `github-pages` satırı ekler, bu normal.
 
 ### 2026-11-15 17:05 — Emir Efe Pekcan (docs/fix-adr-039-duplicate) — Pages şu an `gh-pages` branch'inden elle yayınlanıyor; ADR numarası düzeltildi
 
