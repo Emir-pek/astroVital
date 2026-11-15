@@ -1,0 +1,124 @@
+{
+  "args": {
+    "users": [
+      "data/raw/mmash/user_3",
+      "data/raw/mmash/user_5",
+      "data/raw/mmash/user_7"
+    ],
+    "days": 14,
+    "profile": "mars_transit",
+    "cognition": true,
+    "sleep_event_crew": [
+      "CM2"
+    ],
+    "start": "2026-11-15 07:00",
+    "seed": 42,
+    "out": "data/synthetic"
+  },
+  "params": {
+    "sd_sleep_len_min": 30,
+    "sd_onset_shift_min": 20,
+    "sd_hr_day_bpm": 2.5,
+    "sd_rmssd_day_log": 0.1,
+    "sd_activity_day_log": 0.25,
+    "hr_noise_bpm": 2.0,
+    "hr_ar": 0.8,
+    "rmssd_noise_log": 0.12,
+    "rmssd_ar": 0.7,
+    "space_ramp_days": 3,
+    "space_sleep_loss_min": 30,
+    "space_hr_shift_bpm": -3.0,
+    "space_rmssd_factor": 1.0,
+    "debt_hr_bpm_per_h": 1.5,
+    "debt_rmssd_frac_per_h": -0.05,
+    "debt_decay_per_day": 0.5,
+    "co2_base_mmhg": 2.5,
+    "co2_sd_mmhg": 0.3,
+    "dose_rate_msv_day": {
+      "iss": 0.5,
+      "mars_transit": 1.8
+    },
+    "light_wake_lux": 300,
+    "light_prebed_lux": 50,
+    "pvt_base_rt_ms": 260,
+    "pvt_sd_between_ms": 20,
+    "pvt_sd_within_ms": 10,
+    "pvt_debt_ms_per_h": 8,
+    "pvt_co2_ms_per_mmhg": 4,
+    "pvt_lapse_base": 1.0,
+    "pvt_lapse_per_h_debt": 0.8,
+    "event_day": 8,
+    "event_sleep_min": 270,
+    "event_co2_mmhg": 6.0,
+    "event_co2_start_h": 5,
+    "event_co2_dur_h": 6
+  },
+  "templates": [
+    {
+      "user": "user_3",
+      "info": {
+        "Gender": "M",
+        "Weight": 70,
+        "Height": 174,
+        "Age": 34
+      },
+      "sleep_onset_min": 1352,
+      "wake_min": 352,
+      "sleep_window_min": 440,
+      "tst_min": 351.0,
+      "efficiency": 0.7923,
+      "rr_rejected_beats": 2302,
+      "rr_total_beats": 83965,
+      "coverage_before_fill": {
+        "hr": 0.9520833333333333,
+        "steps": 0.9520833333333333,
+        "rmssd": 0.9548611111111112
+      },
+      "crew_id": "CM1"
+    },
+    {
+      "user": "user_5",
+      "info": {
+        "Gender": "M",
+        "Weight": 80,
+        "Height": 196,
+        "Age": 25
+      },
+      "sleep_onset_min": 1436,
+      "wake_min": 402,
+      "sleep_window_min": 406,
+      "tst_min": 348.0,
+      "efficiency": 0.8571,
+      "rr_rejected_beats": 2731,
+      "rr_total_beats": 77782,
+      "coverage_before_fill": {
+        "hr": 0.9333333333333333,
+        "steps": 0.9340277777777778,
+        "rmssd": 0.9375
+      },
+      "crew_id": "CM2"
+    },
+    {
+      "user": "user_7",
+      "info": {
+        "Gender": "M",
+        "Weight": 65,
+        "Height": 183,
+        "Age": 25
+      },
+      "sleep_onset_min": 28,
+      "wake_min": 482,
+      "sleep_window_min": 454,
+      "tst_min": 342.0,
+      "efficiency": 0.7533,
+      "rr_rejected_beats": 358,
+      "rr_total_beats": 83507,
+      "coverage_before_fill": {
+        "hr": 0.975,
+        "steps": 0.975,
+        "rmssd": 0.9791666666666666
+      },
+      "crew_id": "CM3"
+    }
+  ]
+}

@@ -446,9 +446,82 @@
       "title": "Alert center",
       "empty": "No active alerts. All crew members nominal."
     },
+    "explanation": {
+      "systolicBP": "Blood pressure outside the normal range can signal dehydration, a fluid shift, or cardiovascular strain — all common in spaceflight.",
+      "diastolicBP": "Diastolic pressure outside the normal range can point to the same fluid-shift and cardiovascular changes as systolic pressure.",
+      "heartRate": "A resting heart rate far from normal can mean dehydration, fever, stress, or a cardiovascular problem that needs attention.",
+      "bloodGlucose": "Blood sugar outside the normal range can affect energy, judgement and wound healing — important for a crew member who has to stay sharp.",
+      "bodyTemp": "A body temperature outside the normal range often means infection, dehydration or heat/cold stress — easy to miss in a closed environment.",
+      "sleepHours": "Too little sleep for too long impairs judgement, mood and immune function, and makes every other risk harder to catch.",
+      "mood": "A low or falling mood can be an early sign of the psychological strain of isolation and confinement — one of the five spaceflight hazards.",
+      "spo2": "Low blood oxygen can mean a cabin air problem or a lung/heart issue — both need fast attention in a sealed environment.",
+      "respRate": "A breathing rate outside the normal range can signal a cabin air problem, anxiety, or a developing illness.",
+      "radiationDose": "Space radiation raises long-term cancer and tissue-damage risk; a sudden spike can also mean a solar particle event in progress.",
+      "exerciseMinutes": "Skipping exercise in microgravity or partial gravity speeds up bone and muscle loss that is hard to reverse later."
+    },
+    "radiation": {
+      "spe": "{{metric}}: today's dose is far above what this environment normally sees — a solar particle event may be in progress."
+    },
     "recommendations": {
       "title": "What to do",
-      "empty": "No actions needed."
+      "empty": "No actions needed.",
+      "rest": {
+        "title": "Rest and recover sleep debt",
+        "step1": "Protect your next sleep window — avoid caffeine and screens before it.",
+        "step2": "If you can, add a short nap and move non-essential tasks to tomorrow."
+      },
+      "hydration": {
+        "title": "Rehydrate and cool down",
+        "step1": "Drink water or an electrolyte solution steadily, not all at once.",
+        "step2": "Loosen or remove extra layers and rest somewhere cooler if you can."
+      },
+      "exercise": {
+        "title": "Get back on the exercise schedule",
+        "step1": "Do today's exercise session even if it's shorter than usual.",
+        "step2": "Resistance and cardio sessions are what slow bone and muscle loss."
+      },
+      "nutrition": {
+        "title": "Check your last meal and timing",
+        "step1": "Eat a small balanced snack if it has been a while since your last meal.",
+        "step2": "Log what and when you ate so the trend is easy to read later."
+      },
+      "medicationConsult": {
+        "title": "Flag it for a medical check",
+        "step1": "Note any symptoms you're feeling — dizziness, chest discomfort, shortness of breath.",
+        "step2": "Avoid strenuous activity until this has been reviewed."
+      },
+      "radiationShelter": {
+        "title": "Reduce extra radiation exposure",
+        "step1": "Avoid EVA or other high-exposure activity until this has been reviewed.",
+        "step2": "Log the reading so the crew medical officer can see the trend."
+      },
+      "radiationShelterSpe": {
+        "title": "Take shelter now",
+        "step1": "Move to the designated radiation shelter immediately.",
+        "step2": "Stay there until the flight surgeon or mission control confirms the event has passed."
+      },
+      "psychSupport": {
+        "title": "Reach out and talk it through",
+        "step1": "Talk to a crewmate, or use the scheduled private family conference.",
+        "step2": "The crew medical officer can connect you with psychological support."
+      },
+      "remeasure": {
+        "title": "Measure again",
+        "step1": "Re-take this measurement now to rule out a one-off reading error.",
+        "step2": "If it's still outside the normal range, follow the steps above."
+      },
+      "contactCmo": {
+        "title": "Inform the crew medical officer",
+        "step1": "Tell the crew medical officer this result and what you've already done about it.",
+        "step2": "They decide whether this needs to go further."
+      },
+      "contactFlightSurgeon": {
+        "title": "Contact the flight surgeon",
+        "step1": "Contact the flight surgeon now with this result and your symptoms.",
+        "step2": "Follow their instructions; the crew medical officer stays with you in the meantime.",
+        "stepAutonomous1": "Ground support is too far away to respond in time — the crew medical officer manages this now, following the autonomous protocol.",
+        "stepAutonomous2": "Send a report to the flight surgeon for the record; given the communication delay, do not expect a real-time reply."
+      }
     },
     "learn": {
       "metricsTitle": "Measurements",

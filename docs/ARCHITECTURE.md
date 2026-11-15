@@ -19,6 +19,10 @@ src/
 └── test/               ortak test altyapısı (@test/*, yalnız __tests__ içinden)
 ```
 
+`src/` dışında, uygulamaya **dahil olmayan** çevrimdışı bir araç da var: `tools/anomaly-detection/`
+(Python; MMASH tabanlı sentetik mürettebat verisi + kişiye özel baseline anomali dedektörü, ADR-039).
+Bundle'a ve CI'a girmez; uygulama yalnız çıktısını (`results/alerts.csv`) kullanabilir.
+
 ## 2. Modül bağımlılık grafiği (döngü yasak)
 
 ```mermaid

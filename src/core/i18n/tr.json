@@ -446,9 +446,82 @@
       "title": "Uyarı merkezi",
       "empty": "Aktif uyarı yok. Tüm mürettebat normal."
     },
+    "explanation": {
+      "systolicBP": "Normal aralığın dışındaki tansiyon; sıvı kaybı, sıvı kayması veya kalp-damar yükünün işareti olabilir — uzayda sık görülür.",
+      "diastolicBP": "Normal aralığın dışındaki diyastolik basınç, sistolik basınçla aynı sıvı kayması ve kalp-damar değişimlerine işaret edebilir.",
+      "heartRate": "Normalden çok uzak bir istirahat nabzı; sıvı kaybı, ateş, stres veya dikkat gerektiren bir kalp-damar sorunu anlamına gelebilir.",
+      "bloodGlucose": "Normal aralığın dışındaki kan şekeri; enerjiyi, karar verme becerisini ve yara iyileşmesini etkileyebilir — dikkatini kaybetmemesi gereken bir mürettebat üyesi için önemli.",
+      "bodyTemp": "Normal aralığın dışındaki vücut ısısı çoğunlukla enfeksiyon, sıvı kaybı veya sıcak/soğuk stresi anlamına gelir — kapalı bir ortamda fark etmesi zordur.",
+      "sleepHours": "Uzun süre az uyku; karar verme, ruh hali ve bağışıklığı zayıflatır, diğer bütün riskleri fark etmeyi zorlaştırır.",
+      "mood": "Düşük veya düşmekte olan bir ruh hali; beş uzay tehlikesinden biri olan izolasyon ve kapalı alanın erken bir işareti olabilir.",
+      "spo2": "Düşük kan oksijeni; kabin havasıyla ilgili bir sorun ya da akciğer/kalp sorunu anlamına gelebilir — kapalı bir ortamda ikisi de hızlı müdahale ister.",
+      "respRate": "Normal aralığın dışındaki solunum hızı; kabin havası sorununa, kaygıya veya gelişmekte olan bir hastalığa işaret edebilir.",
+      "radiationDose": "Uzay radyasyonu uzun vadeli kanser ve doku hasarı riskini artırır; ani bir sıçrama devam eden bir güneş parçacık olayı anlamına da gelebilir.",
+      "exerciseMinutes": "Mikro-g veya kısmi yerçekiminde egzersizi atlamak, sonradan geri döndürülmesi zor kemik ve kas kaybını hızlandırır."
+    },
+    "radiation": {
+      "spe": "{{metric}}: bugünkü doz bu ortamda normalde görülenin çok üstünde — devam eden bir güneş parçacık olayı (SPE) olabilir."
+    },
     "recommendations": {
       "title": "Ne yapmalı",
-      "empty": "Yapılması gereken bir şey yok."
+      "empty": "Yapılması gereken bir şey yok.",
+      "rest": {
+        "title": "Dinlen ve uyku açığını kapat",
+        "step1": "Bir sonraki uyku saatini koru — öncesinde kafein ve ekrandan uzak dur.",
+        "step2": "Mümkünse kısa bir şekerleme ekle, acil olmayan işleri yarına ertele."
+      },
+      "hydration": {
+        "title": "Sıvı al ve serinle",
+        "step1": "Su veya elektrolit solüsyonunu bir seferde değil, azar azar iç.",
+        "step2": "Fazla katmanları çıkar/gevşet, mümkünse daha serin bir yerde dinlen."
+      },
+      "exercise": {
+        "title": "Egzersiz programına geri dön",
+        "step1": "Kısa da olsa bugünkü egzersiz oturumunu yap.",
+        "step2": "Kemik ve kas kaybını yavaşlatan şey direnç ve kardiyo oturumları."
+      },
+      "nutrition": {
+        "title": "Son yemeğini ve zamanını kontrol et",
+        "step1": "Son yemeğinin üzerinden bir süre geçtiyse dengeli, küçük bir şeyler ye.",
+        "step2": "Ne zaman ne yediğini kaydet ki trend sonradan kolay okunsun."
+      },
+      "medicationConsult": {
+        "title": "Tıbbi kontrol için işaretle",
+        "step1": "Baş dönmesi, göğüste rahatsızlık, nefes darlığı gibi hissettiğin belirtileri not et.",
+        "step2": "Bu değerlendirilene kadar ağır eforlu aktiviteden kaçın."
+      },
+      "radiationShelter": {
+        "title": "Ek radyasyon maruziyetini azalt",
+        "step1": "Bu değerlendirilene kadar EVA veya yüksek maruziyetli diğer işlerden kaçın.",
+        "step2": "Okumayı kaydet ki mürettebat tıp sorumlusu trendi görebilsin."
+      },
+      "radiationShelterSpe": {
+        "title": "Hemen sığınağa geç",
+        "step1": "Belirlenen radyasyon sığınağına hemen geç.",
+        "step2": "Flight surgeon veya yer kontrolü olayın geçtiğini onaylayana kadar orada kal."
+      },
+      "psychSupport": {
+        "title": "İletişime geç, konuş",
+        "step1": "Bir mürettebat arkadaşınla konuş veya planlanmış özel aile görüşmesini kullan.",
+        "step2": "Mürettebat tıp sorumlusu seni psikolojik destekle buluşturabilir."
+      },
+      "remeasure": {
+        "title": "Tekrar ölç",
+        "step1": "Tek seferlik bir okuma hatasını ekarte etmek için bu ölçümü şimdi tekrarla.",
+        "step2": "Hâlâ normal aralığın dışındaysa yukarıdaki adımları izle."
+      },
+      "contactCmo": {
+        "title": "Mürettebat tıp sorumlusuna haber ver",
+        "step1": "Mürettebat tıp sorumlusuna bu sonucu ve şimdiye kadar ne yaptığını anlat.",
+        "step2": "Bunun daha da yükseltilip yükseltilmeyeceğine o karar verir."
+      },
+      "contactFlightSurgeon": {
+        "title": "Flight surgeon'a haber ver",
+        "step1": "Bu sonucu ve belirtilerini flight surgeon'a şimdi bildir.",
+        "step2": "Onun talimatlarını izle; mürettebat tıp sorumlusu bu sırada yanında kalır.",
+        "stepAutonomous1": "Yer desteği zamanında yanıt veremeyecek kadar uzak — bundan sonra otonom protokole göre mürettebat tıp sorumlusu yönetiyor.",
+        "stepAutonomous2": "Kayıt için flight surgeon'a bir rapor gönder; iletişim gecikmesi yüzünden anlık bir yanıt bekleme."
+      }
     },
     "learn": {
       "metricsTitle": "Ölçümler",

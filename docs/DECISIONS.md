@@ -505,3 +505,21 @@ Node 24 LTS, npm.
   (ADR-021 kabulü geçerli); daha fazlası için kütüphane bazlı `codeSplitting` ayrı iş.
 - **Sonuç:** Üç iş de arayüzsüz; Ayarlar'daki anahtar ve butonlar visualization'a devredildi
   (`docs/HANDOFF_ENGINEER4.md`). Sahip: Mühendis 1.
+### ADR-039 — Anomali tespiti çevrimdışı bir Python aracı olarak `tools/anomaly-detection/` altında
+
+- **Bağlam:** Veri seti + anomali tespiti işi (Emre) Python'da yazıldı: gerçek bir açık giyilebilir veri
+  setinden (MMASH, PhysioNet, ODbL) 14 günlük sentetik mürettebat verisi üretiyor ve kişiye özel baseline
+  (kayan medyan + MAD) ile açıklanabilir uyarılar çıkarıyor (demo verisinde 2/2 olay, 0 yanlış alarm).
+  Repo kuralı "Python/venv kullanılmaz"; uygulama offline-first, saf Node/React.
+- **Seçenekler:** (a) TypeScript'e port edip `src/modules/assessment` içine almak — uygulamada canlı çalışır,
+  ama hackathon gününde büyük iş, assessment sahibi Mühendis 3, tip sözleşmesi değişirse Mühendis 1 onayı;
+  (b) ayrı repo — ekipten kopuk; (c) repoda ayrı, çevrimdışı bir araç klasörü.
+- **Karar:** (c). Kod `tools/anomaly-detection/` altında (`astrohealth/synth`, `astrohealth/detect`,
+  `scripts/`). Uygulama build'ine, `npm run verify`'a ve CI'a **girmez**; uygulama aracı çalışma anında
+  çağırmaz, yalnız çıktısını (`results/alerts.csv`) kullanabilir. Python yalnız bu klasör için gereken
+  isteğe bağlı bir sistem aracıdır (`docs/SETUP_CHECK.md` § 1.6). Ham MMASH verisi (~100 MB) git'e girmez
+  (`.gitignore`); üretilen sentetik veri (~5.5 MB) ve sonuçlar commit'lenir ki ekip MMASH indirmeden
+  entegrasyon yapabilsin. Sahip: Emre, branch `feat/anomaly-detection`.
+- **Sonuç:** "Python/venv kullanılmaz" kuralı uygulama için geçerli kalır; tek istisna bu klasördür.
+  Uyarı seviyelerinin (`BİLGİ/DİKKAT/UYARI`) uygulamanın `Status`'üne (ADR-031) eşlenmesi ve ekranlara
+  bağlanması ayrı iş (assessment/visualization ile). Port (a) daha sonra ayrı bir kararla yapılabilir.

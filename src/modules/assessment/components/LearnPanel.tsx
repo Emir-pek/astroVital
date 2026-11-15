@@ -26,7 +26,7 @@ export function LearnPanel({ metric }: LearnPanelProps) {
       <PlaceholderNotice text={t('common.stubNotice', { owner: 'Engineer 3' })} />
 
       <section aria-labelledby="learn-metrics">
-        <h2 id="learn-metrics" className="mb-3 text-lg font-semibold">
+        <h2 id="learn-metrics" className="mb-3 text-headline font-semibold">
           {t('assessment.learn.metricsTitle')}
         </h2>
         <div className="grid gap-4 md:grid-cols-2">
@@ -34,12 +34,14 @@ export function LearnPanel({ metric }: LearnPanelProps) {
             const def = METRICS[id];
             return (
               <Card key={id} title={`${t(def.labelKey)} (${def.unit})`}>
-                <h3 className="text-sm font-semibold text-accent">
+                <h3 className="text-label font-semibold text-accent">
                   {t('assessment.learn.whatIs')}
                 </h3>
-                <p className="mb-2 text-sm text-muted">{t(def.descriptionKey)}</p>
-                <h3 className="text-sm font-semibold text-accent">{t('assessment.learn.howTo')}</h3>
-                <p className="text-sm text-muted">{t(def.measurementHowToKey)}</p>
+                <p className="mb-2 text-body text-text-2">{t(def.descriptionKey)}</p>
+                <h3 className="text-label font-semibold text-accent">
+                  {t('assessment.learn.howTo')}
+                </h3>
+                <p className="text-body text-text-2">{t(def.measurementHowToKey)}</p>
               </Card>
             );
           })}
@@ -47,14 +49,14 @@ export function LearnPanel({ metric }: LearnPanelProps) {
       </section>
 
       <section aria-labelledby="learn-colors">
-        <h2 id="learn-colors" className="mb-3 text-lg font-semibold">
+        <h2 id="learn-colors" className="mb-3 text-headline font-semibold">
           {t('assessment.learn.colors')}
         </h2>
         <ul className="flex flex-col gap-2">
           {STATUSES.map((s) => (
             <li key={s} className="flex items-center gap-3">
               <StatusBadge status={s} label={t(`status.${s}`)} />
-              <span className="text-sm text-muted">{t(`status.meaning.${s}`)}</span>
+              <span className="text-body text-text-2">{t(`status.meaning.${s}`)}</span>
             </li>
           ))}
         </ul>
@@ -62,14 +64,14 @@ export function LearnPanel({ metric }: LearnPanelProps) {
 
       {!metric && (
         <section aria-labelledby="learn-hazards">
-          <h2 id="learn-hazards" className="mb-3 text-lg font-semibold">
+          <h2 id="learn-hazards" className="mb-3 text-headline font-semibold">
             {t('assessment.learn.hazardsTitle')}
           </h2>
           <div className="grid gap-4 md:grid-cols-2">
             {HAZARD_IDS.map((id) => (
               <Card key={id} title={t(HAZARDS[id].labelKey)}>
-                <p className="mb-2 text-sm text-muted">{t(HAZARDS[id].descriptionKey)}</p>
-                <p className="text-sm">{t(HAZARDS[id].countermeasuresKey)}</p>
+                <p className="mb-2 text-body text-text-2">{t(HAZARDS[id].descriptionKey)}</p>
+                <p className="text-body">{t(HAZARDS[id].countermeasuresKey)}</p>
               </Card>
             ))}
           </div>
