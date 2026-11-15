@@ -497,3 +497,11 @@ Node 24 LTS, npm.
   ezilmez — kökeni görünür kalsın). Geçersiz girdide hiçbir şey değişmez; sonuç `invalidJson` /
   `invalidFormat` (en çok 10 yol: "measurements.0.metric: …") / `unknownCrew`. Yeni core store aksiyonu
   `replaceData`. CSV ve arayüz yok (butonlar visualization).
+- **Karar (3) — Sayfa bazlı yükleme:** `router.tsx`'te Durum (`/`) dışındaki sayfalar `React.lazy` +
+  `Suspense` (fallback boş: parçalar aynı statik klasörden, milisaniyede gelir; ağ isteği yok, offline-first).
+  Durum ana parçada kalır, ilk ekran beklemez. Sonuç (15.11.2026 build): ana parça 965 kB → 562 kB
+  (gzip 311 → 180 kB); sayfa parçaları 0,3–5 kB; ortak bağımlılıklar (grafik, modüller) Rolldown'ın
+  `PageHeader` adını verdiği 422 kB'lık paylaşılan parçada. 500 kB uyarısı ana parça için sürüyor
+  (ADR-021 kabulü geçerli); daha fazlası için kütüphane bazlı `codeSplitting` ayrı iş.
+- **Sonuç:** Üç iş de arayüzsüz; Ayarlar'daki anahtar ve butonlar visualization'a devredildi
+  (`docs/HANDOFF_ENGINEER4.md`). Sahip: Mühendis 1.

@@ -20,6 +20,15 @@ Yalnız `docs/` değişiklikleri kayıt gerektirmez.
 
 <!-- NEW ENTRIES BELOW -->
 
+### 2026-11-15 16:15 — Muhammed Bektaş (feat/core-routine) — Sayfa bazlı kod bölme (React.lazy)
+
+- **Ne:** Durum dışındaki sayfalar ilk ziyarette ayrı parça olarak yüklenir. Ana JS parçası 965 kB'tan
+  562 kB'a indi (gzip 311 → 180 kB). Görünüm ve rotalar değişmedi; parçalar aynı klasörden gelir (offline).
+- **Neden:** ADR-021'deki boyut uyarısı, P2 görevi (ADR-044).
+- **Dosyalar:** `src/app/router.tsx`, `docs/DECISIONS.md` (ADR-044), `docs/modules/core-routine.md`, `CHANGELOG.md`
+- **Ekip ne yapmalı:** Rota testlerinde sayfa başlığını `getBy…` yerine `findBy…` ile bekleyin (sayfa artık
+  bir mikro görev sonra gelir). Mevcut testler zaten `findBy` kullanıyor.
+
 ### 2026-11-15 16:00 — Muhammed Bektaş (feat/core-routine) — Veri dışa/içe aktarma (JSON yedek, mantık)
 
 - **Ne:** `exportData()` tüm veriyi (ölçümler, mürettebat, ayarlar, rutin tamamlamaları) JSON metni olarak

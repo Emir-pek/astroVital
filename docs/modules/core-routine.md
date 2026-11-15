@@ -79,7 +79,7 @@ app → hepsi.
 - [x] JSON dışa/içe aktarma (Zod; geri yükleme, `source` korunur — ADR-044): `exportData()` / `importData(json)`;
       butonlar: visualization. CSV yapılmadı
 - [ ] Demo modu (otomatik akış: senaryo yükle → sayfaları gez)
-- [ ] Sayfa bazlı code splitting (`React.lazy`) — ADR-021
+- [x] Sayfa bazlı code splitting (`React.lazy`) — ADR-021, ADR-044 (ana parça 965 → 562 kB)
 - [ ] Store `version`/`migrate`; 180 gün için boyut kontrolü (ADR-016)
 - [x] Demo verisi otomatik yüklemeyi kapatma: `settings.autoLoadDemo` + store v2/migrate (ADR-009, ADR-044);
       Ayarlar anahtarı: visualization
