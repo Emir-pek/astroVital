@@ -34,7 +34,7 @@ app → hepsi.
 
 - [x] Uygulama kabuğu, yönlendirme (hash router), layout (Sidebar, TopBar, feragat)
 - [x] Store + persist, seçiciler, simülasyon üreticisi + 6 senaryo, `loadDemoData`/`resetAll`
-- [x] Demo verisi takvime birebir (veri = takvim, ADR-040)
+- [x] Demo verisi takvime birebir (veri = takvim, ADR-048)
 - [x] Varsayılan senaryo "karma görev": dört astronot, dört durum seviyesi (ADR-038, `docs/DEMO_CREW_STORIES.md`)
 - [x] i18n altyapısı (EN/TR) + anahtar eşitlik testi
 - [x] MET saati (`MetClock`)
@@ -56,19 +56,19 @@ app → hepsi.
 ### P1 (Faz 2)
 
 - [x] Takvim yapısı: günlük/haftalık/aylık, NASA/CSA kaynaklı (ADR-035, `docs/ROUTINE_SCHEDULE.md`)
-- [x] Takvim saatleri: ISS gün iskeleti, simülasyon saatleri takvimden (ADR-045)
-- [ ] Ortama göre takvim farkları (ayrı karar; rover'ın veri = takvim uyumu ve `twice_daily` ikinci saati dahil — ADR-041 geçici +12 sa)
+- [x] Takvim saatleri: ISS gün iskeleti, simülasyon saatleri takvimden (ADR-047)
+- [ ] Ortama göre takvim farkları (ayrı karar; rover'ın veri = takvim uyumu ve `twice_daily` ikinci saati dahil — ADR-049 geçici +12 sa)
 - [ ] Mürettebat ekleme/çıkarma (sonra kapsamı, ADR-038)
 - [x] `useReminders`: aktif ortamın `reminderSchedule`'ını bugünün UTC görev gününe açar; 5 durum
-      (`late` dahil), kişi bazlı + seçili astronot, elle tamamlanan görevler (ADR-041). `ReminderCenter`
+      (`late` dahil), kişi bazlı + seçili astronot, elle tamamlanan görevler (ADR-049). `ReminderCenter`
       çalışır-sade; görünüm visualization'da (`docs/HANDOFF_ENGINEER4.md`)
 - [x] Bildirim mantığı: `ReminderNotifier` (app/providers'ta mount) yalnız seçili astronot için due/missed
       başına bir kez toast + açıksa ve izin varsa `Notification`; `useNotificationSettings` /
       `requestNotificationPermission` hazır. Ayarlar anahtarının bağlanması: visualization
 - [x] Kaçırılan ölçüm sayısı: `useMissedCount(crewId?)`. Rozetin yeri ve bağlanması: visualization
-- [x] Oyunlaştırma mantığı (ADR-042): türetilmiş XP, seviye, seri, 5 rozet, ekip skoru, 4 günlük sağlık
+- [x] Oyunlaştırma mantığı (ADR-050): türetilmiş XP, seviye, seri, 5 rozet, ekip skoru, 4 günlük sağlık
       görevi; `useGamification(crewId?)`. `MissionBoard` çalışır-sade (görünüm: visualization)
-- [x] Astronot pet mantığı (ADR-043): `useCompanion(crewId?)`, 5 basamaklı öncelik, yalnız seçili
+- [x] Astronot pet mantığı (ADR-051): `useCompanion(crewId?)`, 5 basamaklı öncelik, yalnız seçili
       astronot, teşhis dili yok. Görsel durumlar: visualization
 - [x] **Kural:** XP yalnız **uyum** için — değerden bağımsızlık testle kilitli; `MissionBoard`'da açıklama
       metni görünür (görünüm: visualization)
@@ -76,13 +76,13 @@ app → hepsi.
 
 ### P2 (Faz 3)
 
-- [x] JSON dışa/içe aktarma (Zod; geri yükleme, `source` korunur — ADR-044): `exportData()` / `importData(json)`;
+- [x] JSON dışa/içe aktarma (Zod; geri yükleme, `source` korunur — ADR-052): `exportData()` / `importData(json)`;
       butonlar: visualization. CSV yapılmadı
 - [ ] Demo modu (otomatik akış: senaryo yükle → sayfaları gez)
-- [x] Sayfa bazlı code splitting (`React.lazy`) — ADR-021, ADR-044 (ana parça 965 → 562 kB)
-- [x] Store `version`/`migrate` (v2, ADR-044)
+- [x] Sayfa bazlı code splitting (`React.lazy`) — ADR-021, ADR-052 (ana parça 965 → 562 kB)
+- [x] Store `version`/`migrate` (v2, ADR-052)
 - [ ] 180 gün için boyut kontrolü (ADR-016)
-- [x] Demo verisi otomatik yüklemeyi kapatma: `settings.autoLoadDemo` + store v2/migrate (ADR-009, ADR-044);
+- [x] Demo verisi otomatik yüklemeyi kapatma: `settings.autoLoadDemo` + store v2/migrate (ADR-009, ADR-052);
       Ayarlar anahtarı: visualization
 - [ ] README son hali, build/preview kontrolü
 

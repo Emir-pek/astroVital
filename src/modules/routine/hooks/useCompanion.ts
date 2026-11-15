@@ -6,7 +6,7 @@ import { useGamification } from './useGamification';
 import { useReminders } from './useReminders';
 
 /**
- * What the astronaut companion says right now (ADR-043). `crewId` defaults to the signed-in
+ * What the astronaut companion says right now (ADR-051). `crewId` defaults to the signed-in
  * astronaut. Only that person's own status, reminders and progress go in — the companion never
  * mentions another crew member. Visual (mood → look) belongs to visualization.
  */

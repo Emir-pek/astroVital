@@ -9,6 +9,7 @@ import {
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { NavLink } from 'react-router';
+import { CompanionDock } from '@modules/routine';
 
 interface NavItem {
   to: string;
@@ -49,6 +50,7 @@ export function Sidebar() {
           </NavLink>
         ))}
       </nav>
+      <CompanionDock />
     </aside>
   );
 }

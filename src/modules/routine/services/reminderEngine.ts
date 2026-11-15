@@ -4,7 +4,7 @@ import { MS_PER_DAY, MS_PER_MINUTE, missionDayFor, parseTimeOfDay } from '@core/
 import { DUE_GRACE_MIN, EARLY_WINDOW_MIN, TWICE_DAILY_OFFSET_MIN } from './reminderConfig';
 
 /**
- * Reminder status engine (ADR-041). PURE — `now` is a parameter, no clock, no store.
+ * Reminder status engine (ADR-049). PURE — `now` is a parameter, no clock, no store.
  *
  * Status of one occurrence (dueAt = scheduled time):
  *   now < dueAt − EARLY                         → upcoming

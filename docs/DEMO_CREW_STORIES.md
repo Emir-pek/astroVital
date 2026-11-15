@@ -1,8 +1,8 @@
 # DEMO_CREW_STORIES — Karma görev senaryosu ve mürettebatın hikâyeleri
 
-**Sahip:** Mühendis 1 · **Karar:** ADR-038 (senaryo), ADR-040 (veri = takvim) · **Kod:**
+**Sahip:** Mühendis 1 · **Karar:** ADR-038 (senaryo), ADR-048 (veri = takvim) · **Kod:**
 `mixed_mission` in `src/core/simulation/scenarios.ts` (sabitler: `MIXED`), mürettebat
-`src/core/simulation/crew.ts` · **Test:** `src/core/simulation/__tests__/generator.test.ts`
+`src/core/simulation/crew.ts` · **Test:** `src/core/simulation/__tests__/generator.test.ts`, `src/modules/routine/__tests__/demoAdherence.test.ts`
 
 ## Amaç
 
@@ -12,7 +12,7 @@ Bu challenge için gerçek bir veri seti yok; demo verisini biz üretiyoruz. Var
 - **Dört astronot, dört hikâye, dört durum seviyesi aynı anda:** nominal · advisory · caution · warning.
 - Her hikâye gerçek bir uzay tehlikesine (NASA HRP RIDGE) bağlı ve hangi verinin hangi eşiğe takıldığı açık.
 - Veri hatırlatma takvimiyle birebir: ekranda görünen her ölçüm, takvimde o gün o saatte olan bir göreve
-  karşılık gelir (ADR-040, `docs/ROUTINE_SCHEDULE.md`).
+  karşılık gelir (ADR-048, `docs/ROUTINE_SCHEDULE.md`).
 
 Varsayılan parametreler: ISS, 30 gün, seed `2026`. Gürültü (günden güne doğal oynama) gerçekçilik için
 korunuyor; bu yüzden durumlar **varsayılan seed'de** garanti edilir ve testle kilitlidir. Ayarlar'dan seed
@@ -24,12 +24,30 @@ Gün numaraları görev günüdür (1 = görev başlangıcı, 30 = bugün). Eşi
 
 ## Beklenen durum tablosu
 
-| Astronot            | Beklenen Status | Tetikleyen veri                                                                                                       | Beklenen eskalasyon    | Motor bugün üretiyor mu?                                    |
-| ------------------- | --------------- | --------------------------------------------------------------------------------------------------------------------- | ---------------------- | ----------------------------------------------------------- |
-| crew-1 Mira Okafor  | nominal         | Tüm son değerler nominal bantta                                                                                       | `self_care`            | Evet (motor stub'ı da nominal döner)                        |
-| crew-2 Kenji Arata  | **warning**     | Isı ≥ 38.3 °C (ISS bandı 38.3–39.8), uyku < 6 sa ve "3 gün < 6.5 sa", egzersiz < 60 dk                                | `crew_medical_officer` | Hayır, motor stub (Mühendis 3)                              |
-| crew-3 Selin Aydın  | **caution**     | Son hafta uyku ortalaması 6–7 sa bandında, ruh hali 3 (3–4 bandı), egzersiz 60–120 dk bandında                        | `self_care`            | Hayır, motor stub (Mühendis 3)                              |
-| crew-4 Lucas Moreau | **advisory**    | Sistolik kişisel baseline'ın ~+9 üstünde (113 → ~122) ama nominal bantta; son 7 günün 4'ünde egzersiz hedefin altında | `self_care`            | **Hayır**, motor `advisory` üretmiyor (ADR-031, Mühendis 3) |
+| Astronot            | Beklenen Status | Tetikleyen veri                                                                                                     | Beklenen eskalasyon    | Gerçek motor (PR #15, 15.11.2026)                             |
+| ------------------- | --------------- | ------------------------------------------------------------------------------------------------------------------- | ---------------------- | ------------------------------------------------------------- |
+| crew-1 Mira Okafor  | nominal         | Tüm son değerler nominal bantta                                                                                     | `self_care`            | ✅ nominal / `self_care`                                      |
+| crew-2 Kenji Arata  | **warning**     | Isı ≥ 38.3 °C (ISS bandı 38.3–39.8), uyku < 6 sa ve "3 gün < 6.5 sa", egzersiz < 60 dk                              | `crew_medical_officer` | ✅ warning / `crew_medical_officer`                           |
+| crew-3 Selin Aydın  | **caution**     | Son hafta uyku ortalaması 6–7 sa bandında, ruh hali 3 (3–4 bandı), egzersiz 60–120 dk bandında                      | `self_care`            | ✅ caution / `self_care`                                      |
+| crew-4 Lucas Moreau | **advisory**    | Sistolik kişisel baseline'ın ~+9 üstünde (113 → ~122) ama nominal bantta; son 7 günde 2 egzersiz düşük, 2 kayıt yok | `self_care`            | ❌ nominal: kişisel baseline kuralı yok (ADR-031, Mühendis 3) |
+
+## Uyum tablosu (oyunlaştırma ve pet)
+
+Veri takvimi izler, ama hikâyeye uygun bilinçli kaçırma/gecikme vardır (ADR-048 güncellemesi). XP değerden
+bağımsızdır (ADR-050); farklar yalnız uyumdan gelir. Değerler varsayılan seed'de, 30. gün 23:30 UTC
+(günün tüm görevleri kapanmış), `XP_PER_LEVEL` = 700:
+
+| Astronot | Uyum                                                        | XP    | Seviye | Seri (bugün / en uzun) | Pet (23:30) |
+| -------- | ----------------------------------------------------------- | ----- | ------ | ---------------------- | ----------- |
+| Mira     | Kusursuz                                                    | 3.080 | 5      | 30 / 30                | `cheerful`  |
+| Kenji    | 29–30. gün egzersiz + akşam ruh hali yok; 29. gün sabah geç | 3.005 | 5      | 0 / 28                 | `alert`     |
+| Selin    | 22., 25., 28. gün akşam ruh hali yok                        | 3.050 | 5      | 2 / 21                 | `neutral`   |
+| Lucas    | 25. ve 27. gün egzersiz yok                                 | 3.060 | 5      | 3 / 24                 | `neutral`   |
+
+Ekip skoru (son 7 gün): %97. XP'ye metriksiz görevler de dahil: demo yüklenince haftalık özet ve aylık
+muayene/anket "zamanında yapıldı" sayılır (`DemoRoutineSync`, ADR-048); Kenji hastalığın son 2 gününde
+bunları da yapmaz (29. günün haftalık özeti kaçırıldı). Gün içinde (ör. 12:00) Mira'nın serisi 29'dur, bugünün görevleri kapanınca 30
+olur. Testler: `src/modules/routine/__tests__/demoAdherence.test.ts`.
 
 ## crew-1 · Mira Okafor (Komutan) → NOMINAL
 
@@ -40,6 +58,9 @@ Gün numaraları görev günüdür (1 = görev başlangıcı, 30 = bugün). Eşi
 - **Bu durum hangi verilerden çıkarılır?** Her metriğin son değeri kendi nominal bandında (ör. uyku 7–9,
   sistolik 90–130, egzersiz ≥ 120); hiçbir sustained/trend kuralı tetiklenmez.
 - **İlgili tehlike:** Yok; diğer üçüyle kıyas noktası.
+- **Uyum:** Kusursuz; hiçbir ölçümü kaçırmaz, geç girmez. Seri görev boyunca kesintisiz (30. gün sonunda
+  30 gün). Beklenen pet: `neutral` (günün ipucu ya da "şimdi X zamanı"); gün kapanınca seri 30 kilometre
+  taşında `cheerful`.
 
 ## crew-2 · Kenji Arata (Uçuş Mühendisi) → WARNING
 
@@ -60,6 +81,9 @@ Gün numaraları görev günüdür (1 = görev başlangıcı, 30 = bugün). Eşi
   - `heartRate` 7 günlük trend +%15 kuralı → caution (destekleyici).
 - **İlgili tehlike:** Kapalı/düşmanca ortam (`environment`): kapalı alanda enfeksiyon yayılımı, bağışıklık
   değişimi.
+- **Uyum:** Hastalığın son 2 gününde (29–30) egzersiz ve akşam ruh hali kaydı **yok**; 29. günün sabah
+  vital bloğunu 150 dk geç girer (`late`). Seri 29. günde kırılır (bugün 0, en uzun 28). Beklenen pet:
+  her saatte `alert` (motor warning; "durumunu aç, CMO'ya haber ver").
 
 ## crew-3 · Selin Aydın (Mürettebat Tıp Sorumlusu) → CAUTION
 
@@ -78,6 +102,9 @@ Gün numaraları görev günüdür (1 = görev başlangıcı, 30 = bugün). Eşi
     inseydi Selin warning olurdu ve dört seviye ayrışmazdı. Durum bu yüzden tek bir sustained kuraldan değil,
     üç metriğin birlikte caution bandına inmesinden gelir.
 - **İlgili tehlike:** İzolasyon ve kapalı alan (`isolation`): uyku ve ruh hali yavaşça bozulur.
+- **Uyum:** Son 10 günde 3 akşam ruh hali kaydı **yok** (22., 25., 28. gün): izolasyonda öz-bildirim
+  azalır. Seri 28. günde kırılır (bugün 1–2, en uzun 21). Beklenen pet: `neutral`; kaçırma bugüne
+  düşmediği için `concerned` değil.
 
 ## crew-4 · Lucas Moreau (Görev Uzmanı) → ADVISORY
 
@@ -87,21 +114,32 @@ Gün numaraları görev günüdür (1 = görev başlangıcı, 30 = bugün). Eşi
   - Gün 1–20: normal.
   - **Gün 21–30:** sistolik baseline'ın +9 mmHg üstüne oturur (113 → ~122). Popülasyon için hâlâ normal
     (nominal bant 90–130), ama **bu kişi için** belirgin bir kayma.
-  - **Gün 24–27:** egzersiz hedefin altında (~%60, ~80–90 dk); 28. gün dinlenme; 29–30 normal. Son 7
-    günün 4'ünde egzersiz < 120 dk.
+  - **Gün 24–27:** egzersiz hedefin altında (~%60, ~80–90 dk); 25. ve 27. gün hiç girilmez; 28. gün
+    dinlenme; 29–30 normal. Son 7 günün 2'sinde egzersiz < 120 dk, 2'sinde kayıt yok.
 - **Bu durum hangi verilerden çıkarılır?** Hiçbir değer eşik bandını aşmıyor; advisory, **kişisel
   baseline'a göre sapma** (son 10 gün ortalaması − ilk 20 gün ortalaması ≈ +9) ve egzersiz uyumunun
   düşmesinden çıkar. Sistolik 7 günlük +%10 trend kuralı tetiklenmez (kayma yavaş ve küçük).
   Motor bugün `advisory` üretmiyor (ADR-031); veri beklenen durumu sağlar, kural Mühendis 3'te.
 - **İlgili tehlike:** Yerçekimi alanı (`gravity`): mikro-g'de kardiyovasküler uyum ve egzersiz
   karşı-önleminin (countermeasure) aksaması.
+- **Uyum:** Son 7 günde 2 egzersiz kaydı **yok** (25. ve 27. gün; ikisi de planlı düşük günlerdi →
+  kayıtlı düşük gün 2). 29. günün egzersizi kayıtlı ve normal: bugün 17:30'dan önce son egzersiz değeri
+  düşük görünmez, durum gün içinde kaymaz. Seri 27. günde kırılır (bugün 2–3, en uzun 24). Beklenen pet: `neutral`.
 
 ## Mühendis 3 için
 
 "Beklenen durum tablosu" değerlendirme motoru testlerinde örnek veri seti olarak kullanılabilir:
 `generateHistory({ seed: 2026, scenario: 'mixed_mission', environment: ENVIRONMENTS.iss, days: 30, ... })`.
 Motor bir astronot için tablodan farklı durum üretirse bildir. Ya veri ayarlanır ya da kuralda
-tartışılacak bir şey vardır. Dikkat edilecekler:
+tartışılacak bir şey vardır.
+
+**Gerçek motorla karşılaştırma (15.11.2026, PR #15 motoru, seed 2026, 30. gün 05:00 / 09:00 / 12:00 /
+19:00 / 23:30 UTC):** Mira, Kenji ve Selin her saatte tabloyla aynı. Lucas her saatte `nominal`;
+beklenen `advisory` kişisel baseline kuralı olmadığı için üretilmiyor (veri doğru: son 10 gün sistolik
+≈ +9). Simülasyon tarafında ayar gerekmedi. Testler: `assessCrew.test.ts` (Mühendis 3),
+`companionEngine.test.tsx` (pet × gerçek motor).
+
+Dikkat edilecekler:
 
 - `advisory` için kişisel baseline kuralı henüz yok (ADR-031); Lucas bu kuralın test verisi.
 - `mood` tam sayı (1–5). "3 günde −%25" trend kuralı 4 → 3 geçişinde tetiklenir; gürültülü veride

@@ -8,6 +8,7 @@ export {
   type ScenarioContext,
   type ScenarioDefinition,
   type ScenarioEffect,
+  type SlotAdherence,
 } from './scenarios';
 
 /** Default demo parameters (Settings page can change them). */

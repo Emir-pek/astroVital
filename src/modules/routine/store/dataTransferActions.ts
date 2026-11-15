@@ -3,7 +3,7 @@ import { buildExportJson, parseImportJson, type ImportResult } from '../services
 import { useRoutineStore } from './useRoutineStore';
 
 /**
- * Store wiring of backup export / import (ADR-044). No UI: the Settings buttons (visualization)
+ * Store wiring of backup export / import (ADR-052). No UI: the Settings buttons (visualization)
  * call these. `exportData` returns the JSON text; saving it as a file is the caller's job.
  */
 export function exportData(now: Date = new Date()): string {
@@ -29,6 +29,8 @@ export function importData(json: string): ImportResult {
     dailyMissionCompletions: routine.dailyMissionCompletions,
     // Announcements belong to the old data set; start fresh.
     notifiedIds: {},
+    // The imported completions are the truth: the demo sync must not regenerate over them.
+    demoCompletionsFor: useHealthStore.getState().demoLoadedAt,
   });
   return result;
 }

@@ -67,7 +67,7 @@ Node 24 LTS, npm.
 
 ### ADR-009 — İlk açılışta demo verisi otomatik yüklenir
 
-> **Güncellendi: ADR-044** — davranış `settings.autoLoadDemo` ile kapatılabilir (varsayılan açık).
+> **Güncellendi: ADR-052** — davranış `settings.autoLoadDemo` ile kapatılabilir (varsayılan açık).
 
 - **Karar:** `DemoDataBootstrap`, uygulama **açılışında bir kez**, cihazda hiç veri yoksa
   (`measurements.length === 0 && demoLoadedAt === null`) `loadDemoData()` çağırır. Oturum
@@ -113,8 +113,8 @@ Node 24 LTS, npm.
 ### ADR-016 — Simülasyon ölçüm sıklığı
 
 > **Kısmen yerine geçti: ADR-035** (şeker sıklığı haftalık, egzersizde 7. gün dinlenme).
-> **Kısmen yerine geçti: ADR-045** (ölçüm saatleri).
-> **Kısmen yerine geçti: ADR-040** (akşam vitali kuralı, ölçüm içeriği = takvim).
+> **Kısmen yerine geçti: ADR-047** (ölçüm saatleri).
+> **Kısmen yerine geçti: ADR-048** (akşam vitali kuralı, ölçüm içeriği = takvim).
 
 - **Karar:** Her gün: uyanışta uyku, 07:30 vital (KB, nabız, SpO₂, solunum, ısı — aynı `groupId`),
   17:00 egzersiz, 20:30 dozimetre, 21:00 ruh hali; günlerin ~%50'sinde 19:00 akşam vitali;
@@ -371,9 +371,9 @@ Node 24 LTS, npm.
   (CHANGELOG 15.11.2026). ADR-036 karar 3'teki "panel sayfayı karartmaz, dışarı dokunmak kapatır" ifadesinin
   yerine geçer. Sahip: visualization ekibi (tasarım), Mühendis 1 (kit mimari onayı).
 
-### ADR-045 — Takvim saatleri ISS gün iskeletine göre; simülasyon saatleri takvimden okunur
+### ADR-047 — Takvim saatleri ISS gün iskeletine göre; simülasyon saatleri takvimden okunur
 
-> Numara notu: ilk yazıldığında ADR-036 idi; PR #13 ile aynı numara iki kez oluştuğu için 15.11.2026'da 039'a, ardından ADR-039 anomali tespitine (PR #14) verildiği için 045'e taşındı.
+> Numara notu: ilk yazıldığında ADR-036 idi; PR #13 ile aynı numara iki kez oluştuğu için 15.11.2026'da 039'a, ardından ADR-039 anomali tespitine (PR #14) verildiği için 045'e, 15.11.2026 akşamı main'e eşitlemede core-routine ADR'leri tek blokta toplanırken 047'ye taşındı.
 
 - **Bağlam:** ADR-035 takvimin yapısını kaynaklara bağladı ama saatler Faz 0 örneğiydi. Simülasyon
   ölçüm saatlerini kendi içinde sabit yazıyordu; takvimle ayrışmıştı (ör. egzersiz takvimde 15:00,
@@ -390,11 +390,11 @@ Node 24 LTS, npm.
   rover'daki eksik maddeler) `docs/ROUTINE_SCHEDULE.md` § Açık konular'da; hizalama ayrı karar.
   ADR-016'nın ölçüm saatleri kısmının yerine geçer.
 
-### ADR-040 — Demo verisi takvime birebir uyar (veri = takvim)
+### ADR-048 — Demo verisi takvime birebir uyar (veri = takvim)
 
-> Numara notu: ilk yazıldığında ADR-037 idi; PR #13 ile aynı numara iki kez oluştuğu için 15.11.2026'da 040'a taşındı.
+> Numara notu: ilk yazıldığında ADR-037 idi; PR #13 ile aynı numara iki kez oluştuğu için 15.11.2026'da 040'a, akşam main'e eşitlemede 048'e taşındı.
 
-- **Bağlam:** ADR-035/045 sonrası sıklık ve saat takvimden geliyordu ama simülasyon takvimde olmayan
+- **Bağlam:** ADR-035/047 sonrası sıklık ve saat takvimden geliyordu ama simülasyon takvimde olmayan
   ölçümler de üretiyordu: günlerin ~%50'sinde akşam KB + nabız + ısı (ADR-016) ve takvimde maddesi olmayan
   solunum hızı. Ekranda "görev listesinde olmayan ölçüm" görünüyordu.
 - **Karar:** Üretici yalnız aktif ortamın takviminde o gün düşen hatırlatmalar için, o hatırlatmanın
@@ -404,6 +404,17 @@ Node 24 LTS, npm.
   için ADR-016 davranışında kalır; ortam farkları ayrı karar. Sahip: Mühendis 1.
 - **Sonuç:** 30 gün × 4 kişi ISS 1.452 → 1.324 ölçüm. Bayatlık: ISS'te artık her metrik takvimli
   (solunum 48 sa yerine günlük × 1.5). ADR-016'nın akşam vitali kuralının yerine geçer (rover hariç).
+- **Güncelleme (15.11.2026 akşam):** Veri takvimi izler; senaryolar hikâyeye uygun **bilinçli
+  kaçırma/gecikme** içerebilir (`ScenarioDefinition.adherence(slot, ctx)` → `{ skip }` veya
+  `{ delayMin }`). Günler sabittir (son günden uzaklık), `Math.random` yok. Atlanan slotun değerleri de
+  örneklenir, yalnız çıktıya yazılmaz: PRNG akışı ve diğer bütün değerler aynı kalır. Bugün yalnız
+  `mixed_mission` kullanıyor (Kenji, Selin, Lucas; Mira kusursuz — `docs/DEMO_CREW_STORIES.md` "Uyum").
+  Takvimde olmayan ölçüm hâlâ üretilmez; geç girilen ölçüm takvim saatinden sonra, aynı gün içindedir.
+- **Güncelleme 2 (15.11.2026 akşam):** Metriksiz görevler (haftalık özet, aylık muayene/anket, ekip sohbeti)
+  de takvimi izler: demo yüklendiğinde routine modülü (`DemoRoutineSync` → saf `generateDemoCompletions`)
+  her planlı gün için saat + 10 dk'da, yükleme anına kadar, tamamlama üretir; hikâye istisnası Kenji'nin
+  son 2 günü. Bir kez çalışır (`demoCompletionsFor`); yeni demo eskisinin tamamlamalarını değiştirir, içe
+  aktarılan veriye dokunmaz. Kural: hikâyesinde kaçırma olmayan kişi için `missed` = 0, her saatte.
 
 ### ADR-038 — Varsayılan demo senaryosu: karma görev (dört durum seviyesi); mürettebat 4 kişi sabit
 
@@ -424,7 +435,7 @@ Node 24 LTS, npm.
 
 > Numara düzeltmesi: bu karar ilk mergede yanlışlıkla ADR-039 ile (anomali tespiti kararıyla aynı
 > numarayla) girmişti — aynı anda birden fazla branch'in bağımsız numara seçip birleşmesinden
-> (bu arada ADR-040/044/045 de başka kararlarca alındı). `docs/DECISIONS.md`'de tekrar eden/sırasız
+> (bu arada ADR-048/044/045 de başka kararlarca alındı). `docs/DECISIONS.md`'de tekrar eden/sırasız
 > numaralar var; tam bir yeniden numaralandırma geçişi ayrı, koordineli bir iş (Mühendis 1).
 
 - **Bağlam:** Teslim için projenin herkese açık, hesap/şifre istemeyen bir linkle erişilebilir olması
@@ -466,3 +477,106 @@ Node 24 LTS, npm.
 - **Sonuç:** "Python/venv kullanılmaz" kuralı uygulama için geçerli kalır; tek istisna bu klasördür.
   Uyarı seviyelerinin (`BİLGİ/DİKKAT/UYARI`) uygulamanın `Status`'üne (ADR-031) eşlenmesi ve ekranlara
   bağlanması ayrı iş (assessment/visualization ile). Port (a) daha sonra ayrı bir kararla yapılabilir.
+
+### ADR-049 — Hatırlatma durum kuralları: pencere, 'late', kişi bazlı, seçili astronot
+
+> Numara notu: ilk yazıldığında ADR-041 idi (PR #16). PR #16'nın main ile birleştirilmesinde (`1271079`) bu bölüm DECISIONS'tan düşmüştü; 15.11.2026 akşamı geri eklenip 049'a taşındı.
+
+- **Bağlam:** `useReminders` stub'dı; bir görevin ne zaman "yapıldı/kaçırıldı" sayılacağı ADR-035'te ayrı
+  karar olarak bırakılmıştı. ISS'te aynı metrik günde iki kez ölçülüyor (sabah ve akşam nabzı); ekip
+  ekranında da başkasının tıbbi değeri görünmemeli (ADR-032).
+- **Karar:** Saf motor `expandReminders` (`src/modules/routine/services/reminderEngine.ts`). Sabitler tek
+  yerde (`reminderConfig.ts`): `EARLY_WINDOW_MIN = 60`, `DUE_GRACE_MIN = 120`. Beş durum:
+  `upcoming` (şimdi < saat − 60 dk) · `due` (pencere açık, kayıt yok, saat + 120 dk'ya kadar) · `done`
+  (kayıt [saat − 60, saat + 120] içinde) · `late` (kayıt saat + 120'den sonra ama gün bitmeden) ·
+  `missed` (saat + 120 geçti, kayıt yok). Gün = UTC görev günü (ADR-030; Mars'ta yalnız etiket "Sol").
+  Eşleşme kişi + metrik ile; bir ölçüm yalnız **bir** örneği karşılar: penceresi ölçümü kapsayan,
+  henüz karşılanmamış örneklerden saati en yakın olan (sabah/akşam nabzı karışmaz). Metriği olmayan
+  görevler (haftalık özet, aylık muayene/anket, ekip sohbeti) elle işaretlenir (`completeTask`, aynı
+  pencere kuralları; ancak görev açıkken — `due`/`missed` — kabul edilir). Örnek kimliği
+  `${crewId}:${templateId}:${missionDay}:${occurrence}`. `twice_daily` ikinci örnek = ilk + 12 sa
+  (**geçici**; ortam farkları kararında kesinleşecek). Kişi görünümü varsayılan olarak seçili astronotu
+  (`selectedCrewId`) izler; `byCrew` tüm mürettebatın yalnız görev durumunu verir. Tamamlanma kayıtları
+  modülün kendi store'unda (`astrovital:routine`, ADR-005). Sahip: Mühendis 1.
+- **Sonuç:** Pencere tablosu `docs/ROUTINE_SCHEDULE.md` § Durum kuralları. Gün sınırını aşan pencere
+  yok (en geç görev 21:00 + 120 dk = 23:00). Gece yarısından sonra girilen ölçüm ertesi güne sayılır;
+  önceki gün `missed` kalır. Bayatlık (`isStale`) bu karardan bağımsız.
+- **Güncelleme (15.11.2026 akşam) — bildirimler yalnız oturum içindekiler:** Bir görev ancak `due`
+  olduğu (saat − 60 dk) veya `missed` olduğu (saat + 120 dk) an, geçerli bağlamın başlamasından sonraysa
+  bildirilir. Bağlam: uygulama açılışı, seçili astronot, demo yükleme/sıfırlama/içe aktarma
+  (`demoLoadedAt`), görev başlangıcı, ortam. Daha eskiler sessizce "görüldü" işaretlenir. Neden: boş
+  cihazda ilk render demo verisi yüklenmeden çalışıyordu ve sabahın 6 görevini "kaçırıldı" diye toplu
+  bildiriyordu (Mira için "6 tasks were missed today"). Kural zamana bağlı, render sırasına değil.
+
+### ADR-050 — Oyunlaştırma: türetilmiş XP, uyuma ödül, değerden bağımsız
+
+> Numara notu: ilk yazıldığında ADR-042 idi (PR #16). PR #16'nın main ile birleştirilmesinde (`1271079`) bu bölüm DECISIONS'tan düşmüştü; 15.11.2026 akşamı geri eklenip 050'ye taşındı.
+
+- **Bağlam:** `useGamification` stub'dı. Kural baştan beri belliydi (XP uyuma, değere değil), ama sayaç
+  tutan bir tasarım tekrar tıklamayla şişirilebilirdi ve demo mürettebatı XP'siz başlardı.
+- **Karar:** XP depolanan bir sayaç değil; hatırlatma geçmişinden (`expandRange`, ADR-049) ve günlük görev
+  işaretlerinden **türetilir** (`src/modules/routine/services/gamification.ts`, saf). Puanlar: `done` = 10,
+  `late` = 5, `missed` = 0; elle tamamlanan görev ölçümle aynı (10/5); günlük sağlık görevleri (su, ışıkları
+  zamanında kapat, ekip sohbeti, öğren) elle işaretlenir, kişi + gün başına bir kez, 5 XP. Seviye:
+  `levels.ts` (700 XP/seviye ≈ kusursuz bir ISS haftası; önce 100 — demo 30. günde seviye 30 oluyordu). **Seri:** metrikli tüm planlı görevlerin `done`/`late` olduğu ardışık görev
+  günleri; bugün açık görev varken seri bozulmaz ve sayılmaz; dinlenme günü listeden egzersizi çıkarır,
+  seriyi bozmaz; metriksiz görevler seriye girmez. **Rozetler:** `streak-7`, `streak-30` (en uzun seriye
+  göre, kazanılınca kalır), `exercise-week` (bir görev haftasında 6 planlı egzersizin 6'sı),
+  `monthly-exam-done`, `crew-player` (5 ekip sohbeti). **Ekip skoru:** son 7 görev gününde tüm mürettebatın
+  metrikli görevlerinde (done + late) / çözülmüş planlı görev yüzdesi; açık görevler (upcoming/due) hesaba
+  girmez. Hiçbir fonksiyon ölçüm değerini okumaz; bunu "değer değişse de XP/seri/rozet aynı" testi kilitler.
+  Sahip: Mühendis 1.
+- **Sonuç:** Demo mürettebatı geçmiş XP ve seriyle başlar (demo verisi takvime birebir olduğu için
+  geçmiş ölçümlerin hepsi `done`; metriksiz görevler elle işaretlenmediğinden XP getirmez). Ekran
+  `MissionBoard` çalışır-sade; "XP uyuma verilir" açıklaması görünür kalmalı (görünüm visualization'da).
+
+### ADR-051 — Astronot pet (yardımcı): yalnız mantık, sabit öncelik, kişiye kapalı
+
+> Numara notu: ilk yazıldığında ADR-043 idi (PR #16). PR #16'nın main ile birleştirilmesinde (`1271079`) bu bölüm DECISIONS'tan düşmüştü; 15.11.2026 akşamı geri eklenip 051'e taşındı.
+
+- **Bağlam:** Ekip "astronot pet" fikrini istedi; kuralları Mühendis 1'de, görünümü visualization'da
+  (ADR-032). Pet bir sağlık uygulamasında konuştuğu için dil ve gizlilik kuralı gerekiyor.
+- **Karar:** Saf `decideCompanion` + `useCompanion(crewId?)` (`src/modules/routine`). Çıktı:
+  `{ mood: 'cheerful'|'neutral'|'concerned'|'alert', messageKey, params?, subjectKey?, action?: { route, labelKey } }`.
+  Öncelik: (1) `useCrewHealth().overall === 'warning'` → alert, "Durum ekranını aç, adımları izle, CMO'ya
+  haber ver"; (2) kaçırılan görev → concerned, nazik hatırlatma; (3) şu an açık görev → neutral, "şimdi
+  X zamanı" (ölçümse `/measure`); (4) bugün kazanılan rozet veya seri kilometre taşı (7, 14, 30, 60, 90 gün)
+  → cheerful; (5) aksi halde neutral, günün ipucu: Learn içeriğindeki tehlike karşı önlemleri
+  (`hazards.*.countermeasures`), kişi ve güne göre deterministik (FNV hash, `Math.random` yok).
+  **Dil:** kısa, sade, teşhis yok; değer yazmaz; "prototip, tıbbi cihaz değil" metni (`routine.companion.disclaimer`).
+  **Gizlilik:** girdi yalnız o kişinin kendi özeti, görevleri ve ilerlemesi; varsayılan kişi seçili
+  astronot; başka astronotun bilgisi asla girmez (testli). Sahip: Mühendis 1.
+- **Sonuç:** Değerlendirme motoru bugün stub (hep nominal) olduğu için alert durumu motor gerçek olunca
+  çalışır; Mühendis 3'ün `useCrewHealth` sözleşmesine dayanır. Görsel (4 mood'un görünüşü) Emir'de.
+- **Güncelleme (15.11.2026 akşam):** Arayüz `CompanionDock` (sol menünün altı, `Popover` balon) Mühendis 1
+  tarafından tasarım belgesine göre yazıldı; yüz yerine vizör ışıkları (§2 "sevimli değil"), hareket yalnız sakin
+  hallerde ve azaltılmış harekette yok. Görünüm onayı Emir'de (`docs/HANDOFF_ENGINEER4.md` §4).
+
+### ADR-052 — P2 mantık işleri: demo otomatik yükleme ayarı, veri dışa/içe aktarma, sayfa bazlı yükleme
+
+> Numara notu: ilk yazıldığında ADR-044 idi (PR #16). PR #16'nın main ile birleştirilmesinde (`1271079`) bu bölüm DECISIONS'tan düşmüştü; 15.11.2026 akşamı geri eklenip 052'ye taşındı.
+
+- **Bağlam:** ADR-009 demo verisinin her boş açılışta yüklenmesini "gerçek kullanımda kapatılabilir
+  olmalı" notuyla bırakmıştı; dışa/içe aktarma ve code splitting (ADR-021) P2 listesindeydi.
+- **Karar (1) — `autoLoadDemo`:** `AppSettings.autoLoadDemo` (varsayılan `true`). `DemoDataBootstrap` yalnız
+  açıkken ve cihazda veri yokken yükler. "Tüm veriyi sıfırla" bu tercihi korur (dil ve birim gibi). Store
+  şeması `version` 1 → 2; saf `migrateHealthState` eski kayda `autoLoadDemo: true` ekler. Kullanılmayan
+  `settings.notificationsEnabled` kayıt uyumluluğu için duruyor, `@deprecated` (anahtar routine store'da, ADR-049).
+  Sahip: Mühendis 1; Ayarlar anahtarının görünümü visualization.
+- **Karar (2) — Dışa/içe aktarma:** saf `buildExportJson` / `parseImportJson` (Zod v4,
+  `src/modules/routine/services/dataTransfer.ts`; routine'de çünkü routine tamamlamalarını da içeriyor ve
+  core modülden okuyamaz). Dosya: `{ format: 'astrovital-export', version: 1, exportedAt, measurements, crew,
+  settings, routine: { completions, dailyMissionCompletions } }`. İçe aktarma bir **geri yüklemedir**:
+  ölçümleri, mürettebatı, ayarları ve routine tamamlamalarını değiştirir (birleştirme yok, ID çakışması
+  sorunu olmaz). Her ölçüm kendi `source`'unu korur (kamera ölçümü kamera olarak kalır; `'import'` ile
+  ezilmez — kökeni görünür kalsın). Geçersiz girdide hiçbir şey değişmez; sonuç `invalidJson` /
+  `invalidFormat` (en çok 10 yol: "measurements.0.metric: …") / `unknownCrew`. Yeni core store aksiyonu
+  `replaceData`. CSV ve arayüz yok (butonlar visualization).
+- **Karar (3) — Sayfa bazlı yükleme:** `router.tsx`'te Durum (`/`) dışındaki sayfalar `React.lazy` +
+  `Suspense` (fallback boş: parçalar aynı statik klasörden, milisaniyede gelir; ağ isteği yok, offline-first).
+  Durum ana parçada kalır, ilk ekran beklemez. Sonuç (15.11.2026 build): ana parça 965 kB → 562 kB
+  (gzip 311 → 180 kB); sayfa parçaları 0,3–5 kB; ortak bağımlılıklar (grafik, modüller) Rolldown'ın
+  `PageHeader` adını verdiği 422 kB'lık paylaşılan parçada. 500 kB uyarısı ana parça için sürüyor
+  (ADR-021 kabulü geçerli); daha fazlası için kütüphane bazlı `codeSplitting` ayrı iş.
+- **Sonuç:** Üç iş de arayüzsüz; Ayarlar'daki anahtar ve butonlar visualization'a devredildi
+  (`docs/HANDOFF_ENGINEER4.md`). Sahip: Mühendis 1.

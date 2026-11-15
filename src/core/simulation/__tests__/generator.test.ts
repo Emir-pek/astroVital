@@ -108,7 +108,7 @@ describe('generateHistory', () => {
     }
   });
 
-  describe('slot times come from the environment schedule (ADR-045)', () => {
+  describe('slot times come from the environment schedule (ADR-047)', () => {
     const minuteOfDay = (iso: string) => {
       const d = new Date(iso);
       return d.getUTCHours() * 60 + d.getUTCMinutes();
@@ -204,7 +204,7 @@ const minuteOfDay = (iso: string) => {
   return d.getUTCHours() * 60 + d.getUTCMinutes();
 };
 
-describe('data = schedule (ADR-040)', () => {
+describe('data = schedule (ADR-048)', () => {
   const env = ENVIRONMENTS.iss;
   const out = generateHistory(opts());
   const alias = (m: MetricId): MetricId => (m === 'diastolicBP' ? 'systolicBP' : m);
@@ -320,8 +320,9 @@ describe('mixed_mission stories (ADR-038, docs/DEMO_CREW_STORIES.md)', () => {
     const drift = mean(onDays('crew-4', 'systolicBP', 30 - MIXED.lucasDriftDays + 1, 30));
     expect(drift - before).toBeGreaterThan(6);
     expect(drift - before).toBeLessThan(12);
+    // 4 low days planned (offsets 6–3); offsets 5 and 3 are skipped sessions → 2 recorded low days.
     const lowDays = onDays('crew-4', 'exerciseMinutes', 24, 30).filter((v) => v < 120);
-    expect(lowDays).toHaveLength(4);
+    expect(lowDays).toHaveLength(2);
     lowDays.forEach((v) => expect(v).toBeGreaterThanOrEqual(60));
     latestStatuses('crew-4').forEach((r) => expect(r.status, `${r.metric}=${r.v}`).toBe('nominal'));
   });

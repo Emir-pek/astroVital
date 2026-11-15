@@ -23,6 +23,8 @@ export { RedAlertDialog, type RedAlertItem, type RedAlertDialogProps } from './R
 export { Sheet, type SheetBounds, type SheetProps } from './Sheet';
 export { Segmented, type SegmentedProps } from './Segmented';
 export { Menu } from './Menu';
+export { Popover } from './Popover';
+export { ProgressBar, type ProgressBarProps } from './ProgressBar';
 export { Select } from './Select';
 export { ToastProvider } from './Toast';
 export { useToast, type ToastApi, type ToastInput } from './toastContext';

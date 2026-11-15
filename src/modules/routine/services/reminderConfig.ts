@@ -1,5 +1,5 @@
 /**
- * Reminder time-window rules (ADR-041, docs/ROUTINE_SCHEDULE.md § Durum kuralları).
+ * Reminder time-window rules (ADR-049, docs/ROUTINE_SCHEDULE.md § Durum kuralları).
  * Tune here only — engine, hooks and tests read these constants.
  */
 
@@ -11,6 +11,6 @@ export const DUE_GRACE_MIN = 120;
 
 /**
  * Second slot of a `twice_daily` task, minutes after the first one.
- * TEMPORARY (ADR-041): the environment-differences decision will set real times.
+ * TEMPORARY (ADR-049): the environment-differences decision will set real times.
  */
 export const TWICE_DAILY_OFFSET_MIN = 12 * 60;

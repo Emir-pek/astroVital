@@ -3,11 +3,9 @@
  * Owner: Engineer 1. Contract: docs/CONTRACTS.md § routine.
  * Allowed deps: @core/*, @modules/assessment.
  */
-export {
-  ReminderCenter,
-  REMINDER_STATUS_ICON,
-  type ReminderCenterProps,
-} from './components/ReminderCenter';
+export { ReminderCenter, type ReminderCenterProps } from './components/ReminderCenter';
+export { REMINDER_STATUS_ICON } from './components/reminderStatusIcon';
+export { MissedCountBadge } from './components/MissedCountBadge';
 export { ReminderNotifier } from './components/ReminderNotifier';
 export {
   useNotificationSettings,
@@ -84,3 +82,13 @@ export {
   type ImportResult,
 } from './services/dataTransfer';
 export { exportData, importData } from './store/dataTransferActions';
+export { CompanionDock } from './components/companion/CompanionDock';
+export { CompanionAvatar, type CompanionAvatarProps } from './components/companion/CompanionAvatar';
+export { MOOD_COLOR_VAR, MOOD_STYLE } from './components/companion/moodStyle';
+export { RoutineSettingsPanel } from './components/RoutineSettingsPanel';
+export { DemoRoutineSync } from './components/DemoRoutineSync';
+export {
+  DEMO_MANUAL_DELAY_MIN,
+  generateDemoCompletions,
+  type DemoCompletionsInput,
+} from './services/demoCompletions';

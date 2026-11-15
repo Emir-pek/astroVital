@@ -40,7 +40,7 @@ export interface RemindersApi {
 }
 
 /**
- * Today's reminders (ADR-041). `crewId` defaults to the signed-in astronaut (`selectedCrewId`).
+ * Today's reminders (ADR-049). `crewId` defaults to the signed-in astronaut (`selectedCrewId`).
  * Recomputed every minute and whenever measurements, environment or completions change.
  */
 export function useReminders(crewId?: string): RemindersApi {

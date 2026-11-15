@@ -4,7 +4,7 @@ import { exportData, importData, parseImportJson, useRoutineStore } from '../ind
 
 const NOW = new Date('2026-11-14T22:00:00.000Z');
 
-describe('export / import (ADR-044)', () => {
+describe('export / import (ADR-052)', () => {
   beforeEach(() => {
     useHealthStore.getState().resetAll();
     useRoutineStore.getState().resetRoutine();

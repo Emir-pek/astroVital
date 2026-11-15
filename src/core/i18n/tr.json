@@ -369,7 +369,17 @@
         "done": "Yapıldı",
         "late": "Geç yapıldı",
         "missed": "Kaçırıldı"
-      }
+      },
+      "progressLabel": "Bugün yapılan görevler",
+      "crewProgressLabel": "{{name}} — bugün yapılan görevler",
+      "progress": "{{done}} / {{total}} yapıldı · {{missed}} kaçırıldı",
+      "utcNote": "Saatler görev saatidir (UTC).",
+      "viewLabel": "Kimin görevleri",
+      "viewMe": "Ben",
+      "viewCrew": "Ekip",
+      "you": "(sen)",
+      "missedCount_one": "{{count}} kaçırıldı",
+      "missedCount_other": "{{count}} kaçırıldı"
     },
     "missions": {
       "title": "Görevler",
@@ -385,7 +395,13 @@
       "noBadges": "Henüz rozet yok",
       "dailyTitle": "Bugünkü sağlık görevleri",
       "tick": "Yapıldı olarak işaretle",
-      "ticked": "Bugün yapıldı"
+      "ticked": "Bugün yapıldı",
+      "xpTotal": "{{xp}} XP",
+      "levelProgressLabel": "Seviye {{level}} ilerlemesi",
+      "levelProgress": "{{xp}} / {{max}} XP",
+      "longest": "En uzun: {{count}} gün",
+      "teamScoreHint": "Ekip görevleri, son 7 gün",
+      "notYet": "Henüz kazanılmadı"
     },
     "notify": {
       "title": "AstroVital hatırlatması",
@@ -433,9 +449,48 @@
       "openStatus": "Durumumu aç",
       "openRoutine": "Rutini aç",
       "openMeasure": "Şimdi ölç",
-      "disclaimer": "Ben bir prototip yardımcıyım, tıbbi cihaz değilim. Teşhis koymam."
+      "disclaimer": "Ben bir prototip yardımcıyım, tıbbi cihaz değilim. Teşhis koymam.",
+      "toggle": "Yardımcı: {{mood}}. Mesajı göster veya gizle",
+      "mood": {
+        "cheerful": "Yolunda",
+        "neutral": "Hazır",
+        "concerned": "Hatırlatma",
+        "alert": "Dikkat"
+      },
+      "hide": "Gizle"
     },
-    "envChanged": "Ortam: {{env}}. Hatırlatma takvimi ve eşikler güncellendi."
+    "envChanged": "Ortam: {{env}}. Hatırlatma takvimi ve eşikler güncellendi.",
+    "settings": {
+      "notificationsTitle": "Hatırlatmalar",
+      "notifications": "Tarayıcı bildirimleri",
+      "notificationsHint": "Uygulama içi mesajlar her zaman açık. Açtığında tarayıcı izin ister.",
+      "permissionDenied": "Tarayıcı bildirimleri engelledi. Tarayıcı ayarlarından izin verip tekrar dene.",
+      "permissionUnsupported": "Bu tarayıcı bildirim gösteremiyor. Uygulama içi mesajlar çalışmaya devam eder.",
+      "on": "Açık",
+      "off": "Kapalı",
+      "demoTitle": "Demo verisi",
+      "autoLoad": "Açılışta demo verisini yükle",
+      "autoLoadHint": "Kapalıyken boş cihaz, sen veri yükleyene kadar boş kalır.",
+      "recommendedEnv": "\"{{scenario}}\" senaryosu en iyi şu ortamda görünür: {{env}}",
+      "recommendedEnvLabel": "Senaryonun ortamı",
+      "applyEnv": "Önerileni kullan",
+      "keepEnv": "Mevcudu koru",
+      "loadScenario": "Senaryoyu yükle ({{env}})",
+      "scenarioLoaded": "Senaryo yüklendi.",
+      "backupTitle": "Yedek",
+      "backupHint": "Tüm veriyi bir dosyaya kaydet ya da dosyadan geri yükle. Hiçbir şey bu cihazdan çıkmaz.",
+      "export": "Veriyi dışa aktar",
+      "import": "Veriyi içe aktar",
+      "importConfirmTitle": "Tüm veri değiştirilsin mi?",
+      "importConfirmText": "\"{{file}}\" içe aktarılınca bu cihazdaki tüm ölçümler, mürettebat, ayarlar ve rutin ilerlemesi değişir.",
+      "importConfirm": "Veriyi değiştir",
+      "importDone": "Veri dosyadan geri yüklendi.",
+      "importError": {
+        "invalidJson": "Bu dosya geçerli bir JSON değil. Hiçbir şey değişmedi.",
+        "invalidFormat": "Bu bir AstroVital yedeği değil ({{detail}}). Hiçbir şey değişmedi.",
+        "unknownCrew": "Dosyada tanınmayan bir mürettebata ait ölçüm var. Hiçbir şey değişmedi."
+      }
+    }
   },
   "assessment": {
     "stub": {
