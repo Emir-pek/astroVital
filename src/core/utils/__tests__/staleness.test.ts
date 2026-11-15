@@ -12,7 +12,8 @@ describe('staleness', () => {
   });
 
   it('falls back to 48 h for unscheduled metrics', () => {
-    expect(maxValidityMs('respRate', ENVIRONMENTS.iss)).toBe(48 * MS_PER_HOUR);
+    // ISS schedules every metric since ADR-037; the rover schedule has no respiration item.
+    expect(maxValidityMs('respRate', ENVIRONMENTS.rover)).toBe(48 * MS_PER_HOUR);
   });
 
   it('uses the systolic schedule for diastolic', () => {

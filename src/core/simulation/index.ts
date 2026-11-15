@@ -4,6 +4,7 @@ export { createRng, mulberry32, type Rng } from './prng';
 export {
   SCENARIO_IDS,
   SCENARIOS,
+  MIXED,
   type ScenarioContext,
   type ScenarioDefinition,
   type ScenarioEffect,
