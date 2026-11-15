@@ -20,6 +20,20 @@ Yalnız `docs/` değişiklikleri kayıt gerektirmez.
 
 <!-- NEW ENTRIES BELOW -->
 
+### 2026-11-15 18:15 — Muhammed Bektaş (feat/core-routine) — Demo hikâyeleri gerçek motorla doğrulandı
+
+- **Ne:** PR #15'in değerlendirme motoruyla varsayılan demoda (seed 2026, ISS) dört astronot, 30. günün
+  beş farklı saatinde hesaplandı. Mira nominal, Kenji warning/CMO, Selin caution: tabloyla aynı. Lucas
+  nominal, beklenen advisory. Fark kural eksikliğinden: motorda kişisel baseline sapma kuralı yok.
+  Simülasyonda ayar gerekmedi; motor değiştirilmedi. Yeni test: pet gerçek motorla Kenji için `alert`
+  döndürüyor, diğerleri için döndürmüyor.
+- **Neden:** Motor stub'tan gerçeğe geçti; beklenen durum tablosunun tutup tutmadığını görmek.
+- **Dosyalar:** `src/modules/routine/__tests__/companionEngine.test.tsx` (yeni), `docs/DEMO_CREW_STORIES.md`
+  (tablo "Gerçek motor" sütunu + karşılaştırma notu), `CHANGELOG.md`
+- **Ekip ne yapmalı:** Mühendis 3: DEMO_CREW_STORIES beklenen tablo motorla karşılaştırıldı. Tek fark Lucas
+  (advisory yerine nominal): kişisel baseline (+9 mmHg / son 10 gün) kuralı gerekiyor. Ruh hali tam sayı
+  trend notu duruyor.
+
 ### 2026-11-15 18:00 — Muhammed Bektaş (feat/core-routine) — Karma görevde bilinçli kaçırma/gecikme (uyum hikâyeleri)
 
 - **Ne:** Demo verisinde artık uyum farkı var. Mira kusursuz. Kenji hastalığın son 2 gününde egzersiz ve
