@@ -439,3 +439,23 @@ Node 24 LTS, npm.
 - **Sonuç:** Pencere tablosu `docs/ROUTINE_SCHEDULE.md` § Durum kuralları. Gün sınırını aşan pencere
   yok (en geç görev 21:00 + 120 dk = 23:00). Gece yarısından sonra girilen ölçüm ertesi güne sayılır;
   önceki gün `missed` kalır. Bayatlık (`isStale`) bu karardan bağımsız.
+
+### ADR-042 — Oyunlaştırma: türetilmiş XP, uyuma ödül, değerden bağımsız
+
+- **Bağlam:** `useGamification` stub'dı. Kural baştan beri belliydi (XP uyuma, değere değil), ama sayaç
+  tutan bir tasarım tekrar tıklamayla şişirilebilirdi ve demo mürettebatı XP'siz başlardı.
+- **Karar:** XP depolanan bir sayaç değil; hatırlatma geçmişinden (`expandRange`, ADR-041) ve günlük görev
+  işaretlerinden **türetilir** (`src/modules/routine/services/gamification.ts`, saf). Puanlar: `done` = 10,
+  `late` = 5, `missed` = 0; elle tamamlanan görev ölçümle aynı (10/5); günlük sağlık görevleri (su, ışıkları
+  zamanında kapat, ekip sohbeti, öğren) elle işaretlenir, kişi + gün başına bir kez, 5 XP. Seviye:
+  `levels.ts` (100 XP/seviye). **Seri:** metrikli tüm planlı görevlerin `done`/`late` olduğu ardışık görev
+  günleri; bugün açık görev varken seri bozulmaz ve sayılmaz; dinlenme günü listeden egzersizi çıkarır,
+  seriyi bozmaz; metriksiz görevler seriye girmez. **Rozetler:** `streak-7`, `streak-30` (en uzun seriye
+  göre, kazanılınca kalır), `exercise-week` (bir görev haftasında 6 planlı egzersizin 6'sı),
+  `monthly-exam-done`, `crew-player` (5 ekip sohbeti). **Ekip skoru:** son 7 görev gününde tüm mürettebatın
+  metrikli görevlerinde (done + late) / çözülmüş planlı görev yüzdesi; açık görevler (upcoming/due) hesaba
+  girmez. Hiçbir fonksiyon ölçüm değerini okumaz; bunu "değer değişse de XP/seri/rozet aynı" testi kilitler.
+  Sahip: Mühendis 1.
+- **Sonuç:** Demo mürettebatı geçmiş XP ve seriyle başlar (demo verisi takvime birebir olduğu için
+  geçmiş ölçümlerin hepsi `done`; metriksiz görevler elle işaretlenmediğinden XP getirmez). Ekran
+  `MissionBoard` çalışır-sade; "XP uyuma verilir" açıklaması görünür kalmalı (görünüm visualization'da).

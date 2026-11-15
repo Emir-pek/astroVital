@@ -20,6 +20,23 @@ Yalnız `docs/` değişiklikleri kayıt gerektirmez.
 
 <!-- NEW ENTRIES BELOW -->
 
+### 2026-11-15 14:30 — Muhammed Bektaş (feat/core-routine) — Oyunlaştırma: XP, seri, rozet, ekip skoru (uyuma ödül)
+
+- **Ne:** `useGamification(crewId?)` artık gerçek. XP hatırlatma geçmişinden türetiliyor: zamanında yapılan
+  10, geç yapılan 5, kaçırılan 0. Dört günlük sağlık görevi (su, ışıkları zamanında kapat, ekip sohbeti,
+  öğren) 5'er XP verir, kişi ve gün başına bir kez. Bunların yanında seviye, seri (dinlenme günü bozmaz),
+  5 rozet ve son 7 günün ekip uyum skoru var. Demo mürettebatı geçmiş XP ile başlıyor. `MissionBoard`
+  çalışır-sade; "XP uyuma verilir, değere değil" açıklaması görünür.
+- **Neden:** P1 oyunlaştırma; değerden bağımsızlık testle kilitli: değerler değişse de XP/seri/rozet aynı (ADR-042).
+- **Dosyalar:** `src/modules/routine/services/gamification.ts` (yeni), `src/modules/routine/hooks/useGamification.ts`,
+  `src/modules/routine/components/MissionBoard.tsx`, `src/modules/routine/index.ts`, test `gamification.test.tsx`,
+  `src/core/i18n/en.json`, `src/core/i18n/tr.json` (`routine.missions.*`, `routine.daily.*`, `routine.badges.*`),
+  `docs/DECISIONS.md` (ADR-042), `docs/CONTRACTS.md`, `docs/modules/core-routine.md`,
+  `src/core/ui/__tests__/boxSystem.test.ts` (`MissionBoard` artık eski sınıf kullanmıyor → bekleyen
+  taşıma listesinden çıktı), `CHANGELOG.md`
+- **Ekip ne yapmalı:** Emir: `MissionBoard` restyle sende. Arayüzde hiçbir yerde ölçüm değerini ödülle
+  ilişkilendirme; açıklama metni görünür kalsın.
+
 ### 2026-11-15 14:00 — Muhammed Bektaş (feat/core-routine) — Hatırlatma bildirimleri ve kaçırılan sayısı (mantık)
 
 - **Ne:** Seçili astronotun bir görevi "şimdi yap" veya "kaçırıldı" olduğunda bir kez uygulama içi toast

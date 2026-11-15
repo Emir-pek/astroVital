@@ -18,7 +18,21 @@ export {
   requestNotificationPermission,
   type NotificationPermissionState,
 } from './services/notifications';
-export { MissionBoard } from './components/MissionBoard';
+export { MissionBoard, type MissionBoardProps } from './components/MissionBoard';
+export {
+  BADGE_IDS,
+  DAILY_MISSIONS,
+  DAILY_MISSION_XP,
+  TEAM_SCORE_DAYS,
+  XP_BY_STATUS,
+  computeBadges,
+  computeTeamScore,
+  computeXp,
+  currentStreak,
+  longestStreak,
+  type BadgeId,
+  type MissionTick,
+} from './services/gamification';
 export { MetClock } from './components/MetClock';
 export {
   useReminders,

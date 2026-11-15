@@ -66,11 +66,10 @@ app → hepsi.
       başına bir kez toast + açıksa ve izin varsa `Notification`; `useNotificationSettings` /
       `requestNotificationPermission` hazır. Ayarlar anahtarının bağlanması: visualization
 - [x] Kaçırılan ölçüm sayısı: `useMissedCount(crewId?)`. Rozetin yeri ve bağlanması: visualization
-- [ ] Oyunlaştırma: modül-yerel persist store (`astrovital:routine`), XP, seviye, seri (streak),
-      rozetler, ekip skoru, günlük görevler (egzersiz, hidrasyon, uyku hijyeni, ekip sohbeti, öğren);
-      astronot pet fikri — kuralları Mühendis 1, görünümü visualization; karar bekliyor (görünüm: visualization)
-- [ ] **Kural:** XP yalnız **uyum** için (ölçüm yapıldı, görev tamamlandı) — değerin "iyi" olması
-      ödüllendirilmez. Bunu `MissionBoard`'da kullanıcıya da açıkla. (görünüm: visualization)
+- [x] Oyunlaştırma mantığı (ADR-042): türetilmiş XP, seviye, seri, 5 rozet, ekip skoru, 4 günlük sağlık
+      görevi; `useGamification(crewId?)`. `MissionBoard` çalışır-sade (görünüm: visualization)
+- [x] **Kural:** XP yalnız **uyum** için — değerden bağımsızlık testle kilitli; `MissionBoard`'da açıklama
+      metni görünür (görünüm: visualization)
 - [ ] Uçtan uca entegrasyon testi `src/app/__tests__/e2e-flow.test.tsx` (görünüm: visualization)
 
 ### P2 (Faz 3)

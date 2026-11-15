@@ -378,7 +378,14 @@
       "level": "Level {{level}}",
       "streak": "{{count}}-day streak",
       "teamScore": "Team score",
-      "badges": "Badges"
+      "badges": "Badges",
+      "rule": "XP rewards keeping your routine — measuring on time and finishing tasks — never how good a value is. An honest bad value earns the same XP as a good one.",
+      "streakLabel": "Streak",
+      "teamScoreValue": "{{score}}% of crew tasks done (last 7 days)",
+      "noBadges": "No badges yet",
+      "dailyTitle": "Today's health missions",
+      "tick": "Mark done",
+      "ticked": "Done today"
     },
     "notify": {
       "title": "AstroVital reminder",
@@ -386,6 +393,34 @@
       "dueMany": "{{count}} tasks are due now. Open Routine to see them.",
       "missedOne": "Missed: {{task}}. Do it when you can and record it.",
       "missedMany": "{{count}} tasks were missed today. Open Routine to catch up."
+    },
+    "daily": {
+      "hydration": "Drink water through the day",
+      "sleepHygiene": "Lights out on time",
+      "crewChat": "Chat with a crewmate",
+      "learn": "Read one Learn card"
+    },
+    "badges": {
+      "streak7": {
+        "name": "7-day streak",
+        "description": "7 days in a row with every measurement done."
+      },
+      "streak30": {
+        "name": "30-day streak",
+        "description": "30 days in a row with every measurement done."
+      },
+      "exerciseWeek": {
+        "name": "Full exercise week",
+        "description": "All 6 planned exercise sessions of a week done."
+      },
+      "monthlyExamDone": {
+        "name": "Monthly check-up",
+        "description": "Completed a monthly full check-up."
+      },
+      "crewPlayer": {
+        "name": "Crew player",
+        "description": "Chatted with a crewmate on 5 days."
+      }
     }
   },
   "assessment": {

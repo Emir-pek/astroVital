@@ -122,7 +122,12 @@ ReminderInstance = { id: `${crewId}:${templateId}:${missionDay}:${occurrence}`, 
 expandReminders({ schedule, missionStart, now, measurements, crew, completions }): ReminderInstance[]  // saf
 expandRange(input, fromDay, toDay); EARLY_WINDOW_MIN = 60; DUE_GRACE_MIN = 120
 useRoutineStore ('astrovital:routine'): completions, notifiedIds, dailyMissionCompletions, notificationsEnabled
-useGamification(): { xp; level; streakDays; badges; missions: Mission[]; teamScore; completeMission(id) }
+useGamification(crewId?): { crewId; xp; level; levelProgress; streakDays; longestStreak;  // ADR-042
+  badges: BadgeId[]; missions: Mission[] /* bugünkü günlük görevler */; teamScore /* hep tüm ekip */;
+  completeMission(id): boolean }               // kişi + gün başına bir kez
+<MissionBoard crewId? />                       // çalışır-sade; "XP uyuma verilir" metni görünür kalmalı
+BadgeId = 'streak-7'|'streak-30'|'exercise-week'|'monthly-exam-done'|'crew-player'
+computeXp / currentStreak / longestStreak / computeBadges / computeTeamScore   // saf
 levelForXp(xp: number): number; levelProgress(xp: number): number; XP_PER_LEVEL
 ```
 

@@ -378,7 +378,14 @@
       "level": "Seviye {{level}}",
       "streak": "{{count}} günlük seri",
       "teamScore": "Ekip skoru",
-      "badges": "Rozetler"
+      "badges": "Rozetler",
+      "rule": "XP rutine uymayı ödüllendirir — zamanında ölçmek ve görevi bitirmek — değerin ne kadar iyi olduğunu asla. Dürüstçe girilen kötü bir değer, iyi bir değerle aynı XP'yi kazanır.",
+      "streakLabel": "Seri",
+      "teamScoreValue": "Ekip görevlerinin %{{score}}'i yapıldı (son 7 gün)",
+      "noBadges": "Henüz rozet yok",
+      "dailyTitle": "Bugünkü sağlık görevleri",
+      "tick": "Yapıldı olarak işaretle",
+      "ticked": "Bugün yapıldı"
     },
     "notify": {
       "title": "AstroVital hatırlatması",
@@ -386,6 +393,34 @@
       "dueMany": "Şu an {{count}} görevin zamanı geldi. Görmek için Rutin'i aç.",
       "missedOne": "Kaçırıldı: {{task}}. Fırsat bulunca yap ve kaydet.",
       "missedMany": "Bugün {{count}} görev kaçırıldı. Telafi için Rutin'i aç."
+    },
+    "daily": {
+      "hydration": "Gün boyu su iç",
+      "sleepHygiene": "Işıkları zamanında kapat",
+      "crewChat": "Bir ekip arkadaşınla sohbet et",
+      "learn": "Bir Öğren kartı oku"
+    },
+    "badges": {
+      "streak7": {
+        "name": "7 günlük seri",
+        "description": "Üst üste 7 gün tüm ölçümler yapıldı."
+      },
+      "streak30": {
+        "name": "30 günlük seri",
+        "description": "Üst üste 30 gün tüm ölçümler yapıldı."
+      },
+      "exerciseWeek": {
+        "name": "Tam egzersiz haftası",
+        "description": "Bir haftadaki 6 planlı egzersizin hepsi yapıldı."
+      },
+      "monthlyExamDone": {
+        "name": "Aylık muayene",
+        "description": "Aylık tam muayeneyi tamamladın."
+      },
+      "crewPlayer": {
+        "name": "Takım oyuncusu",
+        "description": "5 gün ekip arkadaşınla sohbet ettin."
+      }
     }
   },
   "assessment": {
