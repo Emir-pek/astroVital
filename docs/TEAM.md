@@ -2,12 +2,12 @@
 
 > İsimleri ekip doldurur (ADR-023).
 
-| Rol                                                | İsim            | Branch               | Sahip olunan klasörler                                                                                                             | Görev listesi                                |
-| -------------------------------------------------- | --------------- | -------------------- | ---------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------- |
-| **Mühendis 1** — Platform, Çekirdek & Görev Rutini | Muhammed Bektaş | `feat/core-routine`  | `src/app/`, `src/core/`, `src/modules/routine/`, kök config, `src/test/` (src/app ve src/core/ui görünümü: visualization, ADR-032) | [core-routine.md](modules/core-routine.md)   |
-| **Mühendis 2** — Veri Toplama (Intake)             | _TBD_           | `feat/intake`        | `src/modules/intake/`                                                                                                              | [intake.md](modules/intake.md)               |
-| **Mühendis 3** — Değerlendirme, Risk & Yönlendirme | _TBD_           | `feat/assessment`    | `src/modules/assessment/`, `docs/THRESHOLDS.md`, `docs/HAZARDS.md`, `docs/SOURCES.md`, `src/core/config/thresholds.config.ts`*     | [assessment.md](modules/assessment.md)       |
-| **Mühendis 4** — Görselleştirme & Dashboard        | _TBD_           | `feat/visualization` | `src/modules/visualization/`, `src/core/ui/tokens.css`*                                                                            | [visualization.md](modules/visualization.md) |
+| Rol                                                | İsim                       | Branch               | Sahip olunan klasörler                                                                                                             | Görev listesi                                |
+| -------------------------------------------------- | -------------------------- | -------------------- | ---------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------- |
+| **Mühendis 1** — Platform, Çekirdek & Görev Rutini | Muhammed Bektaş            | `feat/core-routine`  | `src/app/`, `src/core/`, `src/modules/routine/`, kök config, `src/test/` (src/app ve src/core/ui görünümü: visualization, ADR-032) | [core-routine.md](modules/core-routine.md)   |
+| **Mühendis 2** — Veri Toplama (Intake)             | _TBD_                      | `feat/intake`        | `src/modules/intake/`                                                                                                              | [intake.md](modules/intake.md)               |
+| **Mühendis 3** — Değerlendirme, Risk & Yönlendirme | Emir Efe Pekcan (Emir-pek) | `feat/assessment`    | `src/modules/assessment/`, `docs/THRESHOLDS.md`, `docs/HAZARDS.md`, `docs/SOURCES.md`, `src/core/config/thresholds.config.ts`*     | [assessment.md](modules/assessment.md)       |
+| **Mühendis 4** — Görselleştirme & Dashboard        | _TBD_                      | `feat/visualization` | `src/modules/visualization/`, `src/core/ui/tokens.css`*                                                                            | [visualization.md](modules/visualization.md) |
 
 \* `src/core` altındadır → içerik sahibi o mühendis, ama merge'ü Mühendis 1 onaylar.
 
