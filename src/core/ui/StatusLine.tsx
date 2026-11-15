@@ -22,7 +22,11 @@ export function StatusLine({ status, text, label }: StatusLineProps) {
       className="inline-flex min-w-0 items-center gap-3 rounded-pill bg-raised py-1.5 pr-5 pl-4"
     >
       <Icon aria-hidden="true" className={`size-6 shrink-0 ${textClass}`} />
-      <span className="text-body text-text">{text}</span>
+      {/* One line by contract: a longer translation is clipped, never wrapped (it would change
+          the height of the row it sits in); the full sentence stays in `title` and is announced. */}
+      <span title={text} className="min-w-0 truncate text-body text-text">
+        {text}
+      </span>
     </section>
   );
 }

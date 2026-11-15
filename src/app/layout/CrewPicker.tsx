@@ -25,10 +25,11 @@ export function CrewPicker() {
     <Menu.Root>
       <Menu.Trigger
         aria-label={t('topbar.crewPickerValue', { name })}
-        className="inline-flex min-h-touch min-w-touch max-w-[200px] items-center gap-2 rounded-button bg-raised px-4 text-left text-label text-text"
+        // Fixed width: the top bar does not move with the name or the language.
+        className="inline-flex min-h-touch w-[200px] shrink-0 items-center gap-2 rounded-button bg-raised px-4 text-left text-label text-text"
       >
         <UserRound aria-hidden="true" className="size-6 shrink-0 text-text-2" strokeWidth={1.75} />
-        <span className="line-clamp-2">{name}</span>
+        <span className="line-clamp-2 min-w-0 flex-1">{name}</span>
         <ChevronDown aria-hidden="true" className="size-6 shrink-0 text-text-2" />
       </Menu.Trigger>
       <Menu.Portal>

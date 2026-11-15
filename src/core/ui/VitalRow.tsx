@@ -65,9 +65,11 @@ export function VitalRow({
         )}
       </div>
       {stale ? (
-        <p className="flex items-center gap-2 text-label text-text-2">
-          <Clock aria-hidden="true" className="size-5 shrink-0" />
-          {measuredText}
+        // Always two lines tall (clamped, full text in `title`): the row is the same height in
+        // every language, and the rail reserves room for it (no overlap with the next row).
+        <p title={measuredText} className="flex h-12 items-start gap-2 text-label text-text-2">
+          <Clock aria-hidden="true" className="mt-0.5 size-5 shrink-0" />
+          <span className="line-clamp-2 min-w-0">{measuredText}</span>
         </p>
       ) : (
         <span className="sr-only">{measuredText}</span>

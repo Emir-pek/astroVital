@@ -20,6 +20,78 @@ Yalnız `docs/` değişiklikleri kayıt gerektirmez.
 
 <!-- NEW ENTRIES BELOW -->
 
+### 2026-11-15 17:10 — Emir (feat/visualization) — 3D astronotun dokusu ve ışığı iyileşti (şekil aynı)
+
+- **Ne:** Giysi artık dokuma kumaş, eklemler fırçalanmış metal, vizör hafif çizikli/lekeli cam, eldiven ve tabanlar
+  lastik gibi görünüyor; kumaşta yumuşak kırışık izleri var. Dokular kodla üretiliyor (sabit tohumlu, görüntü dosyası
+  ve ağ yok; dört döşenebilir doku, toplam ≈ 0,8 MB) ve UV gerektirmeyen üç yönlü izdüşümle uygulanıyor. Işık:
+  ortam ışığı 0,45 → 0,1 (her şeyi düz aydınlatıp gölgeyi siliyordu; parlak malzemeler kendi yansımasını korur),
+  yandan daha güçlü ana ışık + ondan tek yumuşak gölge (1024², PCF), dolgu/kenar ışıkları dengelendi, pozlama 1,12.
+  Bembeyaz pikseller %20,5 → %5,5. Siluet piksel maskesiyle karşılaştırıldı: varsayılan, 90°, 180° ve tüm vücut
+  görünümlerinde 0 piksel fark (şekil, duruş, parçalar değişmedi). Renk kuralı, seçimde şeffaf giysi ve uyarı
+  organları aynı; boştayken yine 0 kare çiziliyor, dönerken kare maliyeti ≈ 0,6 → 1,3 ms.
+- **Neden:** Kullanıcı isteği: şekli değiştirmeden doku ve ışıklandırmanın geliştirilmesi.
+- **Dosyalar:** `src/modules/visualization/components/figure3d/{buildAstronaut,createStage}.ts`,
+  `figure3d/surfaceData.ts` (yeni, saf), `figure3d/surfaces.ts` (yeni),
+  `src/modules/visualization/__tests__/surfaces.test.ts` (yeni, 14 test).
+- **Ekip ne yapmalı:** hiçbir şey.
+
+### 2026-11-15 16:25 — Emir (feat/visualization) — Sayfa ilk açılırken eski astronotun bir an görünmesi düzeltildi
+
+- **Ne:** Ctrl+F5 / ilk yüklemede 3D parça (`three`) inerken yedek olarak eski SVG astronot ve onun kılavuz
+  çizgileri bir an çiziliyor, ardından 3D astronot geliyordu. Artık 3D parça yüklenirken figür alanı boş kalır
+  (etiketler görünür ve kullanılabilir), çizgiler 3D figürün ilk karesiyle birlikte gelir. SVG figür yalnız WebGL
+  olmayan cihazda veya WebGL bağlamı kaybolunca görünür. 3D astronotun görünüşü değişmedi.
+- **Neden:** Kullanıcı hatası: yeni astronottan önce eskisi yanıp sönüyordu (Suspense yedeği SVG figürdü).
+- **Dosyalar:** `src/modules/visualization/components/BodyMap.tsx`,
+  `src/modules/visualization/__tests__/BodyMap.loading.test.tsx` (yeni; düzeltmeden önce kırmızı, sonra yeşil).
+- **Ekip ne yapmalı:** hiçbir şey.
+
+### 2026-11-15 14:30 — Emir (feat/visualization) — 3D döndürülebilir astronot, dışarı dokununca kapanan bölge paneli, LED kutular, EN/TR'de sabit yerleşim
+
+- **Ne:**
+  - **3D astronot (Durum):** önden bakan, kodla kurulmuş EVA giysisi + organlar (beyin, göz, kalp, akciğer,
+    böbrek, iskelet, kas, damar, bağışıklık). Tek parmakla sürükle = 360° döndür (ataletli), iki parmak / tekerlek =
+    yakınlaş. Bir bölgeye (etiket veya figür üzerinde dokunma) dokununca kamera oraya gider (böbrekler arkadan),
+    giysi şeffaflaşır, organ durum renginde görünür; aynı bölge tekrar = kapat, figür dışı = kapat. Uyarıdaki
+    organlar seçim yokken giysinin içinden parlar. "Görünümü sıfırla" (104 px) yalnız görünüm değiştiyse; klavye:
+    ← → döndür, + − yakınlaş, 0 sıfırla. `three` ayrı parça (≈ 150 KB gzip), boştayken kare çizilmez; WebGL yoksa SVG figür.
+  - **Bölge paneli dışarı dokunuşla kapanır:** panel dışında herhangi bir yere dokunmak kapatır ve o dokunuşun
+    kendi işi de olur (Acil tek dokunuşta açılır). Sürükleme/kaydırma kapatmaz.
+  - **LED kutular:** her panelin ve bölge etiketinin kenarında LED şerit; seçili astronotun durumuna göre:
+    normal sönük ve sabit, advisory mavi, caution sarı akan ışık, warning kırmızı akan ışık + nabız gibi hale.
+    Azaltılmış harekette hareket yok.
+  - **EN/TR'de sabit yerleşim:** 1180×820'de 7 sayfada dil değişince > 2 px kayan yapısal kutu 102 → 0 (üst bar
+    düğmeleri sabit genişlik, `PageHeader` sağ sütunu 36rem, yer tutucu/eski veri metni iki satır yer ayırır,
+    zaman aralığı eşit seçenekli, Acil/Ayarlar satırları sabit). Yolda iki hata düzeldi: değer rayında eski veri
+    ipucu alttaki satırın üstüne biniyordu; `Segmented`'te seçilen seçenek kalınlaşınca komşularını itiyordu.
+  - **Referans projelerden:** bölümlerin sırayla süzülerek girişi, buzlu cam üst bar, nefes alan canlı noktası,
+    3D sahnede HUD köşe parantezleri, global azaltılmış hareket koruması.
+- **Neden:** Kullanıcı isteği (figür düz baksın, 360° dönsün, yakınlaşıp organ görünsün; tablette dışarı dokunuşla
+  kapanma; dil değişince yapı oynamasın; acil durumda kutular parlasın). Karar ve alternatifler: ADR-038.
+- **Dosyalar:** `package.json`, `package-lock.json` (`three`, `@types/three`), `.gitignore` (`.playwright-mcp/`),
+  `src/modules/visualization/components/figure3d/*` (yeni: anatomy, orbit, gesture, pick, colours, buildAstronaut,
+  createStage, AstronautStage, leaders, stageTypes, webgl), `components/{BodyMap,RegionLabel,VitalsPanel}.tsx`,
+  `src/core/ui/{Sheet,Card,Segmented,StatusLine,VitalRow,PlaceholderNotice}.tsx`, `src/core/ui/tokens.css`, `src/index.css`,
+  `src/app/layout/{AppShell,TopBar,EnvironmentPicker,CrewPicker}.tsx`, `src/app/providers/{AppProviders,LedSync}.tsx`,
+  `src/app/providers/ledLevel.ts`, `src/app/pages/{StatusPage,PageHeader,HistoryPage,EmergencyPage,SettingsPage}.tsx`,
+  `src/core/i18n/{en,tr}.json` (`visualization.stage.*`), testler: `visualization/__tests__/{orbit,gesture,anatomyPick,buildAstronaut,AstronautStage,leaders3d}`,
+  `core/ui/__tests__/{Sheet,ledAndLayout,boxes}`, `app/__tests__/{ledLevel,LedSync,pageLayout}`;
+  docs: `DECISIONS.md` (ADR-038), `CONTRACTS.md`, `TEAM.md` (UI kit), `SETUP_CHECK.md` § 5, UI spec §8 notu,
+  `specs/2026-11-15-astrovital-3d-bodymap-design.md` (yeni), `src/modules/visualization/CLAUDE.md`.
+- **Ekip ne yapmalı:**
+  - `git pull` sonrası **`npm install`** (yeni bağımlılık `three`).
+  - **Mühendis 1:** `Sheet` (`dismissOnOutsideTap`), `tokens.css` (LED, `@layer components` içinde `.card-surface`),
+    `LedSync` sağlayıcısı onayınızda. Panel iç boşluğu artık 22 px + 2 px LED kenar (dış ölçü aynı); `border-2`
+    kullanan `AlertStrip`/`Toast` içte 2 px daha dar.
+  - **Mühendis 3 (assessment):** `assessMeasurement` hâlâ Faz 0 taslağı ve her şeye "nominal" diyor — Ölçüm'de
+    SpO₂ 89 girildi, eşik tablosuna göre warning olmalıydı, "Nominal" göründü. Motor bitene kadar LED parlaması ve
+    organ uyarı görünümü gerçek veride çıkmaz.
+  - **Herkes:** yeni metin kutularında dil metni kutu boyutunu belirlemesin (sabit genişlik/yükseklik veya iki
+    satır yer + kısaltma, tam metin `title`'da). Yer tutucu metinler artık iki satırla sınırlı.
+  - Durum sayfası açıldıktan sonraki ≈ 600 ms içinde bölge açılırsa giriş animasyonu yüzünden panel 10 px'e
+    kadar kayık ölçülebilir (bilinen küçük sınır).
+
 ### 2026-11-15 02:15 — Emir (feat/visualization) — Tek kutu sistemi (Panel/Tile/Pill); bölge paneli üst barı örtmüyor; başlık satırı kırılmıyor
 
 - **Ne:** Uygulamadaki bütün kutular artık üç rolden biri: **Panel** (üst düzey kap — gradient, 24 px köşe, 24 px

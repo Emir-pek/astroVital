@@ -22,7 +22,10 @@ export function Card({ title, actions, placeholder, className, children, ...rest
     >
       {(title || actions) && (
         <header className="mb-4 flex items-center justify-between gap-touch-gap">
-          {title && <h2 className="text-headline font-semibold text-text">{title}</h2>}
+          {/* Takes the free width, so its box does not change with the language. */}
+          {title && (
+            <h2 className="min-w-0 flex-1 text-headline font-semibold text-text">{title}</h2>
+          )}
           {actions}
         </header>
       )}

@@ -31,30 +31,31 @@
 - **Tasarım sahibi:** visualization ekibi (Emir) — ADR-032 (görünüm onayı)
 - **Mimari onay:** Mühendis 1
 
-| Parça           | Kim yazıyor | Motor   | Durum                                                                              |
-| --------------- | ----------- | ------- | ---------------------------------------------------------------------------------- |
-| Button          | Faz 0       | kendi   | hazır                                                                              |
-| Card            | Faz 0       | kendi   | hazır (= **Panel** rolü: gradient, 24 px köşe/boşluk, yumuşak gölge — ADR-037)     |
-| Tile            | Emir        | kendi   | hazır (**Tile/Satır** rolü: raised, 20 px köşe, 16 px boşluk, gölgesiz; `as='li'`) |
-| BOX (tarifler)  | Emir        | kendi   | hazır (`BOX.panel/panelFlush/tile/tileFlush/pill`; bileşen saramıyorsa — ADR-037)  |
-| Modal           | Faz 0       | kendi   | hazır                                                                              |
-| StatusBadge     | Faz 0       | kendi   | hazır                                                                              |
-| Toast           | Faz 0       | kendi   | hazır                                                                              |
-| EmptyState      | Faz 0       | kendi   | hazır                                                                              |
-| ArcGauge        | Emir        | kendi   | hazır (mini 96×44, tek renkli bant — ADR-036)                                      |
-| ValueCard       | Emir        | kendi   | hazır (Durum ekranında yerini VitalRow aldı)                                       |
-| VitalRow        | Emir        | kendi   | hazır                                                                              |
-| StatusLine      | Emir        | kendi   | hazır                                                                              |
-| AlertStrip      | Emir        | kendi   | hazır (`layout`: row = tek satırlık kart, stacked = dar sütun; boşken StatusLine)  |
-| RedAlertDialog  | Emir        | Base UI | hazır                                                                              |
-| Sheet           | Emir        | Base UI | hazır (`width`, `bounds`; `backdrop`: dim = modal / clear = modal değil)           |
-| Segmented       | Emir        | Base UI | hazır                                                                              |
-| Menu            | Emir        | Base UI | hazır                                                                              |
-| Select          | Emir        | Base UI | hazır                                                                              |
-| Tabs            |             | —       | boşta                                                                              |
-| Slider          |             | —       | boşta                                                                              |
-| ProgressBar     |             | —       | boşta                                                                              |
-| Tooltip/Popover |             | —       | boşta                                                                              |
+| Parça                   | Kim yazıyor | Motor       | Durum                                                                                                                                                 |
+| ----------------------- | ----------- | ----------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Button                  | Faz 0       | kendi       | hazır                                                                                                                                                 |
+| Card                    | Faz 0       | kendi       | hazır (= **Panel** rolü: gradient, 24 px köşe/boşluk, yumuşak gölge — ADR-037)                                                                        |
+| Tile                    | Emir        | kendi       | hazır (**Tile/Satır** rolü: raised, 20 px köşe, 16 px boşluk, gölgesiz; `as='li'`)                                                                    |
+| BOX (tarifler)          | Emir        | kendi       | hazır (`BOX.panel/panelFlush/tile/tileFlush/pill`; bileşen saramıyorsa — ADR-037)                                                                     |
+| Modal                   | Faz 0       | kendi       | hazır                                                                                                                                                 |
+| StatusBadge             | Faz 0       | kendi       | hazır                                                                                                                                                 |
+| Toast                   | Faz 0       | kendi       | hazır                                                                                                                                                 |
+| EmptyState              | Faz 0       | kendi       | hazır                                                                                                                                                 |
+| ArcGauge                | Emir        | kendi       | hazır (mini 96×44, tek renkli bant — ADR-036)                                                                                                         |
+| ValueCard               | Emir        | kendi       | hazır (Durum ekranında yerini VitalRow aldı)                                                                                                          |
+| VitalRow                | Emir        | kendi       | hazır                                                                                                                                                 |
+| StatusLine              | Emir        | kendi       | hazır                                                                                                                                                 |
+| AlertStrip              | Emir        | kendi       | hazır (`layout`: row = tek satırlık kart, stacked = dar sütun; boşken StatusLine)                                                                     |
+| RedAlertDialog          | Emir        | Base UI     | hazır                                                                                                                                                 |
+| Sheet                   | Emir        | Base UI     | hazır (`width`, `bounds`; `backdrop`: dim = modal / clear = modal değil, dışarı dokunuşla kapanır — `dismissOnOutsideTap`, `[data-sheet-keep]` hariç) |
+| Segmented               | Emir        | Base UI     | hazır (`fill`: eşit genişlikli seçenekler; kalın yazı genişliği önceden ayrılır)                                                                      |
+| LED / hareket sınıfları | Emir        | kendi (CSS) | hazır — `card-surface` LED kenarı (`<html data-led>`), `.av-live-dot`, `.av-glass-bar`, `.av-enter` (tokens.css, ADR-038)                             |
+| Menu                    | Emir        | Base UI     | hazır                                                                                                                                                 |
+| Select                  | Emir        | Base UI     | hazır                                                                                                                                                 |
+| Tabs                    |             | —           | boşta                                                                                                                                                 |
+| Slider                  |             | —           | boşta                                                                                                                                                 |
+| ProgressBar             |             | —           | boşta                                                                                                                                                 |
+| Tooltip/Popover         |             | —           | boşta                                                                                                                                                 |
 
 Başlamadan önce adını ve motorunu (kendi / Base UI / Radix) yaz ve push et; aynı parçayı iki kişi yazmasın. İç içe açılan katmanlar (modal/popover/tooltip/menü) mümkünse aynı motordan (ADR-029).
 

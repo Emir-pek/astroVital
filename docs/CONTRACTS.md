@@ -86,7 +86,7 @@ validateValue(metric: MetricId, value: number): 'errorNumber' | 'errorRange' | n
 ### `@modules/visualization` (Mühendis 4) — bağımlılık: `@core/*`, `@modules/assessment`
 
 ```ts
-<BodyMap crewId: string selectedRegion: BodyRegionId | null onRegionSelect: (r: BodyRegionId) => void />
+<BodyMap crewId: string selectedRegion: BodyRegionId | null onRegionSelect: (r: BodyRegionId) => void onBackgroundTap?: () => void />  // 3D sahnede figür dışına dokunma
 <RegionSheet crewId: string region: BodyRegionId | null onClose: () => void width?: number bounds?: SheetBounds />  // Durum'da sağ sütunun kutusu: üst bar ve feragat örtülmez; modal değil
 <RegionDetailPanel crewId: string region: BodyRegionId />
 <VitalsPanel crewId: string />
@@ -99,8 +99,10 @@ filterByRange(series: Measurement[], range: TrendRange, now: Date): Measurement[
 TREND_RANGES: readonly TrendRange[]           // TrendRange = '24h' | '7d' | '30d' | 'all'
 ```
 
-`BodyMap` = elle çizilmiş SVG astronot figürü + iki yanında 10 görünür bölge etiketi (≥ 104 px) ve
-kılavuz çizgileri (ADR-036); kapsayıcısını doldurur (`size-full`). `VitalsPanel` = kompakt değer rayı,
+`BodyMap` = 3D astronot (`three`, geç yüklenen ayrı parça; WebGL yoksa SVG figür) + iki yanında 10 görünür
+bölge etiketi (≥ 104 px) ve kılavuz çizgileri (ADR-036, ADR-038); kapsayıcısını doldurur (`size-full`).
+Sürükle = döndür, iki parmak = yakınlaş, figüre dokunma = bölge seç (`onRegionSelect`), figür dışı = `onBackgroundTap`.
+`RegionSheet` panel dışına dokununca kapanır (`Sheet` `dismissOnOutsideTap`; `[data-sheet-keep]` hariç). `VitalsPanel` = kompakt değer rayı,
 nominal olmayanlar üstte.
 `MetricTrendChart` hâlâ yer tutucu (Plan 2).
 

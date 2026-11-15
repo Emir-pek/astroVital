@@ -4,7 +4,7 @@
 
 ## Amaç
 
-Sağlık durumunu net, animasyonlu, etkileşimli göstermek: tıklanabilir SVG insan figürü,
+Sağlık durumunu net, animasyonlu, etkileşimli göstermek: döndürülebilir 3D astronot (WebGL yoksa SVG figür),
 bölge detay paneli, zaman serisi grafikleri (Recharts), vital kartları, mürettebat özeti.
 
 ## Sahip olunan dosyalar
@@ -30,7 +30,12 @@ bölge detay paneli, zaman serisi grafikleri (Recharts), vital kartları, müret
 - Hareket (ADR-036): nefes **yalnız tüm vücut halesinde** (nominalken 4,5 sn); iç bölgeler nefes almaz,
   nominal/eski/veri yok iç bölge figürde hiçbir şey çizmez; advisory/caution/warning sabit, siluete
   kırpılmış işaret. Yanıp sönme yalnız kırmızı uyarı ikonunda. Renkler token'lardan (`STATUS_COLOR_VAR`, `--av-suit-*`).
-- Bölge seçimi figürün yanındaki görünür etiketlerle (`RegionLabel`); görünmez tıklama alanı yok.
+- 3D figür (ADR-038, `components/figure3d/`): `three` yalnız `AstronautStage` ve onun import ettikleri içinde
+  (geç yüklenen ayrı parça); WebGL yoksa veya bağlam kaybolursa SVG figür. Mantık saf ve testli: `orbit.ts`,
+  `gesture.ts` (dokunma < 10 px, pinch asla dokunma sayılmaz), `pick.ts`, `anatomy.ts`. Çizim isteğe bağlı
+  (boştayken kare yok). Figürde renk yalnız sağlık durumu; seçimde giysi şeffaf, organ durum renginde.
+- Bölge seçimi: figürün yanındaki görünür etiketler (`RegionLabel`, eldiven yolu) **ve** 3D figüre dokunma
+  (dokunulan noktaya en yakın bölge). Etiketler ve sahne `data-sheet-keep` taşır (bölge paneli onlara dokununca kapanmaz).
   Yerleşim saf fonksiyon `computeBodyMapLayout` (`components/figure/layout.ts`), testli. Figür çizimi (SuitArt,
   `geometry.ts`) değişirse `REGION_ANCHORS`, `REGION_SHAPES`, `FIGURE_VIEWBOX` birlikte güncellenir; `figureGeometry.test.ts`
   ve `bodyMapLayout.test.ts` yeşil kalmalı. Damar (kan) işareti dolgulu şerittir, çizgi değil (kılavuz çizgileriyle karışmasın).

@@ -1,4 +1,3 @@
-import { motion, useReducedMotion } from 'framer-motion';
 import { Outlet, useLocation } from 'react-router';
 import { useHealthStore } from '@core/store';
 import { AlertLayer } from '@modules/visualization';
@@ -16,7 +15,6 @@ import { TopBar } from './TopBar';
  */
 export function AppShell() {
   const { pathname } = useLocation();
-  const reduceMotion = useReducedMotion();
   const crewId = useHealthStore((s) => s.selectedCrewId);
   return (
     <div className="grid h-dvh grid-cols-[auto_minmax(0,1fr)] grid-rows-[minmax(0,1fr)_auto] overflow-hidden">
@@ -25,16 +23,15 @@ export function AppShell() {
         <TopBar />
         {/* The Status page shows the strip above its vitals rail (AlertPanel) instead of a row. */}
         {crewId && <AlertLayer crewId={crewId} strip={pathname !== '/'} />}
-        <motion.main
+        {/* Keyed by route so a new page re-plays the staggered entry of its top-level sections
+            (`av-enter`, index.css; none with reduced motion). */}
+        <main
           key={pathname}
           id="main"
-          className="relative flex min-h-0 flex-1 flex-col overflow-y-auto px-6 pb-3"
-          initial={reduceMotion ? false : { opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3, ease: 'easeOut' }}
+          className="av-enter relative flex min-h-0 flex-1 flex-col overflow-y-auto px-6 pb-3"
         >
           <Outlet />
-        </motion.main>
+        </main>
       </div>
       <Disclaimer />
       <PortraitNotice />

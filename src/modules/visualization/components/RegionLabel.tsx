@@ -27,6 +27,7 @@ export function RegionLabel({ region, selected, ariaLabel, onSelect, style }: Re
     <button
       type="button"
       data-region={region.id}
+      data-sheet-keep=""
       data-status={region.status}
       aria-pressed={selected}
       aria-label={ariaLabel}

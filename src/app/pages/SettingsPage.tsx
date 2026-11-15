@@ -174,7 +174,8 @@ export function SettingsPage() {
               </p>
             </Field>
             <div className="flex flex-wrap items-end gap-section">
-              <div className="flex flex-col gap-2">
+              {/* Fixed widths below: labels and button texts of either language never move the controls. */}
+              <div className="flex w-56 flex-col gap-2">
                 <label htmlFor={seedId} className="text-label text-text-2">
                   {t('settings.seed')}
                 </label>
@@ -183,7 +184,7 @@ export function SettingsPage() {
                   type="number"
                   value={settings.seed}
                   onChange={(e) => updateSettings({ seed: Number(e.target.value) || 0 })}
-                  className="min-h-touch w-40 rounded-button border-2 border-line bg-raised px-4 font-mono text-body text-text"
+                  className="min-h-touch w-full rounded-button border-2 border-line bg-raised px-4 font-mono text-body text-text"
                 />
               </div>
               <Field label={t('settings.days')}>
@@ -197,6 +198,7 @@ export function SettingsPage() {
             </div>
             <div className="flex flex-wrap items-center gap-touch-gap">
               <Button
+                className="w-64"
                 icon={<Database aria-hidden="true" className="size-6" />}
                 onClick={onLoadDemo}
               >
@@ -204,6 +206,7 @@ export function SettingsPage() {
               </Button>
               <Button
                 variant="secondary"
+                className="w-64"
                 icon={<RotateCcw aria-hidden="true" className="size-6 text-warning" />}
                 onClick={() => setConfirmReset(true)}
               >

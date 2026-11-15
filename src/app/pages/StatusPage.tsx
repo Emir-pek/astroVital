@@ -47,7 +47,14 @@ export function StatusPage() {
       <PageHeader title={t('pages.status.title')} />
       {crewId && (
         <div className="grid flex-1 grid-cols-[minmax(0,60fr)_minmax(0,38fr)] gap-section">
-          <BodyMap crewId={crewId} selectedRegion={region} onRegionSelect={selectRegion} />
+          {/* A tap on the 3D stage beside the figure closes the region sheet. Taps on the stage
+              and the labels never reach the sheet's own outside-tap rule (data-sheet-keep). */}
+          <BodyMap
+            crewId={crewId}
+            selectedRegion={region}
+            onRegionSelect={selectRegion}
+            onBackgroundTap={() => setRegion(null)}
+          />
           {/* The column takes the height the figure pane sets; it never sizes the page. */}
           <div ref={rightColumn} className="flex min-h-0 flex-col gap-touch-gap [contain:size]">
             <div className="flex min-h-0 shrink flex-col overflow-y-auto empty:hidden">

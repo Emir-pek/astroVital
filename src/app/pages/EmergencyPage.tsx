@@ -34,7 +34,7 @@ export function EmergencyPage() {
                 >
                   {index + 1}
                 </span>
-                <div>
+                <div className="min-w-0 flex-1">
                   <h2 className="text-headline font-semibold text-text">
                     {t(`escalation.${step}`)}
                   </h2>

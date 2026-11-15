@@ -424,6 +424,12 @@
       "title": "Body map",
       "regionButton": "{{region}}: {{status}}"
     },
+    "stage": {
+      "roleDescription": "3D astronaut",
+      "ariaLabel": "3D astronaut. Drag or use the left and right arrow keys to turn it, plus and minus to zoom, 0 to reset. Tap a body part to open its details.",
+      "dragHint": "Drag to rotate",
+      "reset": "Reset view"
+    },
     "status": {
       "stale": "Stale data",
       "none": "No data"

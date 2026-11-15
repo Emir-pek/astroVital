@@ -1,4 +1,13 @@
-import { useMemo, useRef } from 'react';
+import {
+  Suspense,
+  lazy,
+  useCallback,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+  type ReactNode,
+} from 'react';
 import { useTranslation } from 'react-i18next';
 import { BODY_REGION_IDS, BODY_REGIONS } from '@core/config/bodyRegions.config';
 import { useActiveEnvironment, useLatestByMetric } from '@core/store';
@@ -16,7 +25,13 @@ import {
   computeBodyMapLayout,
   type BodyMapLayout,
 } from './figure/layout';
+import { glyphPoint, writeLeaders } from './figure3d/leaders';
+import type { BehindMap, Projection } from './figure3d/stageTypes';
+import { canUseWebGL } from './figure3d/webgl';
 import { RegionLabel } from './RegionLabel';
+
+/** The 3D stage pulls in three.js: its own chunk, loaded only where WebGL works. */
+const AstronautStage = lazy(() => import('./figure3d/AstronautStage'));
 
 /** One body region ready for display: status already resolved, strings already translated. */
 export interface RegionView {
@@ -31,6 +46,8 @@ export interface BodyMapViewProps {
   selectedRegion: BodyRegionId | null;
   onRegionSelect: (id: BodyRegionId) => void;
   ariaLabelFor: (r: RegionView) => string;
+  /** A tap on the 3D stage beside the figure (the Status page closes the region sheet). */
+  onBackgroundTap?: () => void;
 }
 
 /** Used until the container has been measured (and in jsdom, which has no layout). */
@@ -40,8 +57,6 @@ const isAlert = (s: DisplayStatus) => s === 'advisory' || s === 'caution' || s =
 
 /** Status glyph disc of an alert region (r in px), set back along its leader from the anchor. */
 const GLYPH_R = 11;
-const GLYPH_SETBACK = 24;
-
 interface LeaderProps {
   region: RegionView;
   points: BodyMapLayout['leaders'][BodyRegionId];
@@ -64,11 +79,7 @@ function Leader({ region, points, selected, dimmed }: LeaderProps) {
       : 'var(--av-text-3)';
   const d = points.map((p) => `${p.x},${p.y}`).join(' ');
   const [, shoulder, end] = points;
-  const dx = shoulder.x - end.x;
-  const dy = shoulder.y - end.y;
-  const length = Math.hypot(dx, dy) || 1;
-  const setback = Math.min(GLYPH_SETBACK, length);
-  const glyph = { x: end.x + (dx / length) * setback, y: end.y + (dy / length) * setback };
+  const glyph = glyphPoint(shoulder, end);
   const Icon = STATUS_STYLE[region.status].icon;
   return (
     <g data-leader={region.id} opacity={dimmed ? 0.35 : undefined}>
@@ -114,19 +125,120 @@ function Leader({ region, points, selected, dimmed }: LeaderProps) {
   );
 }
 
+interface ProjectedLeaderProps {
+  region: RegionView;
+  selected: boolean;
+  register: (id: BodyRegionId, el: SVGGElement | null) => void;
+}
+
+/**
+ * Leader of the 3D figure. React owns only its colours; its geometry, visibility and dimming are
+ * written straight to the DOM after every rendered 3D frame (applyProjection) — no re-render per
+ * frame. Hidden until the first projection places it.
+ */
+function ProjectedLeader({ region, selected, register }: ProjectedLeaderProps) {
+  const alert = isAlert(region.status);
+  const color = selected
+    ? 'var(--av-accent)'
+    : alert
+      ? STATUS_COLOR_VAR[region.status]
+      : 'var(--av-text-3)';
+  const Icon = STATUS_STYLE[region.status].icon;
+  return (
+    <g data-leader={region.id} visibility="hidden" ref={(el) => register(region.id, el)}>
+      <polyline
+        fill="none"
+        stroke="var(--av-bg)"
+        strokeOpacity={0.85}
+        strokeWidth={selected ? 5.5 : 4}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <polyline
+        fill="none"
+        stroke={color}
+        strokeWidth={selected ? 2.25 : 1.5}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <circle data-end="" r={3.5} fill={color} stroke="var(--av-bg)" strokeWidth={2} />
+      {alert && (
+        <g data-glyph={region.status}>
+          <circle r={GLYPH_R} fill="var(--av-bg)" stroke={color} strokeWidth={1.5} />
+          <Icon
+            x={-7.5}
+            y={-7.5}
+            width={15}
+            height={15}
+            color={STATUS_COLOR_VAR[region.status]}
+            strokeWidth={2.25}
+          />
+        </g>
+      )}
+    </g>
+  );
+}
+
 /**
  * Figure + leader lines + ten region labels (pure view, no store access). The figure scales
  * with the container; labels keep their glove size and stand in two columns beside it.
+ *
+ * Where WebGL works the figure is the 3D astronaut (lazy chunk) on a stage that fills the whole
+ * container, and the leaders follow its projected anchors; elsewhere (tests, no GPU, lost
+ * context) the SVG figure with static leaders. While the chunk loads nothing is drawn, so the
+ * old figure never flashes before the 3D one.
  */
 export function BodyMapView({
   regions,
   selectedRegion,
   onRegionSelect,
   ariaLabelFor,
+  onBackgroundTap,
 }: BodyMapViewProps) {
   const ref = useRef<HTMLDivElement>(null);
   const size = useElementSize(ref, FALLBACK_SIZE);
   const layout = useMemo(() => computeBodyMapLayout(size.width, size.height), [size]);
+  const [webgl, setWebgl] = useState(canUseWebGL);
+  /** The 3D stage has drawn at least one frame (until then neither figure nor leaders show). */
+  const [projected, setProjected] = useState(false);
+  const use3d = webgl && projected;
+
+  // Latest values for the per-frame DOM writer (it runs outside React renders).
+  const leaderEls = useRef(new Map<BodyRegionId, SVGGElement>());
+  const layoutRef = useRef(layout);
+  const selectedRef = useRef(selectedRegion);
+  const lastFrame = useRef<{ points: Projection; behind: BehindMap } | null>(null);
+  const projectedRef = useRef(false);
+  const registerLeader = useCallback((id: BodyRegionId, el: SVGGElement | null) => {
+    if (el) leaderEls.current.set(id, el);
+    else leaderEls.current.delete(id);
+  }, []);
+  const onProject = useCallback((points: Projection, behind: BehindMap) => {
+    lastFrame.current = { points, behind };
+    writeLeaders(leaderEls.current, layoutRef.current, selectedRef.current, points, behind);
+    if (!projectedRef.current) {
+      projectedRef.current = true;
+      setProjected(true);
+    }
+  }, []);
+  // After every render (new layout, selection, leaders mounted) re-apply the last frame at once.
+  useLayoutEffect(() => {
+    layoutRef.current = layout;
+    selectedRef.current = selectedRegion;
+    const frame = lastFrame.current;
+    if (frame) writeLeaders(leaderEls.current, layout, selectedRegion, frame.points, frame.behind);
+  });
+  const onContextLost = useCallback(() => {
+    setWebgl(false);
+    setProjected(false);
+    projectedRef.current = false;
+    lastFrame.current = null;
+  }, []);
+  const onBackground = useCallback(() => onBackgroundTap?.(), [onBackgroundTap]);
+  const fit = useMemo(
+    () => ({ width: layout.figure.width, height: layout.figure.height }),
+    [layout.figure.width, layout.figure.height],
+  );
 
   const byId = useMemo(() => {
     const map = new Map<BodyRegionId, RegionView>();
@@ -152,15 +264,33 @@ export function BodyMapView({
     (a, b) => Number(a.id === selectedRegion) - Number(b.id === selectedRegion),
   );
   const { figure } = layout;
+  const svgFigure: ReactNode = (
+    <div
+      className="absolute"
+      style={{ left: figure.x, top: figure.y, width: figure.width, height: figure.height }}
+    >
+      <AstronautFigure regions={statuses} selected={selectedRegion} />
+    </div>
+  );
 
   return (
     <div ref={ref} className="relative size-full" style={{ minHeight: LABEL_STACK_HEIGHT }}>
-      <div
-        className="absolute"
-        style={{ left: figure.x, top: figure.y, width: figure.width, height: figure.height }}
-      >
-        <AstronautFigure regions={statuses} selected={selectedRegion} />
-      </div>
+      {webgl ? (
+        // No SVG figure while the 3D chunk loads: it would flash the old astronaut before the new one.
+        <Suspense fallback={null}>
+          <AstronautStage
+            statuses={statuses}
+            selected={selectedRegion}
+            fit={fit}
+            onSelect={onRegionSelect}
+            onBackgroundTap={onBackground}
+            onProject={onProject}
+            onContextLost={onContextLost}
+          />
+        </Suspense>
+      ) : (
+        svgFigure
+      )}
 
       <svg
         aria-hidden="true"
@@ -170,15 +300,27 @@ export function BodyMapView({
         height={layout.height}
         viewBox={`0 0 ${layout.width} ${layout.height}`}
       >
-        {leaderOrder.map((r) => (
-          <Leader
-            key={r.id}
-            region={r}
-            points={layout.leaders[r.id]}
-            selected={selectedRegion === r.id}
-            dimmed={selectedRegion !== null && selectedRegion !== r.id}
-          />
-        ))}
+        {/* While the 3D stage loads (webgl, no frame yet) draw no leaders: the static ones point
+            at the SVG figure, which is not shown. */}
+        {(use3d || !webgl) &&
+          leaderOrder.map((r) =>
+            use3d ? (
+              <ProjectedLeader
+                key={r.id}
+                region={r}
+                selected={selectedRegion === r.id}
+                register={registerLeader}
+              />
+            ) : (
+              <Leader
+                key={r.id}
+                region={r}
+                points={layout.leaders[r.id]}
+                selected={selectedRegion === r.id}
+                dimmed={selectedRegion !== null && selectedRegion !== r.id}
+              />
+            ),
+          )}
       </svg>
 
       {ordered.map((r) => {
@@ -208,10 +350,12 @@ export interface BodyMapProps {
   crewId: string;
   selectedRegion: BodyRegionId | null;
   onRegionSelect: (id: BodyRegionId) => void;
+  /** A tap on the 3D stage beside the figure (e.g. close the region sheet). */
+  onBackgroundTap?: () => void;
 }
 
 /** Status-screen body map: crew health → display statuses → figure + region labels. */
-export function BodyMap({ crewId, selectedRegion, onRegionSelect }: BodyMapProps) {
+export function BodyMap({ crewId, selectedRegion, onRegionSelect, onBackgroundTap }: BodyMapProps) {
   const { t } = useTranslation();
   const health = useCrewHealth(crewId);
   const latest = useLatestByMetric(crewId);
@@ -244,6 +388,7 @@ export function BodyMap({ crewId, selectedRegion, onRegionSelect }: BodyMapProps
         regions={regions}
         selectedRegion={selectedRegion}
         onRegionSelect={onRegionSelect}
+        onBackgroundTap={onBackgroundTap}
         ariaLabelFor={(r) =>
           t('visualization.bodyMap.regionButton', { region: r.label, status: r.statusLabel })
         }

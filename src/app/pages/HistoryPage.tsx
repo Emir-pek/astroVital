@@ -18,6 +18,7 @@ export function HistoryPage() {
         actions={
           <Segmented
             label={t('pages.history.rangeLabel')}
+            fill
             value={range}
             options={TREND_RANGES.map((r) => ({
               value: r,
