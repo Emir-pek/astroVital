@@ -39,3 +39,6 @@ tools/anomaly-detection/data/raw/
 __pycache__/
 *.py[cod]
 .venv/
+
+# Playwright MCP logs/snapshots (local browser checks)
+.playwright-mcp/

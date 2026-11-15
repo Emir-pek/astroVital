@@ -25,10 +25,12 @@ export function EnvironmentPicker() {
     >
       <Select.Trigger
         aria-label={label}
-        className="inline-flex min-h-touch min-w-touch items-center gap-2 rounded-button bg-raised px-4 text-left text-label whitespace-nowrap text-text"
+        // Fixed width (fits the longest short name, "Lunar base"): the top bar does not move
+        // when the language or the environment changes.
+        className="inline-flex min-h-touch w-44 shrink-0 items-center gap-2 rounded-button bg-raised px-4 text-left text-label whitespace-nowrap text-text"
       >
         <Orbit aria-hidden="true" className="size-6 shrink-0 text-text-2" strokeWidth={1.75} />
-        <span>{shortName}</span>
+        <span className="min-w-0 flex-1 truncate">{shortName}</span>
         <ChevronDown aria-hidden="true" className="size-6 shrink-0 text-text-2" />
       </Select.Trigger>
       <Select.Portal>

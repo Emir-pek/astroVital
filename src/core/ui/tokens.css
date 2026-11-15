@@ -32,12 +32,15 @@
   --av-radius-panel: 24px;
   --av-radius-tile: 20px;
   --av-radius-pill: 999px;
-  --av-pad-panel: 24px;
+  --av-pad-panel: 24px; /* 22 px inside a .card-surface + its 2 px LED edge = 24 px */
   --av-pad-tile: 16px;
   --av-gap-section: 24px; /* between panels and page sections */
   --av-radius-button: 20px; /* controls (Button, Segmented, menu items) */
   --av-radius-card: var(--av-radius-panel); /* LEGACY alias of the panel radius */
-  --av-shadow-soft: 0 12px 32px rgba(0, 0, 0, 0.35);
+  --av-shadow-drop: 0 12px 32px rgba(0, 0, 0, 0.35);
+  /* Panels (.card-surface, below) redeclare this with their LED glow added. */
+  --av-shadow-soft: var(--av-shadow-drop);
+  --av-pad-panel-base: 24px; /* panel padding before the LED edge is subtracted */
   --av-touch-min: 104px;
   --av-touch-gap: 16px;
   --av-duration: 300ms;
@@ -77,6 +80,166 @@
 }
 [data-env='mars_base'] {
   --av-bg: #14142c;
+}
+/*
+ * LED box edges (design 2026-11-15 §3.3). Every Panel (.card-surface, below) draws a 2 px
+ * "LED strip" in its transparent border: a dim ring with two bright arcs. <html data-led> is set
+ * by LedSync (src/app/providers) from the selected astronaut's worst fresh region status:
+ *   nominal  (also: no crew, no data, stale data) dim accent, static
+ *   advisory  blue, static, faint glow
+ *   caution   yellow, the arcs run slowly round the edge
+ *   warning   red, the arcs run + the outer glow pulses (smoothly — on/off blinking stays reserved
+ *             for the red alert icon, ADR-036)
+ * Not glowing all the time keeps the glow meaningful in an emergency (alarm fatigue).
+ * Colours are derived from the status tokens, so they are never hex here.
+ */
+@property --av-led-angle {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 0deg;
+}
+@property --av-led-pulse {
+  syntax: '<number>';
+  inherits: false;
+  initial-value: 0;
+}
+:root {
+  --av-led-width: 2px;
+  --av-led-arc: color-mix(in srgb, var(--av-accent) 50%, transparent);
+  --av-led-ring: color-mix(in srgb, var(--av-accent) 14%, transparent);
+  --av-led-glow: var(--av-accent);
+  --av-led-glow-level: 0; /* static glow strength 0..1 */
+  --av-led-glow-size: 24px;
+  --av-led-anim: none;
+}
+[data-led='advisory'] {
+  --av-led-arc: color-mix(in srgb, var(--av-status-advisory) 80%, transparent);
+  --av-led-ring: color-mix(in srgb, var(--av-status-advisory) 26%, transparent);
+  --av-led-glow: var(--av-status-advisory);
+  --av-led-glow-level: 0.18;
+}
+[data-led='caution'] {
+  --av-led-arc: var(--av-status-caution);
+  --av-led-ring: color-mix(in srgb, var(--av-status-caution) 30%, transparent);
+  --av-led-glow: var(--av-status-caution);
+  --av-led-glow-level: 0.26;
+  --av-led-anim: av-led-run 9s linear infinite;
+}
+[data-led='warning'] {
+  --av-led-arc: var(--av-status-warning);
+  --av-led-ring: color-mix(in srgb, var(--av-status-warning) 42%, transparent);
+  --av-led-glow: var(--av-status-warning);
+  --av-led-glow-level: 0.5;
+  --av-led-glow-size: 28px;
+  --av-led-anim: av-led-run 3.5s linear infinite, av-led-pulse 1.6s ease-in-out infinite;
+}
+@keyframes av-led-run {
+  to {
+    --av-led-angle: 360deg;
+  }
+}
+@keyframes av-led-pulse {
+  0%,
+  100% {
+    --av-led-pulse: 0.3;
+  }
+  50% {
+    --av-led-pulse: 0.85;
+  }
+}
+/*
+ * Panel surface with its LED edge ("LED box edges" above). In the components layer so a
+ * utility on the same element still wins: `border-2 border-warning` (AlertStrip, Toast, Emergency),
+ * `border-dashed border-line` (Card placeholder), `border-transparent` (RegionLabel, LED shows).
+ * - The 2 px border is transparent; the LED gradient is painted in it (border-box layer) under the
+ *   opaque surface gradient (padding-box layer).
+ * - No layout shift: inside a panel `--av-pad-panel` is 2 px smaller, so border + padding = 24 px
+ *   as before (rows using `px-panel` inside a flush panel stay where they were, too).
+ * - Glow: `shadow-soft` reads `--av-shadow-soft`, redeclared here per element = drop shadow + an
+ *   outer glow whose strength is `--av-led-pulse` (registered, not inherited, so each panel
+ *   animates it on its own).
+ */
+@layer components {
+  .card-surface {
+    --av-pad-panel: calc(var(--av-pad-panel-base) - var(--av-led-width));
+    --av-led-pulse: var(--av-led-glow-level);
+    --av-shadow-soft:
+      var(--av-shadow-drop),
+      0 0 var(--av-led-glow-size)
+        color-mix(in srgb, var(--av-led-glow) calc(var(--av-led-pulse) * 100%), transparent);
+    border: var(--av-led-width) solid transparent;
+    background:
+      linear-gradient(180deg, color-mix(in srgb, var(--av-surface), white 4%), var(--av-surface))
+        padding-box,
+      conic-gradient(
+          from var(--av-led-angle),
+          var(--av-led-ring) 0deg,
+          var(--av-led-arc) 45deg,
+          var(--av-led-ring) 95deg,
+          var(--av-led-ring) 180deg,
+          var(--av-led-arc) 225deg,
+          var(--av-led-ring) 275deg,
+          var(--av-led-ring) 360deg
+        )
+        border-box;
+    animation: var(--av-led-anim);
+  }
+}
+/* Staggered entry of the top-level sections of a page (.av-enter, index.css). */
+@keyframes av-section-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes av-live-breathe {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.15);
+  }
+}
+@keyframes av-live-wave {
+  from {
+    opacity: 0.7;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 0;
+    transform: scale(1.42);
+  }
+}
+@layer components {
+  /*
+   * "Live" indicator: a small dot that breathes, with a ring that spreads and fades. Colour =
+   * currentColor (accent by default; a text-* utility recolours it). Static when motion is reduced.
+   */
+  .av-live-dot {
+    position: relative;
+    display: inline-block;
+    flex-shrink: 0;
+    width: 12px;
+    height: 12px;
+    border-radius: var(--av-radius-pill);
+    color: var(--av-accent);
+    background: currentColor;
+    animation: av-live-breathe 3s ease-in-out infinite;
+  }
+  .av-live-dot::after {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border: 2px solid currentColor;
+    border-radius: inherit;
+    opacity: 0;
+    animation: av-live-wave 1.3s ease-out infinite;
+  }
 }
 @keyframes av-blink {
   0%,
@@ -126,5 +289,30 @@
   .av-blink-frame {
     outline: 6px solid currentColor;
     outline-offset: 4px;
+  }
+  /* LED edges stand still; a warning keeps a strong, steady glow instead of the pulse. */
+  [data-led] {
+    --av-led-anim: none;
+  }
+  [data-led='warning'] {
+    --av-led-glow-level: 0.85;
+  }
+  .av-live-dot,
+  .av-live-dot::after {
+    animation: none;
+  }
+  .av-live-dot::after {
+    opacity: 0.35;
+    transform: scale(1.2);
+  }
+  /* Global guard (as in DoctorCoachAI): no motion anywhere, transitions end at once. */
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    animation-delay: 0ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }

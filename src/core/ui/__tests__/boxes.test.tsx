@@ -37,7 +37,12 @@ describe('box roles', () => {
         <EmptyState title="Nothing yet" description="Add a measurement" />
       </>,
     );
-    expect(screen.getByText('Being built')).toHaveClass('rounded-tile', 'p-tile', 'text-label');
+    const notice = screen.getByText('Being built').closest('p');
+    expect(notice).toHaveClass('rounded-tile', 'p-tile', 'text-label');
+    // Two text lines reserved in every language (design 2026-11-15 §3.4).
+    expect(notice).toHaveClass('h-20');
+    expect(notice).toHaveAttribute('title', 'Being built');
+    expect(screen.getByText('Being built')).toHaveClass('line-clamp-2');
     const empty = screen.getByText('Nothing yet').parentElement;
     expect(empty).toHaveClass('rounded-tile', 'p-tile');
     expect(screen.getByText('Add a measurement')).toHaveClass('text-label');

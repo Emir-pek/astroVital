@@ -1,6 +1,7 @@
 import { screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 import { renderWithProviders } from '@test/renderWithProviders';
+import { TopBar } from '../layout/TopBar';
 import { PageHeader } from '../pages/PageHeader';
 import { placeOver } from '../pages/sheetPlacement';
 
@@ -44,5 +45,43 @@ describe('PageHeader', () => {
   it('lets the subtitle use the full width when there are no actions', () => {
     renderWithProviders(<PageHeader title="Measure" subtitle="Type it or tap it." />);
     expect(screen.getByText('Type it or tap it.')).toHaveClass('col-span-2', 'row-start-2');
+  });
+});
+
+describe('language-stable layout (design 2026-11-15 §3.4)', () => {
+  it('PageHeader: fixed right column; title and subtitle clip instead of resizing the grid', () => {
+    renderWithProviders(
+      <PageHeader
+        title="History"
+        subtitle="How your numbers changed."
+        actions={<button>7 d</button>}
+      />,
+    );
+    const title = screen.getByRole('heading', { level: 1, name: 'History' });
+    expect(title.parentElement).toHaveClass('grid-cols-[minmax(0,1fr)_36rem]');
+    expect(title).toHaveClass('truncate');
+    const subtitle = screen.getByText('How your numbers changed.');
+    expect(subtitle).toHaveClass('line-clamp-3');
+    expect(subtitle).toHaveAttribute('title', 'How your numbers changed.');
+  });
+
+  it('PageHeader: a full-width subtitle stays on one line', () => {
+    renderWithProviders(<PageHeader title="Measure" subtitle="Type it or tap it." />);
+    expect(screen.getByText('Type it or tap it.')).toHaveClass('truncate');
+  });
+
+  it('TopBar: the right-hand controls have fixed widths', () => {
+    renderWithProviders(<TopBar />);
+    expect(screen.getByRole('button', { name: /emergency/i })).toHaveClass('w-44');
+    expect(screen.getByRole('combobox', { name: /environment/i })).toHaveClass('w-44');
+    expect(screen.getByRole('button', { name: /language/i })).toHaveClass('size-touch');
+    expect(screen.getByRole('button', { name: /signed in|astronaut|crew/i })).toHaveClass(
+      'w-[200px]',
+    );
+  });
+
+  it('TopBar: frosted glass bar', () => {
+    renderWithProviders(<TopBar />);
+    expect(screen.getByRole('banner')).toHaveClass('av-glass-bar');
   });
 });

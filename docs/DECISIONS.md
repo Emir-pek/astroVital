@@ -580,3 +580,43 @@ Node 24 LTS, npm.
   (ADR-021 kabulü geçerli); daha fazlası için kütüphane bazlı `codeSplitting` ayrı iş.
 - **Sonuç:** Üç iş de arayüzsüz; Ayarlar'daki anahtar ve butonlar visualization'a devredildi
   (`docs/HANDOFF_ENGINEER4.md`). Sahip: Mühendis 1.
+
+### ADR-053 — 3D vücut haritası (`three`), dışarı dokunuşla kapanan bölge paneli, LED kutular, dilden bağımsız yerleşim
+
+- **Bağlam (15.11.2026):** Kullanıcı ¾ duruşlu SVG figürü beğenmedi: figürün önden bakmasını, parmakla 360°
+  çevrilmesini, bölgeye dokununca yakınlaşıp organın şeffaf görünmesini istedi. Ayrıca bölge panelinin tablette
+  dışarı dokununca kapanmasını, EN ↔ TR değişiminde yerleşimin oynamamasını (ölçüm: 7 sayfada 102 kutu > 2 px
+  kayıyordu; üst barda Acil 172 ↔ 113 px) ve kutularda acil durumda parlayan LED kenarları istedi.
+  Tasarım: `docs/superpowers/specs/2026-11-15-astrovital-3d-bodymap-design.md`.
+- **Karar:**
+  1. **Gerçek 3D, kendi modelimiz:** `three@^0.187.0` (tek yeni runtime bağımlılık). Astronot ve organlar kodla
+     ilkel şekillerden kurulur (telifli/hazır model yok). `three` yalnız geç yüklenen `AstronautStage` parçasında
+     (≈ 150 KB gzip); yüklenene kadar, WebGL yoksa veya bağlam kaybolursa SVG figür. Çizim isteğe bağlı.
+     Figür döner, kamera ve ışık sabit (arka da aydınlık). Alternatifler: 2.5D SVG (kâğıt bebek görünümü), hazır
+     glTF (telif, boyut) — elendi.
+  2. **Jestler:** tek parmak = döndür (ataletli), iki parmak = yakınlaş, dokunma (< 10 px, pinch hiç değil) =
+     dokunulan noktaya en yakın bölge (aynı bölge = kapat), figür dışı = seçimi kapat. Eldiven yolu her zaman
+     var: etiketler, "görünümü sıfırla" (104 px, yalnız görünüm değiştiyse), klavye. ADR-036'daki "görünmez
+     tıklama alanı yok" kuralı 3D figür için kalkar; görünür etiketler kalır.
+  3. **Seçim görünümü:** kamera 600 ms'de bölgeye gider (azaltılmış harekette anında), giysi şeffaflaşır, organ
+     durum renginde dolu görünür; uyarıdaki organlar seçim yokken giysinin içinden soluk parlar. Figürde renk
+     yalnız sağlık durumu (değişmedi).
+  4. **Bölge paneli dışarı dokunuşla kapanır:** `Sheet` `dismissOnOutsideTap` (clear panelde varsayılan açık).
+     Kapatma `pointerup`'ta, olay yutulmaz: Acil'e dokunmak paneli kapatır ve Acil'i aynı dokunuşta açar.
+     Sürükleme/kaydırma kapatmaz; `[data-sheet-keep]` (etiketler, 3D sahne) kendi mantığını yürütür.
+     ADR-037 karar 4'teki "dışarı dokunuş kapatmaz" ifadesinin yerine geçer (panel yine modal değil).
+  5. **LED kutular:** `card-surface` (tüm Panel'ler + bölge etiketleri) 2 px LED kenar + iç boşluk 22 px (dış ölçü
+     değişmedi). `<html data-led>` = seçili astronotun taze değerlendirmelerinin en kötüsü (`LedSync`,
+     `ledLevel`; eski veri seviyeyi yükseltmez): nominal sönük/sabit, advisory sabit + hafif hale, caution akan
+     ışık, warning hızlı akan ışık + nabız gibi hale. Nominalde hareket yok — her şey hep parlarsa acil durumdaki
+     parlama anlamını yitirir. Azaltılmış harekette hiçbir şey akmaz. Yanıp sönme (on/off) yine yalnız kırmızı
+     uyarı ikonunda; sürekli hareket istisnaları: tüm vücut halesi (ADR-036), 3D sahnedeki `.av-live-dot`.
+  6. **Dil yerleşimi boyutlandırmaz:** yapısal kutular sabit genişlik/yükseklik ya da uzun dile göre ayrılmış yer
+     kullanır; taşan metin kısaltılır, tam metin `title`'da (`PageHeader` sağ sütunu 36rem, üst bar düğmeleri
+     sabit, `PlaceholderNotice` ve eski veri ipucu iki satır yer ayırır, `Segmented fill`).
+  7. **Referanslardan:** bölümlerin sırayla girişi (`.av-enter`), buzlu cam üst bar (`.av-glass-bar`), nefes alan
+     canlı noktası (`.av-live-dot`), HUD köşe parantezleri (3D sahne), global azaltılmış hareket koruması.
+- **Sonuç:** 1180×820'de 7 sayfada EN/TR yapısal kayma 102 → 0; Durum yine kaydırmasız; 416 test yeşil. Değerlendirme
+  motoru henüz Faz 0 taslağı (hep nominal) olduğu için LED ve organ "röntgen" uyarı görünümü gerçek veride
+  ancak motor bitince görünür (testlerde ve elle verilen durumla doğrulandı). Sahip: visualization (3D, LED
+  tasarımı), Mühendis 1 (`Sheet`, `tokens.css`, `LedSync` kit/kabuk onayı).

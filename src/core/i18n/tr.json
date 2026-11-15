@@ -622,6 +622,12 @@
       "title": "Vücut haritası",
       "regionButton": "{{region}}: {{status}}"
     },
+    "stage": {
+      "roleDescription": "3B astronot",
+      "ariaLabel": "3B astronot. Çevirmek için sürükleyin ya da sol ve sağ ok tuşlarını kullanın; artı ve eksi yakınlaştırır, 0 sıfırlar. Ayrıntılar için bir vücut bölgesine dokunun.",
+      "dragHint": "Çevirmek için sürükle",
+      "reset": "Görünümü sıfırla"
+    },
     "status": {
       "stale": "Eski veri",
       "none": "Veri yok"

@@ -49,12 +49,49 @@
   --color-env: var(--av-text-2);
 }
 
-@utility card-surface {
-  background: linear-gradient(
-    180deg,
-    color-mix(in srgb, var(--av-surface), white 4%),
-    var(--av-surface)
-  );
+/* Page entry motion and the top bar (motion keyframes and the .card-surface LED panel: tokens.css). */
+@layer components {
+  /*
+   * Staggered entry of a page's top-level sections (AppShell <main>; DoctorCoachAI
+   * console-section-in). `backwards`, not `both`: no transform is left behind once it has played
+   * (a transform would trap fixed-position descendants). A panel keeps its LED animation.
+   */
+  .av-enter > * {
+    animation: av-section-in 420ms cubic-bezier(0.16, 1, 0.3, 1) backwards;
+  }
+  .av-enter > .card-surface {
+    animation:
+      av-section-in 420ms cubic-bezier(0.16, 1, 0.3, 1) backwards,
+      var(--av-led-anim);
+  }
+  .av-enter > :nth-child(2) {
+    animation-delay: 45ms;
+  }
+  .av-enter > :nth-child(3) {
+    animation-delay: 90ms;
+  }
+  .av-enter > :nth-child(4) {
+    animation-delay: 135ms;
+  }
+  .av-enter > :nth-child(n + 5) {
+    animation-delay: 180ms;
+  }
+
+  /* Frosted-glass top bar (Maina): translucent background, blur, hairline bottom edge drawn as
+     an inset shadow so the bar keeps its 128 px height. */
+  .av-glass-bar {
+    background: color-mix(in srgb, var(--av-bg) 72%, transparent);
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
+    backdrop-filter: blur(14px) saturate(140%);
+    box-shadow: inset 0 -1px 0 var(--av-line);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .av-enter > *,
+  .av-enter > .card-surface {
+    animation: none;
+  }
 }
 
 @layer base {

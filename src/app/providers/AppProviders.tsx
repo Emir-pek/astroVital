@@ -5,6 +5,7 @@ import { ToastProvider } from '@core/ui';
 import { DemoRoutineSync, EnvironmentChangeNotice, ReminderNotifier } from '@modules/routine';
 import { DemoDataBootstrap } from './DemoDataBootstrap';
 import { I18nSync } from './I18nSync';
+import { LedSync } from './LedSync';
 import { ThemeSync } from './ThemeSync';
 
 /** All global providers + store→DOM synchronisers. */
@@ -14,6 +15,7 @@ export function AppProviders({ children }: { children: ReactNode }) {
       <ToastProvider>
         <I18nSync />
         <ThemeSync />
+        <LedSync />
         <DemoDataBootstrap />
         <DemoRoutineSync />
         <ReminderNotifier />

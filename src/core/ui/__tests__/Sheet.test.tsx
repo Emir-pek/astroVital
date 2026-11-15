@@ -1,4 +1,4 @@
-import { screen } from '@testing-library/react';
+import { fireEvent, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
 import { renderWithProviders } from '@test/renderWithProviders';
@@ -58,7 +58,7 @@ describe('Sheet', () => {
     expect(screen.getByRole('dialog', { name: 'Dim' })).toHaveAttribute('data-backdrop', 'dim');
   });
 
-  it('with a clear backdrop the rest of the page stays usable and does not close the sheet', async () => {
+  it('with a clear backdrop the rest of the page stays usable (outside-tap dismissal off)', async () => {
     const onOpenChange = vi.fn();
     const onOutside = vi.fn();
     renderWithProviders(
@@ -66,7 +66,14 @@ describe('Sheet', () => {
         <button type="button" onClick={onOutside}>
           Emergency
         </button>
-        <Sheet open onOpenChange={onOpenChange} title="Clear" closeLabel="Close" backdrop="clear">
+        <Sheet
+          open
+          onOpenChange={onOpenChange}
+          title="Clear"
+          closeLabel="Close"
+          backdrop="clear"
+          dismissOnOutsideTap={false}
+        >
           <p>Body</p>
         </Sheet>
       </>,
@@ -82,6 +89,104 @@ describe('Sheet', () => {
     await user.click(screen.getByText('Body'));
     await user.keyboard('{Escape}');
     expect(onOpenChange).toHaveBeenCalledWith(false);
+  });
+
+  describe('clear sheet: a tap outside closes it', () => {
+    const tap = (el: Element, x = 10, y = 10, id = 1) => {
+      fireEvent.pointerDown(el, { pointerId: id, clientX: x, clientY: y });
+      fireEvent.pointerUp(el, { pointerId: id, clientX: x, clientY: y });
+    };
+    const setup = (props: { dismissOnOutsideTap?: boolean; backdrop?: 'dim' | 'clear' } = {}) => {
+      const onOpenChange = vi.fn();
+      const onOutside = vi.fn();
+      renderWithProviders(
+        <>
+          <button type="button" onClick={onOutside}>
+            Emergency
+          </button>
+          <div data-sheet-keep="">
+            <button type="button">Kidneys label</button>
+          </div>
+          <Sheet
+            open
+            onOpenChange={onOpenChange}
+            title="Region"
+            closeLabel="Close"
+            backdrop={props.backdrop ?? 'clear'}
+            dismissOnOutsideTap={props.dismissOnOutsideTap}
+          >
+            <p>Body</p>
+          </Sheet>
+        </>,
+      );
+      return { onOpenChange, onOutside };
+    };
+
+    it('closes on a tap anywhere outside', () => {
+      const { onOpenChange } = setup();
+      tap(document.body);
+      expect(onOpenChange).toHaveBeenCalledWith(false);
+    });
+
+    it('does not swallow the tap: the outside button still gets its click', async () => {
+      const { onOpenChange, onOutside } = setup();
+      await userEvent.setup().click(screen.getByRole('button', { name: 'Emergency' }));
+      expect(onOpenChange).toHaveBeenCalledWith(false);
+      expect(onOutside).toHaveBeenCalledTimes(1);
+    });
+
+    it('does not close on a drag or scroll outside (> 10 px)', () => {
+      const { onOpenChange } = setup();
+      const el = screen.getByRole('button', { name: 'Emergency' });
+      fireEvent.pointerDown(el, { pointerId: 1, clientX: 10, clientY: 10 });
+      fireEvent.pointerMove(el, { pointerId: 1, clientX: 40, clientY: 10 });
+      fireEvent.pointerUp(el, { pointerId: 1, clientX: 12, clientY: 10 });
+      expect(onOpenChange).not.toHaveBeenCalled();
+    });
+
+    it('a small wobble (< 10 px) is still a tap', () => {
+      const { onOpenChange } = setup();
+      fireEvent.pointerDown(document.body, { pointerId: 1, clientX: 10, clientY: 10 });
+      fireEvent.pointerMove(document.body, { pointerId: 1, clientX: 16, clientY: 14 });
+      fireEvent.pointerUp(document.body, { pointerId: 1, clientX: 16, clientY: 14 });
+      expect(onOpenChange).toHaveBeenCalledWith(false);
+    });
+
+    it('does not close on a tap inside the sheet', () => {
+      const { onOpenChange } = setup();
+      tap(screen.getByText('Body'));
+      expect(onOpenChange).not.toHaveBeenCalled();
+    });
+
+    it('does not close on a tap inside [data-sheet-keep]', () => {
+      const { onOpenChange } = setup();
+      tap(screen.getByRole('button', { name: 'Kidneys label' }));
+      expect(onOpenChange).not.toHaveBeenCalled();
+    });
+
+    it('a cancelled press or a two-finger press is not a tap', () => {
+      const { onOpenChange } = setup();
+      fireEvent.pointerDown(document.body, { pointerId: 1, clientX: 10, clientY: 10 });
+      fireEvent.pointerCancel(document.body, { pointerId: 1 });
+      fireEvent.pointerUp(document.body, { pointerId: 1, clientX: 10, clientY: 10 });
+      fireEvent.pointerDown(document.body, { pointerId: 2, clientX: 10, clientY: 10 });
+      fireEvent.pointerDown(document.body, { pointerId: 3, clientX: 90, clientY: 10 });
+      fireEvent.pointerUp(document.body, { pointerId: 3, clientX: 90, clientY: 10 });
+      fireEvent.pointerUp(document.body, { pointerId: 2, clientX: 10, clientY: 10 });
+      expect(onOpenChange).not.toHaveBeenCalled();
+    });
+
+    it('can be switched off', () => {
+      const { onOpenChange } = setup({ dismissOnOutsideTap: false });
+      tap(document.body);
+      expect(onOpenChange).not.toHaveBeenCalled();
+    });
+
+    it('has no effect on a dim (modal) sheet', () => {
+      const { onOpenChange } = setup({ backdrop: 'dim' });
+      tap(screen.getByText('Body'));
+      expect(onOpenChange).not.toHaveBeenCalled();
+    });
   });
 
   it('defaults to full height at the right edge; bounds make it a floating panel inside a box', () => {

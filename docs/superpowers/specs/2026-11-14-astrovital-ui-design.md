@@ -221,6 +221,9 @@ Sıra her zaman aynı (rakipten alınan iyi pratik: önce eylem):
 
 ## 8. Astronot figürü
 
+> **15.11.2026 güncellemesi (ADR-053):** Durum ekranındaki figür artık 3D (`three`), önden bakar ve 360° döner;
+> ayrıntı `2026-11-15-astrovital-3d-bodymap-design.md`. Aşağıdaki SVG tarifi yalnız WebGL olmayan cihazlardaki yedek figür içindir.
+
 - **Teknik:** Kod içinde elle yazılmış SVG React bileşenleri (`<AstronautFigure />`), Framer Motion ile animasyon. Dışarıdan resim/3D yok.
 - **Görünüm:** Gerçek yetişkin oranlarında (kask dahil ≈ 7,3 kask boyu — kasklı bir 7,5 baş figürü; büyük kafa yok), ayakta, ¾ duruş; mat beyaz/açık gri skafandr, kaskın vizörü koyu ve yumuşak yansımalı (**yüz/ifade yok**). Az ama özenli detay.
   - **Duruş (asimetrik):** gövde ve vizör izleyicinin sağına dönük; yaşam destek sırt çantası bu yüzden solda, yakın kolun arkasında ve omzun üstünde görünür. Ağırlık yakın (sol) bacakta; uzak bacak bir adım önde (botu daha aşağıda, burnu sağa dönük). Yakın kol dirsekte hafif bükük sarkar, uzak kol dirsekten bükük, eldiven kalçanın yanında; omuzlarda hafif eğim. Hiçbir parça ayna kopyası değil.

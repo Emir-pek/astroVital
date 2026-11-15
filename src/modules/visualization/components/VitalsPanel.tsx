@@ -57,7 +57,9 @@ export function VitalsPanel({ crewId }: VitalsPanelProps) {
               ? t(`visualization.status.${card.status}`)
               : t(`status.${card.status}`);
           return (
-            <li key={card.id} className="min-h-[88px] flex-1">
+            // At least 88 px, never shorter than its content (a stale row with its two-line
+            // re-measure hint is taller): the list scrolls instead of rows overlapping.
+            <li key={card.id} className="flex-[1_0_88px]">
               <VitalRow
                 label={label}
                 value={
