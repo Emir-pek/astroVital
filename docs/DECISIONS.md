@@ -420,91 +420,21 @@ Node 24 LTS, npm.
   testle kilitli; başka seed'lerde gürültü nedeniyle tek bir değer bant kenarını aşabilir. Motor bugün stub;
   `advisory` üretimi Mühendis 3'te (ADR-031). Eski tarayıcı verisi: Ayarlar → Sıfırla → Demo verisini yükle.
 
-### ADR-041 — Hatırlatma durum kuralları: pencere, 'late', kişi bazlı, seçili astronot
+### ADR-039 — Yayın: GitHub Pages
 
-- **Bağlam:** `useReminders` stub'dı; bir görevin ne zaman "yapıldı/kaçırıldı" sayılacağı ADR-035'te ayrı
-  karar olarak bırakılmıştı. ISS'te aynı metrik günde iki kez ölçülüyor (sabah ve akşam nabzı); ekip
-  ekranında da başkasının tıbbi değeri görünmemeli (ADR-032).
-- **Karar:** Saf motor `expandReminders` (`src/modules/routine/services/reminderEngine.ts`). Sabitler tek
-  yerde (`reminderConfig.ts`): `EARLY_WINDOW_MIN = 60`, `DUE_GRACE_MIN = 120`. Beş durum:
-  `upcoming` (şimdi < saat − 60 dk) · `due` (pencere açık, kayıt yok, saat + 120 dk'ya kadar) · `done`
-  (kayıt [saat − 60, saat + 120] içinde) · `late` (kayıt saat + 120'den sonra ama gün bitmeden) ·
-  `missed` (saat + 120 geçti, kayıt yok). Gün = UTC görev günü (ADR-030; Mars'ta yalnız etiket "Sol").
-  Eşleşme kişi + metrik ile; bir ölçüm yalnız **bir** örneği karşılar: penceresi ölçümü kapsayan,
-  henüz karşılanmamış örneklerden saati en yakın olan (sabah/akşam nabzı karışmaz). Metriği olmayan
-  görevler (haftalık özet, aylık muayene/anket, ekip sohbeti) elle işaretlenir (`completeTask`, aynı
-  pencere kuralları; ancak görev açıkken — `due`/`missed` — kabul edilir). Örnek kimliği
-  `${crewId}:${templateId}:${missionDay}:${occurrence}`. `twice_daily` ikinci örnek = ilk + 12 sa
-  (**geçici**; ortam farkları kararında kesinleşecek). Kişi görünümü varsayılan olarak seçili astronotu
-  (`selectedCrewId`) izler; `byCrew` tüm mürettebatın yalnız görev durumunu verir. Tamamlanma kayıtları
-  modülün kendi store'unda (`astrovital:routine`, ADR-005). Sahip: Mühendis 1.
-- **Sonuç:** Pencere tablosu `docs/ROUTINE_SCHEDULE.md` § Durum kuralları. Gün sınırını aşan pencere
-  yok (en geç görev 21:00 + 120 dk = 23:00). Gece yarısından sonra girilen ölçüm ertesi güne sayılır;
-  önceki gün `missed` kalır. Bayatlık (`isStale`) bu karardan bağımsız.
-
-### ADR-042 — Oyunlaştırma: türetilmiş XP, uyuma ödül, değerden bağımsız
-
-- **Bağlam:** `useGamification` stub'dı. Kural baştan beri belliydi (XP uyuma, değere değil), ama sayaç
-  tutan bir tasarım tekrar tıklamayla şişirilebilirdi ve demo mürettebatı XP'siz başlardı.
-- **Karar:** XP depolanan bir sayaç değil; hatırlatma geçmişinden (`expandRange`, ADR-041) ve günlük görev
-  işaretlerinden **türetilir** (`src/modules/routine/services/gamification.ts`, saf). Puanlar: `done` = 10,
-  `late` = 5, `missed` = 0; elle tamamlanan görev ölçümle aynı (10/5); günlük sağlık görevleri (su, ışıkları
-  zamanında kapat, ekip sohbeti, öğren) elle işaretlenir, kişi + gün başına bir kez, 5 XP. Seviye:
-  `levels.ts` (100 XP/seviye). **Seri:** metrikli tüm planlı görevlerin `done`/`late` olduğu ardışık görev
-  günleri; bugün açık görev varken seri bozulmaz ve sayılmaz; dinlenme günü listeden egzersizi çıkarır,
-  seriyi bozmaz; metriksiz görevler seriye girmez. **Rozetler:** `streak-7`, `streak-30` (en uzun seriye
-  göre, kazanılınca kalır), `exercise-week` (bir görev haftasında 6 planlı egzersizin 6'sı),
-  `monthly-exam-done`, `crew-player` (5 ekip sohbeti). **Ekip skoru:** son 7 görev gününde tüm mürettebatın
-  metrikli görevlerinde (done + late) / çözülmüş planlı görev yüzdesi; açık görevler (upcoming/due) hesaba
-  girmez. Hiçbir fonksiyon ölçüm değerini okumaz; bunu "değer değişse de XP/seri/rozet aynı" testi kilitler.
-  Sahip: Mühendis 1.
-- **Sonuç:** Demo mürettebatı geçmiş XP ve seriyle başlar (demo verisi takvime birebir olduğu için
-  geçmiş ölçümlerin hepsi `done`; metriksiz görevler elle işaretlenmediğinden XP getirmez). Ekran
-  `MissionBoard` çalışır-sade; "XP uyuma verilir" açıklaması görünür kalmalı (görünüm visualization'da).
-
-### ADR-043 — Astronot pet (yardımcı): yalnız mantık, sabit öncelik, kişiye kapalı
-
-- **Bağlam:** Ekip "astronot pet" fikrini istedi; kuralları Mühendis 1'de, görünümü visualization'da
-  (ADR-032). Pet bir sağlık uygulamasında konuştuğu için dil ve gizlilik kuralı gerekiyor.
-- **Karar:** Saf `decideCompanion` + `useCompanion(crewId?)` (`src/modules/routine`). Çıktı:
-  `{ mood: 'cheerful'|'neutral'|'concerned'|'alert', messageKey, params?, subjectKey?, action?: { route, labelKey } }`.
-  Öncelik: (1) `useCrewHealth().overall === 'warning'` → alert, "Durum ekranını aç, adımları izle, CMO'ya
-  haber ver"; (2) kaçırılan görev → concerned, nazik hatırlatma; (3) şu an açık görev → neutral, "şimdi
-  X zamanı" (ölçümse `/measure`); (4) bugün kazanılan rozet veya seri kilometre taşı (7, 14, 30, 60, 90 gün)
-  → cheerful; (5) aksi halde neutral, günün ipucu: Learn içeriğindeki tehlike karşı önlemleri
-  (`hazards.*.countermeasures`), kişi ve güne göre deterministik (FNV hash, `Math.random` yok).
-  **Dil:** kısa, sade, teşhis yok; değer yazmaz; "prototip, tıbbi cihaz değil" metni (`routine.companion.disclaimer`).
-  **Gizlilik:** girdi yalnız o kişinin kendi özeti, görevleri ve ilerlemesi; varsayılan kişi seçili
-  astronot; başka astronotun bilgisi asla girmez (testli). Sahip: Mühendis 1.
-- **Sonuç:** Değerlendirme motoru bugün stub (hep nominal) olduğu için alert durumu motor gerçek olunca
-  çalışır; Mühendis 3'ün `useCrewHealth` sözleşmesine dayanır. Görsel (4 mood'un görünüşü) Emir'de.
-
-### ADR-044 — P2 mantık işleri: demo otomatik yükleme ayarı, veri dışa/içe aktarma, sayfa bazlı yükleme
-
-- **Bağlam:** ADR-009 demo verisinin her boş açılışta yüklenmesini "gerçek kullanımda kapatılabilir
-  olmalı" notuyla bırakmıştı; dışa/içe aktarma ve code splitting (ADR-021) P2 listesindeydi.
-- **Karar (1) — `autoLoadDemo`:** `AppSettings.autoLoadDemo` (varsayılan `true`). `DemoDataBootstrap` yalnız
-  açıkken ve cihazda veri yokken yükler. "Tüm veriyi sıfırla" bu tercihi korur (dil ve birim gibi). Store
-  şeması `version` 1 → 2; saf `migrateHealthState` eski kayda `autoLoadDemo: true` ekler. Kullanılmayan
-  `settings.notificationsEnabled` kayıt uyumluluğu için duruyor, `@deprecated` (anahtar routine store'da, ADR-041).
-  Sahip: Mühendis 1; Ayarlar anahtarının görünümü visualization.
-- **Karar (2) — Dışa/içe aktarma:** saf `buildExportJson` / `parseImportJson` (Zod v4,
-  `src/modules/routine/services/dataTransfer.ts`; routine'de çünkü routine tamamlamalarını da içeriyor ve
-  core modülden okuyamaz). Dosya: `{ format: 'astrovital-export', version: 1, exportedAt, measurements, crew,
-  settings, routine: { completions, dailyMissionCompletions } }`. İçe aktarma bir **geri yüklemedir**:
-  ölçümleri, mürettebatı, ayarları ve routine tamamlamalarını değiştirir (birleştirme yok, ID çakışması
-  sorunu olmaz). Her ölçüm kendi `source`'unu korur (kamera ölçümü kamera olarak kalır; `'import'` ile
-  ezilmez — kökeni görünür kalsın). Geçersiz girdide hiçbir şey değişmez; sonuç `invalidJson` /
-  `invalidFormat` (en çok 10 yol: "measurements.0.metric: …") / `unknownCrew`. Yeni core store aksiyonu
-  `replaceData`. CSV ve arayüz yok (butonlar visualization).
-- **Karar (3) — Sayfa bazlı yükleme:** `router.tsx`'te Durum (`/`) dışındaki sayfalar `React.lazy` +
-  `Suspense` (fallback boş: parçalar aynı statik klasörden, milisaniyede gelir; ağ isteği yok, offline-first).
-  Durum ana parçada kalır, ilk ekran beklemez. Sonuç (15.11.2026 build): ana parça 965 kB → 562 kB
-  (gzip 311 → 180 kB); sayfa parçaları 0,3–5 kB; ortak bağımlılıklar (grafik, modüller) Rolldown'ın
-  `PageHeader` adını verdiği 422 kB'lık paylaşılan parçada. 500 kB uyarısı ana parça için sürüyor
-  (ADR-021 kabulü geçerli); daha fazlası için kütüphane bazlı `codeSplitting` ayrı iş.
-- **Sonuç:** Üç iş de arayüzsüz; Ayarlar'daki anahtar ve butonlar visualization'a devredildi
-  (`docs/HANDOFF_ENGINEER4.md`). Sahip: Mühendis 1.
+- **Bağlam:** Teslim için projenin herkese açık, hesap/şifre istemeyen bir linkle erişilebilir olması
+  gerekiyor (NASA Space Apps 2026 teslim kuralları). Uygulama tamamen statik ve sunucusuz: backend yok,
+  offline-first, tüm veri tarayıcıda simüle (`docs/PROJECT_BRIEF.md`). `base: './'` ve hash router
+  (ADR-007) zaten göreli/sunucu-rewrite'ı olmayan bir barındırma için hazır.
+- **Karar:** GitHub Pages, "Source: GitHub Actions" (ücretsiz plan yalnız public repoda çalışır; repo
+  zaten public). Yeni iş akışı `.github/workflows/deploy-pages.yml`: `main`'e her push'ta (ve elle
+  `workflow_dispatch`) `npm ci && npm run build` → `dist/` Pages artifact'ı olarak yüklenir → yayınlanır.
+  Mevcut `ci.yml`'e (lint/typecheck/test/build + CHANGELOG kontrolü) dokunulmadı; iki iş akışı bağımsız
+  çalışır. Site: `https://emir-pek.github.io/astroVital/`.
+- **Sonuç:** Her PR main'e alındığında site birkaç dakika içinde otomatik güncellenir — ekip ayrıca bir
+  şey yapmaz. Ziyaretçinin girdiği ölçüm verisi yalnız kendi tarayıcısında kalır (localStorage); GitHub,
+  Pages'i servis ederken ziyaretçi IP'sini kendi güvenlik/analiz amaçlarıyla loglar (GitHub'ın kendi
+  gizlilik politikası, bizim uygulamamızın değil). README'ye canlı link eklendi.
 ### ADR-039 — Anomali tespiti çevrimdışı bir Python aracı olarak `tools/anomaly-detection/` altında
 
 - **Bağlam:** Veri seti + anomali tespiti işi (Emre) Python'da yazıldı: gerçek bir açık giyilebilir veri

@@ -1,5 +1,10 @@
 # AstroVital 🛰️🫀
 
+**Live demo:** https://emir-pek.github.io/astroVital/
+
+Runs fully in the browser with simulated crew data; prototype decision-support tool, not a
+medical device. Each visitor's data stays in their own browser.
+
 **Crew health, in plain language.** A visual self-monitoring tool for astronauts on long-duration
 missions — built for the **NASA Space Apps Challenge 2026 · Health Monitoring Software**.
 
