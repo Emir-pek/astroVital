@@ -240,7 +240,7 @@ export const ENVIRONMENTS: Record<EnvironmentId, EnvironmentProfile> = {
       // Small cabin volume → CO₂ build-up risk: treat SpO₂/respiration more strictly.
       spo2: { shift: 1 },
       respRate: { widen: -1 },
-      // Short sorties in cramped cabin: lower exercise expectation (green ≥ 60 min).
+      // Short sorties in cramped cabin: lower exercise expectation (nominal ≥ 60 min).
       exerciseMinutes: { shift: -60 },
     },
     reminderSchedule: [

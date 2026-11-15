@@ -48,7 +48,7 @@ app → hepsi.
 - ~~Senaryo seçince `recommendedEnvironment`'ı öner (tek tıkla ortamı da değiştir)~~ → Görünüm devredildi: visualization (ADR-032)
   - [ ] Mantık: senaryo seçilince `recommendedEnvironment` önerisi ve tek aksiyonla hem senaryo hem ortamı
         uygulayan store aksiyonu (görünüm: visualization)
-- [ ] Sözleşme uyumu: ADR-031 dört seviyeli `Status` sonrası `CONTRACTS.md` (`npm run docs:contracts`),
+- [x] Sözleşme uyumu: ADR-031 dört seviyeli `Status` sonrası `CONTRACTS.md` (`npm run docs:contracts`),
       `thresholds.config`, i18n `status.*` ve simülasyon/store kodunda eski green/yellow/red kalıntısı
       olmadığını kontrol et
 - [ ] Sözleşme bakımı: diğer mühendislerin ekleme isteklerini değerlendir, `npm run docs:contracts`

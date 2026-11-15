@@ -65,7 +65,7 @@ useAllCrewHealth(): CrewHealthSummary[]
 <RecommendationList recommendations: Recommendation[] />
 ```
 
-Faz 0 durumu: `assessMeasurement` **stub** (her şey green/self_care). `assessCrew` toplama mantığı
+Faz 0 durumu: `assessMeasurement` **stub** (her şey nominal/self_care). `assessCrew` toplama mantığı
 (bölge = en kötü değerlendirme, genel = en kötü bölge) gerçektir.
 
 ### `@modules/intake` (Mühendis 2) — bağımlılık: `@core/*`
@@ -359,10 +359,10 @@ export type EnvironmentId = 'spacecraft' | 'iss' | 'rover' | 'lunar_base' | 'mar
 
 /**
  * Adjusts a metric's threshold bands for an environment.
- * For every band boundary `b` (see ThresholdBand), with `c` = centre of the green band:
+ * For every band boundary `b` (see ThresholdBand), with `c` = centre of the nominal band:
  *   b' = b + shift + sign(b - c) * widen
  * - `shift`  moves all boundaries (e.g. +0.3 °C on ISS: core temp runs higher in microgravity).
- * - `widen`  moves boundaries away from (positive) or toward (negative) the green centre.
+ * - `widen`  moves boundaries away from (positive) or toward (negative) the nominal centre.
  * Implemented by the assessment engine (Engineer 3).
  */
 export interface ThresholdModifier {

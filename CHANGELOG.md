@@ -20,6 +20,19 @@ Yalnız `docs/` değişiklikleri kayıt gerektirmez.
 
 <!-- NEW ENTRIES BELOW -->
 
+### 2026-11-15 13:05 — Muhammed Bektaş (feat/core-routine) — Sözleşme uyumu: eski green/yellow/red kalıntıları (ADR-031)
+
+- **Ne:** Repo genelinde eski `Status` adları tarandı. Tip, store, simülasyon, i18n `status.*` ve
+  eşik dosyasında kod düzeyinde kalıntı yok. Mühendis 1 alanındaki yorum/doküman ifadeleri yeni adlara
+  çevrildi (`environment.ts` yorumu "nominal band", rover egzersiz yorumu, ARCHITECTURE örneği
+  `warning / crew_medical_officer`, CONTRACTS Faz 0 notu); `npm run docs:contracts` çalıştırıldı.
+- **Neden:** ADR-031 sonrası sözleşme ve dokümanlarda tek terminoloji.
+- **Dosyalar:** `src/core/types/environment.ts` (yalnız yorum), `src/core/config/environments.config.ts` (yalnız
+  yorum), `docs/ARCHITECTURE.md`, `docs/CONTRACTS.md`, `docs/modules/core-routine.md`, `CHANGELOG.md`
+- **Ekip ne yapmalı:** Kendi dosyalarınızda eski adlar kalmış: Mühendis 3 → `src/modules/assessment/README.md`
+  ("always green"); Emir → `src/modules/visualization/README.md` ve `MetricTrendChart.tsx` TODO yorumu
+  ("green/yellow/red bands" → nominal/advisory/caution/warning). Davranış değişikliği yok.
+
 ### 2026-11-15 12:53 — Muhammed Bektaş (feat/core-routine) — Çakışan ADR-036/037 (core-routine) yeniden numaralandı
 
 - **Ne:** `docs/DECISIONS.md`'de iki kez geçen ADR-036 ve ADR-037'nin core-routine olanları taşındı:
