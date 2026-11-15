@@ -20,6 +20,25 @@ Yalnız `docs/` değişiklikleri kayıt gerektirmez.
 
 <!-- NEW ENTRIES BELOW -->
 
+### 2026-11-15 20:10 — Muhammed Bektaş (feat/core-routine) — Hata: ilk açılışta "6 görev kaçırıldı" bildirimi; demo metriksiz görevleri
+
+- **Ne:** Boş tarayıcıda ilk açılışta, kusursuz uyumlu Mira için "6 tasks were missed today" çıkıyordu. Demo
+  verisi doğruydu (Mira'da kaçırılan 0). Neden: bildirici ilk render'da, demo verisi yüklenmeden önceki boş
+  listeyi değerlendiriyor ve sabahın 6 görevini kaçırıldı sayıyordu. Artık yalnız oturum sırasında yeni
+  açılan veya yeni kaçırılan görev bildiriliyor; açılışta, astronot değişince ve demo yüklenince geçmiş
+  durumlar sessizce işaretleniyor. Ayrıca demo yüklenince metriksiz görevler (haftalık özet, aylık
+  muayene/anket) hikâyeye uygun "zamanında yapıldı" sayılıyor (Kenji son 2 günde yapmıyor). Haftalık özet
+  gününde öğleden sonra herkes "kaçırdı" görünmüyor. XP tablosu güncellendi (Mira 3.080 …).
+- **Neden:** Kural: demo verisi yüklendiği ana kadar takvimle tutarlı; hikâyesinde kaçırma olmayan kişide
+  `missed` = 0 (ADR-048 güncelleme 2, ADR-049 güncelleme).
+- **Dosyalar:** `src/modules/routine/components/{ReminderNotifier,DemoRoutineSync}.tsx`,
+  `src/modules/routine/services/demoCompletions.ts` (yeni), `src/modules/routine/store/{useRoutineStore,dataTransferActions}.ts`
+  (`demoCompletionsFor`, store v3), `src/modules/routine/index.ts`, `src/app/providers/AppProviders.tsx`
+  (`<DemoRoutineSync />`), testler (`firstLoad.test.tsx` yeni, `ReminderNotifier.test.tsx`, `companionUi.test.tsx`),
+  `docs/DECISIONS.md`, `docs/DEMO_CREW_STORIES.md`, `docs/HANDOFF_ENGINEER4.md`, `CHANGELOG.md`
+- **Ekip ne yapmalı:** Hiçbir şey; tarayıcıda eski demo verisi varsa Ayarlar → Sıfırla → Demo verisini yükle.
+  Bildirim testi yazan: açılışta toast beklemeyin, saati ilerletin (`firstLoad.test.tsx` örneği).
+
 ### 2026-11-15 19:40 — Muhammed Bektaş (feat/core-routine) — Devir notu: eklenen arayüz, Emir'den beklenenler
 
 - **Ne:** `docs/HANDOFF_ENGINEER4.md`'ye §0 eklendi: Mühendis 1'in eklediği arayüz parçaları (pet,

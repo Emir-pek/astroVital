@@ -26,7 +26,7 @@ class FakeNotification {
 let ids: string[] = [];
 
 beforeEach(() => {
-  vi.useFakeTimers({ toFake: ['Date'] });
+  vi.useFakeTimers({ toFake: ['Date', 'setInterval', 'clearInterval'] });
   vi.setSystemTime(day(3, '05:00')); // nothing due yet (sleep-log opens 05:15)
   vi.stubGlobal('Notification', FakeNotification);
   notificationSpy.mockClear();
@@ -88,10 +88,19 @@ describe('useNotificationSettings', () => {
   });
 });
 
+/** Moves the clock and fires the shared minute ticker (useNow 60 s). */
+const advanceTo = (when: Date) => {
+  vi.setSystemTime(when);
+  act(() => {
+    vi.advanceTimersByTime(60_000);
+  });
+};
+
 describe('<ReminderNotifier/>', () => {
-  it('announces once (one grouped toast), never again after re-mount', () => {
-    vi.setSystemTime(day(3, '06:40')); // sleep-log + 6 morning vitals due
-    const first = renderWithProviders(<ReminderNotifier />);
+  it('announces once (one grouped toast) when tasks open during the session; never again after re-mount', () => {
+    const first = renderWithProviders(<ReminderNotifier />); // 05:00, nothing due
+    expect(screen.queryByText(/tasks are due now/)).toBeNull();
+    advanceTo(day(3, '06:40')); // sleep-log + 6 morning vitals open
     expect(screen.getAllByText(/tasks are due now/)).toHaveLength(1);
     const keys = useRoutineStore.getState().notifiedIds[ids[0] ?? ''] ?? [];
     expect(keys.length).toBeGreaterThan(1);
@@ -101,34 +110,41 @@ describe('<ReminderNotifier/>', () => {
     expect(screen.queryByText(/tasks are due now/)).toBeNull();
   });
 
-  it('never announces another astronaut’s tasks', () => {
-    vi.setSystemTime(day(3, '06:40'));
+  it('opening the app when tasks are already due/missed: no burst, marked as seen', () => {
+    vi.setSystemTime(day(3, '09:00')); // morning tasks missed, nothing new
     renderWithProviders(<ReminderNotifier />);
+    expect(screen.queryByText(/missed|due now/)).toBeNull();
+    expect(useRoutineStore.getState().notifiedIds[ids[0] ?? '']?.length).toBeGreaterThan(0);
+  });
+
+  it('never announces another astronaut’s tasks', () => {
+    renderWithProviders(<ReminderNotifier />);
+    advanceTo(day(3, '06:40'));
     expect(Object.keys(useRoutineStore.getState().notifiedIds)).toEqual([ids[0]]);
   });
 
-  it('switching the crew picker back does not repeat old announcements', () => {
-    vi.setSystemTime(day(3, '06:40'));
+  it('switching the crew picker: the other person’s past tasks are not dumped; switching back repeats nothing', () => {
     renderWithProviders(<ReminderNotifier />);
+    advanceTo(day(3, '06:40'));
     const [a, b] = ids as [string, string];
     act(() => useHealthStore.getState().setSelectedCrew(b));
     expect(Object.keys(useRoutineStore.getState().notifiedIds).sort()).toEqual([a, b].sort());
     const before = useRoutineStore.getState().notifiedIds[a]?.length;
     act(() => useHealthStore.getState().setSelectedCrew(a));
     expect(useRoutineStore.getState().notifiedIds[a]?.length).toBe(before);
-    expect(screen.getAllByText(/tasks are due now/)).toHaveLength(2); // one for a, one for b
+    expect(screen.getAllByText(/tasks are due now/)).toHaveLength(1); // only a's, during the session
   });
 
   it('no browser notification while the user switch is off', () => {
-    vi.setSystemTime(day(3, '06:40'));
     renderWithProviders(<ReminderNotifier />);
+    advanceTo(day(3, '06:40'));
     expect(notificationSpy).not.toHaveBeenCalled();
   });
 
   it('browser notification when switched on and permission granted', () => {
     useRoutineStore.getState().setNotificationsEnabled(true);
-    vi.setSystemTime(day(3, '06:40'));
     renderWithProviders(<ReminderNotifier />);
+    advanceTo(day(3, '06:40'));
     expect(notificationSpy).toHaveBeenCalledTimes(1);
     expect(notificationSpy.mock.calls[0]?.[0]).toBe('AstroVital reminder');
   });
@@ -136,8 +152,8 @@ describe('<ReminderNotifier/>', () => {
   it('no browser notification when permission is denied, even if switched on', () => {
     FakeNotification.permission = 'denied';
     useRoutineStore.getState().setNotificationsEnabled(true);
-    vi.setSystemTime(day(3, '06:40'));
     renderWithProviders(<ReminderNotifier />);
+    advanceTo(day(3, '06:40'));
     expect(notificationSpy).not.toHaveBeenCalled();
     FakeNotification.permission = 'granted';
   });

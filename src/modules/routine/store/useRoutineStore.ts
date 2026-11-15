@@ -21,6 +21,11 @@ export interface RoutineState {
   notificationsEnabled: boolean;
   /** Companion speech bubble open (true) or collapsed to the avatar (false). Default false. */
   companionOpen: boolean;
+  /**
+   * `demoLoadedAt` of the demo whose manual completions were generated (`DemoRoutineSync`); null =
+   * none yet. Lets the sync run exactly once per demo load and never over imported data.
+   */
+  demoCompletionsFor: string | null;
 
   /** Adds a completion unless the same crew/template/day already has one at the same time. */
   addCompletion: (c: TaskCompletion) => void;
@@ -29,6 +34,8 @@ export interface RoutineState {
   markNotified: (crewId: string, ids: readonly string[]) => void;
   setNotificationsEnabled: (enabled: boolean) => void;
   setCompanionOpen: (open: boolean) => void;
+  /** Replaces all manual completions with a demo's generated ones (demo (re)load). */
+  setDemoCompletions: (forDemo: string, completions: TaskCompletion[]) => void;
   resetRoutine: () => void;
 }
 
@@ -43,15 +50,22 @@ const initial = () => ({
   dailyMissionCompletions: [] as DailyMissionCompletion[],
   notificationsEnabled: false,
   companionOpen: false,
+  demoCompletionsFor: null as string | null,
 });
 
-/** Persisted schema version. 1 → 2: `companionOpen` (default false). */
-export const ROUTINE_STORE_VERSION = 2;
+/**
+ * Persisted schema version. 1 → 2: `companionOpen` (default false). 2 → 3: `demoCompletionsFor`
+ * (default null → the current demo gets its manual completions once).
+ */
+export const ROUTINE_STORE_VERSION = 3;
 
 /** Upgrades persisted routine state. PURE; unknown shapes pass through. */
 export const migrateRoutineState = (persisted: unknown, version: number): unknown => {
   if (typeof persisted !== 'object' || persisted === null) return persisted;
-  return version < 2 ? { ...persisted, companionOpen: false } : persisted;
+  let state: Record<string, unknown> = { ...persisted };
+  if (version < 2) state = { ...state, companionOpen: false };
+  if (version < 3) state = { ...state, demoCompletionsFor: null };
+  return state;
 };
 
 /**
@@ -100,6 +114,9 @@ export const useRoutineStore = create<RoutineState>()(
 
       setCompanionOpen: (open) => set({ companionOpen: open }),
 
+      setDemoCompletions: (forDemo, completions) =>
+        set({ completions, demoCompletionsFor: forDemo }),
+
       resetRoutine: () => set(initial()),
     }),
     {
@@ -113,6 +130,7 @@ export const useRoutineStore = create<RoutineState>()(
         dailyMissionCompletions: s.dailyMissionCompletions,
         notificationsEnabled: s.notificationsEnabled,
         companionOpen: s.companionOpen,
+        demoCompletionsFor: s.demoCompletionsFor,
       }),
     },
   ),

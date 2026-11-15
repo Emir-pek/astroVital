@@ -144,10 +144,11 @@ describe('<CompanionDock/>', () => {
     expect(useRoutineStore.getState().companionOpen).toBe(false);
   });
 
-  it('store v1 → v2 adds companionOpen = false', () => {
+  it('store v1 → v3 adds companionOpen = false and demoCompletionsFor = null', () => {
     expect(migrateRoutineState({ completions: [] }, 1)).toEqual({
       completions: [],
       companionOpen: false,
+      demoCompletionsFor: null,
     });
   });
 });

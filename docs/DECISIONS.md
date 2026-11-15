@@ -410,6 +410,11 @@ Node 24 LTS, npm.
   örneklenir, yalnız çıktıya yazılmaz: PRNG akışı ve diğer bütün değerler aynı kalır. Bugün yalnız
   `mixed_mission` kullanıyor (Kenji, Selin, Lucas; Mira kusursuz — `docs/DEMO_CREW_STORIES.md` "Uyum").
   Takvimde olmayan ölçüm hâlâ üretilmez; geç girilen ölçüm takvim saatinden sonra, aynı gün içindedir.
+- **Güncelleme 2 (15.11.2026 akşam):** Metriksiz görevler (haftalık özet, aylık muayene/anket, ekip sohbeti)
+  de takvimi izler: demo yüklendiğinde routine modülü (`DemoRoutineSync` → saf `generateDemoCompletions`)
+  her planlı gün için saat + 10 dk'da, yükleme anına kadar, tamamlama üretir; hikâye istisnası Kenji'nin
+  son 2 günü. Bir kez çalışır (`demoCompletionsFor`); yeni demo eskisinin tamamlamalarını değiştirir, içe
+  aktarılan veriye dokunmaz. Kural: hikâyesinde kaçırma olmayan kişi için `missed` = 0, her saatte.
 
 ### ADR-038 — Varsayılan demo senaryosu: karma görev (dört durum seviyesi); mürettebat 4 kişi sabit
 
@@ -497,6 +502,12 @@ Node 24 LTS, npm.
 - **Sonuç:** Pencere tablosu `docs/ROUTINE_SCHEDULE.md` § Durum kuralları. Gün sınırını aşan pencere
   yok (en geç görev 21:00 + 120 dk = 23:00). Gece yarısından sonra girilen ölçüm ertesi güne sayılır;
   önceki gün `missed` kalır. Bayatlık (`isStale`) bu karardan bağımsız.
+- **Güncelleme (15.11.2026 akşam) — bildirimler yalnız oturum içindekiler:** Bir görev ancak `due`
+  olduğu (saat − 60 dk) veya `missed` olduğu (saat + 120 dk) an, geçerli bağlamın başlamasından sonraysa
+  bildirilir. Bağlam: uygulama açılışı, seçili astronot, demo yükleme/sıfırlama/içe aktarma
+  (`demoLoadedAt`), görev başlangıcı, ortam. Daha eskiler sessizce "görüldü" işaretlenir. Neden: boş
+  cihazda ilk render demo verisi yüklenmeden çalışıyordu ve sabahın 6 görevini "kaçırıldı" diye toplu
+  bildiriyordu (Mira için "6 tasks were missed today"). Kural zamana bağlı, render sırasına değil.
 
 ### ADR-050 — Oyunlaştırma: türetilmiş XP, uyuma ödül, değerden bağımsız
 

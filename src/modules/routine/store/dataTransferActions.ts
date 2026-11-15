@@ -29,6 +29,8 @@ export function importData(json: string): ImportResult {
     dailyMissionCompletions: routine.dailyMissionCompletions,
     // Announcements belong to the old data set; start fresh.
     notifiedIds: {},
+    // The imported completions are the truth: the demo sync must not regenerate over them.
+    demoCompletionsFor: useHealthStore.getState().demoLoadedAt,
   });
   return result;
 }

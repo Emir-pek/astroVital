@@ -92,7 +92,7 @@ ilerleme çubuğu. Durum pill'lerinde durum renkleri kullanılmadı (bunlar sağ
 
 ## 2. Bildirim ve kaçırılan rozeti
 
-**Ne değişti:** `ReminderNotifier` `app/providers`'ta görünmez olarak mount edildi. Seçili astronotun görevi
+**Ne değişti:** `ReminderNotifier` `app/providers`'ta görünmez olarak mount edildi. **Yalnız oturum sırasında** yeni açılan/kaçırılan görevler bildirilir; açılışta, astronot değişince ve demo yüklenince geçmiş durumlar sessizce işaretlenir (ADR-049 güncellemesi). `DemoRoutineSync` (görünmez) demo yüklenince metriksiz görevlerin tamamlamalarını üretir. Seçili astronotun görevi
 `due` ya da `missed` olunca bir kez toast çıkar; aynı anda açılanlar tek mesajda toplanır. Kullanıcı açtıysa
 ve tarayıcı izin verdiyse tarayıcı bildirimi de gelir.
 
@@ -128,7 +128,7 @@ import { useGamification, MissionBoard, BADGE_I18N } from '@modules/routine';
 
 const g = useGamification(); // seçili astronot
 // Mira, 30. gün 12:00 (XP_PER_LEVEL = 700):
-// { crewId, today: 30, xp: 2970, level: 5, levelProgress: 0.24, streakDays: 29, longestStreak: 29,
+// { crewId, today: 30, xp: 3040, level: 5, levelProgress: 0.34, streakDays: 29, longestStreak: 29,
 //   badges: ['streak-7', 'exercise-week'], newBadgesToday: [], teamScore: 98,
 //   missions: [{ id: 'hydration', titleKey: 'routine.daily.hydration', xp: 5, type: 'hydration', completedAt? }, …],
 //   completeMission: (id) => boolean }

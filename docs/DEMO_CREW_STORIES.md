@@ -39,12 +39,14 @@ bağımsızdır (ADR-050); farklar yalnız uyumdan gelir. Değerler varsayılan 
 
 | Astronot | Uyum                                                        | XP    | Seviye | Seri (bugün / en uzun) | Pet (23:30) |
 | -------- | ----------------------------------------------------------- | ----- | ------ | ---------------------- | ----------- |
-| Mira     | Kusursuz                                                    | 3.010 | 5      | 30 / 30                | `cheerful`  |
-| Kenji    | 29–30. gün egzersiz + akşam ruh hali yok; 29. gün sabah geç | 2.945 | 5      | 0 / 28                 | `alert`     |
-| Selin    | 22., 25., 28. gün akşam ruh hali yok                        | 2.980 | 5      | 2 / 21                 | `neutral`   |
-| Lucas    | 25. ve 27. gün egzersiz yok                                 | 2.990 | 5      | 3 / 24                 | `neutral`   |
+| Mira     | Kusursuz                                                    | 3.080 | 5      | 30 / 30                | `cheerful`  |
+| Kenji    | 29–30. gün egzersiz + akşam ruh hali yok; 29. gün sabah geç | 3.005 | 5      | 0 / 28                 | `alert`     |
+| Selin    | 22., 25., 28. gün akşam ruh hali yok                        | 3.050 | 5      | 2 / 21                 | `neutral`   |
+| Lucas    | 25. ve 27. gün egzersiz yok                                 | 3.060 | 5      | 3 / 24                 | `neutral`   |
 
-Ekip skoru (son 7 gün): %97. Gün içinde (ör. 12:00) Mira'nın serisi 29'dur, bugünün görevleri kapanınca 30
+Ekip skoru (son 7 gün): %97. XP'ye metriksiz görevler de dahil: demo yüklenince haftalık özet ve aylık
+muayene/anket "zamanında yapıldı" sayılır (`DemoRoutineSync`, ADR-048); Kenji hastalığın son 2 gününde
+bunları da yapmaz (29. günün haftalık özeti kaçırıldı). Gün içinde (ör. 12:00) Mira'nın serisi 29'dur, bugünün görevleri kapanınca 30
 olur. Testler: `src/modules/routine/__tests__/demoAdherence.test.ts`.
 
 ## crew-1 · Mira Okafor (Komutan) → NOMINAL

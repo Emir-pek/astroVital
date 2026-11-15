@@ -86,3 +86,9 @@ export { CompanionDock } from './components/companion/CompanionDock';
 export { CompanionAvatar, type CompanionAvatarProps } from './components/companion/CompanionAvatar';
 export { MOOD_COLOR_VAR, MOOD_STYLE } from './components/companion/moodStyle';
 export { RoutineSettingsPanel } from './components/RoutineSettingsPanel';
+export { DemoRoutineSync } from './components/DemoRoutineSync';
+export {
+  DEMO_MANUAL_DELAY_MIN,
+  generateDemoCompletions,
+  type DemoCompletionsInput,
+} from './services/demoCompletions';
