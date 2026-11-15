@@ -73,6 +73,15 @@ export interface HealthState {
     scenarioId: ScenarioId,
     options: { withRecommendedEnvironment: boolean; now?: Date },
   ) => void;
+  /**
+   * Replaces measurements, crew and settings at once (backup restore, ADR-044). Keeps the selected
+   * crew member if they still exist, else selects the first one.
+   */
+  replaceData: (data: {
+    measurements: Measurement[];
+    crew: CrewMember[];
+    settings: AppSettings;
+  }) => void;
   /** Clears all data (crew is restored to the demo crew, no measurements). */
   resetAll: () => void;
 }
@@ -188,6 +197,18 @@ export const useHealthStore = create<HealthState>()(
             : {}),
           ...(now ? { now } : {}),
         }),
+
+      replaceData: ({ measurements, crew, settings }) =>
+        set((s) => ({
+          measurements,
+          crew,
+          settings,
+          selectedCrewId: crew.some((c) => c.id === s.selectedCrewId)
+            ? s.selectedCrewId
+            : (crew[0]?.id ?? null),
+          // Restored data counts as loaded: the demo bootstrap must not overwrite it.
+          demoLoadedAt: s.demoLoadedAt ?? new Date(0).toISOString(),
+        })),
 
       resetAll: () =>
         set((s) => ({

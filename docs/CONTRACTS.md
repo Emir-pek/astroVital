@@ -115,6 +115,7 @@ useReminders(crewId?): {                       // ADR-041; crewId yoksa seçili 
   completeTask(crewId, templateId): boolean }  // yalnız metriksiz + açık (due/missed) görev
 useMissedCount(crewId?): number                // kaçırılan rozeti (varsayılan seçili astronot)
 <ReminderNotifier />                           // null render; app/providers'ta tek kez; yalnız seçili astronot
+exportData(now?): string; importData(json): { ok: true } | { ok: false; error; issues: string[] }  // ADR-044, geri yükleme
 <EnvironmentChangeNotice /> / useEnvironmentChangeNotice()  // app/providers'ta tek kez; ortam değişince toast
 useNotificationSettings(): { enabled; permission; setEnabled(next): Promise<boolean> }  // Ayarlar anahtarı
 requestNotificationPermission(): Promise<NotificationPermission | 'unsupported'>; notificationPermission()
@@ -142,7 +143,7 @@ levelForXp(xp: number): number; levelProgress(xp: number): number; XP_PER_LEVEL
 |---|---|
 | `@core/types` | Aşağıdaki tüm tipler |
 | `@core/config` (veya alt dosyalar) | `METRICS`, `METRIC_IDS`, `THRESHOLDS`, `CAREER_RADIATION_LIMIT_MSV`, `RADIATION_SPE_DAILY_MULTIPLIER`, `ENVIRONMENTS`, `ENVIRONMENT_IDS`, `HAZARDS`, `HAZARD_IDS`, `BODY_REGIONS`, `BODY_REGION_IDS`, `SOURCES`, `isKnownSource` |
-| `@core/store` | `useHealthStore` (+ `addMeasurement`, `addMeasurements`, `removeMeasurement`, `setActiveEnvironment`, `setSelectedCrew`, `updateSettings`, `loadDemoData`, `applyScenario(id, { withRecommendedEnvironment })`, `resetAll`), saf seçiciler `getCrewMeasurements`, `getMetricSeries`, `getLatestByMetric`, hook'lar `useCrew`, `useCrewMember`, `useCrewMeasurements`, `useMetricSeries`, `useLatestByMetric`, `useActiveEnvironment`, `useSettings` |
+| `@core/store` | `useHealthStore` (+ `addMeasurement`, `addMeasurements`, `removeMeasurement`, `setActiveEnvironment`, `setSelectedCrew`, `updateSettings`, `loadDemoData`, `applyScenario(id, { withRecommendedEnvironment })`, `replaceData`, `resetAll`), `STORE_VERSION` (2), `migrateHealthState`, saf seçiciler `getCrewMeasurements`, `getMetricSeries`, `getLatestByMetric`, hook'lar `useCrew`, `useCrewMember`, `useCrewMeasurements`, `useMetricSeries`, `useLatestByMetric`, `useActiveEnvironment`, `useSettings` |
 | `@core/simulation` | `generateHistory`, `SCENARIOS`, `SCENARIO_IDS`, `DEMO_CREW`, `DEMO_DEFAULTS`, `createRng`, `mulberry32` |
 | `@core/ui` | `Button`, `Card`, `StatusBadge`, `STATUS_STYLE`, `Modal`, `ToastProvider`, `useToast`, `EmptyState`, `PlaceholderNotice` |
 | `@core/hooks` | `useNow(intervalMs = 1000)` — güncel zaman (tek paylaşılan zamanlayıcı); bileşenlerde `new Date()` yerine (ADR-030) |

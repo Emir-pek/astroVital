@@ -76,7 +76,8 @@ app → hepsi.
 
 ### P2 (Faz 3)
 
-- [ ] JSON/CSV dışa/içe aktarma (Zod ile doğrula, `source: 'import'`)
+- [x] JSON dışa/içe aktarma (Zod; geri yükleme, `source` korunur — ADR-044): `exportData()` / `importData(json)`;
+      butonlar: visualization. CSV yapılmadı
 - [ ] Demo modu (otomatik akış: senaryo yükle → sayfaları gez)
 - [ ] Sayfa bazlı code splitting (`React.lazy`) — ADR-021
 - [ ] Store `version`/`migrate`; 180 gün için boyut kontrolü (ADR-016)

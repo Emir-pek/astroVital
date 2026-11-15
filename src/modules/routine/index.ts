@@ -75,3 +75,12 @@ export {
   EnvironmentChangeNotice,
   useEnvironmentChangeNotice,
 } from './hooks/useEnvironmentChangeNotice';
+export {
+  EXPORT_FORMAT,
+  EXPORT_VERSION,
+  buildExportJson,
+  parseImportJson,
+  type ExportSnapshot,
+  type ImportResult,
+} from './services/dataTransfer';
+export { exportData, importData } from './store/dataTransferActions';

@@ -488,3 +488,12 @@ Node 24 LTS, npm.
   şeması `version` 1 → 2; saf `migrateHealthState` eski kayda `autoLoadDemo: true` ekler. Kullanılmayan
   `settings.notificationsEnabled` kayıt uyumluluğu için duruyor, `@deprecated` (anahtar routine store'da, ADR-041).
   Sahip: Mühendis 1; Ayarlar anahtarının görünümü visualization.
+- **Karar (2) — Dışa/içe aktarma:** saf `buildExportJson` / `parseImportJson` (Zod v4,
+  `src/modules/routine/services/dataTransfer.ts`; routine'de çünkü routine tamamlamalarını da içeriyor ve
+  core modülden okuyamaz). Dosya: `{ format: 'astrovital-export', version: 1, exportedAt, measurements, crew,
+  settings, routine: { completions, dailyMissionCompletions } }`. İçe aktarma bir **geri yüklemedir**:
+  ölçümleri, mürettebatı, ayarları ve routine tamamlamalarını değiştirir (birleştirme yok, ID çakışması
+  sorunu olmaz). Her ölçüm kendi `source`'unu korur (kamera ölçümü kamera olarak kalır; `'import'` ile
+  ezilmez — kökeni görünür kalsın). Geçersiz girdide hiçbir şey değişmez; sonuç `invalidJson` /
+  `invalidFormat` (en çok 10 yol: "measurements.0.metric: …") / `unknownCrew`. Yeni core store aksiyonu
+  `replaceData`. CSV ve arayüz yok (butonlar visualization).

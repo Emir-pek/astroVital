@@ -20,6 +20,19 @@ Yalnız `docs/` değişiklikleri kayıt gerektirmez.
 
 <!-- NEW ENTRIES BELOW -->
 
+### 2026-11-15 16:00 — Muhammed Bektaş (feat/core-routine) — Veri dışa/içe aktarma (JSON yedek, mantık)
+
+- **Ne:** `exportData()` tüm veriyi (ölçümler, mürettebat, ayarlar, rutin tamamlamaları) JSON metni olarak
+  verir; `importData(json)` dosyayı Zod ile doğrulayıp geri yükler. Geçersiz dosyada hiçbir şey değişmez
+  ve hatanın yeri söylenir ("measurements.0.metric: …"). Ölçümler kendi kaynağını (kamera, klavye,
+  simüle) korur. Yeni core store aksiyonu `replaceData`. Arayüz yok.
+- **Neden:** P2 görevi (ADR-044).
+- **Dosyalar:** `src/modules/routine/services/dataTransfer.ts`, `src/modules/routine/store/dataTransferActions.ts` (yeni),
+  `src/modules/routine/index.ts`, `src/core/store/useHealthStore.ts` (`replaceData`), test `dataTransfer.test.ts`,
+  `docs/DECISIONS.md` (ADR-044), `docs/CONTRACTS.md`, `docs/modules/core-routine.md`, `CHANGELOG.md`
+- **Ekip ne yapmalı:** Emir: Ayarlar'a "Dışa aktar" (metni dosya olarak indir) ve "İçe aktar" (dosyayı oku,
+  sonucu göster) butonları. Ayrıntı: `docs/HANDOFF_ENGINEER4.md`.
+
 ### 2026-11-15 15:40 — Muhammed Bektaş (feat/core-routine) — Ayar: demo verisini otomatik yükle (autoLoadDemo)
 
 - **Ne:** Yeni ayar `settings.autoLoadDemo` (varsayılan açık). Kapalıyken boş cihazda demo verisi
