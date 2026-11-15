@@ -20,6 +20,23 @@ Yalnız `docs/` değişiklikleri kayıt gerektirmez.
 
 <!-- NEW ENTRIES BELOW -->
 
+### 2026-11-15 17:05 — Emir Efe Pekcan (docs/fix-adr-039-duplicate) — Pages şu an `gh-pages` branch'inden elle yayınlanıyor; ADR numarası düzeltildi
+
+- **Ne:** Hesap genelinde faturalama kilidi (`github.com/settings/billing` → Actions/Codespaces/
+  Packages `Usage blocked`) yüzünden `deploy-pages.yml` hiç çalışmadı. Geçici olarak klasik
+  "Deploy from a branch" kullanıldı: `npm run build` çıktısı `gh-pages` branch'ine elle commit'lendi,
+  Pages ayarı o branch'e çevrildi. Site **şu an canlı ve doğrulandı**: https://emir-pek.github.io/astroVital/
+  Ayrıca aynı anda birleşen branch'ler yüzünden `docs/DECISIONS.md`'de iki ayrı karar "ADR-039" olmuştu
+  (GitHub Pages + anomali tespiti) — benimki **ADR-046**'ya taşındı.
+- **Neden:** Teslim linki bu gece lazım; faturalama ancak hesap sahibi tarafından açılabilir, onu
+  beklemeden siteyi canlıya almak gerekti.
+- **Dosyalar:** `docs/DECISIONS.md` (ADR-046), `gh-pages` branch'i (yeni, kod review'a girmez).
+- **Ekip ne yapmalı:** Şimdilik `main`'e merge siteyi **otomatik güncellemiyor** — bir sonraki demo
+  öncesi `npm run build` + `gh-pages` branch'ine commit (adımlar ADR-046'da) elle tekrarlanmalı, YA DA
+  Emir faturalama kilidini açar açmaz `gh api PUT repos/Emir-pek/astroVital/pages
+  -f build_type=workflow` çalıştırılıp otomatik yayına geri dönülür. `docs/DECISIONS.md`'de başka
+  numara çakışmaları da var (ADR-039/040/044/045 sırasız) — tam düzeltme ayrı, koordineli bir iş.
+
 ### 2026-11-15 16:37 — Emir Efe Pekcan (chore/github-pages) — Proje GitHub Pages'te herkese açık yayında
 
 - **Ne:** Yeni iş akışı `.github/workflows/deploy-pages.yml`: `main`'e her push'ta (ve elle
