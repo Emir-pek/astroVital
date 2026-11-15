@@ -33,9 +33,6 @@ const PENDING_MIGRATION = new Set([
   '/src/modules/intake/components/MeasurementForm.tsx',
   '/src/modules/intake/components/QuickLogPanel.tsx',
   '/src/modules/routine/components/MetClock.tsx',
-  '/src/modules/assessment/components/AlertCenter.tsx',
-  '/src/modules/assessment/components/LearnPanel.tsx',
-  '/src/modules/assessment/components/RecommendationList.tsx',
 ]);
 
 /** Class-like tokens inside string literals, without variant prefixes (`hover:`, `data-x:` …). */
